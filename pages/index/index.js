@@ -13,7 +13,7 @@ import {
   buildPolyline
 } from '../../utils/map'
 import {
-  addLouhao,
+  addMarker,
   getAroundList,
   getMyAroundList,
   writeLouhaoList,
@@ -860,7 +860,7 @@ Page({
     this.disableMapTap()
     let polyline = this.data.polyline
     let index = getApp().globalData.currentPolylineIndex
-    this.addLouhao(polyline[index].points)
+    this.addMarker(polyline[index].points)
   },
   //从marker-add组件过来的事件，退出
   onCancelChooseMarker() {
@@ -941,7 +941,7 @@ Page({
     })
   },
   //添加道路和围墙
-  addLouhao(points) {
+  addMarker(points) {
     if (points.length < 2) {
       wx.showToast({
         title: '请至少选择2个点',
@@ -966,9 +966,7 @@ Page({
       points: JSON.stringify(points)
     }
     const that = this
-    addLouhao({
-      param: JSON.stringify(param)
-    }).then(res => {
+    addMarker(param).then(res => {
       if (res) {
         wx.showToast({
           title: '添加成功',

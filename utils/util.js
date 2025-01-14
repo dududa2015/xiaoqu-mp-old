@@ -67,7 +67,7 @@ const generateXId = (lat, lng) => {
   let truncatedLng = Math.floor(lng * 1000000).toString()
   let latStr = truncatedLat.substring(truncatedLat.length - 8);
   let lngStr = truncatedLng.substring(truncatedLng.length - 7);
-  return parseInt(latStr + lngStr);
+  return latStr + lngStr;
 }
 const checkWords = name => {
   name = name.toUpperCase()

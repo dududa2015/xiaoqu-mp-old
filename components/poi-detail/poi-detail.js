@@ -3,7 +3,7 @@ import {
   convertSecondsToHMS
 } from '../../utils/util'
 import {
-  getLouhaoById,
+  getMarkerById,
   updateLouhaoLikes
 } from '../../utils/apis'
 Component({
@@ -94,11 +94,8 @@ Component({
   methods: {
     getLouhao(xid) {
       const that = this
-      getLouhaoById({ xid: xid }).then(res => {
-        if (JSON.parse(res).length === 0) {
-          return
-        }
-        let result = JSON.parse(res)[0]
+      getMarkerById({ xid: xid }).then(res => {
+        let result = res
         let remarkTagList = []
         if (result.remark) {
           remarkTagList = result.remark.split(',')

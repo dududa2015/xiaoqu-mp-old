@@ -47,9 +47,9 @@ export const getMyAroundList = (params) => {
 }
 
 // 向db中写一条楼号数据
-export const addLouhao = (params) => {
+export const addMarker = (params) => {
   return request({
-    url: '/addLouhao',
+    url: '/marker/addMarker',
     data: params,
     method: 'POST',
   })
@@ -63,11 +63,11 @@ export const writeLouhaoList = (params) => {
   })
 }
 //获取一条
-export const getLouhaoById = (params) => {
+export const getMarkerById = (params) => {
   return request({
-    url: '/getLouhaoById',
+    url: '/marker/getMarkerById',
     data: params,
-    method: 'POST',
+    method: 'GET',
   })
 }
 //修改
