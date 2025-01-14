@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "t-image": "tdesign-miniprogram/image/image"
+  },
+  "navigationBarTitleText": "添加到主屏幕"
+}

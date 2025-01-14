@@ -1,0 +1,9 @@
+.block {
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  right: 32rpx;
+  top: 32rpx;
+}

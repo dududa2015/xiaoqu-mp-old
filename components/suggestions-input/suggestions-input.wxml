@@ -1,0 +1,4 @@
+<view wx:if="{{tagSuggestions.length > 0 && (markerTypeIndex === 0 || markerTypeIndex === 3)}}">
+  <!-- <text class="suggestions">猜你想输入：</text> -->
+  <t-check-tag wx:for="{{tagSuggestions}}" wx:key="index" theme="default" default-checked="{{item.checked}}" checked="{{item.checked}}" wx:if="{{markerTypeIndex === 0 || markerTypeIndex === 3}}" bindchange="onTagSuggestionChange" data-item="{{item}}" variant="dark" size="medium" content="" style="margin:0 16rpx 0 0">{{item.name}}</t-check-tag>
+</view>

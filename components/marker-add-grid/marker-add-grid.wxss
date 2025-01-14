@@ -1,0 +1,39 @@
+.marker-add-grid-wrap {
+  padding: 48rpx 0 0 0;
+}
+
+.grid-wrap {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.grid-item {
+  text-align: center;
+  width: 150rpx;
+  height: 150rpx;
+}
+
+.grid-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.img-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 40%;
+
+}
+
+.grid-text {
+  font-size: 24rpx;
+  line-height: 48rpx;
+  font-weight: 400;
+  color: #333;
+}

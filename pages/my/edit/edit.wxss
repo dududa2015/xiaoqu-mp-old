@@ -1,0 +1,21 @@
+.container {
+  margin: 32rpx;
+}
+
+.content {
+  border-radius: 32rpx;
+  overflow: hidden;
+}
+
+.btn-wrap {
+  margin: 64rpx 0 0 0;
+}
+
+.t-cell__title,
+.t-cell__note {
+  flex: none !important;
+}
+
+.left {
+  width: 100rpx;
+}

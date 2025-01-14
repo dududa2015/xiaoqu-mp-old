@@ -1,0 +1,9 @@
+<view class="bottom-bar-container" style="bottom: {{bottom + 120}}rpx; {{position}}: 16rpx" bind:tap="onAdd">
+  <!-- 添加 -->
+  <view class="add-wrap shadow" wx:if="{{points>-30}}">
+    <view class="img-wrap">
+      <image src="/images/controls/add.png" class="img" mode="" />
+    </view>
+    <view class="text">添加</view>
+  </view>
+</view>

@@ -1,0 +1,10 @@
+<view class="container">
+  <view class="content">
+    <t-input value="{{nickName}}" type="nickname" borderless maxlength="10" placeholder="请输入昵称(最多10个字)" bind:nicknamereview="onNickNameReview" bind:change="onNickNameChange">
+      <text slot="label">昵称<text style="color: #e34d59"> *</text> </text>
+    </t-input>
+  </view>
+  <view class="btn-wrap">
+    <t-button theme="primary" size="large" block bind:tap="onSave">保存</t-button>
+  </view>
+</view>

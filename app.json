@@ -1,0 +1,51 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/my/index/index",
+    "pages/help/help1/help1",
+    "pages/help/help2/help2",
+    "pages/help/help3/help3",
+    "pages/help/help4/help4",
+    "pages/setting/setting",
+    "pages/my/edit/edit",
+    "pages/my/audit/audit",
+    "pages/my/newUser/newUser",
+    "pages/my/markers/markers"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarBackgroundColor": "#ffffff"
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "为了您更好的体验，请确认获取您的位置"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
+  "tabBar": {
+    "color": "#000000",
+    "selectedColor": "#0052d9",
+    "backgroundColor": "#fff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "text": "小区楼号",
+        "pagePath": "pages/index/index",
+        "iconPath": "/images/tabs/home.png",
+        "selectedIconPath": "/images/tabs/home_select.png"
+      },
+      {
+        "text": "个人中心",
+        "pagePath": "pages/my/index/index",
+        "iconPath": "/images/tabs/my.png",
+        "selectedIconPath": "/images/tabs/my_select.png"
+      }
+    ]
+  }
+}

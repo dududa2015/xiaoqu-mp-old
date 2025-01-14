@@ -1,0 +1,12 @@
+.container {
+  margin: 32rpx;
+}
+
+.number {
+  width: 150rpx;
+}
+
+.unit {
+  width: 80rpx;
+  text-align: center;
+}

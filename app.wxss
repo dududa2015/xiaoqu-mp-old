@@ -1,0 +1,95 @@
+page {
+  background-color: #f7f7f7;
+  font-size: 32rpx;
+  line-height: 1.6;
+  font-family: Monospaced Number, Chinese Quote, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif !important;
+  --td-primary-color-7: #0074FE;
+  --td-cell-left-icon-font-size: 36rpx;
+  --td-cell-title-font-size: 32rpx;
+  --td-cell-vertical-padding: 24rpx 32rpx;
+  --td-popup-border-radius: 32rpx;
+  /* --td-font-size-m: 28rpx; */
+  --td-cell-title-font-size: 28rpx;
+}
+
+.page-body {
+  padding: 20rpx 0;
+}
+
+.btn-area {
+  margin-top: 60rpx;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 30rpx;
+}
+
+.t-notice-bar--info {
+  background: none !important;
+}
+
+.t-notice-bar__content--vertical-item {
+  font-size: 26rpx !important;
+  color: #2F4F4F !important;
+  font-weight: 500;
+}
+
+
+.t-notice-bar__prefix-icon {
+  font-size: 24rpx !important;
+  padding-top: 12rpx;
+}
+
+.t-popup {
+  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .1);
+}
+
+.t-cell-group {
+  position: relative;
+  border-radius: 32rpx;
+  overflow: hidden;
+}
+
+/* ----------flex布局---------- */
+.flex {
+  display: flex;
+}
+
+.f-direct-h {
+  flex-direction: row;
+}
+
+.f-direct-v {
+  flex-direction: column;
+}
+
+.f-x-center {
+  justify-content: center;
+}
+
+.f-x-fs {
+  justify-content: flex-start;
+}
+
+.f-x-fe {
+  justify-content: flex-end;
+}
+
+.f-x-sb {
+  justify-content: space-between;
+}
+
+.f-x-sr {
+  justify-content: space-around;
+}
+
+.f-y-center {
+  align-items: center;
+}
+
+.f-y-fs {
+  align-items: flex-start;
+}
+
+.f-y-fe {
+  align-items: flex-end;
+}

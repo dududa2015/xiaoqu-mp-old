@@ -1,0 +1,43 @@
+.color-wrap {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.title {
+  text-align: center;
+  font-weight: 600;
+  line-height: 80rpx;
+  height: 80rpx;
+  font-size: 36rpx;
+}
+
+.title-sub {
+  display: none;
+  margin-left: 4px;
+  font-weight: 400;
+  font-size: 10px;
+  color: #333;
+  line-height: 14px;
+  text-align: left;
+  font-style: normal;
+}
+
+.color-item {
+  margin: 16rpx;
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+}
+
+.close-btn {
+  position: absolute;
+  right: -16rpx;
+  top: -112rpx;
+}
+
+.footer {
+  padding: 32rpx 0;
+  width: 100%;
+  text-align: center;
+}

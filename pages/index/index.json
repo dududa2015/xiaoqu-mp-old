@@ -1,0 +1,24 @@
+{
+  "usingComponents": {
+    "top-search": "/components/top-search/top-search",
+    "top-tip": "/components/top-tip/top-tip",
+    "top-bar": "/components/top-bar/top-bar",
+    "bottom-add": "/components/bottom-add/bottom-add",
+    "bottom-location": "/components/bottom-location/bottom-location",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-radio-group": "tdesign-miniprogram/radio-group/radio-group",
+    "t-radio": "tdesign-miniprogram/radio/radio",
+    "t-check-tag": "tdesign-miniprogram/check-tag/check-tag",
+    "color-picker": "/components/color-picker/color-picker",
+    "suggestions-input": "/components/suggestions-input/suggestions-input",
+    "poi-detail": "/components/poi-detail/poi-detail",
+    "marker-add": "/components/marker-add/marker-add",
+    "marker-add-grid": "/components/marker-add-grid/marker-add-grid",
+    "map-setting": "/components/map-setting/map-setting"
+  },
+  "navigationBarTitleText": "小区楼号",
+  "navigationStyle": "custom"
+}

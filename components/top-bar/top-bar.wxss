@@ -1,0 +1,73 @@
+.top-bar-container {
+  position: absolute;
+  /* top: 120rpx; */
+  top: 160rpx;
+  text-align: center;
+  background-color: #fff;
+  padding: 16rpx 0;
+  border-radius: 24rpx;
+  opacity: 0.95;
+  height: 272rpx;
+}
+
+.top-bar-container-shadow {
+  position: absolute;
+  top: 160rpx;
+  right: 16rpx;
+  border-radius: 24rpx;
+  width: 74rpx;
+  height: 304rpx;
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* .marginTop16 {
+  margin-top: 16rpx;
+} */
+.img-wrap-first {
+  position: relative;
+  padding: 0 16rpx;
+}
+
+.img-wrap {
+  position: relative;
+  height: 44rpx;
+  padding: 16rpx 16rpx 0 16rpx;
+}
+
+.img {
+  position: relative;
+  width: 44rpx;
+  height: 44rpx;
+  z-index: 0;
+}
+
+.text {
+  font-size: 20rpx;
+  font-weight: 500;
+  color: #000;
+  line-height: 36rpx;
+  height: 36rpx;
+}
+
+.share-btn {
+  position: absolute;
+  /* 绝对定位 */
+  top: 80%;
+  /* 根据需要调整位置 */
+  left: 50%;
+  /* 根据需要调整位置 */
+  transform: translate(-50%, -50%);
+  /* 将按钮移动到中心 */
+  background-color: transparent;
+  /* 透明背景 */
+  color: transparent;
+  /* 透明文字 */
+  border: none;
+  width: 96rpx;
+  /* 按钮宽度，需与 cover-image 一致 */
+  height: 96rpx;
+  /* 按钮高度，需与 cover-image 一致 */
+  z-index: 1;
+  /* 确保按钮在上层 */
+  opacity: 0;
+}

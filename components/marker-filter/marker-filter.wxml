@@ -1,0 +1,29 @@
+<!-- <view class="marker-filter-wrap">
+    <view class="check-tag-wrap">
+        <view class="check-tag">
+            <view wx:for="{{tagList}}" class="card shadow">{{item}}</view>
+        </view>
+
+        <cover-view class="check-tag absolute">
+            <cover-view wx:for="{{tagList}}" class="{{index === checkedIndex ? 'card card-checked': 'card'}}" bind:tap="onCheck" data-index="{{index}}">{{item}}</cover-view>
+        </cover-view>
+    </view>
+</view> -->
+<!-- <cover-view class="marker-filter-wrap cover-view">
+    <cover-view class="t-radio-group t-size-m t-radio-group--filled shadow">
+        <cover-view wx:for="{{tagList}}" tabindex="0" bind:tap="onCheck" data-index="{{index}}" class="{{index === checkedIndex? 't-radio-button t-is-checked': 't-radio-button'}}">
+            <cover-view class="t-radio-button__input"></cover-view>
+            <cover-view class="t-radio-button__label">{{item}}</cover-view>
+        </cover-view>
+        <cover-view class="t-radio-group__bg-block" style="width: 74px; left: {{checkedIndex* 74 + 2}}px;"></cover-view>
+    </cover-view>
+</cover-view> -->
+<view class="marker-filter-wrap">
+    <view class="t-radio-group t-size-m t-radio-group--filled shadow">
+        <label wx:for="{{tagList}}" tabindex="0" bind:tap="onCheck" data-index="{{index}}" class="{{index === checkedIndex? 't-radio-button t-is-checked': 't-radio-button'}}">
+            <span class="t-radio-button__input"></span>
+            <span class="t-radio-button__label">{{item}}</span>
+        </label>
+        <view class="t-radio-group__bg-block" style="width: 74px; left: {{checkedIndex* 74 + 2}}px;"></view>
+    </view>
+</view>

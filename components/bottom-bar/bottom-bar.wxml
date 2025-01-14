@@ -1,0 +1,39 @@
+<view class="bottom-bar-container" style="bottom: {{bottom + 36}}rpx; {{position}}: 16rpx">
+  <!-- 添加 -->
+  <view class="add-wrap shadow" wx:if="{{points>-30}}">
+    <view class="img-wrap">
+      <image src="/images/controls/add.png" class="img" mode="" />
+    </view>
+    <view class="text">添加</view>
+  </view>
+  <!-- 2D/3D -->
+  <!-- <view class="dimension-wrap shadow">
+    <view class="dimension-text"> 2D </view>
+  </view> -->
+  <!-- 定位 -->
+  <view class="location-wrap shadow">
+    <view class="img-wrap">
+      <image src="/images/controls/loc.png" class="img" mode="" />
+    </view>
+  </view>
+</view>
+
+<cover-view class="bottom-bar-container" style="bottom: {{bottom + 36}}rpx; {{position}}: 16rpx">
+  <!-- 添加 -->
+  <cover-view class="add-wrap" bind:tap="onAdd" wx:if="{{points>-30}}">
+    <cover-view class="img-wrap">
+      <cover-image src="/images/controls/add.png" class="img" mode="" />
+    </cover-view>
+    <cover-view class="text">添加</cover-view>
+  </cover-view>
+  <!-- 2D/3D -->
+  <!-- <cover-view class="dimension-wrap" bind:tap="onDimension">
+    <cover-view class="dimension-text"> {{dimensionText}} </cover-view>
+  </cover-view> -->
+  <!-- 定位 -->
+  <cover-view class="location-wrap" bind:tap="onLocation">
+    <cover-view class="img-wrap">
+      <cover-image src="/images/controls/loc.png" class="img" mode="" />
+    </cover-view>
+  </cover-view>
+</cover-view>

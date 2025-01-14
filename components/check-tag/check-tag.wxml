@@ -1,0 +1,9 @@
+<view class="check-tag-wrap">
+    <view class="check-tag">
+        <view wx:for="{{tagList}}" class="card shadow">{{item}}</view>
+    </view>
+
+    <cover-view class="check-tag absolute">
+        <cover-view wx:for="{{tagList}}" class="{{index === checkedIndex ? 'card card-checked': 'card'}}" bind:tap="onCheck" data-index="{{index}}">{{item}}</cover-view>
+    </cover-view>
+</view>

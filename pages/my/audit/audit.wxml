@@ -1,0 +1,51 @@
+<view class="container">
+  <!-- <t-search placeholder="搜索" bind:change="onSearch" /> -->
+  <view class="statistics-wrap flex f-x-sb f-y-center">
+    <view class="statistics-item">
+      <view class="statistics-number">
+        {{recordCountList[0].recordCount}}
+      </view>
+      <view class="statistics-desc">
+        今日标记
+      </view>
+    </view>
+    <view class="statistics-item">
+      <view class="statistics-number">
+        {{recordCountList[1].recordCount}}
+      </view>
+      <view class="statistics-desc">
+        未审核
+      </view>
+    </view>
+    <view class="statistics-item" bind:tap="onNewUser">
+      <view class="statistics-number">
+        {{recordCountList[2].recordCount}}
+      </view>
+      <view class="statistics-desc">
+        新增用户
+      </view>
+    </view>
+  </view>
+  <view class="content">
+    <t-cell-group wx:if="{{auditList.length > 0}}">
+      <t-swipe-cell wx:for="{{auditList}}" wx:key="index">
+        <t-cell title="{{index+1}}、 {{item.name}}" hover arrow url="/pages/password/edit/edit?pId={{item.pId}}" bordered="{{index !== auditList.length-1}}" note="{{item.type}}" bind:tap="onMarkerTap" data-item="{{item}}" />
+        <view slot="right" class="btn-wrapper">
+          <view class="btn delete-btn-1" bind:tap="auditNotPassed" data-points="10" data-item="{{item}}">
+            删扣10
+          </view>
+          <view class="btn delete-btn-2" bind:tap="auditNotPassed" data-points="1" data-item="{{item}}">
+            删扣1
+          </view>
+        </view>
+      </t-swipe-cell>
+    </t-cell-group>
+    <view wx:else>
+      <image src="https://img01.yzcdn.cn/vant/empty-image-default.png" class="img" mode="" />
+      <view class="empty-text">列表为空</view>
+    </view>
+  </view>
+  <t-fab wx:if="{{auditList.length > 0}}" icon="check" bind:click="onAudit" draggable text="通过" aria-label="通过"></t-fab>
+</view>
+
+<map-marker-popup item="{{item}}"></map-marker-popup>

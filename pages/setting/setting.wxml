@@ -1,0 +1,21 @@
+<view class="setting">
+    <t-cell-group>
+        <t-cell title="地图控件位置">
+            <t-radio-group value="{{position}}" slot="note" borderless t-class="box" bind:change="onPositionChange">
+                <t-radio block="{{false}}" label="靠左" value="left" />
+                <t-radio block="{{false}}" label="靠右" value="right" />
+            </t-radio-group>
+        </t-cell>
+        <t-cell title="标记形状">
+            <t-radio-group value="{{markerShape}}" slot="note" borderless t-class="box" bind:change="onMarkerShapeChange">
+                <t-radio block="{{false}}" label="气泡" value="callout" />
+                <t-radio block="{{false}}" label="标签" value="label" />
+            </t-radio-group>
+        </t-cell>
+
+        <t-cell title="开启旋转" bordered="{{false}}">
+            <t-switch value="{{enableRotate}}" slot="note" size="small" bind:change="onRotateChange" />
+        </t-cell>
+    </t-cell-group>
+</view>
+<view class="desc">温馨提醒：标记形状建议选择"标签"，可以有效解决卡顿问题</view>

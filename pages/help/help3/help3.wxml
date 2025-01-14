@@ -1,0 +1,54 @@
+<view class="container">
+  <view class="row">
+    <view class="text-wrap">
+      1️⃣ 轻触右上角···
+    </view>
+    <view class="img-wrap">
+      <t-image src="https://c-ssl.duitang.com/uploads/blog/202408/03/OoSbeEpmf6BlgnB.png" height="100" mode="heightFix" />
+    </view>
+  </view>
+  <view class="row">
+    <view class="text-wrap">
+      2️⃣ 选择「添加到桌面」
+    </view>
+    <view class="img-wrap">
+      <t-image src="https://c-ssl.duitang.com/uploads/blog/202408/03/LySmAEJwFqL6a5Q.png" height="80" mode="heightFix" />
+    </view>
+  </view>
+  <view class="row">
+    <view class="text-wrap">
+      3️⃣ 轻触底部分享图标
+    </view>
+    <view class="img-wrap">
+      <t-image src="https://c-ssl.duitang.com/uploads/blog/202408/03/LySmAEJwFqL6alY.png" height="120" mode="heightFix" />
+    </view>
+  </view>
+
+  <view class="row">
+    <view class="text-wrap">
+      4️⃣ 选择「添加到主屏幕」
+    </view>
+    <view class="img-wrap">
+      <t-image src="https://c-ssl.duitang.com/uploads/blog/202408/03/q4Sz90N4HxGZaLy.jpeg" height="45" mode="heightFix" />
+    </view>
+  </view>
+
+  <view class="row">
+    <view class="text-wrap">
+      5️⃣ 点击「添加」
+    </view>
+    <view class="img-wrap">
+      <t-image src="https://c-ssl.duitang.com/uploads/blog/202408/03/m7Syn6XMUNpJ03z.png" height="120" mode="heightFix" />
+    </view>
+  </view>
+
+  <view class="row">
+    <view class="text-wrap">
+      6️⃣ 成功添加
+    </view>
+    <view class="img-wrap">
+      <t-image src="https://c-ssl.duitang.com/uploads/blog/202408/03/eAS17MwdsM3jVwo.png" height="100" mode="heightFix" />
+    </view>
+  </view>
+
+</view>

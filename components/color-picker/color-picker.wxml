@@ -1,0 +1,14 @@
+<t-popup visible="{{visible}}" placement="bottom" touchmove='false' bind:visible-change="onVisibleChange" style="background:#fff;padding:16rpx 32rpx 32rpx 32rpx; width: calc(100% - 64rpx);">
+  <t-icon t-class="close-btn" name="close-circle" size="32" color="#fff" bind:tap="onFormClose" />
+  <view class="title">标记颜色<text class="title-sub">(颜色对所有人可见)</text> </view>
+  <view class="color-wrap">
+    <view class="color-item" style="background-color: {{item}};" wx:for="{{colorList}}" wx:key="index" data-index="{{index}}" bind:tap="onCheck">
+      <t-icon name="check" size="60rpx" color="#fff" wx:if="{{checkedIndex === index }}" />
+    </view>
+    <view class="footer">
+      <t-button theme="primary" size="large" style="width: 100%;" block bind:tap="onSave">保存</t-button>
+    </view>
+  </view>
+
+
+</t-popup>

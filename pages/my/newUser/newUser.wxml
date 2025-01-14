@@ -1,0 +1,13 @@
+<view class="container">
+  <view class="col">
+    <t-cell-group>
+      <t-cell wx:for="{{leftUserList}}" wx:key="index" title="{{item.hour}}时" note="{{item.recordCount}}人" bordered="{{leftUserList.length - 1 !== index}}" />
+    </t-cell-group>
+  </view>
+  <view class="col">
+    <t-cell-group>
+      <t-cell wx:for="{{rightUserList}}" wx:key="index" title="{{item.hour}}时" note="{{item.recordCount}}人" bordered="{{rightUserList.length - 1 !== index}}" />
+    </t-cell-group>
+  </view>
+
+</view>

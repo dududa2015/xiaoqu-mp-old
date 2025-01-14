@@ -1,0 +1,45 @@
+<t-popup visible="{{showSetting}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#f7f7f7;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx);">
+  <view class="close-btn" bind:tap="onClose">
+    <image src="/images/controls/cross.png" mode="" style="width: 40rpx; height: 40rpx;" />
+  </view>
+  <view>
+    <view class="popup-title">设置</view>
+    <view class="content">
+      <view class="col" bind:tap="onChoose" data-index="0">
+        <image src="/images/layer/4.png" class="{{!enableSatellite ? 'img img-checked' : 'img'}}" mode="scaleToFill" />
+        <view class="{{!enableSatellite ? 'text text-checked' : 'text'}}">标准地图</view>
+      </view>
+      <view class="col" bind:tap="onChoose" data-index="1">
+        <image src="/images/layer/7.png" class="{{enableSatellite ? 'img img-checked' : 'img'}}" mode="scaleToFill" />
+        <view class="{{enableSatellite   ? 'text text-checked' : 'text'}}">卫星地图</view>
+      </view>
+    </view>
+  </view>
+  <view class="setting">
+    <view class="row flex f-x-sb">
+      <view class="row-title">地图控件位置</view>
+      <view class="row-title">
+        <t-radio-group value="{{position}}" slot="note" borderless t-class="box" bind:change="onPositionChange">
+          <t-radio block="{{false}}" label="居左" value="left" />
+          <t-radio block="{{false}}" label="居右" value="right" />
+        </t-radio-group>
+      </view>
+    </view>
+    <!-- callout会引起ios地图卡顿,不要这个设置 2024-11-30 -->
+    <view class="row flex f-x-sb">
+      <view class="row-title">标记形状</view>
+      <view class="row-title">
+        <t-radio-group value="{{markerShape}}" slot="note" borderless t-class="box" bind:change="onMarkerShapeChange">
+          <t-radio block="{{false}}" label="气泡" value="callout" />
+          <t-radio block="{{false}}" label="标签" value="label" />
+        </t-radio-group>
+      </view>
+    </view>
+    <view class="last-row flex f-x-sb">
+      <view class="row-title">开启旋转</view>
+      <view class="row-title">
+        <t-switch value="{{enableRotate}}" slot="note" size="small" bind:change="onRotateChange" />
+      </view>
+    </view>
+  </view>
+</t-popup>

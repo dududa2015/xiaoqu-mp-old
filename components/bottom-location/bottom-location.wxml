@@ -1,0 +1,8 @@
+<view class="bottom-bar-container" style="bottom: {{bottom + 36}}rpx; {{position}}: 16rpx" bind:tap="onLocation">
+  <!-- 定位 -->
+  <view class="location-wrap shadow">
+    <view class="img-wrap">
+      <image src="/images/controls/loc.png" class="img" mode="" />
+    </view>
+  </view>
+</view>

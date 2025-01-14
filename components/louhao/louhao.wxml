@@ -1,0 +1,20 @@
+<view class="flex f-x-sr f-y-center container">
+  <view class="number">
+    <t-input placeholder="" borderless="{{true}}"></t-input>
+  </view>
+  <view class="unit">
+    区
+  </view>
+  <view class="number">
+    <t-input placeholder="" borderless="{{true}}"></t-input>
+  </view>
+  <view class="unit">
+    栋
+  </view>
+  <view class="number">
+    <t-input placeholder="" borderless="{{true}}"></t-input>
+  </view>
+  <view class="unit">
+    单元
+  </view>
+</view>

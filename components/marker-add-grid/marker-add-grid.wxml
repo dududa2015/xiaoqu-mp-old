@@ -1,0 +1,16 @@
+<t-popup visible="{{show}}" show-overlay="{{false}}" placement="bottom">
+  <!-- <cover-view style="position: absolute;bottom: env(safe-area-inset-bottom); left: 0; width: 100%; height: 348rpx;"></cover-view> -->
+  <view class="marker-add-grid-wrap">
+    <view class="grid-wrap">
+      <view class="grid-item" wx:for="{{pointList}}" wx:key="index" bind:tap="onChoose" data-index="{{index}}">
+        <view class="grid-img">
+          <view class="img-wrap" style="background-color: {{item.bgcolor}};">
+            <t-icon name="{{item.icon}}" size="48rpx" color="#fff" />
+          </view>
+        </view>
+        <view class="grid-text">{{item.name}}
+        </view>
+      </view>
+    </view>
+  </view>
+</t-popup>
