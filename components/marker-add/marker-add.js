@@ -7,7 +7,7 @@ import {
 } from '../../utils/util'
 import {
     addMarker,
-    updateLouhao
+    updateMarker
 } from '../../utils/apis'
 Component({
     /**
@@ -434,7 +434,7 @@ Component({
                                 latitude
                             } = res
                             if (that.selectedMarker) {
-                                that.updateLouhao(longitude, latitude)
+                                that.updateMarker(longitude, latitude)
                             } else {
                                 that.addMarker(longitude, latitude)
                             }
@@ -511,7 +511,7 @@ Component({
                 }
             })
         },
-        updateLouhao(longitude, latitude) {
+        updateMarker(longitude, latitude) {
             //如果为true，则delete = 0 表示直接通过，为-1表示需要审核
             let deleted = checkString(this.data.name) ? 0 : -1
             let direction = this.getDirection()
@@ -527,9 +527,7 @@ Component({
                 lat: latitude
             }
             const that = this
-            updateLouhao({
-                param: JSON.stringify(param)
-            }).then(res => {
+            updateMarker(param).then(res => {
                 wx.showToast({
                     title: '修改成功',
                 })
