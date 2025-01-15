@@ -1,6 +1,6 @@
 import {
     getUserById,
-    getMyRank
+    getRankByUserId
 } from '../../../utils/apis'
 Page({
 
@@ -22,7 +22,7 @@ Page({
 
     onShow() {
         this.getUserInfo()
-        this.getMyRank()
+        this.getRankByUserId()
     },
     getUserInfo() {
         getUserById({
@@ -45,9 +45,9 @@ Page({
             }
         })
     },
-    getMyRank() {
+    getRankByUserId() {
         const that = this
-        getMyRank({
+        getRankByUserId({
             userId: wx.getStorageSync('userId'),
         }).then(res => {
             if (res) {

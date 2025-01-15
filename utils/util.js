@@ -1,7 +1,7 @@
 const { words, auditedList } = require('./const.js');
 import api from './api.js'
 import {
-  updateRecordCount
+  updateBdRecordCount
 } from './apis'
 const formatTime = date => {
   const year = date.getFullYear()
@@ -142,7 +142,7 @@ const msgSecCheck = msg => {
 
 const getBdAround = (latlng, page_num) => {
   let createdDate = formatDate(new Date())
-  updateRecordCount({ createdDate })
+  updateBdRecordCount(JSON.stringify(createdDate))
   const param = {
     query: '内部楼栋',
     location: latlng,

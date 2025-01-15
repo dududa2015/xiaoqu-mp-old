@@ -15,11 +15,9 @@ import {
 import {
     addMarker,
     getAroundList,
-    getMyAroundList,
-    writeLouhaoList,
+    addMarkerList,
     deleteMarker,
-    updateUserColor,
-    getRecordCount,
+    getBdRecordCount,
     getCaches,
     deleteNearLouhao
 } from '../../utils/apis'
@@ -49,7 +47,6 @@ Page({
         showLocation: true,
         markers: [],
         show: false,
-        colorVisible: false, //颜色弹窗
         polyline: [],
     },
     onLoad() {
@@ -154,12 +151,7 @@ Page({
             })
             videoAd.onClose((res) => {
                 if (res && res.isEnded || res === undefined) {
-                    //如果颜色选择框visible为true，则看广告是为了修改颜色，否则是删除
-                    if (this.data.colorVisible) {
-                        this.updateUserColor()
-                    } else {
-                        this.onDelete()
-                    }
+                    this.onDelete()
                 }
             })
         }
@@ -622,30 +614,6 @@ Page({
         const match = dateStr.match(/\d+/);
         return match ? parseInt(match[0], 10) : 0;
     },
-    // //当点击“我的”标签时后调用的方法
-    // getMyAroundList() {
-    //     const that = this
-    //     const userId = wx.getStorageSync('userId')
-    //     const lng = wx.getStorageSync('lastLongitude')
-    //     const lat = wx.getStorageSync('lastLatitude')
-    //     getMyAroundList({
-    //         lng,
-    //         lat,
-    //         userId
-    //     }).then(res => {
-    //         let list = JSON.parse(res)
-    //         that.addAroundList2Map(list)
-    //         let includePoints = list.map((element) => {
-    //             return {
-    //                 latitude: element.lat,
-    //                 longitude: element.lng
-    //             };
-    //         });
-    //         that.setData({
-    //             includePoints
-    //         })
-    //     })
-    // },
     //把db中的周围的数据添加到地图的标记上
     addAroundList2Map(list) {
         let markers = this.data.markers
@@ -688,7 +656,7 @@ Page({
     addBdAroundList(lng, lat) {
         let createdDate = formatDate(new Date())
         const that = this
-        getRecordCount({ createdDate }).then(count => {
+        getBdRecordCount({ createdDate }).then(count => {
             //调用次数小于10000
             if (count < 10000) {
                 //反过来。。
@@ -740,12 +708,12 @@ Page({
             }
         }
         this.addAroundList2Map(poiList)
-        this.writeLouhaoList(poiList)
+        this.addMarkerList(poiList)
     },
     //把bd-api请求的数据写入db
-    writeLouhaoList(poiList) {
+    addMarkerList(poiList) {
         if (poiList.length > 0) {
-            writeLouhaoList({ param: JSON.stringify(poiList) }).then(res => {
+            addMarkerList(poiList).then(res => {
                 console.log('success', res)
             }).catch(err => {
                 console.log('failed', err)
@@ -860,7 +828,7 @@ Page({
         this.disableMapTap()
         let polyline = this.data.polyline
         let index = getApp().globalData.currentPolylineIndex
-        this.addMarker(polyline[index].points)
+        this.addPolylineMarker(polyline[index].points)
     },
     //从marker-add组件过来的事件，退出
     onCancelChooseMarker() {
@@ -941,7 +909,7 @@ Page({
         })
     },
     //添加道路和围墙
-    addMarker(points) {
+    addPolylineMarker(points) {
         if (points.length < 2) {
             wx.showToast({
                 title: '请至少选择2个点',
@@ -1049,11 +1017,6 @@ Page({
             markerDetail: event.detail
         })
     },
-    onColor() {
-        this.setData({
-            colorVisible: true
-        })
-    },
     onSetting() {
         this.setData({
             showSetting: true,
@@ -1142,114 +1105,6 @@ Page({
             return '#dc143c'
         }
     },
-    //从颜色选择子组件传过来的事件
-    getColor(event) {
-        const { color, status } = event.detail
-        const colorStorage = getColorFromStorage()
-        //如果返回的color是默认颜色，且缓存中的color不为空，且状态不是临时选择则取缓存中的颜色
-        if (color === '#0074FE' && colorStorage !== '' && status !== -1) {
-            this.color = colorStorage
-        } else {
-            this.color = color
-        }
-
-        let markers = this.data.markers
-        for (const item of markers) {
-            if (item.label) {
-                item.label.bgColor = this.color
-            } else {
-                item.callout.bgColor = this.color
-            }
-        }
-
-        //status，-2表示未选颜色，-1表示选中颜色后的临时生效，0表示关闭颜色窗口后的3秒恢复原状，1表示保存后看广告
-        if (status === -2) {
-            this.setData({
-                colorVisible: false
-            })
-        } else if (status === -1) {
-            this.setData({
-                markers
-            })
-        } else if (status === 0) {
-            wx.showToast({
-                title: '3秒后标记将恢复原来的颜色',
-                icon: 'none'
-            })
-            this.setData({
-                colorVisible: false
-            })
-            setTimeout(() => {
-                this.setData({
-                    markers
-                })
-            }, 3000);
-        } else {
-            //如果选中的是默认颜色，则直接修改，不用看广告
-            if (color === '#0074FE') {
-                this.color = color
-                this.updateUserColor()
-                return
-            }
-            wx.showModal({
-                title: '温馨提示',
-                content: '观看视频，颜色7天有效',
-                success(res) {
-                    if (res.confirm) {
-                        // 用户触发广告后，显示激励视频广告
-                        if (videoAd) {
-                            videoAd.show().catch(() => {
-                                // 失败重试
-                                videoAd.load()
-                                    .then(() => videoAd.show())
-                                    .catch(err => {
-                                        console.error('激励视频 广告显示失败', err)
-                                    })
-                            })
-                        }
-                    }
-                }
-            })
-        }
-    },
-    //修改用户的颜色
-    updateUserColor() {
-        const userId = wx.getStorageSync('userId')
-        const color = this.color
-        this.setData({
-            colorVisible: false
-        })
-        updateUserColor({ userId, color }).then(res => {
-            if (res) {
-                //写缓存
-                let currentDate = new Date();
-                currentDate.setDate(currentDate.getDate() + 7);
-                wx.setStorageSync('color', color)
-                wx.setStorageSync('colorExpiredDate', formatTime(currentDate))
-                wx.showToast({
-                    title: '保存成功',
-                })
-            }
-        })
-    },
-    // 暂时不要，2024-11-22
-    // getCheckedIndex(event) {
-    //     this.checkedIndex = event.detail
-    //     let userId = wx.getStorageSync('userId')
-    //     let markers = []
-    //     this.disableMapTap()
-    //     //当切换到“我的”时保存
-    //     this.setData({
-    //         markers: []
-    //     })
-    //     if (this.checkedIndex === 0) {
-    //         let latitude = wx.getStorageSync('lastLatitude')
-    //         let longitude = wx.getStorageSync('lastLongitude')
-    //         this.getAroundList(latitude, longitude)
-    //     } else {
-    //         this.getMyAroundList()
-    //     }
-    // },
     //防止点击穿透map事件
     disableMapTap() {
         this.disableTap = true

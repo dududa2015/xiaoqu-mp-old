@@ -3,7 +3,7 @@
   <view class="statistics-wrap flex f-x-sb f-y-center">
     <view class="statistics-item">
       <view class="statistics-number">
-        {{recordCountList[0].recordCount}}
+        {{statistics.todayNumber}}
       </view>
       <view class="statistics-desc">
         今日标记
@@ -11,7 +11,7 @@
     </view>
     <view class="statistics-item">
       <view class="statistics-number">
-        {{recordCountList[1].recordCount}}
+        {{statistics.unAuditNumber}}
       </view>
       <view class="statistics-desc">
         未审核
@@ -19,7 +19,7 @@
     </view>
     <view class="statistics-item" bind:tap="onNewUser">
       <view class="statistics-number">
-        {{recordCountList[2].recordCount}}
+        {{statistics.newUserNumber}}
       </view>
       <view class="statistics-desc">
         新增用户

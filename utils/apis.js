@@ -2,7 +2,6 @@ import {
     request
 } from "./request"
 
-
 // 用户相关
 
 // 获取用户信息--用于启动事件
@@ -24,7 +23,7 @@ export const getUserById = (params) => {
 //更改用户昵称
 export const updateNickName = (params) => {
     return request({
-        url: '/updateNickName',
+        url: '/users/updateNickName',
         data: params,
         method: 'POST',
     })
@@ -37,15 +36,6 @@ export const getAroundList = (params) => {
         method: 'GET',
     })
 }
-// 获取周围的标记
-export const getMyAroundList = (params) => {
-    return request({
-        url: '/getMyAroundList',
-        data: params,
-        method: 'POST',
-    })
-}
-
 // 向db中写一条楼号数据
 export const addMarker = (params) => {
     return request({
@@ -54,10 +44,10 @@ export const addMarker = (params) => {
         method: 'POST',
     })
 }
-// 批量向db中写一条楼号数据
-export const writeLouhaoList = (params) => {
+// 批量向db中写入楼号数据
+export const addMarkerList = (params) => {
     return request({
-        url: '/writeLouhaoList',
+        url: '/marker/addMarkerList',
         data: params,
         method: 'POST',
     })
@@ -86,28 +76,20 @@ export const deleteMarker = (params) => {
         method: 'POST',
     })
 }
-//修改用户的主题色
-export const updateUserColor = (params) => {
-    return request({
-        url: '/updateUserColor',
-        data: params,
-        method: 'POST',
-    })
-}
 //获取审核列表
 export const getAuditList = (params) => {
     return request({
-        url: '/getAuditList',
+        url: '/marker/getAuditList',
         data: params,
-        method: 'POST',
+        method: 'GET',
     })
 }
 //获取审核页面中的数量
-export const getAuditRecordCountList = (params) => {
+export const getStatistics = (params) => {
     return request({
-        url: '/getAuditRecordCountList',
+        url: '/marker/getStatistics',
         data: params,
-        method: 'POST',
+        method: 'GET',
     })
 }
 //获取新用户统计
@@ -143,36 +125,36 @@ export const getPwdModel = (params) => {
     })
 }
 //获取百度接口调用次数
-export const getRecordCount = (params) => {
+export const getBdRecordCount = (params) => {
     return request({
-        url: '/getRecordCount',
+        url: '/marker/getBdRecordCount',
         data: params,
-        method: 'POST',
+        method: 'GET',
     })
 }
 //百度接口调用次数+1
-export const updateRecordCount = (params) => {
+export const updateBdRecordCount = (params) => {
     return request({
-        url: '/updateRecordCount',
+        url: '/marker/updateBdRecordCount',
         data: params,
         method: 'POST',
     })
 }
 
 //点赞
-export const updateLouhaoLikes = (params) => {
+export const updateMarkerLikes = (params) => {
     return request({
-        url: '/updateLouhaoLikes',
+        url: '/marker/updateMarkerLikes',
         data: params,
         method: 'POST',
     })
 }
 //获取我的个人排名
-export const getMyRank = (params) => {
+export const getRankByUserId = (params) => {
     return request({
-        url: '/getMyRank',
+        url: '/users/getRankByUserId',
         data: params,
-        method: 'POST',
+        method: 'GET',
     })
 }
 //获取我的个人排名

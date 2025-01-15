@@ -4,7 +4,7 @@ import {
 } from '../../utils/util'
 import {
   getMarkerById,
-  updateLouhaoLikes
+  updateMarkerLikes
 } from '../../utils/apis'
 Component({
   /**
@@ -92,9 +92,9 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    getLouhao(xid) {
+    getLouhao(xId) {
       const that = this
-      getMarkerById({ xid: xid }).then(res => {
+      getMarkerById({ xId: xId }).then(res => {
         let result = res
         let remarkTagList = []
         if (result.remark) {
@@ -138,16 +138,15 @@ Component({
         })
       })
     },
-    convertDate(timestampStr) {
-      const timestamp = parseInt(timestampStr.match(/\d+/)[0]);
-      const date = new Date(timestamp);
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const seconds = String(date.getSeconds()).padStart(2, '0');
-      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    convertDate(inputDateTime) {
+        const date = new Date(inputDateTime);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     },
     showLouhao(e) {
       let {
@@ -289,7 +288,7 @@ Component({
       let type = event.currentTarget.dataset.type
 
       const that = this
-      updateLouhaoLikes({ xId, type }).then(res => {
+      updateMarkerLikes({ xId, type }).then(res => {
         if (res) {
           if (type === '1') {
             that.setData({
