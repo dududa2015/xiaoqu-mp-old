@@ -18,7 +18,7 @@ import {
     addMarkerList,
     deleteMarker,
     getBdRecordCount,
-    getCaches,
+    getCachedNotice,
     deleteNearLouhao
 } from '../../utils/apis'
 // 在页面中定义激励视频广告
@@ -52,7 +52,7 @@ Page({
     onLoad() {
         this.getLocation()
         this.getPadding()
-        this.getCaches()
+        this.getCachedNotice()
 
         this.getStatusBar()
         this.getWindowInfo()
@@ -95,9 +95,9 @@ Page({
             })
         }
     },
-    getCaches() {
+    getCachedNotice() {
         const that = this
-        getCaches().then(res => {
+        getCachedNotice().then(res => {
             if (res) {
                 let result = JSON.parse(res)
                 that.setData({
@@ -189,6 +189,7 @@ Page({
             // isHighAccuracy: true,
             success(res) {
                 let { longitude, latitude } = res
+                console.log(longitude, latitude)
                 // longitude = 113.410138
                 // latitude = 22.453188
                 that.setData({

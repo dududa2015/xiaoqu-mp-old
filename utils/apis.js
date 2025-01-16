@@ -95,15 +95,15 @@ export const getStatistics = (params) => {
 //获取新用户统计
 export const getNewUserStatistics = (params) => {
     return request({
-        url: '/getNewUserStatistics',
+        url: '/users/getNewUserStatistics',
         data: params,
-        method: 'POST',
+        method: 'GET',
     })
 }
 //审核不通过
 export const auditNotPassed = (params) => {
     return request({
-        url: '/auditNotPassed',
+        url: '/marker/auditNotPassed',
         data: params,
         method: 'POST',
     })
@@ -111,19 +111,12 @@ export const auditNotPassed = (params) => {
 //审核通过
 export const auditPassed = (params) => {
     return request({
-        url: '/auditPassed',
+        url: '/marker/auditPassed',
         data: params,
         method: 'POST',
     })
 }
 
-export const getPwdModel = (params) => {
-    return request({
-        url: '/getPwdModel',
-        data: params,
-        method: 'POST',
-    })
-}
 //获取百度接口调用次数
 export const getBdRecordCount = (params) => {
     return request({
@@ -157,33 +150,25 @@ export const getRankByUserId = (params) => {
         method: 'GET',
     })
 }
-//获取我的个人排名
-export const getMyMarkerList = (params) => {
+//获取我标记列表
+export const getMarkerByUserId = (params) => {
     return request({
-        url: '/getMyMarkerList',
+        url: '/marker/getMarkerByUserId',
         data: params,
-        method: 'POST',
-    })
-}
-//获取公告
-export const getNotices = (params) => {
-    return request({
-        url: '/getNotices',
-        data: params,
-        method: 'POST',
+        method: 'GET',
     })
 }
 //获取缓存里的内容，caches.json
-export const getCaches = (params) => {
+export const getCachedNotice = (params) => {
     return request({
         url: '/users/getCachedNotice',
         data: params,
         method: 'GET',
     })
 }
-export const deleteNearLouhao = (params) => {
+export const deleteNearMarkers = (params) => {
     return request({
-        url: '/deleteNearLouhao',
+        url: '/marker/deleteNearMarkers',
         data: params,
         method: 'POST',
     })

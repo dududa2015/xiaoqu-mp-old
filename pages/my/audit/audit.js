@@ -70,9 +70,7 @@ Page({
     onAudit() {
         const that = this
         let xIdList = this.data.auditList.map(item => item.xId)
-        auditPassed({
-            xIdList
-        }).then(res => {
+        auditPassed(xIdList).then(res => {
             wx.showToast({
                 title: res ? '审核成功' : '审核失败'
             })
