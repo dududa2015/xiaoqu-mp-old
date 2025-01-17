@@ -159,9 +159,9 @@ export const getMarkerByUserId = (params) => {
     })
 }
 //获取缓存里的内容，caches.json
-export const getCachedNotice = (params) => {
+export const getNotice = (params) => {
     return request({
-        url: '/users/getCachedNotice',
+        url: '/notice/getNotice',
         data: params,
         method: 'GET',
     })

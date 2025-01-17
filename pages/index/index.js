@@ -18,7 +18,7 @@ import {
     addMarkerList,
     deleteMarker,
     getBdRecordCount,
-    getCachedNotice,
+    getNotice,
     deleteNearLouhao
 } from '../../utils/apis'
 // 在页面中定义激励视频广告
@@ -52,7 +52,6 @@ Page({
     onLoad() {
         this.getLocation()
         this.getPadding()
-        this.getCachedNotice()
 
         this.getStatusBar()
         this.getWindowInfo()
@@ -72,7 +71,8 @@ Page({
             wx.setKeepScreenOn({
                 keepScreenOn: true
             })
-        }, 5000);
+            this.getNotice()
+        }, 3000);
     },
     //设置
     initStorage() {
@@ -95,15 +95,15 @@ Page({
             })
         }
     },
-    getCachedNotice() {
+    getNotice() {
         const that = this
-        getCachedNotice().then(res => {
+        getNotice().then(res => {
             if (res) {
-                let result = JSON.parse(res)
+                let result = JSON.parse(res.content)
                 that.setData({
                     noticeList: result.noticeList,
                 })
-                that.count = result.count
+                that.count = res.count
             } else { //2025年把这个else删除
                 that.setData({
                     noticeList: ["请勿标记门禁密码，违者停用账号"]
