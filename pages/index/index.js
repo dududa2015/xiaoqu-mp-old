@@ -13,7 +13,7 @@ import {
     buildPolyline
 } from '../../utils/map'
 import {
-    addMarker,
+    addLouhao,
     getAroundList,
     addMarkerList,
     deleteMarker,
@@ -190,8 +190,8 @@ Page({
             success(res) {
                 let { longitude, latitude } = res
                 console.log(longitude, latitude)
-                // longitude = 113.410138
-                // latitude = 22.453188
+                longitude = 113.47,
+                latitude = 22.27
                 that.setData({
                     latitude,
                     longitude,
@@ -377,6 +377,7 @@ Page({
     // },
     //点击定点时添加的小圆圈
     addPolylineMarker(latitude, longitude, type) {
+        debugger
         let num = generateRandom10DigitNumber()
         let marker = {
             id: -1 * num,
@@ -558,14 +559,6 @@ Page({
             userId
         }).then(res => {
             let list = res
-            //返回错误时
-            if (list.error) {
-                wx.showToast({
-                    title: list.error,
-                    icon: 'none'
-                })
-                return
-            }
             that.deleteNearMarkers(list)
             //如果db中没有，则请求bd-api数据
             if (list.length > 0) {
@@ -622,7 +615,6 @@ Page({
         for (const item of list) {
             let marker = buildMarkers(item.lat, item.lng, parseInt(item.xId), item.name, item.type, item.userId, item.deleted)
             let points = JSON.parse(item.points || null)
-
             let m = markers.findIndex(item => item.id === marker.id)
             if (m === -1) {
                 //如果该标记点在地图上还不存在，则增加道路线
@@ -826,10 +818,11 @@ Page({
     },
     //从marker-add组件过来的事件，完成
     onFinishChooseMarker() {
+        debugger
         this.disableMapTap()
         let polyline = this.data.polyline
         let index = getApp().globalData.currentPolylineIndex
-        this.addPolylineMarker(polyline[index].points)
+        this.addLouhao(polyline[index].points)
     },
     //从marker-add组件过来的事件，退出
     onCancelChooseMarker() {
@@ -873,6 +866,7 @@ Page({
         })
     },
     addPolyline(longitude, latitude) {
+        debugger
         let polyline = this.data.polyline
         //
         let index = getApp().globalData.currentPolylineIndex
@@ -898,6 +892,10 @@ Page({
         //放在这里，上面的判断没通过，不执行
         this.addPolylineMarker(latitude, longitude, this.data.markerTypeIndex)
         points.push({ latitude, longitude })
+        debugger
+        if(points.length < 2){
+            return
+        }
         currentPolyline = {
             points: points,
             color: this.buildPolylineColor(this.data.markerTypeIndex),
@@ -910,7 +908,7 @@ Page({
         })
     },
     //添加道路和围墙
-    addPolylineMarker(points) {
+    addLouhao(points) {
         if (points.length < 2) {
             wx.showToast({
                 title: '请至少选择2个点',
@@ -935,7 +933,7 @@ Page({
             points: JSON.stringify(points)
         }
         const that = this
-        addMarker(param).then(res => {
+        addLouhao(param).then(res => {
             if (res) {
                 wx.showToast({
                     title: '添加成功',

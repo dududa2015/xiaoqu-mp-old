@@ -109,6 +109,8 @@
     <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;" wx:if="{{showAudit}}">
       <t-cell title="审核" hover arrow left-icon="fact-check" url="/pages/my/audit/audit" note="审核楼号标记">
       </t-cell>
+      <t-cell title="通知公告" hover arrow left-icon="sound" color="#8c444f" url="/pages/my/notice/notice" note="修改通知公告">
+      </t-cell>
     </t-cell-group>
     <view class="ad-wrap" wx:if="{{!isVip}}">
       <ad unit-id="adunit-d0128667c529af77"></ad>

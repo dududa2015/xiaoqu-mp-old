@@ -37,7 +37,7 @@ export const getAroundList = (params) => {
     })
 }
 // 向db中写一条楼号数据
-export const addMarker = (params) => {
+export const addLouhao = (params) => {
     return request({
         url: '/marker/addMarker',
         data: params,
@@ -164,6 +164,14 @@ export const getNotice = (params) => {
         url: '/notice/getNotice',
         data: params,
         method: 'GET',
+    })
+}
+//获取缓存里的内容，caches.json
+export const updateNotice = (params) => {
+    return request({
+        url: '/notice/updateNotice',
+        data: params,
+        method: 'POST',
     })
 }
 export const deleteNearMarkers = (params) => {

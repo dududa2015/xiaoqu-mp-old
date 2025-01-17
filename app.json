@@ -10,7 +10,8 @@
     "pages/my/edit/edit",
     "pages/my/audit/audit",
     "pages/my/newUser/newUser",
-    "pages/my/markers/markers"
+    "pages/my/markers/markers",
+    "pages/my/notice/notice"
   ],
   "window": {
     "navigationBarTextStyle": "black",
