@@ -37,7 +37,7 @@ export const getAroundList = (params) => {
     })
 }
 // 向db中写一条楼号数据
-export const addLouhao = (params) => {
+export const addMarker = (params) => {
     return request({
         url: '/marker/addMarker',
         data: params,

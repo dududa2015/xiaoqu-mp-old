@@ -13,13 +13,13 @@ import {
     buildPolyline
 } from '../../utils/map'
 import {
-    addLouhao,
+    addMarker,
     getAroundList,
     addMarkerList,
     deleteMarker,
     getBdRecordCount,
     getNotice,
-    deleteNearLouhao
+    deleteNearMarkers
 } from '../../utils/apis'
 // 在页面中定义激励视频广告
 let videoAd = null
@@ -190,8 +190,8 @@ Page({
             success(res) {
                 let { longitude, latitude } = res
                 console.log(longitude, latitude)
-                longitude = 113.47,
-                latitude = 22.27
+                // longitude = 113.47,
+                // latitude = 22.27
                 that.setData({
                     latitude,
                     longitude,
@@ -257,7 +257,7 @@ Page({
             latitude: latitude,
             longitude: longitude
         })
-        this.addMarker(latitude, longitude)
+        this.addMarker2Map(latitude, longitude)
         this.getAroundList(latitude, longitude)
     },
     onPoiTap(e) {
@@ -280,7 +280,7 @@ Page({
         })
         const { latitude, longitude } = e.detail
         this.resetPolyline()
-        this.addMarker(latitude, longitude)
+        this.addMarker2Map(latitude, longitude)
         this.moveToLocation(latitude, longitude)
     },
     //用户标记点的label或callout点击
@@ -351,7 +351,7 @@ Page({
         }
     },
     //点击POI时的标记点
-    addMarker(latitude, longitude) {
+    addMarker2Map(latitude, longitude) {
         let marker = {
             id: -1,
             latitude: latitude,
@@ -362,19 +362,6 @@ Page({
             markers: this.data.markers
         });
     },
-    //点击完成后在地图上添加一个标记
-    // addFinishPolylineMarker(latitude, longitude) {
-    //   let marker = {
-    //     id: -1,
-    //     latitude: latitude,
-    //     longitude: longitude,
-    //     name: '道路'
-    //   }
-    //   this.data.markers.push(marker)
-    //   this.setData({
-    //     markers: this.data.markers
-    //   });
-    // },
     //点击定点时添加的小圆圈
     addPolylineMarker(latitude, longitude, type) {
         debugger
@@ -580,7 +567,7 @@ Page({
             for (let j = i + 1; j < data.length; j++) {
                 const diffLat = Math.abs(data[i].lat - data[j].lat);
                 const diffLng = Math.abs(data[i].lng - data[j].lng);
-                if (diffLat < 0.0001 && diffLng < 0.0001 && data[i].name === data[j].name) {
+                if (diffLat < 0.0002 && diffLng < 0.0002 && data[i].name === data[j].name) {
                     const timestampI = this.extractTimestamp(data[i].createdDate);
                     const timestampJ = this.extractTimestamp(data[j].createdDate);
                     // result2.push([data[i], data[j]]);
@@ -599,7 +586,7 @@ Page({
         }
         let list = result.map(item => item.xId)
         if (list && list.length > 0) {
-            deleteNearLouhao({ xidList: list }).then(res => {
+            deleteNearMarkers(list).then(res => {
                 console.log(res)
             })
         }
@@ -822,7 +809,7 @@ Page({
         this.disableMapTap()
         let polyline = this.data.polyline
         let index = getApp().globalData.currentPolylineIndex
-        this.addLouhao(polyline[index].points)
+        this.addMarker(polyline[index].points)
     },
     //从marker-add组件过来的事件，退出
     onCancelChooseMarker() {
@@ -908,7 +895,7 @@ Page({
         })
     },
     //添加道路和围墙
-    addLouhao(points) {
+    addMarker(points) {
         if (points.length < 2) {
             wx.showToast({
                 title: '请至少选择2个点',
@@ -933,7 +920,7 @@ Page({
             points: JSON.stringify(points)
         }
         const that = this
-        addLouhao(param).then(res => {
+        addMarker(param).then(res => {
             if (res) {
                 wx.showToast({
                     title: '添加成功',
