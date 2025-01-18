@@ -1,12 +1,12 @@
 .top-search {
   position: absolute;
-  left: 16rpx;
+  left: 8px;
   line-height: 72rpx;
-  font-size: 24rpx;
+  font-size: 12px;
   color: #999;
   background: #fff;
-  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1); */
-  border: 1rpx solid #E7F0FF;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+  /* border: 1rpx solid #E7F0FF; */
   border-radius: 48rpx;
   display: flex;
   justify-content: flex-start;
@@ -15,7 +15,7 @@
 }
 
 .img {
-  margin: 0 12rpx 0 24rpx;
-  width: 32rpx;
-  height: 32rpx;
+  margin: 0 8px 0 12px;
+  width: 16px;
+  height: 16px;
 }

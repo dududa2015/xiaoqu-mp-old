@@ -1,7 +1,7 @@
 .top-bar-container {
   position: absolute;
   /* top: 120rpx; */
-  top: 160rpx;
+  top: 92px;
   text-align: center;
   background-color: #fff;
   padding: 16rpx 0;
@@ -12,7 +12,7 @@
 
 .top-bar-container-shadow {
   position: absolute;
-  top: 160rpx;
+  top: 92px;
   right: 16rpx;
   border-radius: 24rpx;
   width: 74rpx;

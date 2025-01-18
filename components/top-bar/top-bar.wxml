@@ -1,7 +1,7 @@
-<view class="top-bar-container-shadow" style="{{position}}: 16rpx">
+<view class="top-bar-container-shadow" style="{{position}}: 12px">
 
 </view>
-<cover-view class="top-bar-container" style="{{position}}: 16rpx">
+<cover-view class="top-bar-container" style="{{position}}: 12px">
   <!-- 分享 -->
   <cover-view class="img-wrap-first">
     <cover-image src="/images/controls/share2.png" class="img" mode="" />
