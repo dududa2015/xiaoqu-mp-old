@@ -84,18 +84,24 @@
 
   <view class="content">
     <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
+    <!-- #if MP -->
       <t-cell title="添加到我的小程序" hover arrow url="/pages/help/help2/help2">
         <image src="/images/my/add-to-mp.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
+      </t-cell>      
       <t-cell title="添加到主屏幕" hover arrow url="/pages/help/help3/help3">
         <image src="/images/my/add-to-desktop.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
       <t-cell title="无法添加到主屏幕" hover arrow url="/pages/help/help4/help4">
         <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
-
+      <!-- #else -->
+      <t-cell title="使用帮助" hover arrow url="/pages/help/help4/help4">
+        <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
+      </t-cell>
+    <!-- #endif -->
     </t-cell-group>
 
+    <!-- #if MP -->
     <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
       <!-- <t-cell title="意见反馈" hover arrow>
                 <image src="/images/my/feedback.png" class="left-icon" mode="" slot="left-icon" />
@@ -105,13 +111,15 @@
         <image src="/images/my/star.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
     </t-cell-group>
-
+    <!-- #endif -->
+    <!-- #if MP -->
     <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;" wx:if="{{showAudit}}">
       <t-cell title="审核" hover arrow left-icon="fact-check" url="/pages/my/audit/audit" note="审核楼号标记">
       </t-cell>
       <t-cell title="通知公告" hover arrow left-icon="sound" color="#8c444f" url="/pages/my/notice/notice" note="修改通知公告">
       </t-cell>
     </t-cell-group>
+    <!-- #endif -->
     <view class="ad-wrap" wx:if="{{!isVip}}">
       <ad unit-id="adunit-d0128667c529af77"></ad>
     </view>

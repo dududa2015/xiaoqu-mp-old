@@ -68,7 +68,7 @@ App({
     })
   },
   globalData: {
-    userInfo: null,
+    userInfo: {"userId":"92918a62b30c"},
     mapCtx: null,
     currentPolylineIndex: 0,
     isAndroid: false,
