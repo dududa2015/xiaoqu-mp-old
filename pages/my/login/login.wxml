@@ -1,0 +1,23 @@
+<view class="container">
+    <view class="mobile">189****8888</view>
+    <view class="mobile-desc">一键登录由运营商提供认证服务</view>
+
+    <view class="button-desc">未注册的手机号将自动注册并登录</view>
+    <t-button class="button" theme="primary" size="large" block>本机号码一键登录</t-button>
+
+    <view class="others flex f-x-center f-y-center">
+        <view class="line"></view>
+        <view class="others-text">其他登录方式</view>
+        <view class="line"></view>
+    </view>
+    <view class="others-img">
+        <image src="/images/login/wx.png" class="img" mode=""/>
+        <image src="/images/login/apple.png" class="img" mode=""/>
+    </view>
+
+    <view class="agree-wrap">
+        <t-checkbox block="{{false}}" borderless="{{true}}" value="checkbox3">
+            <view slot="label" class="agree">同意小区楼号分布图<span class="agree-blue">《账号服务与隐私协议》</span>并授权获取本机号码</view>
+        </t-checkbox>
+    </view>
+</view>

@@ -1,4 +1,11 @@
+<!-- #if MP -->
 <view class="top-search" style="width: calc({{rect.left}}px - 32rpx);top:{{rect.top}}px;height: {{rect.height}}px;" bind:tap="onChooseLocation">
-  <image src="/images/controls/search.png" class="img" mode="" />
-  {{topAddress}}
+    <image src="/images/controls/search.png" class="img" mode="" />
+    {{topAddress}}
 </view>
+<!-- #else -->
+<view class="top-search" style="width: 718rpx;top:{{rect.top}}px;height: {{rect.height}}px;" bind:tap="onChooseLocation">
+    <image src="/images/controls/search.png" class="img" mode="" />
+    {{topAddress}}
+</view>
+<!-- #endif -->

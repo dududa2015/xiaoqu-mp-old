@@ -34,13 +34,6 @@ Page({
                 getApp().globalData.userInfo = res
                 this.setData({
                     userInfo: res,
-                    isVip: res.isVip,
-                    isAdmin: res.isAdmin,
-                    points: this.convertToWan(res.points),
-                    markers: this.convertToWan(res.markers),
-                    friends: this.convertToWan(res.friends),
-                    deleted: this.convertToWan(res.deleted),
-                    showRank: res.points > 0
                 })
             }
         })
@@ -57,14 +50,7 @@ Page({
             }
         })
     },
-    convertToWan(num) {
-        if (num > 100000) {
-            return (num / 10000).toFixed(1) + "万";
-        } else if (num > 10000) {
-            return (num / 10000).toFixed(2) + "万";
-        }
-        return num;
-    },
+
     /**
      * 生命周期函数--监听页面加载
      */
@@ -83,17 +69,7 @@ Page({
     onReady() {
         this.getStatusBar()
     },
-    onChooseAvatar(e) {
-        const { avatarUrl } = e.detail
-        this.setData({
-            avatarUrl,
-        })
-    },
-    toEdit() {
-        wx.navigateTo({
-            url: '/pages/my/edit/edit',
-        })
-    },
+    
     onHelp1() {
         wx.navigateTo({
             url: '/pages/help/help1/help1',
@@ -161,12 +137,7 @@ Page({
             });
         }
     },
-    onAvatarTap() {
-        wx.showToast({
-            title: '当前版本：v5.0',
-            icon: 'none'
-        })
-    },
+
     onShareAppMessage() {
 
     }

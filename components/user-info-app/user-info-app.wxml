@@ -4,10 +4,10 @@
             <image src="/images/my/avatar.png" class="header-img" mode="" />
         </view>
         <view class="name-wrap">
-            <view class="name flex f-x-sb f-y-center" bind:tap="toEdit">
+            <view class="name flex f-x-sb f-y-center" bind:tap="toLogin">
                 <!-- 小区楼号 -->
                 <view class="name-icon-wrap">
-                    {{userInfo.nickName || '小区楼号'}}
+                    {{userInfo.nickName || '点击登录'}}
                     <image src="/images/my/v.png" mode="" class="v-img" wx:if="{{isVip}}" />
                     <image src="/images/my/admin.png" mode="" class="v-img" wx:if="{{isAdmin}}" />
                 </view>

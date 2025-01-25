@@ -3,7 +3,9 @@
     "t-tag": "tdesign-miniprogram/tag/tag",
     "t-cell": "tdesign-miniprogram/cell/cell",
     "t-cell-group": "tdesign-miniprogram/cell-group/cell-group",
-    "t-icon": "tdesign-miniprogram/icon/icon"
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "user-info": "/components/user-info/user-info",
+    "user-info-app": "/components/user-info-app/user-info-app"
   },
   "navigationStyle": "custom",
   "navigationBarTitleText": "个人中心"

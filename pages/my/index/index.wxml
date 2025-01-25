@@ -1,127 +1,64 @@
 <view class="container" style="margin-top:{{rect.bottom}}px;">
-  <view class="header">
-    <view class=" flex f-y-center">
-      <view class="avatar-wrap" bind:tap="onAvatarTap">
-        <image src="/images/my/avatar.png" class="header-img" mode="" />
-      </view>
-      <view class="name-wrap">
-        <view class="name flex f-x-sb f-y-center" bind:tap="toEdit">
-          <!-- 小区楼号 -->
-          <view class="name-icon-wrap">
-            {{userInfo.nickName || '小区楼号'}}
-            <image src="/images/my/v.png" mode="" class="v-img" wx:if="{{isVip}}" />
-            <image src="/images/my/admin.png" mode="" class="v-img" wx:if="{{isAdmin}}" />
-          </view>
-          <view>
-            <t-icon name="chevron-right" size="48rpx" />
-          </view>
-        </view>
-        <view class="desc" wx:if="{{showRank}}">
-          <t-tag size="small" variant="light" theme="primary" style="margin-right: 12rpx">积分排名{{rankInfo && rankInfo.pointsRanking < 5000 ? rankInfo.pointsRanking:'1w+'}}</t-tag>
-              <t-tag size="small" variant="light" theme="primary" style="margin-right: 12rpx">标记排名{{rankInfo && rankInfo.markersRanking < 5000?rankInfo.markersRanking:'1w+'}}</t-tag>
-                  <t-tag size="small" variant="light" theme="primary" style="margin-right: 12rpx">好友排名{{rankInfo && rankInfo.friendsRanking < 5000?rankInfo.friendsRanking:'1w+'}}</t-tag>
-        </view>
-      </view>
-    </view>
-    <!-- 第二行 -->
-    <view class="main flex f-x-sr f-y-center">
-      <view class="main-item" bind:tap="showToast" data-number="{{points ||0}}" data-type="score">
-        <view class="number">
-          {{points ||0}}
-        </view>
-        <view class="text">
-          积分
-        </view>
-      </view>
-      <view class="main-item-line"></view>
-
-      <view class="main-item" bind:tap="toMarkers" data-deleted="{{0}}">
-        <view class="number">
-          {{markers ||0}}
-        </view>
-        <view class="text">
-          标记
-        </view>
-      </view>
-      <view class="main-item-line"></view>
-
-      <view class="main-item" bind:tap="showToast" data-number="{{friends ||0}}" data-type="friend">
-        <view class="number">
-          {{friends ||0}}
-        </view>
-        <view class="text">
-          好友
-        </view>
-      </view>
-      <view class="main-item-line"></view>
-
-      <view class="main-item" bind:tap="toMarkers" data-deleted="{{1}}">
-        <view class="number">
-          {{deleted || 0}}
-        </view>
-        <view class="text">
-          被删除
-        </view>
-      </view>
-    </view>
-
-  </view>
-
-
-
-  <view class="vip-wrap flex f-x-sb f-y-center" bind:tap="onHelp1">
-    <view class="vip-text-wrap">
-      <view class="vip-text">
-        升级VIP终身免费使用
-      </view>
-      <view class="vip-desc">
-        2025年1月1日起，积分改为700升级成为vip
-      </view>
-    </view>
-
-    <view class="vip-upgrade flex f-x-center f-y-center">积分规则</view>
-  </view>
-
-  <view class="content">
-    <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
     <!-- #if MP -->
-      <t-cell title="添加到我的小程序" hover arrow url="/pages/help/help2/help2">
-        <image src="/images/my/add-to-mp.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>      
-      <t-cell title="添加到主屏幕" hover arrow url="/pages/help/help3/help3">
-        <image src="/images/my/add-to-desktop.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
-      <t-cell title="无法添加到主屏幕" hover arrow url="/pages/help/help4/help4">
-        <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
-      <!-- #else -->
-      <t-cell title="使用帮助" hover arrow url="/pages/help/help4/help4">
-        <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
+    <user-info userInfo="{{userInfo}}"></user-info>
+    <!-- #else -->
+    <user-info-app></user-info-app>
     <!-- #endif -->
-    </t-cell-group>
 
-    <!-- #if MP -->
-    <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
-      <!-- <t-cell title="意见反馈" hover arrow>
+
+    <view class="vip-wrap flex f-x-sb f-y-center" bind:tap="onHelp1">
+        <view class="vip-text-wrap">
+            <view class="vip-text">
+                升级VIP终身免费使用
+            </view>
+            <view class="vip-desc">
+                2025年1月1日起，积分改为700升级成为vip
+            </view>
+        </view>
+
+        <view class="vip-upgrade flex f-x-center f-y-center">积分规则</view>
+    </view>
+
+    <view class="content">
+        <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
+            <!-- #if MP -->
+            <t-cell title="添加到我的小程序" hover arrow url="/pages/help/help2/help2">
+                <image src="/images/my/add-to-mp.png" class="left-icon" mode="" slot="left-icon" />
+            </t-cell>
+            <t-cell title="添加到主屏幕" hover arrow url="/pages/help/help3/help3">
+                <image src="/images/my/add-to-desktop.png" class="left-icon" mode="" slot="left-icon" />
+            </t-cell>
+            <t-cell title="无法添加到主屏幕" hover arrow url="/pages/help/help4/help4">
+                <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
+            </t-cell>
+            <!-- #else -->
+            <t-cell title="使用帮助" hover arrow url="/pages/help/help4/help4">
+                <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
+            </t-cell>
+            <!-- #endif -->
+        </t-cell-group>
+
+        <!-- #if MP -->
+        <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
+            <!-- <t-cell title="意见反馈" hover arrow>
                 <image src="/images/my/feedback.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell>
             <button openType="feedback" class="feedback-btn"></button> -->
-      <t-cell title="去评价" hover arrow bind:tap="onEvaluate" note="五星好评激励作者">
-        <image src="/images/my/star.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
-    </t-cell-group>
-    <!-- #endif -->
-    <!-- #if MP -->
-    <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;" wx:if="{{showAudit}}">
-      <t-cell title="审核" hover arrow left-icon="fact-check" url="/pages/my/audit/audit" note="审核楼号标记">
-      </t-cell>
-      <t-cell title="通知公告" hover arrow left-icon="sound" color="#8c444f" url="/pages/my/notice/notice" note="修改通知公告">
-      </t-cell>
-    </t-cell-group>
-    <!-- #endif -->
-    <view class="ad-wrap" wx:if="{{!isVip}}">
-      <ad unit-id="adunit-d0128667c529af77"></ad>
+            <t-cell title="去评价" hover arrow bind:tap="onEvaluate" note="五星好评激励作者">
+                <image src="/images/my/star.png" class="left-icon" mode="" slot="left-icon" />
+            </t-cell>
+        </t-cell-group>
+        <!-- #endif -->
+        <!-- #if MP -->
+        <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;" wx:if="{{showAudit}}">
+            <t-cell title="审核" hover arrow left-icon="fact-check" url="/pages/my/audit/audit" note="审核楼号标记">
+            </t-cell>
+            <t-cell title="通知公告" hover arrow left-icon="sound" color="#8c444f" url="/pages/my/notice/notice" note="修改通知公告">
+            </t-cell>
+        </t-cell-group>
+        <!-- #endif -->
+        <view class="ad-wrap" wx:if="{{!isVip}}">
+            <ad unit-id="adunit-d0128667c529af77"></ad>
+        </view>
     </view>
-  </view>
 </view>

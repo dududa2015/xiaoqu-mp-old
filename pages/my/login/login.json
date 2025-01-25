@@ -1,0 +1,8 @@
+{
+    "usingComponents": {
+        "t-button": "tdesign-miniprogram/button/button",
+        "t-radio": "tdesign-miniprogram/radio/radio",
+        "t-checkbox": "tdesign-miniprogram/checkbox/checkbox"
+    },
+    "navigationBarTitleText": "登录"
+}

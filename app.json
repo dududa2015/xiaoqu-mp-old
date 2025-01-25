@@ -11,7 +11,8 @@
     "pages/my/audit/audit",
     "pages/my/newUser/newUser",
     "pages/my/markers/markers",
-    "pages/my/notice/notice"
+    "pages/my/notice/notice",
+    "pages/my/login/login"
   ],
   "window": {
     "navigationBarTextStyle": "black",
