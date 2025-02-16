@@ -1,8 +1,8 @@
-<view class="container" style="margin-top:{{rect.bottom}}px;">
+<view class="container" style="margin-top:{{top}}px;">
     <!-- #if MP -->
     <user-info userInfo="{{userInfo}}"></user-info>
     <!-- #else -->
-    <user-info-app></user-info-app>
+    <user-info-app userInfo="{{userInfo}}"></user-info-app>
     <!-- #endif -->
 
 

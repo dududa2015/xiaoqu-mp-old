@@ -40,9 +40,10 @@
       "WeAppBluetooth": false,
       "WeAppMedia": false,
       "WeAppLBS": true,
-      "WeAppOthers": false
+      "WeAppOthers": false,
+      "WeAppIdaas": true
     },
-    "enableVConsole": "close",
+    "enableVConsole": "open",
     "icons": {
       "mainIcon120": "",
       "mainIcon180": "",

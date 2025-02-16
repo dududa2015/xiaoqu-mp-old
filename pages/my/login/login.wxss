@@ -18,10 +18,10 @@ page {
 }
 
 .mobile-desc {
-    margin-top: 8px;
+    margin-top: 12px;
     height: 18px;
     opacity: 1;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 400;
     letter-spacing: 0px;
     line-height: 18px;
@@ -32,7 +32,7 @@ page {
     margin-top: 150px;
     height: 18px;
     opacity: 1;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 400;
     letter-spacing: 0px;
     line-height: 18px;
@@ -61,16 +61,18 @@ page {
 
 .others-text {
     margin: 0 16px;
+    font-size: 13px;
 }
 
 .img {
-    width: 32px;
-    height: 32px;
-    margin-right: 8px;
+    width: 40px;
+    height: 40px;
 }
-
+.img:not(:first-child) {
+    margin-left: 12px;
+}
 .others-img {
-    margin-top: 8px;
+    margin-top: 16px;
 }
 
 .agree-wrap {
@@ -80,9 +82,10 @@ page {
 }
 
 .agree {
+    margin-left: 8px;
     color: rgba(50, 50, 51, 1);
     font-size: 12px;
-    line-height: 20px;
+    /* line-height: 20px; */
     font-weight: 400;
 }
 

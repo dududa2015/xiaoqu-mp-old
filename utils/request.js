@@ -1,8 +1,8 @@
 // api URL
 // const apiUrl = "https://zhuzixi.cn/louhao/lh.asmx";// 公共的请求地址
 // const apiUrl = "http://localhost/louhao/louhao/lh.asmx"
-const apiUrl = "http://localhost:5213/api"
-// const apiUrl = "https://mp.zhuzixi.cn/api"
+// const apiUrl = "http://localhost:5213/api"
+const apiUrl = "https://mp.zhuzixi.cn/api"
 // 封装微信请求方法
 const request = (params) => {
     let url = params.url;
@@ -28,10 +28,26 @@ const request = (params) => {
             header: header, // 头部
             success(res) {
                 if (res.statusCode === 401) {
+                    // #if MP
                     wx.showToast({
                         title: 'invalid token',
                         icon: 'none'
                     })
+                    // #else
+                    wx.showModal({
+                        title: '登录提示',
+                        content: '需要先登录才能进行操作',
+                        success(res) {
+                            if (res.confirm) {
+                                wx.navigateTo({
+                                    url: '/pages/my/login/login',
+                                })
+                            } else if (res.cancel) {
+                                console.log('用户点击取消')
+                            }
+                        }
+                    })
+                    // #endif
                     reject('')
                 } else {
                     resolve(res.data)

@@ -12,6 +12,15 @@ export const getUserInfo = (params) => {
         method: 'GET',
     })
 }
+// 通过code获取用户信息-用于多端应用的苹果登录
+export const getAppleUserInfo = (params) => {
+    return request({
+        url: '/users/getAppleUserInfo',
+        data: params,
+        method: 'GET',
+    })
+}
+
 //用于个人中心
 export const getUserById = (params) => {
     return request({

@@ -8,8 +8,8 @@ Page({
      * 页面的初始数据
      */
     data: {
-        rect: {},
-        userInfo: {},
+        top: 48,
+        userInfo: null,
         isVip: false,
         isAdmin: false,
         points: 0,
@@ -67,7 +67,9 @@ Page({
         }
     },
     onReady() {
+        // #if MP
         this.getStatusBar()
+        // #endif
     },
     
     onHelp1() {
@@ -79,7 +81,7 @@ Page({
         // 获取菜单按钮（右上角胶囊按钮）的布局位置信息。坐标信息以屏幕左上角为原点。
         const rect = wx.getMenuButtonBoundingClientRect()
         this.setData({
-            rect
+            top: rect.bottom
         })
     },
     openCustomService() {
