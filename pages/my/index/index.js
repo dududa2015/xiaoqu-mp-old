@@ -8,7 +8,7 @@ Page({
      * 页面的初始数据
      */
     data: {
-        top: 48,
+        top: 50,
         userInfo: null,
         isVip: false,
         isAdmin: false,

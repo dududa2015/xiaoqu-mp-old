@@ -162,11 +162,11 @@ Page({
             interstitialAd = wx.createInterstitialAd({
                 adUnitId: 'adunit-6449f8b32a1844a8'
             })
-            interstitialAd.onLoad(() => { })
+            interstitialAd.onLoad(() => {})
             interstitialAd.onError((err) => {
                 console.error('插屏广告加载失败', err)
             })
-            interstitialAd.onClose(() => { })
+            interstitialAd.onClose(() => {})
         }
     },
     //显示插屏广告
@@ -188,7 +188,10 @@ Page({
             type: 'gcj02',
             // isHighAccuracy: true,
             success(res) {
-                let { longitude, latitude } = res
+                let {
+                    longitude,
+                    latitude
+                } = res
                 console.log(longitude, latitude)
                 // longitude = 113.47,
                 // latitude = 22.27
@@ -236,7 +239,10 @@ Page({
                                 wx.getLocation({
                                     type: 'gcj02',
                                     success: function (res) {
-                                        const { longitude, latitude } = res
+                                        const {
+                                            longitude,
+                                            latitude
+                                        } = res
                                         that.setData({
                                             longitude,
                                             latitude,
@@ -252,7 +258,10 @@ Page({
         });
     },
     onChooseLocation(event) {
-        let { latitude, longitude } = event.detail
+        let {
+            latitude,
+            longitude
+        } = event.detail
         this.mapCtx.moveToLocation({
             latitude: latitude,
             longitude: longitude
@@ -278,7 +287,10 @@ Page({
             showAdd: false,
             showLocation: false
         })
-        const { latitude, longitude } = e.detail
+        const {
+            latitude,
+            longitude
+        } = e.detail
         this.resetPolyline()
         this.addMarker2Map(latitude, longitude)
         this.moveToLocation(latitude, longitude)
@@ -307,8 +319,14 @@ Page({
 
     //通过在polyline点击得到的坐标点，循环polyline的points，判断坐标点是否在polyline上，如果在，那就根据xId获取详情
     onPolylineTap(e) {
-        const { latitude, longitude } = e.detail
-        let point = { latitude, longitude }
+        const {
+            latitude,
+            longitude
+        } = e.detail
+        let point = {
+            latitude,
+            longitude
+        }
         let polyline = this.data.polyline
 
         let currentPolyline = null
@@ -373,7 +391,10 @@ Page({
             iconPath: type === 7 ? '/images/marker-green.png' : '/images/marker-red.png',
             width: 16,
             height: 16,
-            anchor: { x: .5, y: .5 }
+            anchor: {
+                x: .5,
+                y: .5
+            }
         }
         this.data.markers.push(marker)
         this.setData({
@@ -546,16 +567,22 @@ Page({
             userId
         }).then(res => {
             let list = res
+            // #if MP
             that.deleteNearMarkers(list)
+            // #endif
             //如果db中没有，则请求bd-api数据
             if (list.length > 0) {
                 that.addAroundList2Map(list)
                 //小于{{数量}}也调用接口，{{数量}}在缓存caches.json里配置
+                // #if MP
                 if (list.length < (that.count || 5)) {
                     that.addBdAroundList(lng, lat)
                 }
+                // #endif
             } else {
+                // #if MP
                 that.addBdAroundList(lng, lat)
+                // #endif
             }
         })
     },
@@ -636,7 +663,9 @@ Page({
     addBdAroundList(lng, lat) {
         let createdDate = formatDate(new Date())
         const that = this
-        getBdRecordCount({ createdDate }).then(count => {
+        getBdRecordCount({
+            createdDate
+        }).then(count => {
             //调用次数小于10000
             if (count < 10000) {
                 //反过来。。
@@ -772,7 +801,10 @@ Page({
         const that = this
         this.mapCtx.getCenterLocation({
             success: function (res) {
-                const { longitude, latitude } = res
+                const {
+                    longitude,
+                    latitude
+                } = res
                 //小数取7位，和楼号等区分开来，以防止坐标点相同，无法插入，因为主键用了lat+lng表示
                 //换成6位
                 that.addPolyline(longitude.toFixed(6), latitude.toFixed(6))
@@ -878,9 +910,12 @@ Page({
         }
         //放在这里，上面的判断没通过，不执行
         this.addPolylineMarker(latitude, longitude, this.data.markerTypeIndex)
-        points.push({ latitude, longitude })
+        points.push({
+            latitude,
+            longitude
+        })
         debugger
-        if(points.length < 2){
+        if (points.length < 2) {
             return
         }
         currentPolyline = {
@@ -977,13 +1012,18 @@ Page({
         })
     },
     getPolyline(event) {
-        const { polyline } = event.detail
+        const {
+            polyline
+        } = event.detail
         this.setData({
             polyline
         })
     },
     moveToCenter(event) {
-        const { latitude, longitude } = event.detail
+        const {
+            latitude,
+            longitude
+        } = event.detail
         this.moveToLocation(latitude, longitude)
     },
     moveToLocation(latitude, longitude) {
