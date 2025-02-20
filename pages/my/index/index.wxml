@@ -5,7 +5,7 @@
     <user-info-app userInfo="{{userInfo}}"></user-info-app>
     <!-- #endif -->
 
-
+    <!-- #if MP -->
     <view class="vip-wrap flex f-x-sb f-y-center" bind:tap="onHelp1">
         <view class="vip-text-wrap">
             <view class="vip-text">
@@ -15,10 +15,9 @@
                 2025年1月1日起，积分改为700升级成为vip
             </view>
         </view>
-
         <view class="vip-upgrade flex f-x-center f-y-center">积分规则</view>
     </view>
-
+    <!-- #endif -->
     <view class="content">
         <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
             <!-- #if MP -->

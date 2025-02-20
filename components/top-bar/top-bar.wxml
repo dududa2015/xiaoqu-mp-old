@@ -5,7 +5,11 @@
   <!-- 分享 -->
   <cover-view class="img-wrap-first">
     <cover-image src="/images/controls/share2.png" class="img" mode="" />
+    <!-- #if MP -->
     <button class="share-btn" openType="share">分享</button>
+    <!-- #else -->
+    <button class="share-btn" bind:tap="onShare">分享</button>
+    <!-- #endif -->
   </cover-view>
   <cover-view class="text">分享</cover-view>
   <!-- 客服 -->

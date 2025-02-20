@@ -1,18 +1,27 @@
 import {
-    getUserInfo
+    getUserInfo,
+    getAppleUserInfo
 } from './utils/apis'
 import {
     formatTime
 } from './utils/util'
 App({
     onLaunch(options) {
+        // #if MP
         //自动更新，非必要不调用
         this.autoUpdate()
-        // #if MP
         this.login(options.query.userId)
         // #else
-        console.log('not mp')
+        this.appleLogin()
         // #endif
+        wx.checkIdentitySession({
+            success() {
+                console.log('系统登录态生效')
+            },
+            fail(res) {
+                console.log('系统登录态失效')
+            }
+        })
     },
     //登录获取用户信息
     login(friendUserId) {
@@ -41,6 +50,19 @@ App({
             }
         })
         // }
+    },
+    appleLogin() {
+        let userId = wx.getStorageSync('userId')
+        if (userId) {
+            getAppleUserInfo({
+                userId
+            }).then(res => {
+                console.log(res)
+                wx.setStorageSync('userId', res.userId)
+                wx.setStorageSync('token', res.token)
+                getApp().globalData.userInfo = res
+            })
+        }
     },
     //自动更新
     autoUpdate() {

@@ -109,6 +109,7 @@ Page({
             code
         }).then(res => {
             wx.setStorageSync('userId', res.userId)
+            wx.setStorageSync('appleId', res.appleId)
             wx.setStorageSync('token', res.token)
             getApp().globalData.userInfo = res
             wx.navigateBack()

@@ -1,6 +1,6 @@
 <view class="container">
   <view class="content">
-    <t-input value="{{nickName}}" type="text" borderless maxlength="10" placeholder="请输入小程序的用户编号"  bind:change="onNickNameChange">
+    <t-input value="{{userId}}" type="text" borderless maxlength="50" placeholder="请输入小程序的用户编号"  bind:change="onUserIdChange">
       <text slot="label">用户编号<text style="color: #e34d59"> *</text> </text>
     </t-input>
   </view>

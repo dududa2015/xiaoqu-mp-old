@@ -190,3 +190,11 @@ export const deleteNearMarkers = (params) => {
         method: 'POST',
     })
 }
+//关联appleId
+export const relateMpUserId = (params) => {
+    return request({
+        url: '/users/relateMpUserId',
+        data: params,
+        method: 'POST',
+    })
+}
