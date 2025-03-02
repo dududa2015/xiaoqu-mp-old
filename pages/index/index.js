@@ -62,6 +62,7 @@ Page({
         this.mapCtx = wx.createMapContext('myMap')
         getApp().globalData.mapCtx = this.mapCtx
         //插屏广告
+        // #if MP
         this.initCPAd()
         setTimeout(() => {
             //初始化激励视频广告
@@ -71,8 +72,8 @@ Page({
             wx.setKeepScreenOn({
                 keepScreenOn: true
             })
-            this.getNotice()
         }, 3000);
+        // #endif
     },
     //设置
     initStorage() {
@@ -172,7 +173,8 @@ Page({
     //显示插屏广告
     showCPAd() {
         //如果不是vip展示插屏广告
-        if (!getApp().globalData.userInfo.isVip) {
+        let userInfo = getApp().globalData.userInfo
+        if (!(userInfo && userInfo.isVip)) {
             if (interstitialAd) {
                 interstitialAd.show().catch((err) => {
                     console.error('插屏广告显示失败', err)
@@ -206,9 +208,11 @@ Page({
                 wx.setStorageSync('lastLatitude', latitude)
                 wx.setStorageSync('lastLongitude', longitude)
                 //确保获取到用户信息后再请求
+                // #if MP
                 let intervalId = setInterval(function () {
                     if (getApp().globalData.userInfo) {
                         that.getAroundList(latitude, longitude)
+                        that.getNotice()
                         that.setData({
                             tips: getApp().globalData.userInfo.remark,
                             isVip: getApp().globalData.userInfo.isVip,
@@ -217,6 +221,10 @@ Page({
                         clearInterval(intervalId)
                     }
                 }, 50);
+                // #else
+                that.getAroundList(latitude, longitude)
+                that.getNotice()
+                // #endif
             },
             fail(res) {
                 // 获取位置失败，引导用户开启权限
@@ -382,7 +390,6 @@ Page({
     },
     //点击定点时添加的小圆圈
     addPolylineMarker(latitude, longitude, type) {
-        debugger
         let num = generateRandom10DigitNumber()
         let marker = {
             id: -1 * num,
@@ -483,7 +490,7 @@ Page({
     onUserMarkerDelete(event) {
         this.selectedMarker = event.detail
         const that = this
-        let userInfo = getApp().globalData.userInfo
+        let userInfo = getApp().globalData.userInfo || {}
         //如果可以编辑，说明是自己的标记，那么就能删除
         //vip也可以直接删除
         if (this.selectedMarker.userId === userInfo.userId || userInfo.isAdmin) {
@@ -560,7 +567,12 @@ Page({
     },
     getAroundList(lat, lng) {
         const that = this
-        let userId = wx.getStorageSync('userId')
+        let isPersonalMap = wx.getStorageSync('isPersonalMap')
+        let userId = ''
+        if(isPersonalMap){
+            userId = wx.getStorageSync('userId')
+        }
+
         getAroundList({
             lng,
             lat,
@@ -837,7 +849,6 @@ Page({
     },
     //从marker-add组件过来的事件，完成
     onFinishChooseMarker() {
-        debugger
         this.disableMapTap()
         let polyline = this.data.polyline
         let index = getApp().globalData.currentPolylineIndex
@@ -885,7 +896,6 @@ Page({
         })
     },
     addPolyline(longitude, latitude) {
-        debugger
         let polyline = this.data.polyline
         //
         let index = getApp().globalData.currentPolylineIndex
@@ -914,7 +924,6 @@ Page({
             latitude,
             longitude
         })
-        debugger
         if (points.length < 2) {
             return
         }
@@ -1099,6 +1108,7 @@ Page({
         } else {
             this.setData({
                 bottom: index === 0 ? 520 : 320,
+                showGrid: false,
                 showForm: true,
                 showCenterMarker: true,
                 markerTypeIndex: index,
@@ -1107,22 +1117,34 @@ Page({
         }
         return
     },
+    //由grid弹窗创建个人地图按钮触发
+    createPersonalMap() {
+        this.setData({
+            showGrid: false,
+            showAdd: true,
+            showLocation: true
+        })
+        this.showTabBar()
+    },
     onFormClose(event) {
         this.disableMapTap()
         this.setData({
             bottom: 0,
             showForm: false,
             showCenterMarker: false,
+            showGrid: true,
+            showAdd: true,
+            showLocation: true
         })
         if (!this.data.showGrid) {
             this.showTabBar()
         }
-        if (event.detail) {
-            this.setData({
-                showAdd: true,
-                showLocation: true
-            })
-        }
+        // if (event.detail) {
+        //     this.setData({
+        //         showAdd: true,
+        //         showLocation: true
+        //     })
+        // }
     },
     buildPolylineColor(type) {
         if (type === 7) {

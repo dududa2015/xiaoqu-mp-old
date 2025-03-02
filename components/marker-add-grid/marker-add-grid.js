@@ -69,6 +69,13 @@ Component({
     onChoose(event) {
       const index = event.currentTarget.dataset.index
       this.triggerEvent('getMarkerTypeIndex', index)
+    },
+    toPersonalMap(){
+        wx.setStorageSync('isPersonalMap', true)
+        this.triggerEvent('createPersonalMap', true)
+        // wx.navigateTo({
+        //   url: '/pages/personal/list/list',
+        // })
     }
   }
 })

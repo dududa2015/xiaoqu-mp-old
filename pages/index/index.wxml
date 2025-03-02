@@ -18,7 +18,7 @@
   <bottom-location position="{{position}}" bottom="{{bottom}}" bind:onLocation="getLocation" wx:if="{{showLocation}}"></bottom-location>
   <ad-custom unit-id="adunit-49b176d9a7ef45d4" wx:if="{{!isVip}}" style="position: absolute;bottom: 0; {{position==='right'?'left':'right'}}: 0"></ad-custom>
   <poi-detail showPOI="{{showPOI}}" xId="{{xId}}" poiDetail="{{poiDetail}}" windowInfo="{{windowInfo}}" bind:moveToCenter="moveToCenter" bind:getPolyline="getPolyline" bind:onDelete="onUserMarkerDelete" bind:onEdit="onUserMarkerEdit"></poi-detail>
-  <marker-add-grid show="{{showGrid}}" bind:getMarkerTypeIndex="getMarkerTypeIndex"></marker-add-grid>
+  <marker-add-grid show="{{showGrid}}" bind:getMarkerTypeIndex="getMarkerTypeIndex" bind:createPersonalMap="createPersonalMap"></marker-add-grid>
   <marker-add markerTypeIndex="{{markerTypeIndex}}" showForm="{{showForm}}" showChooseMarker="{{showChooseMarker}}" markerDetail="{{markerDetail}}" mapCtx="{{mapCtx}}" bind:addUserMarkerByUser="addUserMarkerByUser" bind:updateUserMarkerByUser="updateUserMarkerByUser" bind:showBottomBar="showBottomBar" bind:onFormClose="onFormClose" bind:onChooseMarker="onChooseMarker" bind:onBackChooseMarker="onBackChooseMarker" bind:onFinishChooseMarker="onFinishChooseMarker" bind:onCancelChooseMarker="onCancelChooseMarker"></marker-add>
   <!-- <marker-filter bind:getCheckedIndex="getCheckedIndex"></marker-filter> -->
   <map-setting showSetting="{{showSetting}}" bind:onSettingClose="onSettingClose" bind:onSatellite="onSatellite" bind:onPosition="onPosition" bind:onRotate="onRotate"></map-setting>

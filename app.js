@@ -51,8 +51,10 @@ App({
         })
         // }
     },
+    //用缓存里的userId重新获取用户信息并生成token
     appleLogin() {
         let userId = wx.getStorageSync('userId')
+        console.log(new Date().toLocaleDateString() + ' ' + new Date().toTimeString(), userId)
         if (userId) {
             getAppleUserInfo({
                 userId
@@ -94,9 +96,7 @@ App({
         })
     },
     globalData: {
-        userInfo: {
-            "userId": "92918a62b30c"
-        },
+        userInfo: null,
         mapCtx: null,
         currentPolylineIndex: 0,
         isAndroid: false,

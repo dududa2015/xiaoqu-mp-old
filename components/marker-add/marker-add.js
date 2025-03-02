@@ -458,7 +458,7 @@ Component({
             let deleted = checkString(this.data.name) ? 0 : -1
             let direction = this.getDirection()
             this.data.name = this.data.name + direction
-
+            let isPersonalMap = wx.getStorageSync('isPersonalMap')
             let param = {
                 xId: uid,
                 userId: wx.getStorageSync('userId'),
@@ -467,7 +467,8 @@ Component({
                 remark: this.getRemark(),
                 deleted,
                 lat: latitude,
-                lng: longitude
+                lng: longitude,
+                mapType: isPersonalMap ? 1 : null
             }
             const that = this
             addMarker(param).then(res => {

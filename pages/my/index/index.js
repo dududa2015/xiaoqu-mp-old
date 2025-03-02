@@ -56,7 +56,7 @@ Page({
      */
     onLoad(options) {
         let userInfo = getApp().globalData.userInfo
-        if (userInfo.userId === '92918a62b30c') {
+        if (userInfo && userInfo.userId === '92918a62b30c') {
             this.setData({
                 showAudit: true
             })

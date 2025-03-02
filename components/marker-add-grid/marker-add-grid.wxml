@@ -1,16 +1,30 @@
-<t-popup visible="{{show}}" show-overlay="{{false}}" placement="bottom">
-  <!-- <cover-view style="position: absolute;bottom: env(safe-area-inset-bottom); left: 0; width: 100%; height: 348rpx;"></cover-view> -->
-  <view class="marker-add-grid-wrap">
-    <view class="grid-wrap">
-      <view class="grid-item" wx:for="{{pointList}}" wx:key="index" bind:tap="onChoose" data-index="{{index}}">
-        <view class="grid-img">
-          <view class="img-wrap" style="background-color: {{item.bgcolor}};">
-            <t-icon name="{{item.icon}}" size="48rpx" color="#fff" />
-          </view>
+<t-popup visible="{{show}}" show-overlay="{{false}}" placement="bottom" style="background: linear-gradient(to bottom, transparent, #f7f7f7 50%);">
+    <view class="marker-add-grid-wrap">
+        <view class="grid-wrap">
+            <view class="grid-item" wx:for="{{pointList}}" wx:key="index" bind:tap="onChoose" data-index="{{index}}">
+                <view class="grid-img">
+                    <view class="img-wrap" style="background-color: {{item.bgcolor}};">
+                        <t-icon name="{{item.icon}}" size="48rpx" color="#fff" />
+                    </view>
+                </view>
+                <view class="grid-text">{{item.name}}
+                </view>
+            </view>
         </view>
-        <view class="grid-text">{{item.name}}
+        <view class="cell-wrap" bind:tap="toPersonalMap">
+            <view class="img-wrap" slot="image" style="background-color: #800020;">
+                <t-icon name="map-information-2" size="48rpx" color="#fff" />
+            </view>
+            <view class="title-wrap">
+                <view class="title">个人地图</view>
+                <view class="desc">创建并进入专属于个人的地图</view>
+            </view>
+            <view class="cell-right">
+                <view class="btn-wrap">
+                去创建
+                </view>
+            </view>
         </view>
-      </view>
     </view>
-  </view>
+
 </t-popup>

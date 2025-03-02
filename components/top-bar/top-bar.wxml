@@ -2,27 +2,31 @@
 
 </view>
 <cover-view class="top-bar-container" style="{{position}}: 12px">
-  <!-- 分享 -->
-  <cover-view class="img-wrap-first">
-    <cover-image src="/images/controls/share2.png" class="img" mode="" />
+    <!-- 分享 -->
     <!-- #if MP -->
-    <button class="share-btn" openType="share">分享</button>
+    <cover-view class="img-wrap-first">
+        <cover-image src="/images/controls/share2.png" class="img" mode="" />
+        <button class="share-btn" openType="share">分享</button>
+    </cover-view>
+    <cover-view class="text">分享</cover-view>
+    <!-- 客服 -->
+    <cover-view class="img-wrap">
+        <cover-image src="/images/controls/service2.png" class="img" mode="">
+        </cover-image>
+        <button class="share-btn" openType="contact">客服</button>
+    </cover-view>
+    <cover-view class="text">客服</cover-view>
     <!-- #else -->
-    <button class="share-btn" bind:tap="onShare">分享</button>
+    <cover-view class="img-wrap-first">
+        <cover-image src="/images/controls/share2.png" class="img" mode="" />
+        <button class="share-btn" openType="share">分享</button>
+    </cover-view>
+    <cover-view class="text">分享</cover-view>
     <!-- #endif -->
-  </cover-view>
-  <cover-view class="text">分享</cover-view>
-  <!-- 客服 -->
-  <cover-view class="img-wrap">
-    <cover-image src="/images/controls/service2.png" class="img" mode="">
-    </cover-image>
-    <button class="share-btn" openType="contact">客服</button>
-  </cover-view>
-  <cover-view class="text">客服</cover-view>
-  <!-- 设置 -->
-  <cover-view class="img-wrap" bind:tap="onSetting">
-    <cover-image src="/images/controls/setting.png" class="img" mode="">
-    </cover-image>
-  </cover-view>
-  <cover-view class="text" bind:tap="onSetting">设置</cover-view>
+    <!-- 设置 -->
+    <cover-view class="img-wrap" bind:tap="onSetting">
+        <cover-image src="/images/controls/setting.png" class="img" mode="">
+        </cover-image>
+    </cover-view>
+    <cover-view class="text" bind:tap="onSetting">设置</cover-view>
 </cover-view>

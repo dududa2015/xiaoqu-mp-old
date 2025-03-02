@@ -20,7 +20,7 @@ Component({
                     nickName
                 })
                 if (newVal) {
-                    this.setData({                        
+                    this.setData({
                         isVip: newVal.isVip,
                         isAdmin: newVal.isAdmin,
                         points: this.convertToWan(newVal.points),
@@ -51,7 +51,10 @@ Component({
             })
         },
         showToast(event) {
-            const { number, type } = event.currentTarget.dataset
+            const {
+                number,
+                type
+            } = event.currentTarget.dataset
             let title = ''
             switch (type) {
                 case 'score':
@@ -76,10 +79,28 @@ Component({
             })
         },
         toMarkers(event) {
-            const { deleted } = event.currentTarget.dataset
-            wx.navigateTo({
-                url: '/pages/my/markers/markers?deleted=' + deleted,
-            })
+            if (getApp().globalData.userInfo) {
+                const {
+                    deleted
+                } = event.currentTarget.dataset
+                wx.navigateTo({
+                    url: '/pages/my/markers/markers?deleted=' + deleted,
+                })
+            } else {
+                wx.showModal({
+                    title: '登录提示',
+                    content: '需要先登录才能进行操作',
+                    success(res) {
+                        if (res.confirm) {
+                            wx.navigateTo({
+                                url: '/pages/my/login/login',
+                            })
+                        } else if (res.cancel) {
+                            console.log('用户点击取消')
+                        }
+                    }
+                })
+            }
         },
         convertToWan(num) {
             if (num > 100000) {

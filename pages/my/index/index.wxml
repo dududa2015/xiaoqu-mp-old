@@ -34,12 +34,11 @@
             <t-cell title="关联小程序" hover arrow url="/pages/my/relate/relate">
                 <image src="https://res.wx.qq.com/mpres/en_US/htmledition/comm_htmledition/images/icon/login/mp_app741afb.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell>
-            <!-- <t-cell title="使用帮助" hover arrow url="/pages/help/help4/help4">
+            <t-cell title="个人地图" hover arrow url="/pages/help/help4/help4">
                 <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
-            </t-cell> -->
+            </t-cell>
             <!-- #endif -->
         </t-cell-group>
-
         <!-- #if MP -->
         <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
             <!-- <t-cell title="意见反馈" hover arrow>
@@ -51,14 +50,14 @@
             </t-cell>
         </t-cell-group>
         <!-- #endif -->
-        <!-- #if MP -->
+
         <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;" wx:if="{{showAudit}}">
             <t-cell title="审核" hover arrow left-icon="fact-check" url="/pages/my/audit/audit" note="审核楼号标记">
             </t-cell>
             <t-cell title="通知公告" hover arrow left-icon="sound" color="#8c444f" url="/pages/my/notice/notice" note="修改通知公告">
             </t-cell>
         </t-cell-group>
-        <!-- #endif -->
+
         <view class="ad-wrap" wx:if="{{!isVip}}">
             <ad unit-id="adunit-d0128667c529af77"></ad>
         </view>

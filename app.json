@@ -13,7 +13,8 @@
     "pages/my/markers/markers",
     "pages/my/notice/notice",
     "pages/my/login/login",
-    "pages/my/relate/relate"
+    "pages/my/relate/relate",
+    "pages/personal/list/list"
   ],
   "window": {
     "navigationBarTextStyle": "black",
