@@ -1,6 +1,6 @@
 {
   "miniVersion": "v2",
-  "name": "%name%",
+  "name": "小区楼号地图",
   "version": "0.0.1",
   "versionCode": 100,
   "i18nFilePath": "i18n",
@@ -80,5 +80,14 @@
       "NSPhotoLibraryAddUsageDescription": "应用程序在请求访问照片库，如需修改描述请前往「project.miniapp.json - 隐私信息访问许可描述」修改，并且关闭「自动使用默认描述补全默认隐私信息访问许可"
     },
     "qmapAPIKey": "H2UBZ-6JDC5-VQKIZ-IN4JJ-2G42H-HCFZP"
+  },
+  "mini-plugin": {
+    "ios": [
+      {
+        "open": false,
+        "pluginId": "",
+        "pluginVersion": ""
+      }
+    ]
   }
 }

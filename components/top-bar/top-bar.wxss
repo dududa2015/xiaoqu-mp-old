@@ -1,71 +1,92 @@
 .top-bar-container {
-  position: absolute;
-  /* top: 120rpx; */
-  top: 92px;
-  text-align: center;
-  background-color: #fff;
-  padding: 16rpx 0;
-  border-radius: 24rpx;
-  opacity: 0.95;
+    position: absolute;
+    /* top: 120rpx; */
+    top: 160rpx;
+    text-align: center;
+    background-color: #fff;
+    padding: 16rpx 0;
+    border-radius: 24rpx;
+    opacity: 0.95;
+    height: 272rpx;
 }
 
 .top-bar-container-shadow {
-  position: absolute;
-  top: 92px;
-  right: 16rpx;
-  border-radius: 24rpx;
-  width: 74rpx;
-  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 160rpx;
+    right: 16rpx;
+    border-radius: 24rpx;
+    width: 74rpx;
+    height: 304rpx;
+    box-shadow: 0rpx 4rpx 24rpx 0rpx rgba(100, 101, 102, 0.12);
 }
 
 /* .marginTop16 {
-  margin-top: 16rpx;
-} */
+    margin-top: 16rpx;
+  } */
 .img-wrap-first {
-  position: relative;
-  padding: 0 16rpx;
+    position: relative;
+    height: 44rpx;
+    padding: 0 16rpx;
 }
 
 .img-wrap {
-  position: relative;
-  height: 44rpx;
-  padding: 16rpx 16rpx 0 16rpx;
+    position: relative;
+    height: 44rpx;
+    padding: 24rpx 16rpx 0 16rpx;
 }
 
 .img {
-  position: relative;
-  width: 44rpx;
-  height: 44rpx;
-  z-index: 0;
+    position: relative;
+    width: 44rpx;
+    height: 44rpx;
+    z-index: 0;
 }
 
 .text {
-  font-size: 20rpx;
-  font-weight: 500;
-  color: #000;
-  line-height: 36rpx;
-  height: 36rpx;
+    font-size: 20rpx;
+    font-weight: 500;
+    color: #333;
+    line-height: 36rpx;
+    height: 36rpx;
+}
+
+.text-4 {
+    line-height: 28rpx;
+    height: 28rpx;
 }
 
 .share-btn {
-  position: absolute;
-  /* 绝对定位 */
-  top: 80%;
-  /* 根据需要调整位置 */
-  left: 50%;
-  /* 根据需要调整位置 */
-  transform: translate(-50%, -50%);
-  /* 将按钮移动到中心 */
-  background-color: transparent;
-  /* 透明背景 */
-  color: transparent;
-  /* 透明文字 */
-  border: none;
-  width: 96rpx;
-  /* 按钮宽度，需与 cover-image 一致 */
-  height: 96rpx;
-  /* 按钮高度，需与 cover-image 一致 */
-  z-index: 1;
-  /* 确保按钮在上层 */
-  opacity: 0;
+    position: absolute;
+    /* 绝对定位 */
+    top: 80%;
+    /* 根据需要调整位置 */
+    left: 50%;
+    /* 根据需要调整位置 */
+    transform: translate(-50%, -50%);
+    /* 将按钮移动到中心 */
+    background-color: transparent;
+    /* 透明背景 */
+    color: transparent;
+    /* 透明文字 */
+    border: none;
+    width: 96rpx;
+    /* 按钮宽度，需与 cover-image 一致 */
+    height: 96rpx;
+    /* 按钮高度，需与 cover-image 一致 */
+    z-index: 1;
+    /* 确保按钮在上层 */
+    opacity: 0;
+}
+
+/* app样式 */
+.top-bar-container-shadow-app {
+    position: absolute;
+    top: 160rpx;
+    right: 16rpx;
+    padding: 16rpx 0;
+    text-align: center;
+    border-radius: 24rpx;
+    width: 74rpx;
+    background-color: #fff;
+    box-shadow: 0rpx 4rpx 24rpx 0rpx rgba(100, 101, 102, 0.12);
 }

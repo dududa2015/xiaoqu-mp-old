@@ -36,8 +36,6 @@ App({
                     friendUserId: friendUserId ?? ''
                 }).then(res => {
                     wx.setStorageSync('userId', res.userId)
-                    //   wx.setStorageSync('color', res.color)
-                    //   wx.setStorageSync('colorExpiredDate', formatTime(new Date(parseInt(res.colorExpiredDate.match(/(\d+)/)[0]))))
                     wx.setStorageSync('token', res.token)
                     getApp().globalData.userInfo = res
                 }).catch(err => {

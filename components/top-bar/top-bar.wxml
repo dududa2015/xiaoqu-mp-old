@@ -1,9 +1,8 @@
-<view class="top-bar-container-shadow" style="{{position}}: 12px">
-
+<!-- #if MP -->
+<view class="top-bar-container-shadow" style="{{position}}: 16rpx">
 </view>
-<cover-view class="top-bar-container" style="{{position}}: 12px">
+<cover-view class="top-bar-container" style="{{position}}: 16rpx">
     <!-- 分享 -->
-    <!-- #if MP -->
     <cover-view class="img-wrap-first">
         <cover-image src="/images/controls/share2.png" class="img" mode="" />
         <button class="share-btn" openType="share">分享</button>
@@ -16,13 +15,6 @@
         <button class="share-btn" openType="contact">客服</button>
     </cover-view>
     <cover-view class="text">客服</cover-view>
-    <!-- #else -->
-    <cover-view class="img-wrap-first">
-        <cover-image src="/images/controls/share2.png" class="img" mode="" />
-        <button class="share-btn" openType="share">分享</button>
-    </cover-view>
-    <cover-view class="text">分享</cover-view>
-    <!-- #endif -->
     <!-- 设置 -->
     <cover-view class="img-wrap" bind:tap="onSetting">
         <cover-image src="/images/controls/setting.png" class="img" mode="">
@@ -30,3 +22,25 @@
     </cover-view>
     <cover-view class="text" bind:tap="onSetting">设置</cover-view>
 </cover-view>
+<!-- #else -->
+<!-- 以下是app的上边栏 -->
+<view class="top-bar-container-shadow-app" style="{{position}}: 16rpx">
+    <!-- 个人地图 -->
+    <view bind:tap="toPersonalMap">
+        <view class="img-wrap-first">
+            <t-icon name="map-information-2" size="42rpx" color="#000" />
+            <!-- <image src="/images/controls/my-map.png" class="img" mode="" /> -->
+        </view>
+        <view class="text text-4">个人</view>
+        <view class="text text-4">地图</view>
+    </view>
+    <!-- 设置 -->
+    <view bind:tap="onSetting">
+        <view class="img-wrap">
+            <image src="/images/controls/setting.png" class="img" mode="">
+            </image>
+        </view>
+        <view class="text">设置</view>
+    </view>
+</view>
+<!-- #endif -->

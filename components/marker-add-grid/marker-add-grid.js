@@ -71,7 +71,7 @@ Component({
       this.triggerEvent('getMarkerTypeIndex', index)
     },
     toPersonalMap(){
-        wx.setStorageSync('isPersonalMap', true)
+        wx.setStorageSync('enablePersonalMap', true)
         this.triggerEvent('createPersonalMap', true)
         // wx.navigateTo({
         //   url: '/pages/personal/list/list',

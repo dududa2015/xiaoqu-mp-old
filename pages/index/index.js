@@ -48,6 +48,7 @@ Page({
         markers: [],
         show: false,
         polyline: [],
+        showMapAddForm: false, //是否显示创建个人地图的form
     },
     onLoad() {
         this.getLocation()
@@ -454,6 +455,7 @@ Page({
             showLocation: true,
             showPOI: false,
             showGrid: false,
+            showPersonalMap: false,
             showSetting: false,
             bottom: 0
         })
@@ -475,11 +477,14 @@ Page({
         })
     },
     showTabBar() {
-        setTimeout(() => {
-            wx.showTabBar({
-                animation: false
-            });
-        }, 240);
+        wx.showTabBar({
+            animation: false
+        });
+        // setTimeout(() => {
+        //     wx.showTabBar({
+        //         animation: false
+        //     });
+        // }, 240);
     },
     hideTabBar() {
         wx.hideTabBar({
@@ -567,9 +572,9 @@ Page({
     },
     getAroundList(lat, lng) {
         const that = this
-        let isPersonalMap = wx.getStorageSync('isPersonalMap')
+        let enablePersonalMap = wx.getStorageSync('enablePersonalMap')
         let userId = ''
-        if(isPersonalMap){
+        if (enablePersonalMap) {
             userId = wx.getStorageSync('userId')
         }
 
@@ -1052,15 +1057,49 @@ Page({
             markerDetail: event.detail
         })
     },
+    //打开个人地图
+    toPersonalMap() {
+        let userId = wx.getStorageSync('userId')
+        if (userId) {
+            this.disableMapTap()
+            this.setData({
+                showSetting: false,
+                showPersonalMap: true,
+                showGrid: false,
+                showForm: false
+            })
+            this.hideTabBar()
+        } else {
+            wx.navigateTo({
+                url: '/pages/my/login/login',
+            })
+        }
+    },
+    //个人地图关闭
+    onPersonalMapClose() {
+        this.disableMapTap()
+        this.setData({
+            showPersonalMap: false
+        })
+        this.showTabBar()
+    },
+    //打开设置
     onSetting() {
+        this.disableMapTap()
         this.setData({
             showSetting: true,
+            showPersonalMap: false,
             showGrid: false,
             showForm: false
         })
         this.hideTabBar()
     },
+    //设置关闭
     onSettingClose() {
+        this.disableMapTap()
+        this.setData({
+            showSetting: false
+        })
         this.showTabBar()
     },
     //更改图层
@@ -1068,6 +1107,19 @@ Page({
         this.setData({
             enableSatellite: event.detail
         })
+    },
+    personalMapChange(event) {
+        // console.log(event.detail)
+        // const latitude = wx.getStorageSync('latitude')
+        // const longitude = wx.getStorageSync('longitude')
+        // if(event.detail){
+        //     this.getAroundList(latitude, longitude)
+        // }
+        this.setData({
+            markers: [],
+            polyline: []
+        })
+        this.getLocation()
     },
     onPosition(event) {
         this.setData({
@@ -1122,9 +1174,10 @@ Page({
         this.setData({
             showGrid: false,
             showAdd: true,
-            showLocation: true
+            showLocation: true,
+            showSetting: true
         })
-        this.showTabBar()
+        this.hideTabBar()
     },
     onFormClose(event) {
         this.disableMapTap()

@@ -1,6 +1,9 @@
 import {
     getAppleUserInfo
 } from '../../../utils/apis'
+import {
+    wxLogin
+} from '../../../apis/user-api.js'
 Page({
 
     /**
@@ -80,7 +83,11 @@ Page({
     wxLogin() {
         wx.miniapp.login({
             success: (res) => {
-                console.log('login success:', res.code)
+                wxLogin({
+                    code: res.code
+                }).then(res => {
+                    console.log(res)
+                })
             }
         })
     },

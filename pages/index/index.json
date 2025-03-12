@@ -17,7 +17,8 @@
     "poi-detail": "/components/poi-detail/poi-detail",
     "marker-add": "/components/marker-add/marker-add",
     "marker-add-grid": "/components/marker-add-grid/marker-add-grid",
-    "map-setting": "/components/map-setting/map-setting"
+    "map-setting": "/components/map-setting/map-setting",
+    "personal-map": "/components/personal-map/personal-map"
   },
   "navigationBarTitleText": "小区楼号",
   "navigationStyle": "custom"

@@ -1,0 +1,70 @@
+<t-popup visible="{{showPersonalMap}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#F5F5F5;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx);">
+    <view class="popup-title-wrap">
+        <view class="popup-title">个人地图</view>
+        <image src="/images/controls/cross.png" mode="" style="width: 40rpx; height: 40rpx;" bind:tap="onClose" />
+    </view>
+    <view class="cell-wrap" bind:tap="toPersonalMap">
+        <view class="img-wrap" slot="image" style="background-color: #0074FE;">
+            <t-icon name="map-information-2" size="48rpx" color="#fff" />
+        </view>
+        <view class="title-wrap" bind:tap="onMapChoose" data-pId="0">
+            <view class="title {{currentPId === '0' ? 'current' : ''}}">公共地图</view>
+            <view class="desc">所有用户共建的地图</view>
+        </view>
+        <view class="cell-right">
+            <!-- <view class="btn-wrap">
+                进入
+            </view> -->
+            <t-icon name="chevron-right" size="42rpx" color="#333"></t-icon>
+        </view>
+    </view>
+    <view class="my-map-wrap">
+        <block wx:if="{{mapList.length > 0}}">
+            <t-swipe-cell wx:for="{{mapList}}" wx:key="index" opened="{{index === 0 ? opened : false}}" >
+                <view class="my-map-cell-wrap {{index === mapList.length - 1 ? 'noborder' : ''}}" bind:tap="onMapChoose" data-pId="{{item.pId}}">
+                    <view class="title-wrap">
+                        <view class="title {{currentPId === item.pId? 'current' : ''}}">{{item.name}}</view>
+                        <view class="desc">创建于{{item.createdDate}}</view>
+                    </view>
+                    <view class="cell-right">
+                        <!-- <view class="btn-wrap">
+                            进入
+                        </view> -->
+                        <t-icon name="chevron-right" size="42rpx" color="#333"></t-icon>
+                    </view>
+                </view>
+                <view slot="right" class="btn-wrapper">
+                    <view class="btn delete-btn-1" bind:tap="onEdit" data-points="10" data-item="{{item}}">
+                        修改
+                    </view>
+                    <view class="btn delete-btn-2" bind:tap="onDelete" data-item="{{item}}">
+                        删除
+                    </view>
+                </view>
+            </t-swipe-cell>            
+        </block>        
+        <view class="empty-wrap" wx:else>
+            <image src="https://img01.yzcdn.cn/vant/empty-image-default.png" class="img" mode="" />
+            <view class="empty-text">您还没有创建个人地图</view>
+        </view>       
+    </view>
+    <view wx:if="{{mapList.length > 0}}" class="list-tips">温馨提示：向左滑动可修改和删除个人地图</view>
+    <view class="footer">
+        <button type="primary" style="background-color: #0074FE;" bind:tap="onAdd">创建个人地图</button>
+        <!-- <text style="color: #808080; font-size: 24rpx;">可在地图上标记专属于您的楼号</text> -->
+    </view>
+    <t-popup visible="{{showForm}}" placement="center" touchmove='false' style="background:#F5F5F5;padding: 0 32rpx; width: 600rpx">
+        <view class="popup-title-wrap">
+            <view class="popup-title">个人地图</view>
+            <image src="/images/controls/cross.png" mode="" style="width: 40rpx; height: 40rpx;" bind:tap="onFormClose" />
+        </view>
+        <view class="form-content">
+            <t-input value="{{name}}" placeholder="请输入地图名称（限10个字内）" maxlength="10" borderless clearable bindchange="onNameChange">
+                <view slot="label" class="custom-label">地图名称 </view>
+            </t-input>
+        </view>
+        <view class="form-footer">
+            <button type="primary" style="background-color: #0074FE; width: 320rpx;" bind:tap="onSave">保存</button>            
+        </view>
+    </t-popup>
+</t-popup>

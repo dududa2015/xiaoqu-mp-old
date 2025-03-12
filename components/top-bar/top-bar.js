@@ -23,8 +23,8 @@ Component({
      * 组件的方法列表
      */
     methods: {
-        onColor() {
-            this.triggerEvent('onColor');
+        toPersonalMap() {
+            this.triggerEvent('toPersonalMap');
         },
         onSetting() {
             this.triggerEvent('onSetting');

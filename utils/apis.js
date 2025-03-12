@@ -183,6 +183,7 @@ export const updateNotice = (params) => {
         method: 'POST',
     })
 }
+
 export const deleteNearMarkers = (params) => {
     return request({
         url: '/marker/deleteNearMarkers',
