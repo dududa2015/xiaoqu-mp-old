@@ -11,7 +11,7 @@
                 </view>
             </view>
         </view>
-        <view class="cell-wrap" bind:tap="toPersonalMap">
+        <view class="cell-wrap" bind:tap="toMap">
             <view class="img-wrap" slot="image" style="background-color: #800020;">
                 <t-icon name="map-information-2" size="48rpx" color="#fff" />
             </view>

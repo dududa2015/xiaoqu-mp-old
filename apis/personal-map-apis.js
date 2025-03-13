@@ -3,36 +3,36 @@ import {
 } from "../utils/request"
 
 //添加个人地图
-export const addPersonalMap = (params) => {
+export const addMap = (params) => {
     return request({
-        url: '/personalMap/addPersonalMap',
+        url: '/map/addMap',
         data: params,
         method: 'POST',
     })
 }
 
 //修改个人地图
-export const updatePersonalMap = (params) => {
+export const updateMap = (params) => {
     return request({
-        url: '/personalMap/updatePersonalMap',
+        url: '/map/updateMap',
         data: params,
         method: 'POST',
     })
 }
 
 //删除个人地图
-export const deletePersonalMap = (params) => {
+export const deleteMap = (params) => {
     return request({
-        url: '/personalMap/deletePersonalMap',
+        url: '/map/deleteMap',
         data: params,
         method: 'POST',
     })
 }
 
 //获取个人地图列表
-export const getPersonalMapList = (params) => {
+export const getMapList = (params) => {
     return request({
-        url: '/personalMap/getPersonalMapList',
+        url: '/map/getMapList',
         data: params,
         method: 'GET',
     })

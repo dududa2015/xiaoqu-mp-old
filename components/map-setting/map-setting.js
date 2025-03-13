@@ -32,13 +32,13 @@ Component({
      */
     methods: {
         initStorage() {
-            const enablePersonalMap = wx.getStorageSync('enablePersonalMap')
+            const enableMap = wx.getStorageSync('enableMap')
             const position = wx.getStorageSync('position')
             const markerShape = wx.getStorageSync('markerShape')
             const enableRotate = wx.getStorageSync('enableRotate')
             const enableSatellite = wx.getStorageSync('enableSatellite')
             this.setData({
-                enablePersonalMap,
+                enableMap,
                 position: position ? position : 'right',
                 markerShape: markerShape ? markerShape : 'label'
             })
@@ -69,13 +69,13 @@ Component({
         //开启个人地图
         onPersonalmapChange(e) {
             this.setData({
-                enablePersonalMap: e.detail.value
+                enableMap: e.detail.value
             });
-            wx.setStorageSync('enablePersonalMap', e.detail.value)
-            this.triggerEvent('personalMapChange', e.detail.value)
+            wx.setStorageSync('enableMap', e.detail.value)
+            this.triggerEvent('mapChange', e.detail.value)
         },
         //个人地图帮助
-        onPersonalMapHelp() {
+        onMapHelp() {
             this.setData({
                 showConfirm: true
             })
@@ -83,8 +83,8 @@ Component({
         //导入个人数据
         //要先开启个人地图才能导入个人数据
         onImportPersonalDataChange(e) {
-            const enablePersonalMap = wx.getStorageSync('enablePersonalMap')
-            if (enablePersonalMap) {
+            const enableMap = wx.getStorageSync('enableMap')
+            if (enableMap) {
                 this.setData({
                     enableImportPersonalData: e.detail.value
                 });

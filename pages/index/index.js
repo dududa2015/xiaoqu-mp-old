@@ -455,7 +455,7 @@ Page({
             showLocation: true,
             showPOI: false,
             showGrid: false,
-            showPersonalMap: false,
+            showMap: false,
             showSetting: false,
             bottom: 0
         })
@@ -572,9 +572,9 @@ Page({
     },
     getAroundList(lat, lng) {
         const that = this
-        let enablePersonalMap = wx.getStorageSync('enablePersonalMap')
+        let enableMap = wx.getStorageSync('enableMap')
         let userId = ''
-        if (enablePersonalMap) {
+        if (enableMap) {
             userId = wx.getStorageSync('userId')
         }
 
@@ -1058,13 +1058,13 @@ Page({
         })
     },
     //打开个人地图
-    toPersonalMap() {
+    toMap() {
         let userId = wx.getStorageSync('userId')
         if (userId) {
             this.disableMapTap()
             this.setData({
                 showSetting: false,
-                showPersonalMap: true,
+                showMap: true,
                 showGrid: false,
                 showForm: false
             })
@@ -1075,11 +1075,21 @@ Page({
             })
         }
     },
+    //个人地图选择
+    onMapChange(e){
+        let mapId = e.detail
+        console.log(mapId)
+        this.setData({
+            markers: [],
+            polyline: []
+        })
+        this.getLocation()
+    },
     //个人地图关闭
-    onPersonalMapClose() {
+    onMapClose() {
         this.disableMapTap()
         this.setData({
-            showPersonalMap: false
+            showMap: false
         })
         this.showTabBar()
     },
@@ -1088,7 +1098,7 @@ Page({
         this.disableMapTap()
         this.setData({
             showSetting: true,
-            showPersonalMap: false,
+            showMap: false,
             showGrid: false,
             showForm: false
         })
@@ -1108,7 +1118,7 @@ Page({
             enableSatellite: event.detail
         })
     },
-    personalMapChange(event) {
+    mapChange(event) {
         // console.log(event.detail)
         // const latitude = wx.getStorageSync('latitude')
         // const longitude = wx.getStorageSync('longitude')
@@ -1170,7 +1180,7 @@ Page({
         return
     },
     //由grid弹窗创建个人地图按钮触发
-    createPersonalMap() {
+    createMap() {
         this.setData({
             showGrid: false,
             showAdd: true,

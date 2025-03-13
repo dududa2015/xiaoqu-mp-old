@@ -70,9 +70,9 @@ Component({
       const index = event.currentTarget.dataset.index
       this.triggerEvent('getMarkerTypeIndex', index)
     },
-    toPersonalMap(){
-        wx.setStorageSync('enablePersonalMap', true)
-        this.triggerEvent('createPersonalMap', true)
+    toMap(){
+        wx.setStorageSync('enableMap', true)
+        this.triggerEvent('createMap', true)
         // wx.navigateTo({
         //   url: '/pages/personal/list/list',
         // })

@@ -2,7 +2,7 @@ import {
     getAppleUserInfo
 } from '../../../utils/apis'
 import {
-    wxLogin
+    getUserInfoByWxLogin
 } from '../../../apis/user-api.js'
 Page({
 
@@ -83,10 +83,15 @@ Page({
     wxLogin() {
         wx.miniapp.login({
             success: (res) => {
-                wxLogin({
+                console.log('wx.miniapp.login', res.code)
+                getUserInfoByWxLogin({
                     code: res.code
                 }).then(res => {
+                    console.log('getUserInfoByWxLogin')
                     console.log(res)
+                    wx.setStorageSync('userId', res.userId)
+                    wx.setStorageSync('token', res.token)
+                    getApp().globalData.userInfo = res
                 })
             }
         })

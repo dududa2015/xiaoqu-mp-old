@@ -26,7 +26,7 @@
 <!-- 以下是app的上边栏 -->
 <view class="top-bar-container-shadow-app" style="{{position}}: 16rpx">
     <!-- 个人地图 -->
-    <view bind:tap="toPersonalMap">
+    <view bind:tap="toMap">
         <view class="img-wrap-first">
             <t-icon name="map-information-2" size="42rpx" color="#000" />
             <!-- <image src="/images/controls/my-map.png" class="img" mode="" /> -->

@@ -20,10 +20,10 @@
         <view class="row flex f-x-sb">
             <view class="row-title flex f-y-center">
                 <text>开启个人地图</text>
-                <t-icon class="help-icon" color="#999" name="help-circle" size="24rpx" data-key="showPersonalMapConfirm" bind:tap="showDialog"></t-icon>
+                <t-icon class="help-icon" color="#999" name="help-circle" size="24rpx" data-key="showMapConfirm" bind:tap="showDialog"></t-icon>
             </view>
             <view class="row-title">
-                <t-switch value="{{enablePersonalMap}}" slot="note" size="small" bind:change="onPersonalmapChange" />
+                <t-switch value="{{enableMap}}" slot="note" size="small" bind:change="onPersonalmapChange" />
             </view>
         </view>
         <view class="last-row flex f-x-sb">
@@ -64,7 +64,7 @@
         </view>
     </view>
 
-    <t-dialog visible="{{showPersonalMapConfirm}}" content="创建专属于您的楼号地图，他人将无法查看、修改和删除您的个人地图" confirm-btn="确定" bind:confirm="closeDialog" />
+    <t-dialog visible="{{showMapConfirm}}" content="创建专属于您的楼号地图，他人将无法查看、修改和删除您的个人地图" confirm-btn="确定" bind:confirm="closeDialog" />
     <t-dialog visible="{{showImportPersonalDataConfirm}}" content="把您过去的标记导入到个人地图" confirm-btn="确定" bind:confirm="closeDialog" />
     
 </t-popup>

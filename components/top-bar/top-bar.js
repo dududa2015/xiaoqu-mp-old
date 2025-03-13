@@ -23,8 +23,8 @@ Component({
      * 组件的方法列表
      */
     methods: {
-        toPersonalMap() {
-            this.triggerEvent('toPersonalMap');
+        toMap() {
+            this.triggerEvent('toMap');
         },
         onSetting() {
             this.triggerEvent('onSetting');

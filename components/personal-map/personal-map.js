@@ -1,8 +1,8 @@
 import {
-    addPersonalMap,
-    updatePersonalMap,
-    deletePersonalMap,
-    getPersonalMapList
+    addMap,
+    updateMap,
+    deleteMap,
+    getMapList
 } from '../../apis/personal-map-apis'
 Component({
     options: {
@@ -12,7 +12,7 @@ Component({
      * 组件的属性列表
      */
     properties: {
-        showPersonalMap: {
+        showMap: {
             type: Boolean,
             value: false,
             observer(newVal, oldVal) {
@@ -41,21 +41,21 @@ Component({
             // this.setData({
             //     mapList: []
             // })
-            this.getPersonalMapList()
+            this.getMapList()
             // this.openedChange()
         },
         onMapChoose(e){
             //当前选中的地图pId
-            let currentPId = e.currentTarget.dataset.pid
-            wx.setStorageSync('currentPId', currentPId)
+            let mapId = e.currentTarget.dataset.mapid
+            wx.setStorageSync('mapId', mapId)
             this.setData({
-                currentPId
+                mapId
             })
             //TODO: 还未处理
-            this.triggerEvent('onPersonalMapChange')
+            this.triggerEvent('onMapChange', mapId)
         },
         onClose() {
-            this.triggerEvent('onPersonalMapClose')
+            this.triggerEvent('onMapClose')
         },
         onFormClose() {
             this.setData({
@@ -83,10 +83,10 @@ Component({
             }
             let method = null
             if (this.currentEditMap) {
-                param.pId = this.currentEditMap.pId
-                method = updatePersonalMap
+                param.mapId = this.currentEditMap.mapId
+                method = updateMap
             } else {
-                method = addPersonalMap
+                method = addMap
             }
             method(param).then(res => {
                 if (res) {
@@ -99,7 +99,7 @@ Component({
                     })
                     setTimeout(() => {
                         if (this.currentEditMap) {
-                            this.getPersonalMapList()
+                            this.getMapList()
                         } else {
                             this.init()
                         }
@@ -122,23 +122,23 @@ Component({
             })
         },
         onDelete(e) {
-            let pId = e.currentTarget.dataset.item.pId
-            deletePersonalMap({
-                pId,
+            let mapId = e.currentTarget.dataset.item.mapId
+            deleteMap({
+                mapId,
                 userId: wx.getStorageSync('userId'),
             }).then(res => {
                 if (res) {
                     wx.showToast({
                         title: '删除成功',
                     })
-                    this.getPersonalMapList()
+                    this.getMapList()
                 }
             })
         },
-        getPersonalMapList() {
+        getMapList() {
             let userId = wx.getStorageSync('userId')
             const that = this
-            getPersonalMapList({
+            getMapList({
                 userId
             }).then(res => {
                 console.log(res)

@@ -3,9 +3,9 @@ import {
 } from "../utils/request"
 
 //微信登录
-export const wxLogin = (params) => {
+export const getUserInfoByWxLogin = (params) => {
     return request({
-        url: '/users/wxLogin',
+        url: '/users/getUserInfoByWxLogin',
         data: params,
         method: 'GET',
     })
