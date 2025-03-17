@@ -14,14 +14,6 @@ App({
         // #else
         this.appleLogin()
         // #endif
-        wx.checkIdentitySession({
-            success() {
-                console.log('系统登录态生效')
-            },
-            fail(res) {
-                console.log('系统登录态失效')
-            }
-        })
     },
     //登录获取用户信息
     login(friendUserId) {

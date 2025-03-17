@@ -81,7 +81,7 @@
 /* app样式 */
 .top-bar-container-shadow-app {
     position: absolute;
-    top: 160rpx;
+    top: 175rpx;
     right: 16rpx;
     padding: 16rpx 0;
     text-align: center;

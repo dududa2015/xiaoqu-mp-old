@@ -16,7 +16,7 @@
         </view>
     </view>
     <!-- 个人地图设置 -->
-    <view class="setting {{isShowBorder ? 'border-show' : 'border-hidden'}}">
+    <!-- <view class="setting {{isShowBorder ? 'border-show' : 'border-hidden'}}">
         <view class="row flex f-x-sb">
             <view class="row-title flex f-y-center">
                 <text>开启个人地图</text>
@@ -35,7 +35,7 @@
                 <t-switch value="{{enableImportPersonalData}}" slot="note" size="small" bind:change="onImportPersonalDataChange" />
             </view>
         </view>
-    </view>
+    </view> -->
     <!-- 位置、形状、旋转设置 -->
     <view class="setting">
         <view class="row flex f-x-sb">

@@ -1,4 +1,4 @@
-<t-popup visible="{{show}}" show-overlay="{{false}}" placement="bottom" style="background: linear-gradient(to bottom, transparent, #f7f7f7 50%);">
+<t-popup visible="{{show}}" show-overlay="{{false}}" placement="bottom" style="background: linear-gradient(to bottom, transparent, #fff 75%);">
     <view class="marker-add-grid-wrap">
         <view class="grid-wrap">
             <view class="grid-item" wx:for="{{pointList}}" wx:key="index" bind:tap="onChoose" data-index="{{index}}">
@@ -11,7 +11,7 @@
                 </view>
             </view>
         </view>
-        <view class="cell-wrap" bind:tap="toMap">
+        <!-- <view class="cell-wrap" bind:tap="toMap">
             <view class="img-wrap" slot="image" style="background-color: #800020;">
                 <t-icon name="map-information-2" size="48rpx" color="#fff" />
             </view>
@@ -24,7 +24,7 @@
                 去创建
                 </view>
             </view>
-        </view>
+        </view> -->
     </view>
 
 </t-popup>

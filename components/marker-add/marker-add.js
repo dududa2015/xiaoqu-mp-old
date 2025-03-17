@@ -459,20 +459,21 @@ Component({
             let direction = this.getDirection()
             this.data.name = this.data.name + direction
             let enableMap = wx.getStorageSync('enableMap')
+            let mapId = wx.getStorageSync('mapId') || null
             let param = {
                 xId: uid,
                 userId: wx.getStorageSync('userId'),
                 type: this.data.markerTypeIndex,
+                mapId,
                 name: this.data.name,
                 remark: this.getRemark(),
                 deleted,
                 lat: latitude,
-                lng: longitude,
-                mapType: enableMap ? 1 : null
+                lng: longitude
             }
             const that = this
             addMarker(param).then(res => {
-                if (res) {
+                if (res > 0) {
                     wx.showToast({
                         title: '添加成功',
                     })

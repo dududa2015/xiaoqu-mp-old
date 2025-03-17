@@ -2,8 +2,12 @@ import {
     addMap,
     updateMap,
     deleteMap,
-    getMapList
-} from '../../apis/personal-map-apis'
+    getMapList,
+    importHistoryData
+} from '../../apis/map-apis'
+import {
+    getUserById
+} from '../../utils/apis'
 Component({
     options: {
         // styleIsolation: "apply-shared"
@@ -42,17 +46,52 @@ Component({
             //     mapList: []
             // })
             this.getMapList()
+            let mapId = wx.getStorageSync('mapId')
+            this.setData({
+                mapId
+            })
             // this.openedChange()
         },
-        onMapChoose(e){
+        onMapChoose(e) {
             //当前选中的地图pId
             let mapId = e.currentTarget.dataset.mapid
+            let mapName = e.currentTarget.dataset.name
             wx.setStorageSync('mapId', mapId)
+            wx.setStorageSync('mapName', mapName)
             this.setData({
                 mapId
             })
             //TODO: 还未处理
-            this.triggerEvent('onMapChange', mapId)
+            this.triggerEvent('onMapChange', {
+                mapId,
+                mapName
+            })
+            // debugger
+            // wx.showToast({
+            //     title: '已为您切换至' + e.currentTarget.dataset.name,
+            //   })            
+        },
+        onMapTap(e) {
+            const that = this
+            wx.showActionSheet({
+                itemList: ['修改', '删除', '导入历史数据'],
+                success(res) {
+                    console.log('用户点击了：', res.tapIndex);
+                    if (res.tapIndex === 0) {
+                        // 执行修改操作
+                        that.onEdit(e)
+                    } else if (res.tapIndex === 1) {
+                        // 执行删除操作
+                        that.onDelete(e)
+                    } else if (res.tapIndex === 2) {
+                        // 执行导入历史数据操作
+                        that.importHistoryData(e)
+                    }
+                },
+                fail(err) {
+                    console.log('显示操作菜单失败：', err);
+                }
+            });
         },
         onClose() {
             this.triggerEvent('onMapClose')
@@ -110,6 +149,7 @@ Component({
                         title: '保存失败，稍后重试',
                         icon: 'none'
                     })
+                    console.log(res)
                 }
             })
         },
@@ -122,18 +162,56 @@ Component({
             })
         },
         onDelete(e) {
-            let mapId = e.currentTarget.dataset.item.mapId
-            deleteMap({
-                mapId,
-                userId: wx.getStorageSync('userId'),
-            }).then(res => {
-                if (res) {
-                    wx.showToast({
-                        title: '删除成功',
-                    })
-                    this.getMapList()
+            wx.showModal({
+                content: '删除后无法恢复，确认要删除吗？',
+                complete: (res) => {
+                    if (res.confirm) {
+                        let mapId = e.currentTarget.dataset.item.mapId
+                        deleteMap({
+                            mapId,
+                            userId: wx.getStorageSync('userId'),
+                        }).then(res => {
+                            if (res) {
+                                wx.showToast({
+                                    title: '删除成功',
+                                })
+                                if (wx.getStorageSync('mapId') === mapId) {
+                                    wx.removeStorageSync('mapId')
+                                }
+                                this.getMapList()
+                            }
+                        })
+                    }
                 }
             })
+        },
+        importHistoryData(e) {
+            let userInfo = getApp().globalData.userInfo
+            if (userInfo && !userInfo.historyImported) {
+                console.log(e.currentTarget.dataset.item)
+                let userId = e.currentTarget.dataset.item.userId
+                let mapId = e.currentTarget.dataset.item.mapId
+                importHistoryData({
+                    userId,
+                    mapId
+                }).then(res => {
+                    if (res) {
+                        wx.showToast({
+                            title: '导入成功',
+                        })
+                    } else {
+                        wx.showToast({
+                            title: '导入失败，请重试',
+                            icon: 'none'
+                        })
+                    }
+                })
+            } else {
+                wx.showToast({
+                    title: '您已经导入过一次数据了',
+                    icon: 'none'
+                })
+            }
         },
         getMapList() {
             let userId = wx.getStorageSync('userId')
@@ -141,10 +219,11 @@ Component({
             getMapList({
                 userId
             }).then(res => {
-                console.log(res)
-                that.setData({
-                    mapList: res
-                })
+                if (Array.isArray(res) && res.length > 0) {
+                    that.setData({
+                        mapList: res
+                    })
+                }
             })
         },
         onNameChange(e) {
@@ -177,6 +256,21 @@ Component({
                     opened: false
                 })
             }, 1000);
-        }
+        },
+        //导入个人地图后
+        getUserInfo() {
+            getUserById({
+                code: '',
+                userId: wx.getStorageSync('userId'),
+                friendUserId: ''
+            }).then(res => {
+                if (res) {
+                    getApp().globalData.userInfo = res
+                    this.setData({
+                        userInfo: res,
+                    })
+                }
+            })
+        },
     }
 })

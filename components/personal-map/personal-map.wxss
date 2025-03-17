@@ -67,6 +67,14 @@
     height: 36rpx;
 }
 
+.ellipsis {
+    position: absolute;
+    top: 24rpx;
+    right: 24rpx;
+    width: 32rpx;
+    height: 32rpx;
+}
+
 .btn-wrap {
     font-size: 24rpx;
     font-weight: 500;
@@ -121,13 +129,17 @@
 }
 
 .empty-wrap {
-    text-align: center;
+    height: 500rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .img {
     /* margin-top: 20rpx; */
-    width: 300rpx;
-    height: 300rpx;
+    width: 200rpx;
+    height: 200rpx;
 }
 
 .empty-text {
@@ -139,13 +151,13 @@
 .list-tips {
     margin-top: 32rpx;
     width: 100%;
-    text-align: right;
+    text-align: left;
     color: #808080;
     font-size: 24rpx;
 }
 
 .footer {
-    padding: 32rpx 0 0 0;
+    padding: 64rpx 0 0 0;
     text-align: center;
 }
 
@@ -198,6 +210,6 @@
 }
 
 .form-footer {
-    padding: 32rpx 0;
+    padding: 32rpx 0 32rpx 0;
     text-align: center;
 }

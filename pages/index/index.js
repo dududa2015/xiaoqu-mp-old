@@ -573,22 +573,21 @@ Page({
     getAroundList(lat, lng) {
         const that = this
         let enableMap = wx.getStorageSync('enableMap')
-        let userId = ''
-        if (enableMap) {
-            userId = wx.getStorageSync('userId')
-        }
+        let userId = wx.getStorageSync('userId')
+        let mapId = wx.getStorageSync('mapId')
 
         getAroundList({
             lng,
             lat,
-            userId
+            userId,
+            mapId
         }).then(res => {
             let list = res
-            // #if MP
-            that.deleteNearMarkers(list)
-            // #endif
             //如果db中没有，则请求bd-api数据
-            if (list.length > 0) {
+            if (Array.isArray(list) && list.length > 0) {
+                // #if MP
+                that.deleteNearMarkers(list)
+                // #endif
                 that.addAroundList2Map(list)
                 //小于{{数量}}也调用接口，{{数量}}在缓存caches.json里配置
                 // #if MP
@@ -958,10 +957,12 @@ Page({
         let longitude = points[index].longitude
         let uid = generateXId(latitude, longitude)
         let userId = wx.getStorageSync('userId')
+        let mapId = wx.getStorageSync('mapId') || null
         let param = {
             xId: uid,
             userId,
             type: this.data.markerTypeIndex,
+            mapId,
             name: this.data.markerTypeIndex === 7 ? '可通行' : '围墙',
             remark: '',
             lat: latitude,
@@ -1076,14 +1077,28 @@ Page({
         }
     },
     //个人地图选择
-    onMapChange(e){
-        let mapId = e.detail
+    onMapChange(e) {
+        let mapId = e.detail.mapId
+        let mapName = e.detail.mapName
         console.log(mapId)
         this.setData({
+            mapName,
             markers: [],
-            polyline: []
+            polyline: [],
+            showMap: false
         })
+        this.showTabBar()
         this.getLocation()
+        this.setTabBarName()
+    },
+    setTabBarName() {
+        let mapName = wx.getStorageSync('mapName')
+        setTimeout(() => {
+            wx.setTabBarItem({
+                index: 0,
+                text: mapName || '小区楼号' // 新的 tabBar 名称
+            });
+        }, 500);
     },
     //个人地图关闭
     onMapClose() {
@@ -1119,12 +1134,6 @@ Page({
         })
     },
     mapChange(event) {
-        // console.log(event.detail)
-        // const latitude = wx.getStorageSync('latitude')
-        // const longitude = wx.getStorageSync('longitude')
-        // if(event.detail){
-        //     this.getAroundList(latitude, longitude)
-        // }
         this.setData({
             markers: [],
             polyline: []
