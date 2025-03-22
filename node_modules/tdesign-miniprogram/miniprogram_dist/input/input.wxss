@@ -28,9 +28,10 @@
 .t-input {
   background-color: var(--td-input-bg-color, var(--td-bg-color-container, var(--td-font-white-1, #ffffff)));
   display: flex;
-  align-items: center;
+  align-items: var(--td-input-align-items, center);
   flex: 1;
   padding: var(--td-input-vertical-padding, 32rpx);
+  overflow: hidden;
 }
 .t-input--border {
   position: relative;
@@ -166,7 +167,10 @@
 }
 .t-input__placeholder {
   color: var(--td-input-placeholder-text-color, var(--td-text-color-placeholder, var(--td-font-gray-3, rgba(0, 0, 0, 0.4))));
-  font-size: var(--td-font-size-m, 32rpx);
+  font-size: var(--td-input-placeholder-text-font-size, var(--td-font-size-m, 32rpx));
+}
+.t-input__placeholder--disabled {
+  color: var(--td-input-disabled-text-color, var(--td-text-color-disabled, var(--td-font-gray-4, rgba(0, 0, 0, 0.26))));
 }
 .t-input__tips {
   font-size: var(--td-font-size-s, 24rpx);

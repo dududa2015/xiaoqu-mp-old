@@ -7,7 +7,7 @@
     padding: 16rpx 0;
     border-radius: 24rpx;
     opacity: 0.95;
-    height: 272rpx;
+    /* height: 272rpx; */
 }
 
 .top-bar-container-shadow {

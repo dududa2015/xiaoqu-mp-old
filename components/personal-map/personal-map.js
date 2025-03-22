@@ -7,7 +7,7 @@ import {
 } from '../../apis/map-apis'
 import {
     getUserById
-} from '../../utils/apis'
+} from '../../apis/user-api'
 Component({
     options: {
         // styleIsolation: "apply-shared"
@@ -153,6 +153,7 @@ Component({
                 }
             })
         },
+        //修改地图名称
         onEdit(e) {
             //不为null，表示是修改
             this.currentEditMap = e.currentTarget.dataset.item
@@ -161,6 +162,7 @@ Component({
                 name: this.currentEditMap.name
             })
         },
+        //删除
         onDelete(e) {
             wx.showModal({
                 content: '删除后无法恢复，确认要删除吗？',
@@ -185,6 +187,7 @@ Component({
                 }
             })
         },
+        //导入历史数据
         importHistoryData(e) {
             let userInfo = getApp().globalData.userInfo
             if (userInfo && !userInfo.historyImported) {
@@ -258,19 +261,19 @@ Component({
             }, 1000);
         },
         //导入个人地图后
-        getUserInfo() {
-            getUserById({
-                code: '',
-                userId: wx.getStorageSync('userId'),
-                friendUserId: ''
-            }).then(res => {
-                if (res) {
-                    getApp().globalData.userInfo = res
-                    this.setData({
-                        userInfo: res,
-                    })
-                }
-            })
-        },
+        // getUserInfo() {
+        //     getUserById({
+        //         code: '',
+        //         userId: wx.getStorageSync('userId'),
+        //         friendUserId: ''
+        //     }).then(res => {
+        //         if (res) {
+        //             getApp().globalData.userInfo = res
+        //             this.setData({
+        //                 userInfo: res,
+        //             })
+        //         }
+        //     })
+        // },
     }
 })

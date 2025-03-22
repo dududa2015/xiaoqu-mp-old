@@ -1,7 +1,11 @@
 const props = {
+    autoClose: {
+        type: Boolean,
+        value: false,
+    },
     cancelBtn: {
         type: String,
-        value: '',
+        value: '取消',
     },
     confirmBtn: {
         type: String,
@@ -14,12 +18,15 @@ const props = {
     end: {
         type: null,
     },
-    externalClasses: {
-        type: Array,
+    filter: {
+        type: null,
     },
     format: {
         type: String,
         value: 'YYYY-MM-DD HH:mm:ss',
+    },
+    formatter: {
+        type: null,
     },
     header: {
         type: Boolean,

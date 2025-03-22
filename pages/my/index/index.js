@@ -1,7 +1,7 @@
 import {
     getUserById,
     getRankByUserId
-} from '../../../utils/apis'
+} from '../../../apis/user-api'
 Page({
 
     /**

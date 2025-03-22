@@ -9,15 +9,17 @@ Component({
             type: Object,
             value: {},
             observer(newVal, oldVal) {
-                this.setData({
-                    isVip: newVal.isVip,
-                    isAdmin: newVal.isAdmin,
-                    points: this.convertToWan(newVal.points),
-                    markers: this.convertToWan(newVal.markers),
-                    friends: this.convertToWan(newVal.friends),
-                    deleted: this.convertToWan(newVal.deleted),
-                    showRank: newVal.points > 0
-                })
+                if (newVal) {
+                    this.setData({
+                        isVip: newVal.isVip,
+                        isAdmin: newVal.isAdmin,
+                        points: this.convertToWan(newVal.points),
+                        markers: this.convertToWan(newVal.markers),
+                        friends: this.convertToWan(newVal.friends),
+                        deleted: this.convertToWan(newVal.deleted),
+                        showRank: newVal.points > 0
+                    })
+                }
             }
         }
     },
@@ -34,7 +36,9 @@ Component({
      */
     methods: {
         onChooseAvatar(e) {
-            const { avatarUrl } = e.detail
+            const {
+                avatarUrl
+            } = e.detail
             this.setData({
                 avatarUrl,
             })
@@ -51,7 +55,10 @@ Component({
             })
         },
         showToast(event) {
-            const { number, type } = event.currentTarget.dataset
+            const {
+                number,
+                type
+            } = event.currentTarget.dataset
             let title = ''
             switch (type) {
                 case 'score':
@@ -76,7 +83,9 @@ Component({
             })
         },
         toMarkers(event) {
-            const { deleted } = event.currentTarget.dataset
+            const {
+                deleted
+            } = event.currentTarget.dataset
             wx.navigateTo({
                 url: '/pages/my/markers/markers?deleted=' + deleted,
             })

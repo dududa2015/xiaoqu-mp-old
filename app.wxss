@@ -10,6 +10,7 @@ page {
   --td-popup-border-radius: 32rpx;
   /* --td-font-size-m: 28rpx; */
   --td-cell-title-font-size: 28rpx;
+  --td-input-prefix-icon-color: rgba(150, 151, 153, 1);
 }
 
 .page-body {

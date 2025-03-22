@@ -32,7 +32,7 @@
             </t-cell>
             <!-- #else -->
             <t-cell title="关联小程序" hover arrow url="/pages/my/relate/relate">
-                <image src="https://res.wx.qq.com/mpres/en_US/htmledition/comm_htmledition/images/icon/login/mp_app741afb.png" class="left-icon" mode="" slot="left-icon" />
+                <image src="/images/my/mp.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell>
             <t-cell title="个人地图" hover arrow url="/pages/help/help4/help4">
                 <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />

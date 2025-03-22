@@ -1,3 +1,4 @@
+/// <reference types="miniprogram-api-typings" />
 import { SuperComponent, RelationsOptions } from '../common/src/index';
 export default class TabPanel extends SuperComponent {
     externalClasses: string[];
@@ -12,12 +13,13 @@ export default class TabPanel extends SuperComponent {
         active: boolean;
         hide: boolean;
         id: string;
+        hasActivated: boolean;
     };
     setId(id: any): void;
     observers: {
-        'label, badgeProps, disabled, icon, panel, value'(): void;
+        'label, badgeProps, disabled, icon, panel, value, lazy'(): void;
     };
     getComputedName(): string;
     update(): void;
-    render(active: Boolean, parent: any): void;
+    render(active: Boolean, parent: WechatMiniprogram.Component.TrivialInstance): void;
 }

@@ -30,6 +30,13 @@ function parseOptions(options, keys) {
         };
     });
 }
+const defaultState = {
+    contentHeight: 0,
+    stepHeight: 0,
+    tabsHeight: 0,
+    subTitlesHeight: 0,
+    stepsInitHeight: 0,
+};
 let Cascader = class Cascader extends SuperComponent {
     constructor() {
         super(...arguments);
@@ -45,6 +52,7 @@ let Cascader = class Cascader extends SuperComponent {
                 event: 'change',
             },
         ];
+        this.state = Object.assign({}, defaultState);
         this.data = {
             prefix,
             name,
@@ -53,14 +61,22 @@ let Cascader = class Cascader extends SuperComponent {
             selectedValue: [],
             scrollTopList: [],
             steps: [],
+            _optionsHeight: 0,
         };
         this.observers = {
             visible(v) {
                 if (v) {
                     const $tabs = this.selectComponent('#tabs');
                     $tabs === null || $tabs === void 0 ? void 0 : $tabs.setTrack();
+                    $tabs === null || $tabs === void 0 ? void 0 : $tabs.getTabHeight().then((res) => {
+                        this.state.tabsHeight = res.height;
+                    });
+                    this.initOptionsHeight(this.data.steps.length);
                     this.updateScrollTop();
                     this.initWithValue();
+                }
+                else {
+                    this.state = Object.assign({}, defaultState);
                 }
             },
             value() {
@@ -76,12 +92,20 @@ let Cascader = class Cascader extends SuperComponent {
                 });
             },
             selectedIndexes() {
+                const { visible, theme } = this.properties;
                 const { selectedValue, steps, items } = this.genItems();
-                this.setData({
+                const setData = {
                     steps,
                     selectedValue,
                     stepIndex: items.length - 1,
-                });
+                };
+                if (JSON.stringify(items) !== JSON.stringify(this.data.items)) {
+                    Object.assign(setData, { items });
+                }
+                this.setData(setData);
+                if (visible && theme === 'step') {
+                    this.updateOptionsHeight(steps.length);
+                }
             },
             stepIndex() {
                 return __awaiter(this, void 0, void 0, function* () {
@@ -93,6 +117,35 @@ let Cascader = class Cascader extends SuperComponent {
             },
         };
         this.methods = {
+            updateOptionsHeight(steps) {
+                const { contentHeight, stepsInitHeight, stepHeight, subTitlesHeight } = this.state;
+                this.setData({
+                    _optionsHeight: contentHeight - stepsInitHeight - subTitlesHeight - (steps - 1) * stepHeight,
+                });
+            },
+            initOptionsHeight(steps) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    const { theme, subTitles } = this.properties;
+                    const { height } = yield getRect(this, `.${name}__content`);
+                    this.state.contentHeight = height;
+                    if (theme === 'step') {
+                        yield Promise.all([getRect(this, `.${name}__steps`), getRect(this, `.${name}__step`)]).then(([stepsRect, stepRect]) => {
+                            this.state.stepsInitHeight = stepsRect.height - (steps - 1) * stepRect.height;
+                            this.state.stepHeight = stepRect.height;
+                        });
+                    }
+                    if (subTitles.length > 0) {
+                        const { height } = yield getRect(this, `.${name}__options-title`);
+                        this.state.subTitlesHeight = height;
+                    }
+                    const optionsInitHeight = this.state.contentHeight - this.state.subTitlesHeight;
+                    this.setData({
+                        _optionsHeight: theme === 'step'
+                            ? optionsInitHeight - this.state.stepsInitHeight - (steps - 1) * this.state.stepHeight
+                            : optionsInitHeight - this.state.tabsHeight,
+                    });
+                });
+            },
             initWithValue() {
                 if (this.data.value != null && this.data.value !== '') {
                     const selectedIndexes = this.getIndexesByValue(this.data.options, this.data.value);
@@ -140,6 +193,9 @@ let Cascader = class Cascader extends SuperComponent {
                 this.hide('overlay');
             },
             onClose() {
+                if (this.data.checkStrictly) {
+                    this.triggerChange();
+                }
                 this.hide('close-btn');
             },
             onStepClick(e) {
@@ -181,10 +237,11 @@ let Cascader = class Cascader extends SuperComponent {
                 };
             },
             handleSelect(e) {
-                var _a, _b, _c, _d;
+                var _a, _b, _c, _d, _e;
                 const { level } = e.target.dataset;
                 const { value } = e.detail;
-                const { selectedIndexes, items, keys, options } = this.data;
+                const { checkStrictly } = this.properties;
+                const { selectedIndexes, items, keys, options, selectedValue } = this.data;
                 const index = items[level].findIndex((item) => { var _a; return item[(_a = keys === null || keys === void 0 ? void 0 : keys.value) !== null && _a !== void 0 ? _a : 'value'] === value; });
                 let item = selectedIndexes.slice(0, level).reduce((acc, item, index) => {
                     var _a;
@@ -202,11 +259,21 @@ let Cascader = class Cascader extends SuperComponent {
                 if (item.disabled) {
                     return;
                 }
+                this.triggerEvent('pick', {
+                    value: item[(_b = keys === null || keys === void 0 ? void 0 : keys.value) !== null && _b !== void 0 ? _b : 'value'],
+                    label: item[(_c = keys === null || keys === void 0 ? void 0 : keys.label) !== null && _c !== void 0 ? _c : 'label'],
+                    index,
+                    level,
+                });
                 selectedIndexes[level] = index;
+                if (checkStrictly && selectedValue.includes(String(value))) {
+                    selectedIndexes.length = level;
+                    this.setData({ selectedIndexes });
+                    return;
+                }
                 selectedIndexes.length = level + 1;
-                this.triggerEvent('pick', { value: item[(_b = keys === null || keys === void 0 ? void 0 : keys.value) !== null && _b !== void 0 ? _b : 'value'], index, level });
                 const { items: newItems } = this.genItems();
-                if ((_d = item === null || item === void 0 ? void 0 : item[(_c = keys === null || keys === void 0 ? void 0 : keys.children) !== null && _c !== void 0 ? _c : 'children']) === null || _d === void 0 ? void 0 : _d.length) {
+                if ((_e = item === null || item === void 0 ? void 0 : item[(_d = keys === null || keys === void 0 ? void 0 : keys.children) !== null && _d !== void 0 ? _d : 'children']) === null || _e === void 0 ? void 0 : _e.length) {
                     this.setData({
                         selectedIndexes,
                         [`items[${level + 1}]`]: newItems[level + 1],
@@ -215,16 +282,17 @@ let Cascader = class Cascader extends SuperComponent {
                 else {
                     this.setData({
                         selectedIndexes,
-                    }, () => {
-                        var _a;
-                        const { items } = this.data;
-                        this._trigger('change', {
-                            value: item[(_a = keys === null || keys === void 0 ? void 0 : keys.value) !== null && _a !== void 0 ? _a : 'value'],
-                            selectedOptions: items.map((item, index) => item[selectedIndexes[index]]),
-                        });
-                    });
+                    }, this.triggerChange);
                     this.hide('finish');
                 }
+            },
+            triggerChange() {
+                var _a;
+                const { items, selectedValue, selectedIndexes } = this.data;
+                this._trigger('change', {
+                    value: (_a = selectedValue[selectedValue.length - 1]) !== null && _a !== void 0 ? _a : '',
+                    selectedOptions: items.map((item, index) => item[selectedIndexes[index]]).filter(Boolean),
+                });
             },
         };
     }

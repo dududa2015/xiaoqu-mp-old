@@ -1,8 +1,10 @@
 import {
-    getAppleUserInfo
+
 } from '../../../utils/apis'
 import {
-    getUserInfoByWxLogin
+    getUserInfoByAppLogin,
+    getUserInfoByWxLogin,
+    getAppleUserInfo
 } from '../../../apis/user-api.js'
 Page({
 
@@ -10,6 +12,8 @@ Page({
      * 页面的初始数据
      */
     data: {
+        userId: '',
+        pwd: '',
         phoneMask: '号码未知',
         agreeText: '',
         agreeUrl: ''
@@ -69,6 +73,41 @@ Page({
     onShow() {
 
     },
+    onUserIdInput(e) {
+        console.log(e.detail.value)
+        this.setData({
+            userId: e.detail.value
+        })
+    },
+    onPwdInput(e) {
+        this.setData({
+            pwd: e.detail.value
+        })
+    },
+    //app登录
+    onLogin() {
+        console.log(this.data.userId, this.data.pwd)
+        if (this.data.userId.length === 0) {
+            wx.showToast({
+                title: '请输入小程序用户id',
+                icon: 'none'
+            })
+            return
+        }
+        if (this.data.pwd.length === 0) {
+            wx.showToast({
+                title: '请输入小程序用户密码',
+                icon: 'none'
+            })
+            return
+        }
+        getUserInfoByAppLogin({
+            userId: this.data.userId,
+            pwd: this.data.pwd
+        }).then(res => {
+            this.setUserInfo(res)
+        })
+    },
     //本机一键登录
     phoneLogin() {
         wx.getPhoneMask({
@@ -87,11 +126,7 @@ Page({
                 getUserInfoByWxLogin({
                     code: res.code
                 }).then(res => {
-                    console.log('getUserInfoByWxLogin')
-                    console.log(res)
-                    wx.setStorageSync('userId', res.userId)
-                    wx.setStorageSync('token', res.token)
-                    getApp().globalData.userInfo = res
+                    this.setUserInfo(res)
                 })
             }
         })
@@ -106,7 +141,11 @@ Page({
             success(res) {
                 if (res.code) {
                     console.log('登录成功', res)
-                    that.getAppleUserInfo(res.code)
+                    getAppleUserInfo({
+                        code: res.code
+                    }).then(res => {
+                        this.setUserInfo(res)
+                    })
                 } else {
                     console.log('登录失败！' + res.errMsg)
                 }
@@ -116,17 +155,30 @@ Page({
             }
         })
     },
-    getAppleUserInfo(code) {
-        getAppleUserInfo({
-            code
-        }).then(res => {
+    setUserInfo(res) {
+        if (res) {
             wx.setStorageSync('userId', res.userId)
-            wx.setStorageSync('appleId', res.appleId)
             wx.setStorageSync('token', res.token)
             getApp().globalData.userInfo = res
             wx.navigateBack()
-        })
+        } else {
+            wx.showToast({
+                title: '登录失败',
+                icon: 'none'
+            })
+        }
     },
+    // getAppleUserInfo(code) {
+    //     getAppleUserInfo({
+    //         code
+    //     }).then(res => {
+    //         wx.setStorageSync('userId', res.userId)
+    //         wx.setStorageSync('appleId', res.appleId)
+    //         wx.setStorageSync('token', res.token)
+    //         getApp().globalData.userInfo = res
+    //         wx.navigateBack()
+    //     })
+    // },
 
     /**
      * 生命周期函数--监听页面隐藏

@@ -591,13 +591,15 @@ Page({
                 that.addAroundList2Map(list)
                 //小于{{数量}}也调用接口，{{数量}}在缓存caches.json里配置
                 // #if MP
-                if (list.length < (that.count || 5)) {
-                    that.addBdAroundList(lng, lat)
-                }
+                //注释百度接口 2025-03-22
+                // if (list.length < (that.count || 5)) {
+                //     that.addBdAroundList(lng, lat)
+                // }
                 // #endif
             } else {
                 // #if MP
-                that.addBdAroundList(lng, lat)
+                //注释百度接口 2025-03-22
+                // that.addBdAroundList(lng, lat)
                 // #endif
             }
         })

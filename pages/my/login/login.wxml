@@ -7,8 +7,15 @@
         <image class="logo-img" src="https://c-ssl.duitang.com/uploads/blog/202503/11/y9SD3p84tbdGzxx.png"></image>
         <view class="logo-text">小区楼号地图</view>
     </view>
+    <view class="input-wrap">
+        <t-input prefixIcon="user" value="{{userId}}" placeholder="请输入小程序用户id" maxlength="20" borderless bind:change="onUserIdInput" />
+    </view>
+    <view class="input-wrap">
+        <t-input prefixIcon="lock-on" value="{{pwd}}" type="password" placeholder="请输入小程序用户密码" maxlength="20" borderless bind:change="onPwdInput" />
+    </view>
+    <view class="input-tip">登录指引</view>
     <!-- <view class="logo-desc">欢迎登录进行使用！</view> -->
-    <t-button class="button" theme="primary" size="large" block bind:tap="wxLogin">微信一键登录</t-button>
+    <t-button class="button" theme="primary" size="large" block bind:tap="onLogin">登 录</t-button>
 
     <view class="others flex f-x-center f-y-center">
         <view class="line"></view>
@@ -16,12 +23,12 @@
         <view class="line"></view>
     </view>
     <view class="others-img">
-        <!-- <image src="/images/login/wx.png" class="img" mode="" bind:tap="wxLogin" /> -->
+        <image src="/images/login/wx.png" class="img" mode="" bind:tap="wxLogin" />
         <image src="/images/login/apple.png" class="img" mode="" bind:tap="appleLogin" />
     </view>
 
     <view class="agree-wrap">
-        <t-checkbox block="{{false}}" borderless="{{true}}" value="checkbox3">
+        <t-checkbox block="{{false}}" borderless="{{true}}" value="checkbox3" custom-style="background:#f7f7f7">
             <view slot="label" class="agree">已阅读并同意
                 <span class="agree-blue">《用户协议》</span>
                 <span class="agree-blue">《隐私政策》</span>

@@ -1,6 +1,6 @@
 <view class="header">
     <view class="flex f-y-center">
-        <view class="avatar-wrap" bind:tap="onAvatarTap">
+        <view class="avatar-wrap">
             <image src="/images/my/avatar.png" class="header-img" mode="" />
         </view>
         <view class="name-wrap">

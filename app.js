@@ -1,10 +1,7 @@
 import {
     getUserInfo,
     getAppleUserInfo
-} from './utils/apis'
-import {
-    formatTime
-} from './utils/util'
+} from './apis/user-api'
 App({
     onLaunch(options) {
         // #if MP

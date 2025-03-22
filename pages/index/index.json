@@ -12,7 +12,6 @@
     "t-radio-group": "tdesign-miniprogram/radio-group/radio-group",
     "t-radio": "tdesign-miniprogram/radio/radio",
     "t-check-tag": "tdesign-miniprogram/check-tag/check-tag",
-    "color-picker": "/components/color-picker/color-picker",
     "suggestions-input": "/components/suggestions-input/suggestions-input",
     "poi-detail": "/components/poi-detail/poi-detail",
     "marker-add": "/components/marker-add/marker-add",

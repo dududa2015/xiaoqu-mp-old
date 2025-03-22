@@ -2,41 +2,6 @@ import {
     request
 } from "./request"
 
-// 用户相关
-
-// 获取用户信息--用于启动事件
-export const getUserInfo = (params) => {
-    return request({
-        url: '/users/getUserInfo',
-        data: params,
-        method: 'GET',
-    })
-}
-// 通过code获取用户信息-用于多端应用的苹果登录
-export const getAppleUserInfo = (params) => {
-    return request({
-        url: '/users/getAppleUserInfo',
-        data: params,
-        method: 'GET',
-    })
-}
-
-//用于个人中心
-export const getUserById = (params) => {
-    return request({
-        url: '/users/getUserById',
-        data: params,
-        method: 'GET',
-    })
-}
-//更改用户昵称
-export const updateNickName = (params) => {
-    return request({
-        url: '/users/updateNickName',
-        data: params,
-        method: 'POST',
-    })
-}
 // 获取周围的标记
 export const getAroundList = (params) => {
     return request({
@@ -149,14 +114,6 @@ export const updateMarkerLikes = (params) => {
         url: '/marker/updateMarkerLikes',
         data: params,
         method: 'POST',
-    })
-}
-//获取我的个人排名
-export const getRankByUserId = (params) => {
-    return request({
-        url: '/users/getRankByUserId',
-        data: params,
-        method: 'GET',
     })
 }
 //获取我标记列表

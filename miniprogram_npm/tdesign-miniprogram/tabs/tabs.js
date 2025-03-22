@@ -18,6 +18,7 @@ import props from './props';
 import config from '../common/config';
 import touch from '../mixins/touch';
 import { getRect, uniqueFactory } from '../common/utils';
+import { getObserver } from '../common/wechat';
 const { prefix } = config;
 const name = `${prefix}-tabs`;
 const getUniqueID = uniqueFactory('tabs');
@@ -124,7 +125,7 @@ let Tabs = class Tabs extends SuperComponent {
                 const Labels = [];
                 this.children.forEach((child, idx) => {
                     const isActive = index === idx;
-                    if (isActive !== child.data.active) {
+                    if (isActive !== child.data.active || !child.initialized) {
                         child.render(isActive, this);
                     }
                     Labels.push(child.data.label);
@@ -150,17 +151,25 @@ let Tabs = class Tabs extends SuperComponent {
             calcScrollOffset(containerWidth, targetLeft, targetWidth, offset) {
                 return offset + targetLeft - (1 / 2) * containerWidth + targetWidth / 2;
             },
+            getTabHeight() {
+                return getRect(this, `.${name}`);
+            },
             getTrackSize() {
+                const { bottomLineMode } = this.properties;
+                const targetMap = {
+                    fixed: `.${prefix}-tabs__track`,
+                    auto: `.${prefix}-tabs__item--active .${prefix}-tabs__item-inner`,
+                    full: `.${prefix}-tabs__item--active`,
+                };
                 return new Promise((resolve, reject) => {
                     if (this.trackWidth) {
                         resolve(this.trackWidth);
                         return;
                     }
-                    getRect(this, `.${prefix}-tabs__track`)
+                    getRect(this, targetMap[bottomLineMode] || targetMap.fixed)
                         .then((res) => {
                         if (res) {
-                            this.trackWidth = res.width;
-                            resolve(this.trackWidth);
+                            resolve(res.width);
                         }
                     })
                         .catch(reject);
@@ -196,13 +205,18 @@ let Tabs = class Tabs extends SuperComponent {
                                 offset: Math.min(Math.max(offset, 0), maxOffset),
                             });
                         }
+                        else if (!this._hasObserved) {
+                            this._hasObserved = true;
+                            getObserver(this, `.${name}`).then(() => this.setTrack());
+                        }
+                        const trackLineWidth = yield this.getTrackSize();
                         if (this.data.theme === 'line') {
-                            const trackLineWidth = yield this.getTrackSize();
                             distance += (rect.width - trackLineWidth) / 2;
                         }
                         this.setData({
                             trackStyle: `-webkit-transform: translateX(${distance}px);
             transform: translateX(${distance}px);
+            width:${trackLineWidth}px;
           `,
                         });
                     }

@@ -1,4 +1,4 @@
-import { TdOverlayProps as OverlayProps } from '../overlay/index';
+import { OverlayProps } from '../overlay/index';
 export interface TdToastProps {
     direction?: {
         type: StringConstructor;
@@ -34,7 +34,7 @@ export interface TdToastProps {
     };
     theme?: {
         type: StringConstructor;
-        value?: 'loading' | 'success' | 'error';
+        value?: 'loading' | 'success' | 'warning' | 'error';
     };
     usingCustomNavbar?: {
         type: BooleanConstructor;

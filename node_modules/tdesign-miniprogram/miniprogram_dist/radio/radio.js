@@ -41,6 +41,8 @@ let Radio = class Radio extends SuperComponent {
         this.properties = Object.assign(Object.assign({}, Props), { borderless: {
                 type: Boolean,
                 value: false,
+            }, tId: {
+                type: String,
             } });
         this.controlledProps = [
             {
@@ -57,43 +59,54 @@ let Radio = class Radio extends SuperComponent {
             iconVal: [],
             _placement: '',
             _disabled: false,
+            _readonly: false,
         };
         this.observers = {
             disabled(v) {
                 this.setData({ _disabled: v });
             },
+            readonly(v) {
+                this.setData({ _readonly: v });
+            },
         };
         this.methods = {
             handleTap(e) {
-                const { _disabled, readonly, contentDisabled } = this.data;
+                const { _disabled, _readonly, contentDisabled } = this.data;
                 const { target } = e.currentTarget.dataset;
-                if (_disabled || readonly || (target === 'text' && contentDisabled))
+                if (_disabled || _readonly || (target === 'text' && contentDisabled))
                     return;
                 this.doChange();
             },
             doChange() {
+                var _a;
                 const { value, checked, allowUncheck } = this.data;
+                const isAllowUncheck = Boolean(allowUncheck || ((_a = this.$parent) === null || _a === void 0 ? void 0 : _a.data.allowUncheck));
                 if (this.$parent) {
-                    this.$parent.updateValue(checked && allowUncheck ? null : value);
+                    this.$parent.updateValue(checked && isAllowUncheck ? null : value);
                 }
                 else {
-                    this._trigger('change', { checked: checked && allowUncheck ? false : !checked });
+                    this._trigger('change', { checked: isAllowUncheck ? !checked : true });
                 }
             },
             init() {
-                var _a, _b, _c, _d, _e, _f;
+                var _a, _b, _c, _d;
                 const { icon } = this.data;
                 const isIdArr = Array.isArray(((_a = this.$parent) === null || _a === void 0 ? void 0 : _a.icon) || icon);
                 this.setData({
                     customIcon: isIdArr,
                     slotIcon: icon === 'slot',
                     iconVal: isIdArr ? ((_b = this.$parent) === null || _b === void 0 ? void 0 : _b.icon) || icon : [],
-                    _placement: (_f = (_c = this.data.placement) !== null && _c !== void 0 ? _c : (_e = (_d = this.$parent) === null || _d === void 0 ? void 0 : _d.data) === null || _e === void 0 ? void 0 : _e.placement) !== null && _f !== void 0 ? _f : 'left',
+                    _placement: this.data.placement || ((_d = (_c = this.$parent) === null || _c === void 0 ? void 0 : _c.data) === null || _d === void 0 ? void 0 : _d.placement) || 'left',
                 });
             },
             setDisabled(disabled) {
                 this.setData({
                     _disabled: this.data.disabled || disabled,
+                });
+            },
+            setReadonly(readonly) {
+                this.setData({
+                    _readonly: this.data.readonly || readonly,
                 });
             },
         };

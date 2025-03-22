@@ -1,10 +1,21 @@
 <view class="container">
-  <view class="content">
-    <t-input value="{{nickName}}" type="nickname" borderless maxlength="10" placeholder="请输入昵称(最多10个字)" bind:nicknamereview="onNickNameReview" bind:change="onNickNameChange">
-      <text slot="label">昵称<text style="color: #e34d59"> *</text> </text>
-    </t-input>
-  </view>
-  <view class="btn-wrap">
-    <t-button theme="primary" size="large" block bind:tap="onSave">保存</t-button>
-  </view>
+    <view class="content">
+        <!-- #if MP -->
+        <t-input value="{{nickName}}" type="nickname" maxlength="10" placeholder="请输入昵称(最多10个字)" suffixIcon="chevron-right" bind:nicknamereview="onNickNameReview" bind:change="onNickNameChange">
+            <text slot="label">昵称<text style="color: #e34d59"> *</text> </text>
+        </t-input>
+        <t-input label="用户id" value="{{userId}}" readonly suffixIcon="copy" bind:click="onUserIdCopy" />
+        <t-input label="用户密码" value="**********" readonly suffixIcon="copy" bind:click="onPwdCopy"/>
+        <!-- #else -->
+        <t-input value="{{nickName}}" type="text" borderless maxlength="10" placeholder="请输入昵称(最多10个字)" bind:change="onNickNameChange">
+            <text slot="label">昵称<text style="color: #e34d59"> *</text> </text>
+        </t-input>
+        <!-- #endif -->
+    </view>
+    <view class="btn-wrap">
+        <t-button theme="primary" size="large" block bind:tap="onSave">切换账号</t-button>
+    </view>
+    <view class="footer">
+        <text class="footer-text">注销账号</text>
+    </view>
 </view>

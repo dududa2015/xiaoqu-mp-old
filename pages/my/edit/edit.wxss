@@ -1,21 +1,37 @@
 .container {
-  margin: 32rpx;
+    margin: 32rpx;
 }
 
 .content {
-  border-radius: 32rpx;
-  overflow: hidden;
+    border-radius: 32rpx;
+    overflow: hidden;
 }
 
 .btn-wrap {
-  margin: 64rpx 0 0 0;
+    margin: 64rpx 0 0 0;
 }
 
 .t-cell__title,
 .t-cell__note {
-  flex: none !important;
+    flex: none !important;
 }
 
 .left {
-  width: 100rpx;
+    width: 100rpx;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    padding-bottom: env(safe-area-inset-bottom);
+    text-align: center;
+}
+
+.footer-text {
+    font-size: 28rpx;
+    color: #8a8a8a;
+    text-decoration: underline;
 }

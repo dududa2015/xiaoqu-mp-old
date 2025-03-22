@@ -1,5 +1,5 @@
 page {
-    background-color: #fff;
+    background-color: #f7f7f7;
 }
 
 .container {
@@ -11,6 +11,7 @@ page {
     text-align: left;
     display: flex;
     align-items: center;
+    padding-bottom: 24px;
 }
 
 .logo-img {
@@ -68,13 +69,25 @@ page {
     line-height: 18px;
     color: rgba(150, 151, 153, 1);
 }
+.input-wrap{
+    margin-top: 24px;
+    border-radius: 100px;
+    overflow: hidden;
+}
+.input-tip{
+    margin-top: 12px;
+    width: 100%;
+    text-align: right;
+    font-size: 13px;
+    color: rgba(22, 93, 255, 1);
+}
 
 .button {
-    margin-top: 500rpx;
+    margin-top: 48px;
 }
 
 .others {
-    margin-top: 50rpx;
+    margin-top: 150rpx;
     color: rgba(150, 151, 153, 1);
     font-size: 12px;
     line-height: 24px;
@@ -100,7 +113,7 @@ page {
 }
 
 .img:not(:first-child) {
-    margin-left: 12px;
+    margin-left: 16px;
 }
 
 .others-img {

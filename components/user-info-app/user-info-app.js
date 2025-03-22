@@ -45,10 +45,19 @@ Component({
      * 组件的方法列表
      */
     methods: {
+        //登录或者编辑
         toLogin() {
-            wx.navigateTo({
-                url: '/pages/my/login/login',
-            })
+            let userId = wx.getStorageSync('userId')
+            let token = wx.getStorageSync('token')
+            if (userId && token) {
+                wx.navigateTo({
+                    url: '/pages/my/edit/edit',
+                })
+            } else {
+                wx.navigateTo({
+                    url: '/pages/my/login/login',
+                })
+            }
         },
         showToast(event) {
             const {
