@@ -1,0 +1,28 @@
+<view class="vip-container">
+    <view class="title-wrap flex">
+        <view class="line"></view>
+        <view class="title">会员权益</view>
+    </view>
+    <view class="rights-wrap flex f-x-sr">
+        <view class="rights">
+            <image src="/images/my/noad.png" class="rights-icon" mode="" />
+            <view class="rights-text">免广告</view>
+        </view>
+        <view class="rights">
+            <t-icon name="map-information-2" class="rights-icon" size="72rpx" color="#0074FE" />
+            <view class="rights-text">个人地图</view>
+        </view>
+        <view class="rights">
+            <image src="/images/my/noad.png" class="rights-icon" mode="" />
+            <view class="rights-text">标记日历</view>
+        </view>
+        <!-- <view class="rights">
+            <image src="/images/my/noad.png" class="rights-icon" mode="" />
+            <view class="rights-text">免广告</view>
+        </view>
+        <view class="rights">
+            <image src="/images/my/noad.png" class="rights-icon" mode="" />
+            <view class="rights-text">免广告</view>
+        </view> -->
+    </view>
+</view>

@@ -1,21 +1,22 @@
 <view class="container">
     <view class="content">
-        <!-- #if MP -->
-        <t-input value="{{nickName}}" type="nickname" maxlength="10" placeholder="请输入昵称(最多10个字)" suffixIcon="chevron-right" bind:nicknamereview="onNickNameReview" bind:change="onNickNameChange">
+        <t-input value="{{nickName}}" type="text" readonly maxlength="10" placeholder="请输入昵称(最多10个字)" suffixIcon="chevron-right" bind:nicknamereview="onNickNameReview" bind:change="onNickNameChange" bind:tap="showNickNameDialog">
             <text slot="label">昵称<text style="color: #e34d59"> *</text> </text>
         </t-input>
-        <t-input label="用户id" value="{{userId}}" readonly suffixIcon="copy" bind:click="onUserIdCopy" />
-        <t-input label="用户密码" value="**********" readonly suffixIcon="copy" bind:click="onPwdCopy"/>
-        <!-- #else -->
-        <t-input value="{{nickName}}" type="text" borderless maxlength="10" placeholder="请输入昵称(最多10个字)" bind:change="onNickNameChange">
-            <text slot="label">昵称<text style="color: #e34d59"> *</text> </text>
-        </t-input>
+        <!-- #if MP -->        
+        <t-input label="用户id" value="{{userId}}" readonly suffixIcon="copy" bind:tap="onUserIdCopy" />
+        <t-input label="用户密码" value="**********" readonly suffixIcon="copy" bind:tap="onPwdCopy" />
         <!-- #endif -->
     </view>
+    <!-- #if NATIVE -->
     <view class="btn-wrap">
-        <t-button theme="primary" size="large" block bind:tap="onSave">切换账号</t-button>
+        <t-button theme="primary" size="large" block bind:tap="toLogin">切换账号</t-button>
     </view>
     <view class="footer">
-        <text class="footer-text">注销账号</text>
+        <text class="footer-text" bind:tap="onLogout">注销账号</text>
     </view>
+    <!-- #endif -->
+    <t-dialog visible="{{showDialog}}" title="修改昵称" confirm-btn="确定" cancel-btn="取消" bind:confirm="closeDialog" bind:cancel="closeDialog">
+        <t-input value="{{name}}" borderless class="dialog-input" slot="content" placeholder="请输入昵称" bind:change="onNameChange" />
+    </t-dialog>
 </view>

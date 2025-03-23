@@ -25,18 +25,25 @@ Page({
         this.getRankByUserId()
     },
     getUserInfo() {
-        getUserById({
-            code: '',
-            userId: wx.getStorageSync('userId'),
-            friendUserId: ''
-        }).then(res => {
-            if (res) {
-                getApp().globalData.userInfo = res
-                this.setData({
-                    userInfo: res,
-                })
-            }
-        })
+        let userId = wx.getStorageSync('userId')
+        if (userId) {
+            getUserById({
+                code: '',
+                userId,
+                friendUserId: ''
+            }).then(res => {
+                if (res) {
+                    getApp().globalData.userInfo = res
+                    this.setData({
+                        userInfo: res,
+                    })
+                }
+            })
+        } else {
+            this.setData({
+                userInfo: null
+            })
+        }
     },
     getRankByUserId() {
         const that = this
@@ -75,6 +82,11 @@ Page({
     onHelp1() {
         wx.navigateTo({
             url: '/pages/help/help1/help1',
+        })
+    },
+    toVip() {
+        wx.navigateTo({
+            url: '/pages/my/vip/vip',
         })
     },
     getStatusBar() {

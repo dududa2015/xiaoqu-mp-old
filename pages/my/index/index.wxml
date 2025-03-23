@@ -17,6 +17,22 @@
         </view>
         <view class="vip-upgrade flex f-x-center f-y-center">积分规则</view>
     </view>
+    <!-- #else -->
+    <view class="vip-app-wrap flex f-x-sb f-y-center" bind:tap="toVip">
+        <view>
+            <image src="/images/my/vip.png" class="vip-img" mode="widthFix" />
+            <view class="vip-app-desc">
+                开通会员，解锁更多功能
+            </view>
+            <!-- <view class="vip-app-desc">
+                开通会员，解锁更多功能
+            </view> -->
+        </view>
+        <view class="vip-upgrade flex f-x-center f-y-center">成为会员</view>
+        <!-- <view class="vip-app-button flex f-x-center f-y-center">
+            <text class="vip-app-button-text">成为会员</text> 
+        </view> -->
+    </view>
     <!-- #endif -->
     <view class="content">
         <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
@@ -33,9 +49,6 @@
             <!-- #else -->
             <t-cell title="关联小程序" hover arrow url="/pages/my/relate/relate">
                 <image src="/images/my/mp.png" class="left-icon" mode="" slot="left-icon" />
-            </t-cell>
-            <t-cell title="个人地图" hover arrow url="/pages/help/help4/help4">
-                <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell>
             <!-- #endif -->
         </t-cell-group>

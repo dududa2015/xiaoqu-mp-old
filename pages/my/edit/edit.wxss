@@ -35,3 +35,21 @@
     color: #8a8a8a;
     text-decoration: underline;
 }
+
+.dialog-input {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    margin-top: 32rpx;
+    border-radius: 8rpx;
+    background-color: #f3f3f3 !important;
+    box-sizing: border-box;
+}
+
+.placeholder {
+    /* color: var(--td-text-color-placeholder); */
+    /* line-height: 96rpx;
+    height: 96rpx !important; */
+    display: flex;
+    align-items: center;
+}

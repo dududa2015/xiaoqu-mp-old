@@ -19,17 +19,15 @@ Component({
                 this.setData({
                     nickName
                 })
-                if (newVal) {
-                    this.setData({
-                        isVip: newVal.isVip,
-                        isAdmin: newVal.isAdmin,
-                        points: this.convertToWan(newVal.points),
-                        markers: this.convertToWan(newVal.markers),
-                        friends: this.convertToWan(newVal.friends),
-                        deleted: this.convertToWan(newVal.deleted),
-                        showRank: newVal.points > 0
-                    })
-                }
+                this.setData({
+                    isVip: newVal ? newVal.isVip : false,
+                    isAdmin: newVal ? newVal.isAdmin : false,
+                    points: this.convertToWan(newVal ? newVal.points : 0),
+                    markers: this.convertToWan(newVal ? newVal.markers : 0),
+                    friends: this.convertToWan(newVal ? newVal.friends : 0),
+                    deleted: this.convertToWan(newVal ? newVal.deleted : 0),
+                    showRank: newVal && newVal.points > 0
+                })
             }
         }
     },

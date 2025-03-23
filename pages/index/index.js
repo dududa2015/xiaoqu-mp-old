@@ -61,6 +61,9 @@ Page({
         this.initStorage()
         // 使用 wx.createMapContext 获取 map 上下文
         this.mapCtx = wx.createMapContext('myMap')
+        this.mapCtx.setLocMarkerIcon({
+            iconPath: '/images/loc-marker/v2.png'
+        })
         getApp().globalData.mapCtx = this.mapCtx
         //插屏广告
         // #if MP
@@ -413,8 +416,8 @@ Page({
         if (e.type === 'end' && e.causedBy === 'drag') {
             let lat = e.detail.centerLocation.latitude.toFixed(6)
             let lng = e.detail.centerLocation.longitude.toFixed(6)
-            let lastLatitude = wx.getStorageSync('lastLatitude')
-            let lastLongitude = wx.getStorageSync('lastLongitude')
+            let lastLatitude = wx.getStorageSync('lastLatitude') || 0
+            let lastLongitude = wx.getStorageSync('lastLongitude') || 0
             //如果经度或纬度移动超过0.003度,那么就获取周围的标记点
             let latlng = parseFloat(lat) + parseFloat(lng)
             let latlngStorage = parseFloat(lastLatitude) + parseFloat(lastLongitude)
@@ -428,7 +431,6 @@ Page({
                 wx.setStorageSync('lastLongitude', lng)
             }
         }
-
     },
     onDimension() {
         this.setData({
