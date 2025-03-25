@@ -50,6 +50,8 @@ Page({
         show: false,
         polyline: [],
         showMapAddForm: false, //是否显示创建个人地图的form
+        locationChangeHandler: null, //位置change
+        compassChangeHandler: null, //罗盘change
     },
     onLoad() {
         this.getLocation()
@@ -200,6 +202,7 @@ Page({
                     latitude
                 } = res
                 console.log(longitude, latitude)
+
                 // longitude = 113.47,
                 // latitude = 22.27
                 that.setData({
@@ -236,6 +239,77 @@ Page({
                 that.showSettingDialog();
             }
         })
+    },
+    getWxLocation() {
+        let that = this;
+        try {
+            wx.startLocationUpdate({
+                success: (res) => {
+                    const locationChangeHandler = res => {
+                        console.log('onLocationChange', res)
+                        this.mapCtx.moveToLocation({
+                            longitude: res.longitude,
+                            latitude: res.latitude,
+                            success: function () {
+                                console.log('地图中心已成功移动到指定位置');
+                            },
+                            fail: function (err) {
+                                console.error('移动地图中心时出错:', err);
+                            },
+                            complete: function () {
+                                console.log('移动地图中心操作完成');
+                            }
+                        })
+                    }
+                    // 监听位置信息
+                    wx.onLocationChange(locationChangeHandler)
+                    that.setData({
+                        locationChangeHandler
+                    });
+                },
+                fail: (err) => {
+                    console.log('update fail', err)
+                }
+            })
+        } catch (error) {
+
+        }
+    },
+    getWxCompass() {
+        let that = this;
+        try {
+            // 开启罗盘功能
+            wx.startCompass({
+                success: (res) => {
+                    const compassChangeHandler = res => {
+                        that.setData({
+                            rotate: 360 - res.direction
+                        })
+                    }
+                    // 监听位置信息
+                    wx.onCompassChange(compassChangeHandler)
+                    that.setData({
+                        compassChangeHandler
+                    })
+                },
+                fail: (err) => {
+                    console.log('update fail', err)
+                }
+            })
+        } catch (error) {
+
+        }
+    },
+    updateLocationIconRotation(direction) {
+        this.mapCtx.setLocation({
+            rotate: -direction,
+            success: () => {
+                console.log('定位图标旋转成功');
+            },
+            fail: (err) => {
+                console.error('定位图标旋转失败:', err);
+            }
+        });
     },
     // 显示设置引导对话框
     showSettingDialog: function () {
@@ -414,7 +488,6 @@ Page({
         });
     },
     onRegionChange(e) {
-        console.log(e)
         if (e.type === 'begin') {
             this.setData({
                 showMapName: false
@@ -1091,6 +1164,38 @@ Page({
                 url: '/pages/my/login/login',
             })
         }
+    },
+    //步行导航
+    onFoot(e) {
+        if (e.detail) {
+            this.getWxLocation()
+            this.getWxCompass()
+        } else {
+            const {
+                locationChangeHandler,
+                compassChangeHandler
+            } = this.data;
+            //停止位置变化
+            if (locationChangeHandler) {
+                wx.offLocationChange(locationChangeHandler)
+            }
+            wx.stopLocationUpdate()
+            //停止罗盘
+            if (compassChangeHandler) {
+                wx.offCompassChange(compassChangeHandler)
+            }
+            wx.stopCompass()
+            this.setData({
+                rotate: 0
+            })
+            wx.setStorageSync('isFoot', false)
+        }
+        this.disableMapTap()
+        this.resetMap()
+        this.showTabBar()
+        this.setData({
+            showForm: false
+        })
     },
     //个人地图选择
     onMapChange(e) {

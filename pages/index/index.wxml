@@ -13,6 +13,7 @@
   <top-search rect="{{rect}}" showMapName="{{showMapName}}" mapName="{{mapName}}" bind:onChooseLocation="onChooseLocation"></top-search>
   <top-tip noticeList="{{noticeList}}"></top-tip>
   <top-bar position="{{position}}" bind:toMap="toMap" bind:onSetting="onSetting"></top-bar>
+  <middle-bar position="{{position}}" bind:onFoot="onFoot"></middle-bar>
   <!-- 底部添加和定位按钮 -->
   <bottom-add position="{{position}}" bind:onAdd="onAdd" wx:if="{{showAdd}}"></bottom-add>
   <bottom-location position="{{position}}" bottom="{{bottom}}" bind:onLocation="getLocation" wx:if="{{showLocation}}"></bottom-location>

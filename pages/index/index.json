@@ -3,6 +3,7 @@
     "top-search": "/components/top-search/top-search",
     "top-tip": "/components/top-tip/top-tip",
     "top-bar": "/components/top-bar/top-bar",
+    "middle-bar": "/components/middle-bar/middle-bar",
     "bottom-add": "/components/bottom-add/bottom-add",
     "bottom-location": "/components/bottom-location/bottom-location",
     "t-icon": "tdesign-miniprogram/icon/icon",
