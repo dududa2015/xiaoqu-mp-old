@@ -17,7 +17,14 @@ Component({
                     firstChar: newVal.substring(0, 1)
                 })
             }
-        }
+        },
+        showMapName: {
+            type: Boolean,
+            value: true,
+            observer(newVal, oldVal) {
+                 console.log(newVal)
+            }
+        },
     },
     /**
      * 组件的初始数据

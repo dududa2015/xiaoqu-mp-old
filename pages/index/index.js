@@ -36,6 +36,7 @@ Page({
         rotate: 0,
         enable3D: false,
         topAddress: '搜索附近小区',
+        showMapName: true, //是否显示顶部的地图名称
         showAddress: false,
         latitude: 39.909188, //当前位置116.397478,39.909188
         longitude: 116.397478, //当前位置
@@ -62,7 +63,7 @@ Page({
         // 使用 wx.createMapContext 获取 map 上下文
         this.mapCtx = wx.createMapContext('myMap')
         this.mapCtx.setLocMarkerIcon({
-            iconPath: '/images/loc-marker/v2.png'
+            iconPath: '/images/loc-marker/tx.png'
         })
         getApp().globalData.mapCtx = this.mapCtx
         //插屏广告
@@ -192,7 +193,7 @@ Page({
         this.disableMapTap()
         wx.getLocation({
             type: 'gcj02',
-            // isHighAccuracy: true,
+            isHighAccuracy: true,
             success(res) {
                 let {
                     longitude,
@@ -413,6 +414,17 @@ Page({
         });
     },
     onRegionChange(e) {
+        console.log(e)
+        if (e.type === 'begin') {
+            this.setData({
+                showMapName: false
+            })
+        }
+        if (e.type === 'end') {
+            this.setData({
+                showMapName: true
+            })
+        }
         if (e.type === 'end' && e.causedBy === 'drag') {
             let lat = e.detail.centerLocation.latitude.toFixed(6)
             let lng = e.detail.centerLocation.longitude.toFixed(6)

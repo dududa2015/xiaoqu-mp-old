@@ -8,6 +8,6 @@
     <view class="icon-wrap" bind:tap="onChooseLocation">
         <t-icon name="search" size="44rpx" color="#000"></t-icon>
     </view>
-    <text class="name">{{ mapName || '公共地图'}}</text>
+    <text class="name" wx:if="{{showMapName}}">{{ mapName || '公共地图'}}</text>
 </view>
 <!-- #endif -->

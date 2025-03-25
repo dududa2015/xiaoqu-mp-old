@@ -45,43 +45,6 @@
     vertical-align: middle;
 }
 
-.vip-app-wrap {
-    padding: 0 48rpx;
-    margin-top: 36rpx;
-    height: 124rpx;
-    background-image: url(https://c-ssl.duitang.com/uploads/blog/202408/30/q4Sz90N4HxGg8w4.png);
-    background-size: cover;
-    border-radius: 24rpx;
-}
-
-.vip-img {
-    width: 100rpx;
-}
-
-.vip-app-desc {
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0px;
-    line-height: 20.27px;
-    color: #fff;
-}
-
-.vip-app-button {
-    width: 66px;
-    height: 26px;
-    border-radius: 23px;
-    background: linear-gradient(160.91deg, rgba(239, 204, 152, 1) 0%, rgba(222, 174, 104, 1) 100%);
-    box-shadow: inset -2px -2px 2px rgba(82, 54, 20, 0.25), inset 2px 2px 4px rgba(255, 244, 191, 0.61);
-}
-
-.vip-app-button-text {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0px;
-    line-height: 26px;
-    color: rgba(255, 255, 255, 1);    
-}
-
 .content {
     border-radius: 32rpx;
     overflow: hidden;
