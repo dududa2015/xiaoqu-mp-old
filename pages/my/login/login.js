@@ -1,6 +1,4 @@
-import {
-
-} from '../../../utils/apis'
+//b5cb4a5f5b	bYef8AkiA4
 import {
     getUserInfoByAppLogin,
     getUserInfoByWxLogin,
@@ -12,52 +10,56 @@ Page({
      * 页面的初始数据
      */
     data: {
+        hasWechatInstall: false, //微信是否安装
         userId: '',
         pwd: '',
         phoneMask: '号码未知',
         agreeText: '',
-        agreeUrl: ''
+        agreeUrl: '',
+        showGuide: false,
+        agreed: false //同意用户协议或隐私
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-        const that = this
-        wx.showLoading({
-            title: '正在加载',
-        })
-        wx.getPhoneMask({
-            success(res) {
-                if (res.phoneMask) {
-                    console.log(res)
-                    let phoneMask = res.phoneMask
-                    let operatorType = res.operatorType
-                    let agreeText = ''
-                    let agreeUrl = ''
-                    if (operatorType === 1) {
-                        agreeText = '《中国移动认证服务条款》'
-                        agreeUrl = 'https://wap.cmpassport.com/resources/html/contract.html'
-                    } else if (operatorType === 2) {
-                        agreeText = '《联通统一认证服务条款》'
-                        agreeUrl = 'https://opencloud.wostore.cn/authz/resource/html/disclaimer.html?fromsdk=true'
-                    } else {
-                        agreeText = '《天翼账号提供认证服务与隐私协议》'
-                        agreeUrl = 'https://e.189.cn/sdk/agreement/show.do?order=2&type=main&appKey=&hidetop=true&returnUrl='
-                    }
-                    console.log(phoneMask, agreeText, agreeUrl)
-                    that.setData({
-                        phoneMask,
-                        agreeText,
-                        agreeUrl
-                    })
-                    // 获取手机号掩码 res.phoneMask 成功，展示在登录页。
-                }
-            },
-            complete(res) {
-                wx.hideLoading()
-            }
-        })
+        this.hasWechatInstall()
+        // const that = this
+        // wx.showLoading({
+        //     title: '正在加载',
+        // })
+        // wx.getPhoneMask({
+        //     success(res) {
+        //         if (res.phoneMask) {
+        //             console.log(res)
+        //             let phoneMask = res.phoneMask
+        //             let operatorType = res.operatorType
+        //             let agreeText = ''
+        //             let agreeUrl = ''
+        //             if (operatorType === 1) {
+        //                 agreeText = '《中国移动认证服务条款》'
+        //                 agreeUrl = 'https://wap.cmpassport.com/resources/html/contract.html'
+        //             } else if (operatorType === 2) {
+        //                 agreeText = '《联通统一认证服务条款》'
+        //                 agreeUrl = 'https://opencloud.wostore.cn/authz/resource/html/disclaimer.html?fromsdk=true'
+        //             } else {
+        //                 agreeText = '《天翼账号提供认证服务与隐私协议》'
+        //                 agreeUrl = 'https://e.189.cn/sdk/agreement/show.do?order=2&type=main&appKey=&hidetop=true&returnUrl='
+        //             }
+        //             console.log(phoneMask, agreeText, agreeUrl)
+        //             that.setData({
+        //                 phoneMask,
+        //                 agreeText,
+        //                 agreeUrl
+        //             })
+        //             // 获取手机号掩码 res.phoneMask 成功，展示在登录页。
+        //         }
+        //     },
+        //     complete(res) {
+        //         wx.hideLoading()
+        //     }
+        // })
     },
 
     /**
@@ -101,6 +103,7 @@ Page({
             })
             return
         }
+        if (!this.checkAgreed()) return
         getUserInfoByAppLogin({
             userId: this.data.userId,
             pwd: this.data.pwd
@@ -118,25 +121,39 @@ Page({
             }
         })
     },
+    //判断微信是否有安装
+    hasWechatInstall() {
+        wx.miniapp.hasWechatInstall({
+            success: (res) => {
+                console.log('hasWechatInstall success:', res)
+                this.setData({
+                    hasWechatInstall: res.hasWechatInstall
+                })
+            },
+            fail(err) {
+                console.log(err)
+            }
+        })
+    },
     //微信登录,个人主体无法使用
     wxLogin() {
+        if (!this.checkAgreed()) return
+        const that = this
         wx.miniapp.login({
             success: (res) => {
                 console.log('wx.miniapp.login', res.code)
                 getUserInfoByWxLogin({
                     code: res.code
                 }).then(res => {
-                    this.setUserInfo(res)
+                    that.setUserInfo(res)
                 })
             }
         })
     },
     //苹果登录
     appleLogin() {
+        if (!this.checkAgreed()) return
         const that = this
-        // 登录成功 {"code": "D7l0ZggBEAEaFwgEEhMxNzM5Njg0NDk2MGJhSGJGU3R5IhgIAxIUCAMSEHar0jHJrg99eGqF3Ed59to", "errCode": 0, "errMsg": "wx.appleLogin success: ok."}
-        // let code = 'D7l0ZggBEAEaFwgEEhMxNzM5Njg0NDk2MGJhSGJGU3R5IhgIAxIUCAMSEHar0jHJrg99eGqF3Ed59to'
-        // that.getAppleUserInfo(code)
         wx.appleLogin({
             success(res) {
                 if (res.code) {
@@ -144,21 +161,40 @@ Page({
                     getAppleUserInfo({
                         code: res.code
                     }).then(res => {
-                        this.setUserInfo(res)
+                        that.setUserInfo(res)
                     })
                 } else {
+                    wx.showToast({
+                        title: '登录失败，请稍后重试',
+                        icon: 'none'
+                    })
                     console.log('登录失败！' + res.errMsg)
                 }
             },
             fail(err) {
+                wx.showToast({
+                    title: '登录失败，请稍后重试',
+                    icon: 'none'
+                })
                 console.log(err)
             }
         })
+    },
+    checkAgreed() {
+        if (!this.data.agreed) {
+            wx.showToast({
+                title: '请先阅读并同意用户协议及隐私政策',
+                duration: 3000,
+                icon: 'none'
+            })
+        }
+        return this.data.agreed
     },
     setUserInfo(res) {
         if (res) {
             wx.setStorageSync('userId', res.userId)
             wx.setStorageSync('token', res.token)
+            wx.setStorageSync('appleId', res.appleId)
             getApp().globalData.userInfo = res
             wx.navigateBack()
         } else {
@@ -167,6 +203,19 @@ Page({
                 icon: 'none'
             })
         }
+    },
+    toGuide() {
+        this.setData({
+            showGuide: true
+        })
+        // wx.navigateTo({
+        //     url: '/pages/my/login-guide/login-guide',
+        // })
+    },
+    closeGuide() {
+        this.setData({
+            showGuide: false
+        })
     },
     // getAppleUserInfo(code) {
     //     getAppleUserInfo({
@@ -179,7 +228,21 @@ Page({
     //         wx.navigateBack()
     //     })
     // },
-
+    agreedChange(event) {
+        this.setData({
+            agreed: event.detail.checked
+        })
+    },
+    toUseAgreement() {
+        wx.navigateTo({
+            url: '/pages/my/user-agreement/user-agreement?type=1',
+        })
+    },
+    toUserPrivacy() {
+        wx.navigateTo({
+            url: '/pages/my/user-agreement/user-agreement?type=2',
+        })
+    },
     /**
      * 生命周期函数--监听页面隐藏
      */

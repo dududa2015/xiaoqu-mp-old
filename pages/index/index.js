@@ -87,6 +87,7 @@ Page({
         const position = wx.getStorageSync('position')
         const enableRotate = wx.getStorageSync('enableRotate')
         const enableSatellite = wx.getStorageSync('enableSatellite')
+        const enable3D = wx.getStorageSync('enable3D')
         if (position) {
             this.setData({
                 position
@@ -100,6 +101,11 @@ Page({
         if (typeof enableSatellite === 'boolean') {
             this.setData({
                 enableSatellite
+            })
+        }
+        if (typeof enable3D === 'boolean') {
+            this.setData({
+                enable3D
             })
         }
     },
@@ -488,17 +494,16 @@ Page({
         });
     },
     onRegionChange(e) {
-        if (e.type === 'begin') {
+        console.log('onRegionChanage', e)
+        if (e.type === 'begin' && e.causedBy === 'gesture') {
             this.setData({
                 showMapName: false
             })
         }
-        if (e.type === 'end') {
+        if (e.type === 'end' && e.causedBy === 'drag') {
             this.setData({
                 showMapName: true
             })
-        }
-        if (e.type === 'end' && e.causedBy === 'drag') {
             let lat = e.detail.centerLocation.latitude.toFixed(6)
             let lng = e.detail.centerLocation.longitude.toFixed(6)
             let lastLatitude = wx.getStorageSync('lastLatitude') || 0
@@ -517,7 +522,7 @@ Page({
             }
         }
     },
-    onDimension() {
+    on3D() {
         this.setData({
             enable3D: true
         })
@@ -1261,15 +1266,23 @@ Page({
         })
         this.getLocation()
     },
+    //控件位置，事件来自设置页面
     onPosition(event) {
         this.setData({
             position: event.detail
         })
     },
+    //开启旋转，事件来自设置页面
     onRotate(event) {
         this.setData({
             enableRotate: event.detail,
             rotate: 0
+        })
+    },
+    //3D楼块，事件来自设置页面
+    on3D(event) {
+        this.setData({
+            enable3D: event.detail
         })
     },
     //添加，从marker-add-grid组件的点击事件

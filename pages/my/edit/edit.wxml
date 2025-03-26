@@ -1,6 +1,6 @@
 <view class="container">
     <view class="content">
-        <t-input value="{{nickName}}" type="text" readonly maxlength="10" placeholder="请输入昵称(最多10个字)" suffixIcon="chevron-right" bind:nicknamereview="onNickNameReview" bind:change="onNickNameChange" bind:tap="showNickNameDialog">
+        <t-input value="{{nickName}}" type="text" readonly maxlength="10" placeholder="请输入昵称" suffixIcon="chevron-right" bind:nicknamereview="onNickNameReview" bind:change="onNickNameChange" bind:tap="showNickNameDialog">
             <text slot="label">昵称<text style="color: #e34d59"> *</text> </text>
         </t-input>
         <!-- #if MP -->        
@@ -17,6 +17,6 @@
     </view>
     <!-- #endif -->
     <t-dialog visible="{{showDialog}}" title="修改昵称" confirm-btn="确定" cancel-btn="取消" bind:confirm="closeDialog" bind:cancel="closeDialog">
-        <t-input value="{{name}}" borderless class="dialog-input" slot="content" placeholder="请输入昵称" bind:change="onNameChange" />
+        <t-input value="{{name}}" borderless maxlength="10" class="dialog-input" slot="content" placeholder="请输入昵称(最多10个字)" bind:change="onNameChange" />
     </t-dialog>
 </view>

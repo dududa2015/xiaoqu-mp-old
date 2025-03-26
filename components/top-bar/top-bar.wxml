@@ -24,17 +24,17 @@
 </cover-view>
 <!-- #else -->
 <!-- 以下是app的上边栏 -->
-<view class="top-bar-container-shadow-app" style="{{position}}: 16rpx">
-    <!-- 搜索 -->
-    <!-- <view bind:tap="toMap">
+<view class="top-bar-container-shadow-app" style="top: {{rect.top}}px; {{position}}: 16rpx">
+    <!-- 分享 -->
+    <view bind:tap="toShare">
         <view class="img-wrap-first">
-            <t-icon name="search" size="42rpx" color="#000" />
+            <image src="/images/controls/share2.png" class="img" mode="" />
         </view>
-        <view class="text">搜索</view>
-    </view> -->
+        <view class="text">分享</view>
+    </view>
     <!-- 个人地图 -->
     <view bind:tap="toMap">
-        <view class="img-wrap-first">
+        <view class="img-wrap">
             <t-icon name="map-information-2" size="42rpx" color="#000" />
             <!-- <image src="/images/controls/my-map.png" class="img" mode="" /> -->
         </view>
@@ -44,8 +44,7 @@
     <!-- 设置 -->
     <view bind:tap="onSetting">
         <view class="img-wrap">
-            <image src="/images/controls/setting.png" class="img" mode="">
-            </image>
+            <image src="/images/controls/setting.png" class="img" mode="" />
         </view>
         <view class="text">设置</view>
     </view>

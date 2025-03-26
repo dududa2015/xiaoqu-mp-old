@@ -1,8 +1,7 @@
 <wxs module="tools" src="../../utils/wxs/includes.wxs"></wxs>
 
-<!-- <add-tips top="{{rect.bottom}}" /> -->
 <view class="container">
-  <map id="myMap" style="width: 100%; height: {{windowInfo.windowHeight || 850}}px;" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" scale="{{scale}}" enable-rotate="{{enableRotate}}" rotate="{{rotate}}" show-location=" true" show-scale="true" show-compass="{{rotate}}" enable-satellite="{{enableSatellite}}" enable-3D="{{true}}" enable-overlooking="{{true}}" bindpoitap="onPoiTap" bindtap="onMapTap" bindlabeltap="onLabelTap" bindcallouttap="onLabelTap" bindpolylinetap="onPolylineTap" bindregionchange="onRegionChange">
+  <map id="myMap" style="width: 100%; height: {{windowInfo.windowHeight || 850}}px;" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" scale="{{scale}}" enable-rotate="{{enableRotate}}" rotate="{{rotate}}" show-location=" true" show-scale="true" show-compass="{{rotate}}" enable-satellite="{{enableSatellite}}" enable-3D="{{enable3D}}"  bindpoitap="onPoiTap" bindtap="onMapTap" bindlabeltap="onLabelTap" bindcallouttap="onLabelTap" bindpolylinetap="onPolylineTap" bindregionchange="onRegionChange">
     <image src="/images/marker0.png" class="cross" wx:if="{{showCenterMarker && markerTypeIndex === 0}}"></image>
     <image src="/images/marker1.png" class="cross" wx:if="{{showCenterMarker && (markerTypeIndex === 1 ) }}"></image>
     <image src="/images/marker2.png" class="cross" wx:if="{{showCenterMarker && (markerTypeIndex >=2 && markerTypeIndex <= 6)}}"></image>
@@ -12,8 +11,10 @@
   <!-- enable-rotate rotate="{{rotate}}"  -->
   <top-search rect="{{rect}}" showMapName="{{showMapName}}" mapName="{{mapName}}" bind:onChooseLocation="onChooseLocation"></top-search>
   <top-tip noticeList="{{noticeList}}"></top-tip>
-  <top-bar position="{{position}}" bind:toMap="toMap" bind:onSetting="onSetting"></top-bar>
+  <top-bar rect="{{rect}}" position="{{position}}" bind:toMap="toMap" bind:onSetting="onSetting"></top-bar>
+  <!-- #if NATIVE -->
   <middle-bar position="{{position}}" bind:onFoot="onFoot"></middle-bar>
+  <!-- #endif -->
   <!-- 底部添加和定位按钮 -->
   <bottom-add position="{{position}}" bind:onAdd="onAdd" wx:if="{{showAdd}}"></bottom-add>
   <bottom-location position="{{position}}" bottom="{{bottom}}" bind:onLocation="getLocation" wx:if="{{showLocation}}"></bottom-location>
@@ -22,6 +23,6 @@
   <marker-add-grid show="{{showGrid}}" bind:getMarkerTypeIndex="getMarkerTypeIndex" bind:createMap="createMap"></marker-add-grid>
   <marker-add markerTypeIndex="{{markerTypeIndex}}" showForm="{{showForm}}" showChooseMarker="{{showChooseMarker}}" markerDetail="{{markerDetail}}" mapCtx="{{mapCtx}}" bind:addUserMarkerByUser="addUserMarkerByUser" bind:updateUserMarkerByUser="updateUserMarkerByUser" bind:showBottomBar="showBottomBar" bind:onFormClose="onFormClose" bind:onChooseMarker="onChooseMarker" bind:onBackChooseMarker="onBackChooseMarker" bind:onFinishChooseMarker="onFinishChooseMarker" bind:onCancelChooseMarker="onCancelChooseMarker"></marker-add>
   <!-- <marker-filter bind:getCheckedIndex="getCheckedIndex"></marker-filter> -->
-  <map-setting showSetting="{{showSetting}}" bind:onSettingClose="onSettingClose" bind:onSatellite="onSatellite" bind:mapChange="mapChange" bind:onPosition="onPosition" bind:onRotate="onRotate"></map-setting>
+  <map-setting showSetting="{{showSetting}}" bind:onSettingClose="onSettingClose" bind:onSatellite="onSatellite" bind:mapChange="mapChange" bind:onPosition="onPosition" bind:onRotate="onRotate" bind:on3D="on3D"></map-setting>
   <personal-map showMap="{{showMap}}" bind:onMapChange="onMapChange" bind:onMapClose="onMapClose"></personal-map>
 </view>

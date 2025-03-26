@@ -19,7 +19,7 @@ Page({
         console.log(this.data.userId)
         if (this.data.userId.trim().length === 0) {
             wx.showToast({
-                title: '请输入小程序中的用户编号',
+                title: '请输入小程序的用户编号',
                 icon: 'none'
             })
             return
@@ -38,9 +38,10 @@ Page({
         }
         console.log(param)
         relateMpUserId(param).then(res => {
+            console.log('relateMpUserId', res)
             if (res) {
                 wx.showToast({
-                    title: '保存成功',
+                    title: '关联成功',
                     mask: true
                 })
                 wx.setStorageSync('userId', res.userId)
@@ -51,8 +52,8 @@ Page({
                 }, 1500);
             } else {
                 wx.showToast({
-                    title: '保存失败',
-                    icon: 'error',
+                    title: '关联失败',
+                    icon: 'none',
                     mask: true
                 })
             }

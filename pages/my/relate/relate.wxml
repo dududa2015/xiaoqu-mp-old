@@ -5,6 +5,6 @@
     </t-input>
   </view>
   <view class="btn-wrap">
-    <t-button theme="primary" size="large" block bind:tap="onSave">保存</t-button>
+    <button type="primary" style="background-color: #0074FE; " bind:tap="onSave">关 联</button>
   </view>
 </view>

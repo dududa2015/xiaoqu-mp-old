@@ -15,7 +15,9 @@
     "pages/my/login/login",
     "pages/my/relate/relate",
     "pages/personal/list/list",
-    "pages/my/vip/vip"
+    "pages/my/vip/vip",
+    "pages/my/login-guide/login-guide",
+    "pages/my/user-agreement/user-agreement"
   ],
   "window": {
     "navigationBarTextStyle": "black",

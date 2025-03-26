@@ -50,16 +50,13 @@ const request = (params) => {
                     // #endif
                     reject('')
                 } else if (res.statusCode === 500) {
-                    wx.showToast({
-                        title: '出错了，请联系管理员',
-                        icon: 'none'
-                    })
                     reject('')
                 } else {
                     resolve(res.data)
                 }
             },
             fail(err) {
+                console.log('request', err)
                 reject(err);
             },
             complete() {

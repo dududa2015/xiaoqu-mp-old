@@ -56,10 +56,16 @@
                 </t-radio-group>
             </view>
         </view>
-        <view class="last-row flex f-x-sb">
+        <view class="row flex f-x-sb">
             <view class="row-title">开启旋转</view>
             <view class="row-title">
                 <t-switch value="{{enableRotate}}" slot="note" size="small" bind:change="onRotateChange" />
+            </view>
+        </view>
+        <view class="last-row flex f-x-sb">
+            <view class="row-title">3D楼块</view>
+            <view class="row-title">
+                <t-switch value="{{enable3D}}" slot="note" size="small" bind:change="on3DChange" />
             </view>
         </view>
     </view>

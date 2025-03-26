@@ -69,12 +69,14 @@ page {
     line-height: 18px;
     color: rgba(150, 151, 153, 1);
 }
-.input-wrap{
+
+.input-wrap {
     margin-top: 24px;
-    border-radius: 100px;
+    border-radius: 16px;
     overflow: hidden;
 }
-.input-tip{
+
+.input-tip {
     margin-top: 12px;
     width: 100%;
     text-align: right;
@@ -87,7 +89,7 @@ page {
 }
 
 .others {
-    margin-top: 150rpx;
+    margin-top: 100rpx;
     color: rgba(150, 151, 153, 1);
     font-size: 12px;
     line-height: 24px;
@@ -140,4 +142,37 @@ page {
 
 .t-checkbox__icon--left {
     margin-right: 0 !important;
+}
+
+.guide-wrap {}
+
+.title {
+    padding-top: 36rpx;
+    text-align: center;
+    font-weight: 500;
+    font-size: 32rpx;
+    color: #333333;
+    line-height: 40rpx;
+}
+
+.content {
+    margin: 36rpx;
+    font-weight: 300;
+    font-size: 26rpx;
+    color: #808080;
+    line-height: 40rpx;
+    text-align: left;
+}
+
+.row {
+    margin-bottom: 16rpx;
+}
+.red {
+    color: #FF0000;
+}
+.footer {
+    border-top: 1rpx solid #EEEEEE; 
+}
+.t-popup--center {
+border-radius: 16rpx !important;
 }

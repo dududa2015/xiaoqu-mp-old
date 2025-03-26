@@ -16,6 +16,8 @@ Page({
      */
     onLoad(options) {
         let userInfo = getApp().globalData.userInfo
+        console.log(userInfo)
+        // #if MP
         if (userInfo) {
             this.userId = userInfo.userId.substring(userInfo.userId.length - 10)
             this.pwd = userInfo.openId.substring(userInfo.openId.length - 10)
@@ -25,6 +27,13 @@ Page({
                 nickName: userInfo.nickName
             })
         }
+        // #else
+        if (userInfo) {
+            this.setData({
+                nickName: userInfo.nickName
+            })
+        }
+        // #endif
     },
     onNickNameReview(e) {
         console.log(e)
@@ -125,8 +134,15 @@ Page({
         })
     },
     toLogin() {
-        wx.navigateTo({
-            url: '/pages/my/login/login',
+        wx.showModal({
+            content: '确认要切换当前账号吗？',
+            complete: (res) => {
+                if (res.confirm) {
+                    wx.navigateTo({
+                        url: '/pages/my/login/login',
+                    })
+                }
+            }
         })
     },
     onLogout() {
@@ -137,8 +153,16 @@ Page({
                 if (res.confirm) {
                     wx.clearStorage({
                         success: function () {
-                            wx.navigateTo({
-                                url: '/pages/my/login/login',
+                            wx.showModal({
+                                content: '注销成功',
+                                showCancel: false,
+                                complete: (res) => {
+                                    if (res.confirm) {
+                                        wx.switchTab({
+                                            url: '/pages/my/index/index',
+                                        })
+                                    }
+                                }
                             })
                         },
                         fail: function (res) {

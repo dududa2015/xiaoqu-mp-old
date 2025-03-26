@@ -11,8 +11,8 @@ Component({
             observer(newVal, oldVal) {
                 if (newVal) {
                     this.initStorage()
-                    // 调用开始动画函数
-                    this.startAnimation();
+                    // // 调用开始动画函数
+                    // this.startAnimation();
                 }
             }
         }
@@ -32,13 +32,17 @@ Component({
      */
     methods: {
         initStorage() {
-            const enableMap = wx.getStorageSync('enableMap')
+            //控件位置
             const position = wx.getStorageSync('position')
+            //标记形状
             const markerShape = wx.getStorageSync('markerShape')
+            //开启旋转
             const enableRotate = wx.getStorageSync('enableRotate')
+            //开启卫星地图
             const enableSatellite = wx.getStorageSync('enableSatellite')
+            //开启3d楼块
+            const enable3D = wx.getStorageSync('enable3D')
             this.setData({
-                enableMap,
                 position: position ? position : 'right',
                 markerShape: markerShape ? markerShape : 'label'
             })
@@ -51,6 +55,11 @@ Component({
             if (typeof enableSatellite === 'boolean') {
                 this.setData({
                     enableSatellite
+                })
+            }
+            if (typeof enable3D === 'boolean') {
+                this.setData({
+                    enable3D
                 })
             }
         },
@@ -162,6 +171,14 @@ Component({
             })
             wx.setStorageSync('enableRotate', e.detail.value)
             this.triggerEvent('onRotate', e.detail.value)
+        },
+        //开启3d楼块
+        on3DChange(e) {
+            this.setData({
+                enable3D: e.detail.value
+            })
+            wx.setStorageSync('enable3D', e.detail.value)
+            this.triggerEvent('on3D', e.detail.value)
         },
         startAnimation() {
             // 定时器，控制边框显示隐藏

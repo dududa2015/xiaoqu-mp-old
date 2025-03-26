@@ -53,3 +53,7 @@
     display: flex;
     align-items: center;
 }
+
+.t-input {
+    padding: 24rpx !important;
+}

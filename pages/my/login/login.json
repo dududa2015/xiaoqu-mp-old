@@ -3,8 +3,9 @@
         "t-input": "tdesign-miniprogram/input/input",
         "t-button": "tdesign-miniprogram/button/button",
         "t-radio": "tdesign-miniprogram/radio/radio",
-        "t-checkbox": "tdesign-miniprogram/checkbox/checkbox"
+        "t-checkbox": "tdesign-miniprogram/checkbox/checkbox",
+        "t-popup": "tdesign-miniprogram/popup/popup"
     },
-    "navigationBarTitleText": "登录",
-    "navigationBarBackgroundColor": "#f7f7f7"
+    "disableScroll": true,
+    "navigationBarTitleText": "登录"
 }
