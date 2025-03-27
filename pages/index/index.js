@@ -1259,6 +1259,13 @@ Page({
             enableSatellite: event.detail
         })
     },
+    //更改定位图标
+    onLocIcon(event){
+        console.log(event.detail)
+        this.mapCtx.setLocMarkerIcon({
+            iconPath: `/images/loc-marker/${event.detail}.png`
+        })
+    },
     mapChange(event) {
         this.setData({
             markers: [],

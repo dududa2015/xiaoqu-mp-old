@@ -1,38 +1,41 @@
 .top-tip {
-  position: absolute;
-  top: 120px;
-  left: 125rpx;
-  width: 500rpx;
-  /* padding: 6rpx 16rpx; */
-  height: 25px;
-  background-color: rgba(231, 240, 255, 0.9);
+    position: absolute;
+    /* #if MP */
+    top: 120px;
+    /* #else */
+    top: 100px;
+    /* #endif */
+    left: 125rpx;
+    width: 500rpx;
+    height: 25px;
+    background-color: rgba(231, 240, 255, 0.9);
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 12rpx;
-  overflow: hidden;
-  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12rpx;
+    overflow: hidden;
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
 }
 
 .t-notice-bar_wrap {
-  flex: 1;
-  padding: 0 0 0 16rpx !important;
-  color: #808080;
-  font-size: 10px !important;
+    flex: 1;
+    padding: 0 0 0 16rpx !important;
+    color: #808080;
+    font-size: 10px !important;
 }
 
 
 
 .img-wrap {
-  width: 40rpx;
-  height: 40rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    width: 40rpx;
+    height: 40rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .img {
-  width: 16px;
-  height: 16px;
+    width: 16px;
+    height: 16px;
 }

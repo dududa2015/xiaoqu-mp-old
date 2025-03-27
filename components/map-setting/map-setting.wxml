@@ -2,19 +2,18 @@
     <view class="close-btn" bind:tap="onClose">
         <image src="/images/controls/cross.png" mode="" style="width: 40rpx; height: 40rpx;" />
     </view>
-    <view>
-        <view class="popup-title">设置</view>
-        <view class="content">
-            <view class="col" bind:tap="onChoose" data-index="0">
-                <image src="/images/layer/4.png" class="{{!enableSatellite ? 'img img-checked' : 'img'}}" mode="scaleToFill" />
-                <view class="{{!enableSatellite ? 'text text-checked' : 'text'}}">标准地图</view>
-            </view>
-            <view class="col" bind:tap="onChoose" data-index="1">
-                <image src="/images/layer/7.png" class="{{enableSatellite ? 'img img-checked' : 'img'}}" mode="scaleToFill" />
-                <view class="{{enableSatellite   ? 'text text-checked' : 'text'}}">卫星地图</view>
-            </view>
+    <view class="popup-title">设置</view>
+    <view class="content">
+        <view class="col" bind:tap="onChoose" data-index="0">
+            <image src="/images/layer/4.png" class="{{!enableSatellite ? 'img img-checked' : 'img'}}" mode="scaleToFill" />
+            <view class="{{!enableSatellite ? 'text text-checked' : 'text'}}">标准地图</view>
+        </view>
+        <view class="col" bind:tap="onChoose" data-index="1">
+            <image src="/images/layer/7.png" class="{{enableSatellite ? 'img img-checked' : 'img'}}" mode="scaleToFill" />
+            <view class="{{enableSatellite   ? 'text text-checked' : 'text'}}">卫星地图</view>
         </view>
     </view>
+
     <!-- 个人地图设置 -->
     <!-- <view class="setting {{isShowBorder ? 'border-show' : 'border-hidden'}}">
         <view class="row flex f-x-sb">
@@ -38,6 +37,12 @@
     </view> -->
     <!-- 位置、形状、旋转设置 -->
     <view class="setting">
+        <view class="row flex f-x-sb" style="padding: 16rpx 24rpx">
+            <view class="row-title" style="padding-top: 8rpx;">定位图标</view>
+            <view class="row-title flex f-y-center">
+                <image wx:for="{{locIconList}}" wx:key="index" src="{{item.url}}" class="{{ locIconIndex===index ? 'row-icon row-icon-selected' : 'row-icon' }}" mode="" bind:tap="onLocIcon" data-index="{{index}}" />
+            </view>
+        </view>
         <view class="row flex f-x-sb">
             <view class="row-title">地图控件位置</view>
             <view class="row-title">
@@ -72,5 +77,5 @@
 
     <t-dialog visible="{{showMapConfirm}}" content="创建专属于您的楼号地图，他人将无法查看、修改和删除您的个人地图" confirm-btn="确定" bind:confirm="closeDialog" />
     <t-dialog visible="{{showImportPersonalDataConfirm}}" content="把您过去的标记导入到个人地图" confirm-btn="确定" bind:confirm="closeDialog" />
-    
+
 </t-popup>

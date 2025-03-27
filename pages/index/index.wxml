@@ -23,6 +23,6 @@
   <marker-add-grid show="{{showGrid}}" bind:getMarkerTypeIndex="getMarkerTypeIndex" bind:createMap="createMap"></marker-add-grid>
   <marker-add markerTypeIndex="{{markerTypeIndex}}" showForm="{{showForm}}" showChooseMarker="{{showChooseMarker}}" markerDetail="{{markerDetail}}" mapCtx="{{mapCtx}}" bind:addUserMarkerByUser="addUserMarkerByUser" bind:updateUserMarkerByUser="updateUserMarkerByUser" bind:showBottomBar="showBottomBar" bind:onFormClose="onFormClose" bind:onChooseMarker="onChooseMarker" bind:onBackChooseMarker="onBackChooseMarker" bind:onFinishChooseMarker="onFinishChooseMarker" bind:onCancelChooseMarker="onCancelChooseMarker"></marker-add>
   <!-- <marker-filter bind:getCheckedIndex="getCheckedIndex"></marker-filter> -->
-  <map-setting showSetting="{{showSetting}}" bind:onSettingClose="onSettingClose" bind:onSatellite="onSatellite" bind:mapChange="mapChange" bind:onPosition="onPosition" bind:onRotate="onRotate" bind:on3D="on3D"></map-setting>
+  <map-setting showSetting="{{showSetting}}" bind:onSettingClose="onSettingClose" bind:onLocIcon="onLocIcon" bind:onSatellite="onSatellite" bind:mapChange="mapChange" bind:onPosition="onPosition" bind:onRotate="onRotate" bind:on3D="on3D"></map-setting>
   <personal-map showMap="{{showMap}}" bind:onMapChange="onMapChange" bind:onMapClose="onMapClose"></personal-map>
 </view>

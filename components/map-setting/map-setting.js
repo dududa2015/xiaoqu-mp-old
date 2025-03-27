@@ -24,7 +24,18 @@ Component({
     data: {
         checkedIndex: 0,
         isShowBorder: false,
-        count: 0
+        count: 0,
+        locIconList: [{
+            url: '/images/loc-marker/0.png',
+        }, {
+            url: '/images/loc-marker/1.png',
+        }, {
+            url: '/images/loc-marker/2.png',
+        }, {
+            url: '/images/loc-marker/3.png',
+        }, {
+            url: '/images/loc-marker/4.png',
+        }]
     },
 
     /**
@@ -109,6 +120,14 @@ Component({
                     })
                 }, 500);
             }
+        },
+        //定位图标选择
+        onLocIcon(e) {
+            const index = e.currentTarget.dataset.index
+            this.setData({
+                locIconIndex: index
+            })
+            this.triggerEvent('onLocIcon', index)
         },
         //地图控件位置选择
         onPositionChange(e) {

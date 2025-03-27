@@ -157,7 +157,7 @@
 }
 
 .footer {
-    padding: 64rpx 0 0 0;
+    padding: 32rpx 0 0 0;
     text-align: center;
 }
 
