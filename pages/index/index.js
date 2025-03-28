@@ -88,6 +88,7 @@ Page({
         const enableRotate = wx.getStorageSync('enableRotate')
         const enableSatellite = wx.getStorageSync('enableSatellite')
         const enable3D = wx.getStorageSync('enable3D')
+        const locIconIndex = wx.getStorageSync('locIconIndex')
         if (position) {
             this.setData({
                 position
@@ -108,6 +109,16 @@ Page({
                 enable3D
             })
         }
+
+        // #if NATIVE
+        if (locIconIndex) {
+            setTimeout(() => {
+                this.mapCtx.setLocMarkerIcon({
+                    iconPath: `/images/loc-marker/${locIconIndex}.png`
+                })
+            }, 500);
+        }
+        // #endif
     },
     getNotice() {
         const that = this
@@ -1260,7 +1271,7 @@ Page({
         })
     },
     //更改定位图标
-    onLocIcon(event){
+    onLocIcon(event) {
         console.log(event.detail)
         this.mapCtx.setLocMarkerIcon({
             iconPath: `/images/loc-marker/${event.detail}.png`

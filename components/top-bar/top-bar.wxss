@@ -32,7 +32,7 @@
 .img-wrap {
     position: relative;
     height: 44rpx;
-    padding: 16rpx 16rpx 0 16rpx;
+    padding: 12rpx 16rpx 0 16rpx;
 }
 
 .img {

@@ -127,6 +127,7 @@ Component({
             this.setData({
                 locIconIndex: index
             })
+            wx.setStorageSync('locIconIndex', index)
             this.triggerEvent('onLocIcon', index)
         },
         //地图控件位置选择
