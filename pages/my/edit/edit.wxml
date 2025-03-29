@@ -4,7 +4,7 @@
             <text slot="label">昵称<text style="color: #e34d59"> *</text> </text>
         </t-input>
         <!-- #if MP -->        
-        <t-input label="用户id" value="{{userId}}" readonly suffixIcon="copy" bind:tap="onUserIdCopy" />
+        <t-input label="用户编号" value="{{userId}}" readonly suffixIcon="copy" bind:tap="onUserIdCopy" />
         <t-input label="用户密码" value="**********" readonly suffixIcon="copy" bind:tap="onPwdCopy" />
         <!-- #endif -->
     </view>

@@ -118,6 +118,24 @@ Page({
                 })
             }, 500);
         }
+
+        // wx.miniapp.loadNativePlugin({
+        //     pluginId: "wx033a6b34f2c7ea15",
+        //     success(myPlugin) {
+        //         // #if IOS
+        //         const IDFV = myPlugin.getIdentifierForVendor()
+        //         console.log('ios plugin', IDFV)
+        //         // #elif ANDROID
+        //         const ret = myPlugin.getAndroidId({})
+        //         console.log('android plugin', ret)
+        //         // #endif
+                
+        //         // plugin 5214FC8D-7E4D-484A-80AD-17351C1183B6
+        //     },
+        //     fail(err) {
+        //         // 启动插件失败
+        //     }
+        // })
         // #endif
     },
     getNotice() {
@@ -505,7 +523,6 @@ Page({
         });
     },
     onRegionChange(e) {
-        console.log('onRegionChanage', e)
         if (e.type === 'begin' && e.causedBy === 'gesture') {
             this.setData({
                 showMapName: false

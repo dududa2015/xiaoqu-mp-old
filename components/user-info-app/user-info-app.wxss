@@ -1,8 +1,10 @@
 
 .header {
+    position: relative;
     padding: 32rpx;
     background-color: #fff;
     border-radius: 32rpx;
+    overflow: hidden;
   }
   
   .avatar-wrapper {
@@ -90,4 +92,14 @@
     height: 35rpx;
     opacity: 1;
     background-color: rgba(199, 199, 199, 1);
+  }
+  .vip-date {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: #0077F9;
+      color: #fff;
+      padding: 2rpx 16rpx;
+      font-size: 24rpx;
+      border-radius: 0 16rpx  0;
   }

@@ -8,7 +8,7 @@
         <view class="logo-text">小区楼号地图</view>
     </view>
     <view class="input-wrap">
-        <t-input prefixIcon="user" value="{{userId}}" placeholder="请输入小程序用户id" maxlength="20" borderless bind:change="onUserIdInput" />
+        <t-input prefixIcon="user" value="{{userId}}" placeholder="请输入小程序用户编号" maxlength="20" borderless bind:change="onUserIdInput" />
     </view>
     <view class="input-wrap">
         <t-input prefixIcon="lock-on" value="{{pwd}}" type="password" placeholder="请输入小程序用户密码" maxlength="20" borderless bind:change="onPwdInput" />
@@ -40,28 +40,28 @@
     </view>
 </view>
 
-<t-popup visible="{{showGuide}}" placement="center" style="width: 75%;" bind:visible-change="onVisibleChange">
+<t-popup visible="{{showGuide}}" placement="center" style="width: 80%;" bind:visible-change="onVisibleChange">
     <view class="guide-wrap">
         <view class="title">登录指引</view>
         <view class="content">
             <view class="row red">
-                提示：如果没用过微信小程序，请直接用微信或者苹果登录
+                提示：如果没用过微信小程序【小区楼号分布图】，请直接用微信或者苹果登录
             </view>
             <view class="row">
                 1、进入微信小程序【小区楼号分布图】的个人中心，点击昵称进入个人信息
             </view>
             <view class="row">
-                2、分别复制【用户id】和【用户密码】
+                2、分别复制【用户编号】和【用户密码】
             </view>
             <view class="row">
-                3、回到此页面粘贴【用户id】和【用户密码】
+                3、回到此页面粘贴【用户编号】和【用户密码】
             </view>
             <view class="row">
                 4、点击登录，登录成功后将自动关联上微信小程序
             </view>
         </view>
         <view class="footer">
-            <t-button theme="primary" size="large" block variant="text" bind:tap="closeGuide"> 关闭</t-button>
+            <t-button style="color: #333333;" size="large" block variant="text" bind:tap="closeGuide"> 关闭</t-button>
         </view>
     </view>
 </t-popup>

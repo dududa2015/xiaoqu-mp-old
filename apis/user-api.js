@@ -27,7 +27,7 @@ export const updateNickName = (params) => {
         method: 'POST',
     })
 }
-//app登录，通过小程序用户id和小程序用户密码
+//app登录，通过小程序用户编号和小程序用户密码
 export const getUserInfoByAppLogin = (params) => {
     return request({
         url: '/users/appLogin',

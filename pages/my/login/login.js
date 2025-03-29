@@ -91,7 +91,7 @@ Page({
         console.log(this.data.userId, this.data.pwd)
         if (this.data.userId.length === 0) {
             wx.showToast({
-                title: '请输入小程序用户id',
+                title: '请输入小程序用户编号',
                 icon: 'none'
             })
             return

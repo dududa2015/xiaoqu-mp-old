@@ -84,9 +84,17 @@
   "mini-plugin": {
     "ios": [
       {
-        "open": false,
-        "pluginId": "",
-        "pluginVersion": ""
+        "open": true,
+        "pluginId": "wx033a6b34f2c7ea15",
+        "pluginVersion": "1.0.0",
+        "isFromLocal": false
+      }
+    ],
+    "android": [
+      {
+        "open": true,
+        "pluginId": "wx033a6b34f2c7ea15",
+        "pluginVersion": "1.0.0"
       }
     ]
   }

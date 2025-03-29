@@ -171,7 +171,7 @@ page {
     color: #FF0000;
 }
 .footer {
-    border-top: 1rpx solid #EEEEEE; 
+    border-top: 2rpx solid #EEEEEE; 
 }
 .t-popup--center {
 border-radius: 16rpx !important;
