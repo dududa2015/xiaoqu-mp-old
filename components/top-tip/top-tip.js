@@ -22,7 +22,6 @@ Component({
         },
         ready() {
             this.showNotices()
-            this.showUserRemark()
         },
         moved() {
             // console.log('组件被移动');
@@ -35,7 +34,8 @@ Component({
      * 组件的初始数据
      */
     data: {
-        show: true, //默认显示  
+        show: true, //默认显示
+        noticeListApp: ['免费试用7天，结束后需要订阅 →'],
         content: [
             // '请勿标记门禁密码，违者停用账号',
             // '轻触右上角···添加小程序，使用更方便',
@@ -63,21 +63,12 @@ Component({
                 })
             }
         },
-        showUserRemark() {
-            setTimeout(() => {
-                let userInfo = getApp().globalData.userInfo
-                if (userInfo && userInfo.remark) {
-                    let remark = userInfo.remark
-                    if (remark) {
-                        let content = [remark]
-                        this.setData({
-                            content
-                        })
-                    }
-                }
-            }, 3000);
+        onClick(){
+            wx.navigateTo({
+              url: '/pages/my/vip/vip',
+            })
         },
-        onDelete() {
+        onClose() {
             this.setData({
                 show: false
             })

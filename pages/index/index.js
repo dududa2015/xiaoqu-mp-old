@@ -82,6 +82,22 @@ Page({
         }, 3000);
         // #endif
     },
+    onShow() {
+        // #if NATIVE
+        wx.showModal({
+            title: '',
+            content: '免费试用结束，请开启订阅',
+            showCancel: false,
+            complete: (res) => {
+                if (res.confirm) {
+                    wx.navigateTo({
+                      url: '/pages/my/vip/vip',
+                    })
+                }
+            }
+        })
+        // #endif
+    },
     //设置
     initStorage() {
         const position = wx.getStorageSync('position')
@@ -89,6 +105,7 @@ Page({
         const enableSatellite = wx.getStorageSync('enableSatellite')
         const enable3D = wx.getStorageSync('enable3D')
         const locIconIndex = wx.getStorageSync('locIconIndex')
+
         if (position) {
             this.setData({
                 position
@@ -129,7 +146,7 @@ Page({
         //         const ret = myPlugin.getAndroidId({})
         //         console.log('android plugin', ret)
         //         // #endif
-                
+
         //         // plugin 5214FC8D-7E4D-484A-80AD-17351C1183B6
         //     },
         //     fail(err) {

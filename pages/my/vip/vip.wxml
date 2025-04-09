@@ -1,28 +1,37 @@
 <view class="vip-container">
-    <view class="title-wrap flex">
-        <view class="line"></view>
-        <view class="title">会员权益</view>
+    <view class="header">
+        <view class="title-wrap flex  f-y-center">
+            <view class="line"></view>
+            <view class="title">会员权益<text class="title-2">(相比小程序)</text></view>
+        </view>
+        <view class="rights-wrap flex f-x-fs f-y-center">
+            <view class="rights" wx:for="{{rightsList}}" wx:key="index">
+                <view class="rights-img-wrap flex f-x-center f-y-center">
+                    <image src="{{item.imgUrl}}" class="rights-img"></image>
+                </view>
+                <view class="rights-text">{{item.name}}</view>
+            </view>
+        </view>
     </view>
-    <view class="rights-wrap flex f-x-sr">
-        <view class="rights">
-            <image src="/images/my/noad.png" class="rights-icon" mode="" />
-            <view class="rights-text">免广告</view>
+    <view class="content ">
+        <view class="title-wrap flex  f-y-center">
+            <view class="line"></view>
+            <view class="title">会员选择</view>
         </view>
-        <view class="rights">
-            <t-icon name="map-information-2" class="rights-icon" size="72rpx" color="#0074FE" />
-            <view class="rights-text">个人地图</view>
+        <view class="vip-wrap flex">
+            <view class="{{ item.checked? 'box box-selected':'box'}}" wx:for="{{productList}}" wx:key="index" bind:tap="onVipChange" data-productId="{{item.productId}}">
+                <view class="name">{{item.name}}</view>
+                <view class="price"><text class="price-sign">￥</text>{{item.price}}元</view>
+                <view class="original-price">￥{{item.originalPrice}}元</view>
+                <view class="note">{{item.note}}</view>
+                <view class="recommend" wx:if="{{item.recommend}}"><text class="recommend-text">{{item.recommend}}</text></view>
+            </view>
         </view>
-        <view class="rights">
-            <image src="/images/my/noad.png" class="rights-icon" mode="" />
-            <view class="rights-text">标记日历</view>
-        </view>
-        <!-- <view class="rights">
-            <image src="/images/my/noad.png" class="rights-icon" mode="" />
-            <view class="rights-text">免广告</view>
-        </view>
-        <view class="rights">
-            <image src="/images/my/noad.png" class="rights-icon" mode="" />
-            <view class="rights-text">免广告</view>
-        </view> -->
+    </view>
+    <view class="tips">
+        温馨提醒：如果您不愿付费，也可前往微信小程序【小区楼号分布图】
+    </view>
+    <view class="footer">
+        <button type="primary" style="background-color: rgba(219, 179, 122, 1); " bind:tap="onVip">开通会员</button>
     </view>
 </view>
