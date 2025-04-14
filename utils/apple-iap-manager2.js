@@ -66,7 +66,6 @@ class ApplePayManager {
      * 处理购买成功
      */
     _handlePurchased(transaction) {
-        console.log('购买成功:', transaction);
         // //为了测试，要删除下面这行代码TODO
         // this._finishTransaction(transaction);
         // 验证收据
@@ -89,7 +88,7 @@ class ApplePayManager {
      * 处理购买失败
      */
     _handleFailed(transaction) {
-        console.error('购买失败:', transaction.error);
+        console.error('购买失败了:', transaction.error);
         if (this.paymentFailCallback) {
             this.paymentFailCallback(transaction.error);
         }
@@ -100,19 +99,25 @@ class ApplePayManager {
      * 验证收据
      */
     _verifyReceipt(receiptData) {
+        console.log('_verifyReceipt')
+        console.log(receiptData)
         return new Promise((resolve, reject) => {
             // 这里应该将收据发送到你的服务器进行验证
             // 示例代码，实际应该调用你的后端API
             wx.request({
-                url: 'https://your-server.com/verify-receipt',
+                url: 'https://mp.zhuzixi.cn/api/ReceiptVerification/VerifyReceipt',
+                // url: 'http://localhost:5213/api/ReceiptVerification/VerifyReceipt',
                 method: 'POST',
                 data: {
                     receipt: receiptData
                 },
                 success: (res) => {
+                    console.log('_verifyReceipt', res)
                     if (res.data.valid) {
+                        console.log('验证收据成功')
                         resolve();
                     } else {
+                        console.log('验证收据失败')
                         reject(new Error('无效的收据'));
                     }
                 },

@@ -1,9 +1,5 @@
-import {
-    iapManager
-} from '../../../utils/apple-iap-manager';
 import ApplePayManager from '../../../utils/apple-iap-manager2';
 
-const applePayManager = new ApplePayManager().init();
 Page({
 
     /**
@@ -97,24 +93,35 @@ Page({
             productList
         });
     },
+    //支付
     onVip() {
         //获取productId
         const productId = this.data.productList.find(item => item.checked).productId
         wx.showLoading({
-          title: '正在支付...',
+            title: '正在支付...',
+            mask: true
         })
         // 发起购买
-        applePayManager.purchaseProduct(productId)
+        this.applePayManager.purchaseProduct(productId)
             .then(transaction => {
                 console.log('购买成功:', transaction);
+                wx.showToast({
+                  title: '购买成功',
+                })
             })
             .catch(error => {
                 console.error('购买失败:', error);
-            }).finally(() => {
-                console.log('finally')
-                wx.hideLoading()
-            });        
-
+                // "未能完成操作。（SKErrorDomain错误2。）"
+                let description = error.localizedDescription
+                const index = description.indexOf("。");
+                if (index !== -1) {
+                    description = description.substring(0, index);
+                }
+                wx.showToast({
+                    title: description,
+                    icon: 'none'
+                })
+            })
 
         // const productId = 'com.louhao.xiaoqu.month'
         // wx.showLoading({
