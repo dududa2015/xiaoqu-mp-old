@@ -84,18 +84,18 @@ Page({
     },
     onShow() {
         // #if NATIVE
-        wx.showModal({
-            title: '',
-            content: '免费试用结束，请开启订阅',
-            showCancel: false,
-            complete: (res) => {
-                if (res.confirm) {
-                    wx.navigateTo({
-                      url: '/pages/my/vip/vip',
-                    })
-                }
-            }
-        })
+        // wx.showModal({
+        //     title: '',
+        //     content: '免费试用结束，请开启订阅',
+        //     showCancel: false,
+        //     complete: (res) => {
+        //         if (res.confirm) {
+        //             wx.navigateTo({
+        //               url: '/pages/my/vip/vip',
+        //             })
+        //         }
+        //     }
+        // })
         // #endif
     },
     //设置

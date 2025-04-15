@@ -105,7 +105,7 @@ class ApplePayManager {
             // 这里应该将收据发送到你的服务器进行验证
             // 示例代码，实际应该调用你的后端API
             wx.request({
-                url: 'https://mp.zhuzixi.cn/api/ReceiptVerification/VerifyReceipt',
+                url: 'https://mp.zhuzixi.cn/api/AppleIAPReceipts/VerifyReceipt',
                 // url: 'http://localhost:5213/api/ReceiptVerification/VerifyReceipt',
                 method: 'POST',
                 data: {

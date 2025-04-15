@@ -121,6 +121,10 @@ Page({
                     title: description,
                     icon: 'none'
                 })
+            }).finally(()=>{
+                setTimeout(() => {
+                    wx.hideToast()
+                }, 3000);
             })
 
         // const productId = 'com.louhao.xiaoqu.month'
