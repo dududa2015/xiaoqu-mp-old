@@ -1,9 +1,11 @@
 class ApplePayManager {
-    constructor() {
+    constructor(userId) {
         this.transactionObserver = null;
         this.paymentSuccessCallback = null;
         this.paymentFailCallback = null;
         this.currentRequest = null;
+        this.userId = userId;
+        console.log('用户id:' + this.userId)
     }
 
     /**
@@ -100,7 +102,7 @@ class ApplePayManager {
      */
     _verifyReceipt(receiptData) {
         console.log('_verifyReceipt')
-        console.log(receiptData)
+        // console.log(receiptData)
         return new Promise((resolve, reject) => {
             // 这里应该将收据发送到你的服务器进行验证
             // 示例代码，实际应该调用你的后端API
@@ -109,7 +111,8 @@ class ApplePayManager {
                 // url: 'http://localhost:5213/api/ReceiptVerification/VerifyReceipt',
                 method: 'POST',
                 data: {
-                    receipt: receiptData
+                    receipt: receiptData,
+                    userId: this.userId
                 },
                 success: (res) => {
                     console.log('_verifyReceipt', res)

@@ -22,6 +22,8 @@ Page({
             name: '定位图标',
             imgUrl: '/images/my/rights-loc.png'
         }],
+        //6 18	72
+        //5 14.9  39.9
         productList: [{
                 name: '连续包月',
                 price: 4,
@@ -29,7 +31,7 @@ Page({
                 note: '0.13元/天，可随时取消订阅',
                 recommend: '限时特惠',
                 checked: true,
-                productId: 'com.louhao.xiaoqu.month'
+                productIdentifier: 'com.louhao.xiaoqu.month'
             },
             {
                 name: '连续包季',
@@ -37,7 +39,7 @@ Page({
                 originalPrice: 15,
                 note: '0.11元/天，可随时取消订阅',
                 checked: false,
-                productId: 'com.louhao.xiaoqu.season'
+                productIdentifier: 'com.louhao.xiaoqu.season'
             }, {
                 name: '连续包年',
                 price: 29.9,
@@ -45,7 +47,7 @@ Page({
                 note: '0.08元/天，可随时取消订阅',
                 recommend: '超值推荐',
                 checked: false,
-                productId: 'com.louhao.xiaoqu.year'
+                productIdentifier: 'com.louhao.xiaoqu.year'
             }
         ]
     },
@@ -54,17 +56,30 @@ Page({
      * 生命周期函数--监听页面加载
      */
     async onLoad(options) {
-        const productIdentifiers = ['com.louhao.xiaoqu.month', 'com.louhao.xiaoqu.season', 'com.louhao.xiaoqu.year'];
-
+        //获取userId
+        const userId = wx.getStorageSync('userId')
         // 初始化支付管理器（如果未全局挂载）
-        this.applePayManager = new ApplePayManager().init();
+        this.applePayManager = new ApplePayManager(userId).init();
 
+        const productIdentifiers = ['com.louhao.xiaoqu.month', 'com.louhao.xiaoqu.season', 'com.louhao.xiaoqu.year'];
         // 请求商品信息
         this.applePayManager.requestProducts(productIdentifiers)
             .then(products => {
+                products.sort((a, b) => a.price - b.price);
+                products.forEach((element, index) => {
+                    element.originalPrice = Math.ceil(element.price * 0.6 * (2 + index * 0.5))
+                    element.note = this.getProductNote(index, element.price)
+                    if (element.productIdentifier === 'com.louhao.xiaoqu.month') {
+                        element.recommend = '限时特惠'
+                    }
+                    if (element.productIdentifier === 'com.louhao.xiaoqu.year') {
+                        element.recommend = '超值推荐'
+                    }
+                    element.checked = index === 0
+                });
                 console.log('商品数据', products)
                 this.setData({
-                    products
+                    productList: products
                 }); // 更新页面数据
             })
             .catch(error => {
@@ -75,6 +90,18 @@ Page({
                 });
             });
     },
+    getProductNote(index, price) {
+        if (index === 0) {
+            return `${(price / 30).toFixed(2)}元/天，可随时取消订阅`
+        } else if (index === 1) {
+            return `${(price / 90).toFixed(2)}元/天，可随时取消订阅`
+        } else if (index === 2) {
+            return `${(price / 365).toFixed(2)}元/天，可随时取消订阅`
+        } else {
+            return '可随时取消订阅'
+        }
+
+    },
     onUnload() {
         // 清理资源
         if (this.applePayManager) {
@@ -83,9 +110,9 @@ Page({
         }
     },
     onVipChange(event) {
-        const productId = event.currentTarget.dataset.productid
+        const productIdentifier = event.currentTarget.dataset.productidentifier
         const productList = this.data.productList.map((item, i) => {
-            item.checked = item.productId === productId;
+            item.checked = item.productIdentifier === productIdentifier;
             return item;
         });
         console.log(productList)
@@ -96,17 +123,17 @@ Page({
     //支付
     onVip() {
         //获取productId
-        const productId = this.data.productList.find(item => item.checked).productId
+        const productIdentifier = this.data.productList.find(item => item.checked).productIdentifier
         wx.showLoading({
             title: '正在支付...',
             mask: true
         })
         // 发起购买
-        this.applePayManager.purchaseProduct(productId)
+        this.applePayManager.purchaseProduct(productIdentifier)
             .then(transaction => {
                 console.log('购买成功:', transaction);
                 wx.showToast({
-                  title: '购买成功',
+                    title: '购买成功',
                 })
             })
             .catch(error => {
@@ -121,25 +148,25 @@ Page({
                     title: description,
                     icon: 'none'
                 })
-            }).finally(()=>{
+            }).finally(() => {
                 setTimeout(() => {
                     wx.hideToast()
                 }, 3000);
             })
 
-        // const productId = 'com.louhao.xiaoqu.month'
+        // const productIdentifier = 'com.louhao.xiaoqu.month'
         // wx.showLoading({
         //     title: '支付中...',
         // })
         // try {
         //     // 1. 动态查询商品信息（确保获取最新价格和状态）
-        //     const products = await iapManager.fetchProducts([productId]);
+        //     const products = await iapManager.fetchProducts([productIdentifier]);
         //     if (products.length === 0) {
         //         throw new Error('商品不存在或不可用');
         //     }
 
         //     // 2. 发起支付
-        //     await iapManager.purchase(productId);
+        //     await iapManager.purchase(productIdentifier);
         //     console.log('支付成功');
         // } catch (err) {
         //     console.error('支付失败:', err);
