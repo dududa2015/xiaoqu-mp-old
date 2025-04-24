@@ -14,19 +14,19 @@ Component({
                 if (newVal) {
                     nickName = newVal.nickName || '小区楼号'
                 } else {
+                    newVal = {}
                     nickName = '点击登录'
                 }
                 this.setData({
                     nickName
                 })
                 this.setData({
-                    isVip: newVal ? newVal.isVip : false,
-                    isAdmin: newVal ? newVal.isAdmin : false,
                     points: this.convertToWan(newVal ? newVal.points : 0),
                     markers: this.convertToWan(newVal ? newVal.markers : 0),
                     friends: this.convertToWan(newVal ? newVal.friends : 0),
                     deleted: this.convertToWan(newVal ? newVal.deleted : 0),
-                    showRank: newVal && newVal.points > 0
+                    showVip: new Date(newVal.iosVipExpiredDate) > new Date() || new Date(newVal.androidVipExpiredDate) > new Date(),
+                    vipExpiredDate: newVal.iosVipExpiredDate || newVal.androidVipExpiredDate
                 })
             }
         }
@@ -86,7 +86,8 @@ Component({
             })
         },
         toMarkers(event) {
-            if (getApp().globalData.userInfo) {
+            let userInfo = wx.getStorageSync('userInfo')
+            if (userInfo) {
                 const {
                     deleted
                 } = event.currentTarget.dataset
@@ -116,6 +117,6 @@ Component({
                 return (num / 10000).toFixed(2) + "万";
             }
             return num;
-        },
+        }
     }
 })

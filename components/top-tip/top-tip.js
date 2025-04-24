@@ -68,6 +68,17 @@ Component({
               url: '/pages/my/vip/vip',
             })
         },
+        onAppNoticeClick(){
+            if (!wx.getStorageSync('userId')) {
+                wx.navigateTo({
+                    url: '/pages/my/login/login',
+                  })
+            } else {
+                wx.navigateTo({
+                  url: '/pages/my/vip/vip',
+                })
+            }
+        },
         onClose() {
             this.setData({
                 show: false

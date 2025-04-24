@@ -26,25 +26,25 @@ Page({
         //5 14.9  39.9
         productList: [{
                 name: '连续包月',
-                price: 4,
-                originalPrice: 5,
-                note: '0.13元/天，可随时取消订阅',
+                price: 5,
+                originalPrice: 6,
+                note: '0.17元/天，可随时取消订阅',
                 recommend: '限时特惠',
                 checked: true,
                 productIdentifier: 'com.louhao.xiaoqu.month'
             },
             {
                 name: '连续包季',
-                price: 9.9,
-                originalPrice: 15,
+                price: 12,
+                originalPrice: 18,
                 note: '0.11元/天，可随时取消订阅',
                 checked: false,
                 productIdentifier: 'com.louhao.xiaoqu.season'
             }, {
                 name: '连续包年',
-                price: 29.9,
-                originalPrice: 60,
-                note: '0.08元/天，可随时取消订阅',
+                price: 39.9,
+                originalPrice: 72,
+                note: '0.11元/天，可随时取消订阅',
                 recommend: '超值推荐',
                 checked: false,
                 productIdentifier: 'com.louhao.xiaoqu.year'

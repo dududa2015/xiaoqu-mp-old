@@ -34,7 +34,7 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onLoad() {
-        let userInfo = getApp().globalData.userInfo
+        let userInfo = wx.getStorageSync('userInfo')
         if (userInfo && userInfo.userId !== '92918a62b30c') {
             wx.switchTab({
                 url: '/pages/index/index',

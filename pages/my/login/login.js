@@ -195,7 +195,7 @@ Page({
             wx.setStorageSync('userId', res.userId)
             wx.setStorageSync('token', res.token)
             wx.setStorageSync('appleId', res.appleId)
-            getApp().globalData.userInfo = res
+            wx.setStorageSync('userInfo', res)
             wx.navigateBack()
         } else {
             wx.showToast({
@@ -217,17 +217,6 @@ Page({
             showGuide: false
         })
     },
-    // getAppleUserInfo(code) {
-    //     getAppleUserInfo({
-    //         code
-    //     }).then(res => {
-    //         wx.setStorageSync('userId', res.userId)
-    //         wx.setStorageSync('appleId', res.appleId)
-    //         wx.setStorageSync('token', res.token)
-    //         getApp().globalData.userInfo = res
-    //         wx.navigateBack()
-    //     })
-    // },
     agreedChange(event) {
         this.setData({
             agreed: event.detail.checked

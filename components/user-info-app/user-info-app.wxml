@@ -8,17 +8,15 @@
                 <!-- 小区楼号 -->
                 <view class="name-icon-wrap">
                     {{nickName}}
-                    <image src="/images/my/v.png" mode="" class="v-img" wx:if="{{isVip}}" />
-                    <image src="/images/my/admin.png" mode="" class="v-img" wx:if="{{isAdmin}}" />
+                    <image src="/images/my/v.png" mode="" class="v-img" wx:if="{{showVip}}" />
                 </view>
                 <view>
                     <t-icon name="chevron-right" size="48rpx" />
                 </view>
             </view>
-            <view class="desc" wx:if="{{showRank}}">
-                <t-tag size="small" variant="light" theme="primary" style="margin-right: 12rpx">积分排名{{rankInfo && rankInfo.pointsRanking < 5000 ? rankInfo.pointsRanking:'1w+'}}</t-tag>
-                        <t-tag size="small" variant="light" theme="primary" style="margin-right: 12rpx">标记排名{{rankInfo && rankInfo.markersRanking < 5000?rankInfo.markersRanking:'1w+'}}</t-tag>
-                                <t-tag size="small" variant="light" theme="primary" style="margin-right: 12rpx">好友排名{{rankInfo && rankInfo.friendsRanking < 5000?rankInfo.friendsRanking:'1w+'}}</t-tag>
+            <view class="desc" wx:if="{{vipExpiredDate}}">
+                <t-tag wx:if="{{showVip}}" size="small" variant="light" theme="primary">会员到期日期 {{vipExpiredDate}}</t-tag>
+                <t-tag wx:else="{{vipExpiredDate}}" size="small" variant="light" theme="warning">您的会员于{{vipExpiredDate}}过期 </t-tag>
             </view>
         </view>
     </view>

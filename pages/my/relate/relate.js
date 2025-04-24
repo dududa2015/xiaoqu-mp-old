@@ -46,7 +46,7 @@ Page({
                 })
                 wx.setStorageSync('userId', res.userId)
                 wx.setStorageSync('token', res.token)
-                getApp().globalData.userInfo = res
+                wx.setStorageSync('userInfo', res)
                 setTimeout(() => {
                     wx.navigateBack()
                 }, 1500);

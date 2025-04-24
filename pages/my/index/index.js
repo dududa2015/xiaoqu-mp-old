@@ -33,7 +33,7 @@ Page({
                 friendUserId: ''
             }).then(res => {
                 if (res) {
-                    getApp().globalData.userInfo = res
+                    wx.setStorageSync('userInfo', res)
                     this.setData({
                         userInfo: res,
                     })
@@ -62,7 +62,7 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-        let userInfo = getApp().globalData.userInfo
+        let userInfo = wx.getStorageSync('userInfo')
         if (userInfo && userInfo.userId === '92918a62b30c') {
             this.setData({
                 showAudit: true

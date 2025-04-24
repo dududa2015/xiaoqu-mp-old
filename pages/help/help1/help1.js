@@ -12,7 +12,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    let userInfo = getApp().globalData.userInfo
+    let userInfo = wx.getStorageSync('userInfo')
     let ts = parseInt(userInfo.createdDate.match(/\d+/)[0])
     let createdDate = new Date(ts)
     //从2024年9月1日开始到上一个小时可以显示

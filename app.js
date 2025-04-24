@@ -9,6 +9,7 @@ App({
         this.autoUpdate()
         this.login(options.query.userId)
         // #else
+        this.appInit()
         this.appleLogin()
         // #endif
     },
@@ -26,7 +27,7 @@ App({
                 }).then(res => {
                     wx.setStorageSync('userId', res.userId)
                     wx.setStorageSync('token', res.token)
-                    getApp().globalData.userInfo = res
+                    wx.setStorageSync('userInfo', res)
                 }).catch(err => {
                     wx.showModal({
                         title: '请求错误',
@@ -49,9 +50,15 @@ App({
                 console.log(res)
                 wx.setStorageSync('userId', res.userId)
                 wx.setStorageSync('token', res.token)
-                getApp().globalData.userInfo = res
+                wx.setStorageSync('userInfo', res)
             })
         }
+    },
+    appInit(){
+        //第一次启动的时候写入installDate
+        if(wx.getStorageSync('installDate') === ''){
+            wx.setStorageSync('installDate', new Date())
+        }        
     },
     //自动更新
     autoUpdate() {

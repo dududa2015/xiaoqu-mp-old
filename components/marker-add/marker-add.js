@@ -410,7 +410,7 @@ Component({
             //   this.showWarnMessage('您输入的内容疑似密码，请重新输入')
             //   return
             // }
-            let userInfo = getApp().globalData.userInfo
+            let userInfo = wx.getStorageSync('userInfo')
             //2024-11-9去掉&& !userInfo.isAdmin
             if (checkChineseNumbers(this.data.name)) {
                 wx.showToast({

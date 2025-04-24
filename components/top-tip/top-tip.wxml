@@ -2,7 +2,7 @@
     <!-- #if MP -->
     <t-notice-bar class="t-notice-bar_wrap" visible="{{true}}" direction="vertical" interval="{{5000}}" content="{{noticeList}}" prefixIcon="{{false}}" bind:click="click"></t-notice-bar>
     <!-- #else -->
-    <t-notice-bar class="t-notice-bar_wrap" visible="{{true}}" direction="vertical" interval="{{5000}}" content="{{noticeListApp}}" prefixIcon="{{false}}" bind:click="onClick"></t-notice-bar>
+    <t-notice-bar class="t-notice-bar_wrap" visible="{{true}}" direction="vertical" interval="{{5000}}" content="{{noticeListApp}}" prefixIcon="{{false}}" bind:click="onAppNoticeClick"></t-notice-bar>
     <!-- #endif -->
     <view class="img-wrap" bind:tap="onClose">
         <image src="/images/controls/cross.png" class="img" mode="" />

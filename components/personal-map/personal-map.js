@@ -189,7 +189,7 @@ Component({
         },
         //导入历史数据
         importHistoryData(e) {
-            let userInfo = getApp().globalData.userInfo
+            let userInfo = wx.getStorageSync('userInfo')
             if (userInfo && !userInfo.historyImported) {
                 console.log(e.currentTarget.dataset.item)
                 let userId = e.currentTarget.dataset.item.userId
@@ -259,21 +259,6 @@ Component({
                     opened: false
                 })
             }, 1000);
-        },
-        //导入个人地图后
-        // getUserInfo() {
-        //     getUserById({
-        //         code: '',
-        //         userId: wx.getStorageSync('userId'),
-        //         friendUserId: ''
-        //     }).then(res => {
-        //         if (res) {
-        //             getApp().globalData.userInfo = res
-        //             this.setData({
-        //                 userInfo: res,
-        //             })
-        //         }
-        //     })
-        // },
+        }
     }
 })

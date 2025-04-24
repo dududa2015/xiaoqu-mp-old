@@ -186,15 +186,6 @@ const getColorFromStorage = n => {
     return '#0074FE'
   }
 }
-//根据getAroundList返回的color和colorExpiredDate来判断
-//暂未用到---颜色标记有冲。
-const getColorFromDB = (color, colorExpiredDate) => {
-  if (colorExpiredDate > new Date()) {
-    return color
-  } else {
-    return '#0074FE'
-  }
-}
 //根据类型获取背景色
 const getBgColorByType = (type) => {
   let bgColor = ''
@@ -258,6 +249,10 @@ const checkString = (s) => {
   const containsDash = /^(-$|^[A-Za-z]-[A-Za-z]$|^\d{0,3}-\d{0,3}$)/.test(s); // 允许单独的'-'，或者'-前后全为字母或全为数字'
   return isShortNumeric || isSingleAlphabetic || containsSpecialCharWithNumbers || containsDash || isSingleLetterWithSpecialChar;
 }
+//根据vip过期时间判断是否vip
+const isAppVip = (expiredDate) => {
+     
+  }
 
 module.exports = {
   formatTime,

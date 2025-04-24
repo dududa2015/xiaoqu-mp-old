@@ -84,18 +84,51 @@ Page({
     },
     onShow() {
         // #if NATIVE
-        // wx.showModal({
-        //     title: '',
-        //     content: '免费试用结束，请开启订阅',
-        //     showCancel: false,
-        //     complete: (res) => {
-        //         if (res.confirm) {
-        //             wx.navigateTo({
-        //               url: '/pages/my/vip/vip',
-        //             })
-        //         }
-        //     }
-        // })
+        //如果获取到了用户信息，用createdDate和当前时间相比，如果超过了7天，就自动跳转到vip开通页面
+        //如果没有取到用户信息，用缓存中的installDate和当前时间比较，如果超过2小时，则跳转到登录页面
+        let userInfo = wx.getStorageSync('userInfo')
+        if (!userInfo) {
+            const targetDate = new Date(userInfo.createdDate.replace(" ", "T"));
+            targetDate.setDate(targetDate.getDate() + 7);
+            const currentDate = new Date();
+            if (targetDate < currentDate) {
+                wx.showModal({
+                    title: '',
+                    content: '免费试用结束，请开启订阅',
+                    showCancel: false,
+                    complete: (res) => {
+                        if (res.confirm) {
+                            wx.navigateTo({
+                                url: '/pages/my/vip/vip',
+                            })
+                        }
+                    }
+                })
+            }
+        } else {
+            let installDate = wx.getStorageSync('installDate')
+            let targetDate = new Date(parseInt(installDate))
+            targetDate.setHours(targetDate.getHours() + 2);
+            let currentDate = new Date()
+            console.log('time')
+            console.log(targetDate,currentDate)
+            if (targetDate < currentDate) {
+                wx.showModal({
+                    content: '您已经用了一段时间了，请先登录',
+                    showCancel: false,
+                    complete: (res) => {
+                        if (res.confirm) {
+                            let ts = Date.now() + 1 * 60 * 60 * 1000
+                            wx.setStorageSync('installDate', ts)
+                            wx.navigateTo({
+                                url: '/pages/my/login/login',
+                            })
+                        }
+                    }
+                })
+            }
+        }
+
         // #endif
     },
     //设置
@@ -232,7 +265,7 @@ Page({
     //显示插屏广告
     showCPAd() {
         //如果不是vip展示插屏广告
-        let userInfo = getApp().globalData.userInfo
+        let userInfo = wx.getStorageSync('userInfo')
         if (!(userInfo && userInfo.isVip)) {
             if (interstitialAd) {
                 interstitialAd.show().catch((err) => {
@@ -270,13 +303,14 @@ Page({
                 //确保获取到用户信息后再请求
                 // #if MP
                 let intervalId = setInterval(function () {
-                    if (getApp().globalData.userInfo) {
+                    let userInfo = wx.getStorageSync('userInfo')
+                    if (userInfo) {
                         that.getAroundList(latitude, longitude)
                         that.getNotice()
                         that.setData({
-                            tips: getApp().globalData.userInfo.remark,
-                            isVip: getApp().globalData.userInfo.isVip,
-                            points: getApp().globalData.userInfo.points
+                            tips: userInfo.remark,
+                            isVip: userInfo.isVip,
+                            points: userInfo.points
                         })
                         clearInterval(intervalId)
                     }
@@ -632,7 +666,7 @@ Page({
     onUserMarkerDelete(event) {
         this.selectedMarker = event.detail
         const that = this
-        let userInfo = getApp().globalData.userInfo || {}
+        let userInfo = wx.getStorageSync('userInfo')
         //如果可以编辑，说明是自己的标记，那么就能删除
         //vip也可以直接删除
         if (this.selectedMarker.userId === userInfo.userId || userInfo.isAdmin) {

@@ -126,7 +126,7 @@ Component({
                     latitude: result.lat,
                     longitude: result.lng,
                 });
-                let userInfo = getApp().globalData.userInfo || {}
+                let userInfo = wx.getStorageSync('userInfo')
                 let canEditUserMarker = wx.getStorageSync('userId') === result.userId || userInfo.isAdmin
 
                 that.setData({
