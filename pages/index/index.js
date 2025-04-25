@@ -84,34 +84,47 @@ Page({
     },
     onShow() {
         // #if NATIVE
+        this.checkVip()
+        // #endif
+    },
+    checkVip() {
         //如果获取到了用户信息，用createdDate和当前时间相比，如果超过了7天，就自动跳转到vip开通页面
         //如果没有取到用户信息，用缓存中的installDate和当前时间比较，如果超过2小时，则跳转到登录页面
         let userInfo = wx.getStorageSync('userInfo')
-        if (!userInfo) {
-            const targetDate = new Date(userInfo.createdDate.replace(" ", "T"));
-            targetDate.setDate(targetDate.getDate() + 7);
-            const currentDate = new Date();
-            if (targetDate < currentDate) {
-                wx.showModal({
-                    title: '',
-                    content: '免费试用结束，请开启订阅',
-                    showCancel: false,
-                    complete: (res) => {
-                        if (res.confirm) {
-                            wx.navigateTo({
-                                url: '/pages/my/vip/vip',
-                            })
-                        }
-                    }
-                })
+        if (userInfo) {
+            //如果ios过期时间不为空，则和当前时间比较，小于当前时间则跳转到vip开通页面
+            // #if IOS
+            if (userInfo.iosVipExpiredDate) {
+                const targetDate = new Date(userInfo.iosVipExpiredDate)
+                const currentDate = new Date();
+                if (targetDate < currentDate) {
+                    this.toVip('会员在' + userInfo.iosVipExpiredDate + '已过期，请续费')
+                }
+            }
+            // #elif ANDROID
+            if (userInfo.androidVipExpiredDate) {
+                const targetDate = new Date(userInfo.androidVipExpiredDate)
+                const currentDate = new Date();
+                if (targetDate < currentDate) {
+                    this.toVip('会员在' + userInfo.androidVipExpiredDate + '已过期，请续费')
+                }
+            }
+            // #endif
+            else {
+                const targetDate = new Date(userInfo.createdDate.replace(" ", "T"));
+                targetDate.setDate(targetDate.getDate() + 7);
+                const currentDate = new Date();
+                if (targetDate < currentDate) {
+                    this.toVip('免费试用结束，请开启订阅')
+                }
             }
         } else {
             let installDate = wx.getStorageSync('installDate')
-            let targetDate = new Date(parseInt(installDate))
+            let targetDate = new Date(installDate)
             targetDate.setHours(targetDate.getHours() + 2);
             let currentDate = new Date()
             console.log('time')
-            console.log(targetDate,currentDate)
+            console.log(targetDate, currentDate)
             if (targetDate < currentDate) {
                 wx.showModal({
                     content: '您已经用了一段时间了，请先登录',
@@ -128,8 +141,20 @@ Page({
                 })
             }
         }
-
-        // #endif
+    },
+    toVip(content) {
+        wx.showModal({
+            title: '',
+            content,
+            showCancel: false,
+            complete: (res) => {
+                if (res.confirm) {
+                    wx.navigateTo({
+                        url: '/pages/my/vip/vip',
+                    })
+                }
+            }
+        })
     },
     //设置
     initStorage() {

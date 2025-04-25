@@ -54,11 +54,12 @@ App({
             })
         }
     },
-    appInit(){
+    appInit() {        
         //第一次启动的时候写入installDate
-        if(wx.getStorageSync('installDate') === ''){
-            wx.setStorageSync('installDate', new Date())
-        }        
+        if (wx.getStorageSync('installDate') === '') {
+            wx.setStorageSync('installDate', new Date().getTime())
+        }
+        console.log('app init', wx.getStorageSync('installDate'))
     },
     //自动更新
     autoUpdate() {
