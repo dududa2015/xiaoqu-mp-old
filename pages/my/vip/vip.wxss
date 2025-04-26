@@ -156,6 +156,10 @@
     color: rgba(153, 153, 153, 1);
 }
 
+.mp-name{
+    color: #0074FE;
+}
+
 .footer {
     position: fixed;
     bottom: 16px;
@@ -164,4 +168,29 @@
     width: 90%;
     padding-bottom: env(safe-area-inset-bottom);
     text-align: center;
+}
+
+.agree-wrap {
+    margin-top: 8px;
+}
+.restore{
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+    text-decoration: underline;
+}
+.agree {
+    color: rgba(50, 50, 51, 1);
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+    text-decoration: underline;
+}
+
+.agree-blue {
+    color: rgba(22, 93, 255, 1);
+}
+
+.t-checkbox__icon--left {
+    margin-right: 0 !important;
 }

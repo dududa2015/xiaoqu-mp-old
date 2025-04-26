@@ -106,7 +106,7 @@ Page({
                 const targetDate = new Date(userInfo.androidVipExpiredDate)
                 const currentDate = new Date();
                 if (targetDate < currentDate) {
-                    this.toVip('会员在' + userInfo.androidVipExpiredDate + '已过期，请续费')
+                    this.toVip('会员于' + userInfo.androidVipExpiredDate + '已过期，请续费')
                 }
             }
             // #endif

@@ -29,9 +29,19 @@
         </view>
     </view>
     <view class="tips">
-        温馨提醒：如果您不愿付费，也可前往微信小程序【小区楼号分布图】
+        温馨提醒：您也可以免费使用微信小程序<text class="mp-name" bind:tap="toMP">【小区楼号分布图】</text>
     </view>
     <view class="footer">
-        <button type="primary" style="background-color: rgba(219, 179, 122, 1); " bind:tap="onVip">开通会员</button>
+        <button type="primary" style="background-color: rgba(219, 179, 122, 1); " bind:tap="onPurchase">开通会员</button>
+        <view class="agree-wrap flex f-x-sb f-y-center">
+            <view class="restore" bind:tap="onRestore">
+                恢复购买
+            </view>
+            <view>
+                <span class="agree" bind:tap="toUseAgreement">会员服务协议</span>
+                <span style="margin-left: 4px;">·</span>
+                <span class="agree" style="margin-left: 4px;" bind:tap="toRenew">自动续费规则</span>
+            </view>
+        </view>
     </view>
 </view>

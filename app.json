@@ -17,7 +17,9 @@
     "pages/personal/list/list",
     "pages/my/vip/vip",
     "pages/my/login-guide/login-guide",
-    "pages/my/user-agreement/user-agreement"
+    "pages/my/user-agreement/user-agreement",
+    "pages/my/vip-agreement/vip-agreement",
+    "pages/my/vip-renew/vip-renew"
   ],
   "window": {
     "navigationBarTextStyle": "black",

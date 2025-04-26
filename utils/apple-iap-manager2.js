@@ -4,6 +4,8 @@ class ApplePayManager {
         this.paymentSuccessCallback = null;
         this.paymentFailCallback = null;
         this.currentRequest = null;
+        this.restoreSuccessCallback = null;
+        this.restoreFailCallback = null;
         this.userId = userId;
         console.log('用户id:' + this.userId)
     }
@@ -30,9 +32,29 @@ class ApplePayManager {
             },
             restoreCompletedTransactionsFailedWithError: (args) => {
                 console.error('恢复购买失败:', args);
+                if (this.restoreFailCallback) {
+                    this.restoreFailCallback(args);
+                }
             },
             paymentQueueRestoreCompletedTransactionsFinished: (args) => {
                 console.log('恢复购买完成:', args);
+                if (args.transactions && args.transactions.length > 0) {
+                    args.transactions.forEach(transaction => {
+                        this._handleTransaction(transaction);
+                    });
+                    if (this.restoreSuccessCallback) {
+                        this.restoreSuccessCallback({
+                            message: '恢复购买完成'
+                        })
+                    }
+                } else {
+                    console.log('没有可恢复的购买');
+                    if (this.restoreSuccessCallback) {
+                        this.restoreSuccessCallback({
+                            message: '没有可恢复的购买'
+                        });
+                    }
+                }
             },
             // 其他回调...
         };
@@ -57,6 +79,7 @@ class ApplePayManager {
                 break;
             case 'SKPaymentTransactionStateRestored':
                 console.log('交易已恢复:', transaction);
+                this._handlePurchased(transaction);
                 break;
             case 'SKPaymentTransactionStateDeferred':
                 console.log('交易延迟:', transaction);
@@ -190,9 +213,22 @@ class ApplePayManager {
      */
     restorePurchases() {
         return new Promise((resolve, reject) => {
+            this.restoreSuccessCallback = resolve;
+            this.restoreFailCallback = reject;
             wx.miniapp.IAP.restoreCompletedTransactions({
-                success: (ret) => resolve(ret),
-                fail: (error) => reject(error)
+                success: (ret) => {
+                    console.log('恢复购买成功', ret);
+                    // 这里不直接调用resolve，等待交易观察者的回调，否则vip.js将收到这里的回调
+                    // if (this.restoreSuccessCallback) {
+                    //     this.restoreSuccessCallback(ret);
+                    // }
+                },
+                fail: (error) => {
+                    console.error('恢复购买失败', error);
+                    if (this.restoreFailCallback) {
+                        this.restoreFailCallback(error);
+                    }
+                }
             });
         });
     }

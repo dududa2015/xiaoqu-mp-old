@@ -1,0 +1,28 @@
+<view class="container">
+    <view class="title">小区楼号会员自动续费服务协议</view>
+    <view class="content">
+        本规则被视为《会员服务协议》的补充协议，是其不可分割的组成部分，与其构成统一整体，如本规则与《会员服务协议》存在冲突的，以本规则为准。如您需使用小区楼号VIP自动续费服务，则需同意本规则。 您理解并同意：
+    </view>
+    <view class="title-1">一、小区楼号VIP自动续费服务</view>
+    <view class="content">
+        1、服务名称：小区楼号VIP自动续费。
+    </view>
+    <view class="content margintop8">
+        2、本服务是在您已开通小区楼号VIP服务的前提下，为您提供的自动续费服务。如您开通小区楼号VIP服务，则视为您授权小区楼号VIP有权在您的小区楼号VIP服务即将到期时，从您的iTunes账户（以下统称“账户”）余额中代扣下一个计费周期包月费。该服务实现的前提是可成功从上述账户中扣款，因上述账户中可扣款余额不足导致的续费失败，由您自行承担。
+    </view>
+    <view class="content margintop8">
+        小区楼号VIP有三种订购方式可供选择：
+        <view>第一种：8元/1个月，每1个月自动续订。</view>
+        <view>第二种：18元/3个月，每3个月自动续订。</view>
+        <view>第三种：49.9元/12个月，每12个月自动续订。</view>
+    </view>
+    <view class="content margintop8">
+        3、购买自动续费小区楼号VIP的账号，会在到期前24小时，自动续订并扣除相应费用。如已开通3个月小区楼号VIP自动续费服务，则小区楼号VIP服务到期前自动从账户扣费并延长3个月小区楼号VIP有效期。在不同时间点购买不同月份的自动续费会员情况下，将以最后开通的自动续费会员为准。如已开通1个月小区楼号VIP自动续费，在本月又开通了3个月小区楼号VIP自动续费，则服务到期前自动从账户扣费并延长3个月小区楼号VIP有效期。
+    </view>
+    <view class="content margintop8">
+        4、如需取消自动续订，请至少提前24小时操作取消。您可通过下述方式中止或终止本服务： 苹果应用内支付（IAP支付，in-app purchase）自动续费用户退订方法如下： 打开苹果手机“设置” --> 进入“iTunes Store 与 App Store”-->点击 “Apple ID”，选择"查看Apple ID"，进入"账户设置"页面，点击“订阅”，选择小区楼号VIP取消订阅即可。
+    </view>
+    <view class="content margintop8">
+        5、同一个appleid只能给一个小区楼号账号开通自动续费服务。
+    </view>
+</view>

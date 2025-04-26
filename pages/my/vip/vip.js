@@ -1,5 +1,7 @@
 import ApplePayManager from '../../../utils/apple-iap-manager2';
-
+import {
+    getUserById
+} from '../../../apis/user-api'
 Page({
 
     /**
@@ -26,25 +28,25 @@ Page({
         //5 14.9  39.9
         productList: [{
                 name: '连续包月',
-                price: 5,
-                originalPrice: 6,
-                note: '0.17元/天，可随时取消订阅',
-                recommend: '限时特惠',
+                price: 8,
+                originalPrice: 10,
+                note: '0.26元/天，可随时取消订阅',
+                // recommend: '限时特惠',
                 checked: true,
                 productIdentifier: 'com.louhao.xiaoqu.month'
             },
             {
                 name: '连续包季',
-                price: 12,
-                originalPrice: 18,
-                note: '0.11元/天，可随时取消订阅',
+                price: 18,
+                originalPrice: 30,
+                note: '0.20元/天，可随时取消订阅',
                 checked: false,
                 productIdentifier: 'com.louhao.xiaoqu.season'
             }, {
                 name: '连续包年',
-                price: 39.9,
-                originalPrice: 72,
-                note: '0.11元/天，可随时取消订阅',
+                price: 49.9,
+                originalPrice: 120,
+                note: '0.13元/天，可随时取消订阅',
                 recommend: '超值推荐',
                 checked: false,
                 productIdentifier: 'com.louhao.xiaoqu.year'
@@ -69,9 +71,9 @@ Page({
                 products.forEach((element, index) => {
                     element.originalPrice = Math.ceil(element.price * 0.6 * (2 + index * 0.5))
                     element.note = this.getProductNote(index, element.price)
-                    if (element.productIdentifier === 'com.louhao.xiaoqu.month') {
-                        element.recommend = '限时特惠'
-                    }
+                    // if (element.productIdentifier === 'com.louhao.xiaoqu.month') {
+                    //     element.recommend = '限时特惠'
+                    // }
                     if (element.productIdentifier === 'com.louhao.xiaoqu.year') {
                         element.recommend = '超值推荐'
                     }
@@ -121,7 +123,7 @@ Page({
         });
     },
     //支付
-    onVip() {
+    onPurchase() {
         //获取productId
         const productIdentifier = this.data.productList.find(item => item.checked).productIdentifier
         wx.showLoading({
@@ -135,6 +137,11 @@ Page({
                 wx.showToast({
                     title: '购买成功',
                 })
+                //购买成功后调用获取用户信息的接口，并返回上一页
+                setTimeout(() => {
+                    this.getUserInfo()
+                }, 1500);
+                                
             })
             .catch(error => {
                 console.error('购买失败:', error);
@@ -153,60 +160,55 @@ Page({
                     wx.hideToast()
                 }, 3000);
             })
-
-        // const productIdentifier = 'com.louhao.xiaoqu.month'
-        // wx.showLoading({
-        //     title: '支付中...',
-        // })
-        // try {
-        //     // 1. 动态查询商品信息（确保获取最新价格和状态）
-        //     const products = await iapManager.fetchProducts([productIdentifier]);
-        //     if (products.length === 0) {
-        //         throw new Error('商品不存在或不可用');
-        //     }
-
-        //     // 2. 发起支付
-        //     await iapManager.purchase(productIdentifier);
-        //     console.log('支付成功');
-        // } catch (err) {
-        //     console.error('支付失败:', err);
-        // }
-
-
-
-
-
-        // const requestObj = wx.miniapp.IAP.requestSKProducts({
-        //     productIdentifiers: [
-        //         'com.louhao.xiaoqu.month'
-        //     ],
-        //     success(ret) {
-        //         console.log(ret)
-        //         console.log(ret.invalidProductIdentifiers)
-        //         console.log(ret.products)
-
-        //         wx.miniapp.IAP.addPaymentByProductIdentifiers({
-        //             productIdentifier: 'com.louhao.xiaoqu.month',
-        //             applicationUsername: 'testidentifierUserName',
-        //             quantity: 1,
-        //             simulatesAskToBuyInSandbox: false,
-        //             success: (args) => {
-        //               // addPayment调用成功，但是不代表交易完成。
-        //               console.log(`addPaymentByProductIdentifiers success`, args)
-        //             },
-        //             fail: (args) => {
-        //               // addPayment调用成功
-        //               console.error(`addPaymentByProductIdentifiers fail`, args)
-        //             }
-        //           })
-
-        //     },
-        //     fail(error) {
-        //         console.error(`requestSKProducts failed. ${error.errMsg}`)
-        //     }
-        // })
-
-        // wx.miniapp.IAP.cancelRequestSKProducts(requestObj)
+    },
+    //恢复购买
+    onRestore() {
+        wx.showLoading({
+            title: '恢复购买中...',
+            mask: true
+        })
+        this.applePayManager.restorePurchases().then(res => {
+            console.log('onRestore', res)
+            wx.showToast({
+                title: res.message,
+                icon: 'none'
+            })
+        })
+    },
+    toMP() {
+        wx.miniapp.launchMiniProgram({
+            userName: 'gh_37d525095f5a', //小程序原始ID
+            path: 'pages/index/index',
+            miniprogramType: 0, //0 release ，1 test, 2 preview
+            success: (res) => {
+                console.log('launchMiniProgram success:', res)
+            }
+        })
+    },
+    toUseAgreement() {
+        wx.navigateTo({
+            url: '/pages/my/vip-agreement/vip-agreement',
+        })
+    },
+    toRenew() {
+        wx.navigateTo({
+            url: '/pages/my/vip-renew/vip-renew',
+        })
+    },
+    getUserInfo() {
+        let userId = wx.getStorageSync('userId')
+        if (userId) {
+            getUserById({
+                code: '',
+                userId,
+                friendUserId: ''
+            }).then(res => {
+                if (res) {
+                    wx.setStorageSync('userInfo', res)
+                    wx.navigateBack()
+                }
+            })
+        }
     },
     /**
      * 生命周期函数--监听页面初次渲染完成
