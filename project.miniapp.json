@@ -59,7 +59,8 @@
       "customImage": ""
     },
     "privacy": {
-      "enable": false
+      "enable": true,
+      "template": "miniapp-privacy.json"
     },
     "enableOpenUrlNavigate": true,
     "privateDescriptions": {

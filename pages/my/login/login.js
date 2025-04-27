@@ -141,12 +141,19 @@ Page({
         const that = this
         wx.miniapp.login({
             success: (res) => {
-                console.log('wx.miniapp.login', res.code)
-                getUserInfoByWxLogin({
-                    code: res.code
-                }).then(res => {
-                    that.setUserInfo(res)
-                })
+                console.log('wx.miniapp.login', res)
+                if (res.code !== '') {
+                    getUserInfoByWxLogin({
+                        code: res.code
+                    }).then(res => {
+                        that.setUserInfo(res)
+                    })
+                } else {
+                    wx.showToast({
+                        title: '您取消了授权请求',
+                        icon: 'none'
+                    })
+                }
             }
         })
     },
@@ -172,10 +179,17 @@ Page({
                 }
             },
             fail(err) {
-                wx.showToast({
-                    title: '登录失败，请稍后重试',
-                    icon: 'none'
-                })
+                if(err.errCode === -700000) {
+                    wx.showToast({
+                        title: '您取消了授权请求',
+                        icon: 'none'
+                    })                    
+                } else {
+                    wx.showToast({
+                        title: '登录失败，请稍后重试',
+                        icon: 'none'
+                    })
+                }
                 console.log(err)
             }
         })
