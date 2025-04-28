@@ -62,6 +62,8 @@ Page({
 
         //初始化配置
         this.initStorage()
+        //获取设备id
+        this.getDeviceId()
         // 使用 wx.createMapContext 获取 map 上下文
         this.mapCtx = wx.createMapContext('myMap')
         this.mapCtx.setLocMarkerIcon({
@@ -226,6 +228,28 @@ Page({
         //     }
         // })
         // #endif
+    },
+    getDeviceId() {
+        wx.miniapp.loadNativePlugin({
+            pluginId: "wx033a6b34f2c7ea15",
+            success(myPlugin) {
+                console.log('启动插件成功', myPlugin)
+                // 调用插件接口
+                // #if IOS
+                const IDFV = myPlugin.getIdentifierForVendor()
+                console.log('ios plugin', IDFV)
+                // #elif ANDROID
+                const ret = myPlugin.getAndroidId({})
+                console.log('android plugin', ret)
+                // #endif
+
+                // ios plugin 20C13C69-B33C-4641-8074-C2F438A28430
+            },
+            fail(err) {
+                console.log('启动插件失败')
+                // 启动插件失败
+            }
+        })
     },
     getNotice() {
         const that = this
@@ -509,6 +533,7 @@ Page({
     },
     //用户标记点的label或callout点击
     onLabelTap(e) {
+        console.log(e)
         if (this.data.showForm || this.disableTap || this.data.showChooseMarker) {
             return
         }

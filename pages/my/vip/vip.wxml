@@ -1,3 +1,8 @@
+<navigation-bar title="开通会员" back="{{true}}" color="black" background="#FFF">
+    <view slot="right">
+        <text class="navbar-right" bind:tap="onRestore">恢复购买</text>
+    </view>
+</navigation-bar>
 <view class="vip-container">
     <view class="header">
         <view class="title-wrap flex  f-y-center">
@@ -33,15 +38,13 @@
     </view>
     <view class="footer">
         <button type="primary" style="background-color: rgba(219, 179, 122, 1); " bind:tap="onPurchase">开通会员</button>
-        <view class="agree-wrap flex f-x-sb f-y-center">
-            <view class="restore" bind:tap="onRestore">
+        <view class="agree-wrap flex f-x-center f-y-center">
+            <!-- <view class="restore" bind:tap="onRestore">
                 恢复购买
-            </view>
-            <view>
-                <span class="agree" bind:tap="toUseAgreement">会员服务协议</span>
+            </view> -->
+            <span class="agree" bind:tap="toUseAgreement">会员服务协议</span>
                 <span style="margin-left: 4px;">·</span>
                 <span class="agree" style="margin-left: 4px;" bind:tap="toRenew">自动续费规则</span>
-            </view>
         </view>
     </view>
 </view>

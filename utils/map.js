@@ -5,7 +5,7 @@ const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted) => 
     name = name.substring(0, 2) + '***（审核中）'
   }
   let markers = {
-    id: uid,
+    id: parseInt(uid),
     iconPath: '/images/marker-0.png',
     width: 1,
     height: 1,

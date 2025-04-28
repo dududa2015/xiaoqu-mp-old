@@ -1,3 +1,23 @@
+page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  .navbar-right{
+      font-size: 14px;
+      font-weight: 400;
+      color: #333;
+  }
+  .scroll-area {
+    flex: 1;
+    overflow-y: hidden;
+  }
+  
+  .intro {
+    padding: 30px;
+    text-align: center;
+  }
+
 .vip-container {
     position: relative;
     height: calc(100vh - 64rpx);

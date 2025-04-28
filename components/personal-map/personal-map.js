@@ -61,15 +61,17 @@ Component({
             this.setData({
                 mapId
             })
-            //TODO: 还未处理
             this.triggerEvent('onMapChange', {
                 mapId,
                 mapName
             })
-            // debugger
-            // wx.showToast({
-            //     title: '已为您切换至' + e.currentTarget.dataset.name,
-            //   })            
+            //延迟显示切换成功的消息
+            setTimeout(() => {
+                wx.showToast({
+                    title: '已为您切换至' + (e.currentTarget.dataset.name || '公共地图'),
+                    icon: 'none'
+                })
+            }, 500);
         },
         onMapTap(e) {
             const that = this
