@@ -2,21 +2,23 @@ page {
     display: flex;
     flex-direction: column;
     height: 100vh;
-  }
-  .navbar-right{
-      font-size: 14px;
-      font-weight: 400;
-      color: #333;
-  }
-  .scroll-area {
+}
+
+.navbar-right {
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+}
+
+.scroll-area {
     flex: 1;
     overflow-y: hidden;
-  }
-  
-  .intro {
+}
+
+.intro {
     padding: 30px;
     text-align: center;
-  }
+}
 
 .vip-container {
     position: relative;
@@ -42,9 +44,11 @@ page {
     line-height: 21.72px;
     color: rgba(51, 51, 51, 1);
 }
-.title-2{
+
+.title-2 {
     font-size: 12px;
 }
+
 .rights-wrap {
     width: 100%;
     margin-top: 24px;
@@ -85,11 +89,18 @@ page {
 }
 
 .vip-wrap {
-    margin-top: 48rpx;
-    gap: 32rpx;
+    overflow-x: auto;
+    gap: 16px;
+}
+
+.vip-wrap::-webkit-scrollbar {
+    display: none;
 }
 
 .box {
+    margin-top: 48rpx;
+    min-width: calc(35% - 16px);
+    /* 确保最小宽度 */
     position: relative;
     flex: 1;
     opacity: 1;
@@ -176,7 +187,7 @@ page {
     color: rgba(153, 153, 153, 1);
 }
 
-.mp-name{
+.mp-name {
     color: #0074FE;
 }
 
@@ -193,12 +204,14 @@ page {
 .agree-wrap {
     margin-top: 8px;
 }
-.restore{
+
+.restore {
     font-size: 14px;
     font-weight: 400;
     color: #333;
     text-decoration: underline;
 }
+
 .agree {
     color: rgba(50, 50, 51, 1);
     font-size: 14px;

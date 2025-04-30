@@ -27,12 +27,20 @@ Page({
         //6 18	72
         //5 14.9  39.9
         productList: [{
+                name: '终身会员',
+                price: 99.9,
+                originalPrice: 999,
+                note: '一次付费，永久使用',
+                recommend: '限时特惠',
+                checked: true,
+                productIdentifier: 'com.louhao.xiaoqu.vip'
+            }, {
                 name: '连续包月',
                 price: 6,
                 originalPrice: 8,
                 note: '0.20元/天，可随时取消订阅',
                 // recommend: '限时特惠',
-                checked: true,
+                checked: false,
                 productIdentifier: 'com.louhao.xiaoqu.month'
             },
             {
@@ -63,7 +71,7 @@ Page({
         // 初始化支付管理器（如果未全局挂载）
         this.applePayManager = new ApplePayManager(userId).init();
 
-        const productIdentifiers = ['com.louhao.xiaoqu.month', 'com.louhao.xiaoqu.season', 'com.louhao.xiaoqu.year'];
+        const productIdentifiers = ['com.louhao.xiaoqu.vip','com.louhao.xiaoqu.month', 'com.louhao.xiaoqu.season', 'com.louhao.xiaoqu.year'];
         // 请求商品信息
         this.applePayManager.requestProducts(productIdentifiers)
             .then(products => {
@@ -80,9 +88,9 @@ Page({
                     element.checked = index === 0
                 });
                 console.log('商品数据', products)
-                this.setData({
-                    productList: products
-                }); // 更新页面数据
+                // this.setData({
+                //     productList: products
+                // }); // 更新页面数据
             })
             .catch(error => {
                 console.error('获取商品失败:', error);
@@ -141,7 +149,7 @@ Page({
                 setTimeout(() => {
                     this.getUserInfo()
                 }, 1500);
-                                
+
             })
             .catch(error => {
                 console.error('购买失败:', error);
