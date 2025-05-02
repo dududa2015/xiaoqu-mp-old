@@ -36,10 +36,10 @@ Component({
         toShare() {
             console.log('onShare')
             wx.miniapp.shareWebPageMessage({
-                title: '网页标题',
-                description: '网页描述',
-                thumbPath: '/images/layer/4.png',
-                webpageUrl: 'www.qq.com',
+                title: '小区楼号地图',
+                description: '专注于提供小区楼栋号数字化查询服务​',
+                thumbPath: '/images/icon-83.5@2x.png',
+                webpageUrl: 'https://zhuzixi.cn/app/louhao/',
                 scene: 0,
                 success(res) {
                     console.log(res)

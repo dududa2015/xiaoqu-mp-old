@@ -90,7 +90,7 @@ page {
 
 .vip-wrap {
     overflow-x: auto;
-    gap: 16px;
+    gap: 8px;
 }
 
 .vip-wrap::-webkit-scrollbar {
@@ -99,7 +99,7 @@ page {
 
 .box {
     margin-top: 48rpx;
-    min-width: calc(35% - 16px);
+    min-width: calc(32% - 8px);
     /* 确保最小宽度 */
     position: relative;
     flex: 1;

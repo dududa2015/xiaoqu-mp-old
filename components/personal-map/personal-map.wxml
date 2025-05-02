@@ -34,7 +34,7 @@
             <view class="empty-text">您还没有创建个人地图</view>
         </view>
     </view>
-    <view wx:if="{{mapList.length > 0}}" class="list-tips">温馨提示：您可通过...中的“导入历史数据” 命令，将以往标记的数据导入其中一张个人地图。但此操作仅能执行一次!</view>
+    <view wx:if="{{mapList.length > 0}}" class="list-tips">温馨提示：您可通过...中的“导入我的标记” 命令，将以往标记的数据导入其中一张个人地图。但此操作仅能执行一次!</view>
     <view class="footer">
         <button type="primary" style="background-color: #0074FE; " bind:tap="onAdd">创建个人地图</button>
         <!-- <text style="color: #808080; font-size: 24rpx;">可在地图上标记专属于您的楼号</text> -->

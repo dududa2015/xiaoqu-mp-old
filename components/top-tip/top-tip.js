@@ -35,7 +35,9 @@ Component({
      */
     data: {
         show: true, //默认显示
-        noticeListApp: ['免费试用7天，结束后需要订阅 →'],
+        noticeList: [], //
+        // noticeListAppWithoutVIP: ['免费试用7天，结束后需要订阅 →'], //不是app会员时显示
+        noticeListApp: [],
         content: [
             // '请勿标记门禁密码，违者停用账号',
             // '轻触右上角···添加小程序，使用更方便',
@@ -44,7 +46,20 @@ Component({
             // '管理员免看广告删除违规和错误的标记',
         ],
     },
-
+    lifetimes: {
+        attached() {
+            const userInfo = wx.getStorageSync('userInfo')
+            if (userInfo.isIOSVip || userInfo.isAndroidVip) {
+                this.setData({
+                    noticeListApp: ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
+                })
+            } else {
+                this.setData({
+                    noticeListApp: ['免费试用7天，结束后需要订阅 →']
+                })
+            }
+        }
+    },
     /**
      * 组件的方法列表
      */
@@ -63,19 +78,23 @@ Component({
                 })
             }
         },
-        onClick(){
-            wx.navigateTo({
-              url: '/pages/my/vip/vip',
-            })
+        onClick() {
+            debugger
+            const userInfo = wx.getStorageSync('userInfo')
+            if (!userInfo.isIOSVip && !userInfo.isAndroidVip) {
+                wx.navigateTo({
+                    url: '/pages/my/vip/vip',
+                })
+            }
         },
-        onAppNoticeClick(){
+        onAppNoticeClick() {
             if (!wx.getStorageSync('userId')) {
                 wx.navigateTo({
                     url: '/pages/my/login/login',
-                  })
-            } else {
+                })
+            } else if (!userInfo.isIOSVip && !userInfo.isAndroidVip) {
                 wx.navigateTo({
-                  url: '/pages/my/vip/vip',
+                    url: '/pages/my/vip/vip',
                 })
             }
         },

@@ -78,9 +78,6 @@ Page({
             this.initAd()
             //显示插屏广告
             this.showCPAd()
-            wx.setKeepScreenOn({
-                keepScreenOn: true
-            })
         }, 3000);
         // #endif
     },
@@ -1318,7 +1315,15 @@ Page({
         if (e.detail) {
             this.getWxLocation()
             this.getWxCompass()
+            //保持屏幕常亮
+            wx.setKeepScreenOn({
+                keepScreenOn: true
+            })
         } else {
+            //关闭屏幕常亮
+            wx.setKeepScreenOn({
+                keepScreenOn: false
+            })
             const {
                 locationChangeHandler,
                 compassChangeHandler

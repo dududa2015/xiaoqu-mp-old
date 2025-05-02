@@ -76,7 +76,7 @@ Component({
         onMapTap(e) {
             const that = this
             wx.showActionSheet({
-                itemList: ['修改', '删除', '导入历史数据'],
+                itemList: ['修改', '删除', '导入我的标记'],
                 success(res) {
                     console.log('用户点击了：', res.tapIndex);
                     if (res.tapIndex === 0) {
@@ -86,7 +86,7 @@ Component({
                         // 执行删除操作
                         that.onDelete(e)
                     } else if (res.tapIndex === 2) {
-                        // 执行导入历史数据操作
+                        // 执行导入我的标记数据操作
                         that.importHistoryData(e)
                     }
                 },
@@ -189,7 +189,7 @@ Component({
                 }
             })
         },
-        //导入历史数据
+        //导入我的标记数据
         importHistoryData(e) {
             let userInfo = wx.getStorageSync('userInfo')
             if (userInfo && !userInfo.historyImported) {

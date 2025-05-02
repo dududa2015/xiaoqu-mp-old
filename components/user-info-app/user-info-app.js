@@ -26,7 +26,7 @@ Component({
                     friends: this.convertToWan(newVal ? newVal.friends : 0),
                     deleted: this.convertToWan(newVal ? newVal.deleted : 0),
                     showVip: new Date(newVal.iosVipExpiredDate) > new Date() || new Date(newVal.androidVipExpiredDate) > new Date(),
-                    vipExpiredDate: newVal.iosVipExpiredDate || newVal.androidVipExpiredDate
+                    vipExpiredDate: this.formatDate(newVal.iosVipExpiredDate) || this.formatDate(newVal.androidVipExpiredDate)
                 })
             }
         }
@@ -115,8 +115,20 @@ Component({
                 return (num / 10000).toFixed(1) + "万";
             } else if (num > 10000) {
                 return (num / 10000).toFixed(2) + "万";
+            } else {
+                return num || 0
             }
-            return num;
+        },
+        formatDate(datetimeStr) {
+            if (datetimeStr) {
+                const dateObj = new Date(datetimeStr); // 解析为 Date 对象
+                const year = dateObj.getFullYear();
+                const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始，补零
+                const day = String(dateObj.getDate()).padStart(2, "0"); // 补零
+                return `${year}-${month}-${day}`;
+            } else {
+                return ''
+            }
         }
     }
 })
