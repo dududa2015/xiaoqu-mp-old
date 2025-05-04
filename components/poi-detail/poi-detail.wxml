@@ -1,19 +1,19 @@
 <t-popup visible="{{showPOI}}" show-overlay="{{false}}" placement="bottom" style=" padding-left: 32rpx; padding-right: 32rpx; width: calc(100% - 64rpx);">
-  <view class="poi-wrap">
-    <view class="poi-title-text ">{{poiText}}</view>
-    <view class="poi-tag-warp">
-      <t-tag size="small" class="poi-tag" variant="light" theme="primary" wx:for="{{remarkTagList}}" wx:key="index">{{item}}</t-tag>
+    <view class="poi-wrap">
+        <view class="poi-title-text ">{{poiText}}</view>
+        <view class="poi-tag-warp">
+            <t-tag size="small" class="poi-tag" variant="light" theme="primary" wx:for="{{remarkTagList}}" wx:key="index">{{item}}</t-tag>
+        </view>
+        <view class="poi-desc" wx:if="{{walkingMsg}}"> {{walkingMsg}}</view>
+        <view class="poi-desc" wx:elif="{{duration !== 0 }}">
+            距你<text style="font-weight: 500;">{{distance}}</text>, 骑行约<text style="font-weight: 500;">{{duration}}</text>
+        </view>
+        <view class="poi-desc">{{poiAddress}}</view>
+        <view class="poi-desc" wx:if="{{showNickName}}"> {{nickName}} 编辑于{{createdDate}}</view>
     </view>
-    <view class="poi-desc" wx:if="{{walkingMsg}}"> {{walkingMsg}}</view>
-    <view class="poi-desc" wx:elif="{{duration !== 0 }}">
-      距你<text style="font-weight: 500;">{{distance}}</text>, 骑行约<text style="font-weight: 500;">{{duration}}</text>
-    </view>
-    <view class="poi-desc">{{poiAddress}}</view>
-    <view class="poi-desc" wx:if="{{showNickName}}"> {{nickName}} 编辑于{{createdDate}}</view>
-  </view>
-  <view class="button-wrap">
-    <view class="left">
-      <view class="thumb-wrap" wx:if="{{showLike && !hasLike}}" bindtap="onLike" data-type="1">
+    <view class="button-wrap">
+        <view class="left">
+            <!-- <view class="thumb-wrap" wx:if="{{showLike && !hasLike}}" bindtap="onLike" data-type="1">
         <image src="/images/poi-detail/thumb-up.png" class="img" mode="" />
         <view class="b-text">{{good}}</view>
       </view>
@@ -28,19 +28,19 @@
       <view class="thumb-wrap" wx:if="{{showLike && hasLike}}" bindtap="onLike" data-type="0">
         <image src="/images/poi-detail/thumb-down-grey.png" class="img" mode="" />
         <view class="b-text-grey">{{bad}}</view>
-      </view>
-      <view class="thumb-wrap" wx:if="{{canEditUserMarker && markerType<6}}" bind:tap="onEdit">
-        <image src="/images/poi-detail/edit.png" class="img" mode="" />
-        <view class="b-text">编辑</view>
-      </view>
-      <view class="thumb-wrap" wx:if="{{showLike}}" bind:tap="onDelete">
-        <image src="/images/poi-detail/delete.png" class="img" mode="" />
-        <view class="b-text">删除</view>
-      </view>
+      </view> -->
+            <view class="thumb-wrap" wx:if="{{canEditUserMarker && markerType<6}}" bind:tap="onEdit">
+                <image src="/images/poi-detail/edit.png" class="img" mode="" />
+                <view class="b-text">编辑</view>
+            </view>
+            <view class="thumb-wrap" wx:if="{{showLike}}" bind:tap="onDelete">
+                <image src="/images/poi-detail/delete.png" class="img" mode="" />
+                <view class="b-text">删除</view>
+            </view>
+        </view>
+        <view class="right">
+            <t-button size="small" shape="round" variant="outline" style="width:120rpx;margin-right: 16rpx;" bindtap="openLocation" data-name="{{poiCommunity}}{{poiText}}" data-address="{{poiAddress}}">导航</t-button>
+            <t-button theme="primary" size="small" shape="round" style="width:120rpx" bind:tap="showPolyline">路线</t-button>
+        </view>
     </view>
-    <view class="right">
-      <t-button size="small" shape="round" variant="outline" style="width:120rpx;margin-right: 16rpx;" bindtap="openLocation" data-name="{{poiCommunity}}{{poiText}}" data-address="{{poiAddress}}">导航</t-button>
-      <t-button theme="primary" size="small" shape="round" style="width:120rpx" bind:tap="showPolyline">路线</t-button>
-    </view>
-  </view>
 </t-popup>

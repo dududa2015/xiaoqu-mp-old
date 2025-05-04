@@ -12,7 +12,7 @@
                 升级VIP终身免费使用
             </view>
             <view class="vip-desc">
-                2025年1月1日起，积分改为700升级成为vip
+                2025年10月1日起，积分达到1000成为vip
             </view>
         </view>
         <view class="vip-upgrade flex f-x-center f-y-center">积分规则</view>
@@ -54,9 +54,5 @@
             <t-cell title="通知公告" hover arrow left-icon="sound" color="#8c444f" url="/pages/my/notice/notice" note="修改通知公告">
             </t-cell>
         </t-cell-group>
-
-        <view class="ad-wrap" wx:if="{{!isVip}}">
-            <ad unit-id="adunit-d0128667c529af77"></ad>
-        </view>
     </view>
 </view>

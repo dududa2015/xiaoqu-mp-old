@@ -12,13 +12,13 @@
     <view>❇️如果标记门禁密码、辱骂他人、评价小区，被管理员发现将一次性扣除所有积分，直至拉黑，无法使用小程序。</view>
   </view>
   <view class="subtitle">VIP 权益</view>
-  <view>当您的积分达到 <text class="point"> 700 </text>积分时，您将成为VIP用户。作为VIP用户，您将享有以下特权：</view>
+  <view>当您的积分达到 <text class="point"> 1000 </text>积分时，您将成为VIP用户。作为VIP用户，您将享有以下特权：</view>
   <view>
     <view>❇️<text class="point">终身免费</text>使用小程序：无论未来推出何种新功能或者小程序开始收费，您都可以免费使用。</view>
     <view>❇️免除小程序里的一切广告（包括封面广告）</view>
   </view>
   <view class="subtitle">管理员 权益</view>
-  <view>当您标记地点达到 <text class="point"> 500 </text>个时，您将成为管理员。作为管理员，您将享有以下特权：</view>
+  <view>当您标记地点达到 <text class="point"> 800 </text>个时，您将成为管理员。作为管理员，您将享有以下特权：</view>
   <view>
     <view>❇️免看广告删除用户的违规或者错误的标记</view>
   </view>

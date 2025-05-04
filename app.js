@@ -4,9 +4,9 @@ import {
 } from './apis/user-api'
 App({
     onLaunch(options) {
-        this.init()
         // #if MP
         //自动更新，非必要不调用
+        this.tryTimes = 3 //login登录失败重试次数
         this.autoUpdate()
         this.login(options.query.userId)
         // #else
@@ -16,29 +16,45 @@ App({
     },
     //登录获取用户信息
     login(friendUserId) {
-        // friendUserId = '92918a62b30c43479f501c056905dd08'
-        // if (wx.getStorageSync('userId') === "") {
+        this.tryTimes -= 1
+        console.log('this.tryTimes', this.tryTimes)
+        if (this.tryTimes <= 0) return
         // 登录
-        wx.login({
-            success: res => {
-                getUserInfo({
-                    code: res.code,
-                    userId: wx.getStorageSync('userId'),
-                    friendUserId: friendUserId ?? ''
-                }).then(res => {
-                    wx.setStorageSync('userId', res.userId)
-                    wx.setStorageSync('token', res.token)
-                    wx.setStorageSync('userInfo', res)
-                }).catch(err => {
-                    wx.showModal({
-                        title: '请求错误',
-                        content: JSON.stringify(err),
-                        showCancel: false
-                    })
-                })
-            }
-        })
+        let userId = wx.getStorageSync('userId')
+        if (userId === '') {
+            wx.login({
+                success: res => {
+                    if (res.code) {
+                        this.getMPUserInfo(res.code, '', friendUserId)
+                    } else {
+                        this.login()
+                    }
+                },
+                fail(err) {
+                    this.login()
+                }
+            })
+        } else {
+            this.getMPUserInfo('', userId, friendUserId)
+        }
         // }
+    },
+    getMPUserInfo(code, userId, friendUserId) {
+        getUserInfo({
+            code,
+            userId,
+            friendUserId: friendUserId ?? ''
+        }).then(res => {
+            wx.setStorageSync('userId', res.userId)
+            wx.setStorageSync('token', res.token)
+            wx.setStorageSync('userInfo', res)
+        }).catch(err => {
+            wx.showModal({
+                title: '请求错误',
+                content: JSON.stringify(err),
+                showCancel: false
+            })
+        })
     },
     //用缓存里的userId重新获取用户信息并生成token
     appleLogin() {
@@ -90,26 +106,6 @@ App({
         updateManager.onUpdateFailed(function () {
             console.log('onUpdateFailed')
         })
-    },
-    init() {
-        // 获取系统信息
-        const systemInfo = wx.getSystemInfoSync()
-        // 获取胶囊按钮信息
-        const menuButtonInfo = wx.getMenuButtonBoundingClientRect()
-
-        // 计算导航栏高度 = 状态栏高度 + (胶囊按钮顶部距离 - 状态栏高度) * 2 + 胶囊按钮高度
-        const navBarHeight = (menuButtonInfo.top - systemInfo.statusBarHeight) * 2 + menuButtonInfo.height + systemInfo.statusBarHeight
-
-        // 存储到全局变量
-        this.globalData = {
-            systemInfo,
-            menuButtonInfo,
-            navBarHeight,
-            statusBarHeight: systemInfo.statusBarHeight,
-            menuRight: systemInfo.screenWidth - menuButtonInfo.right, // 胶囊距右方间距
-            menuBotton: menuButtonInfo.top - systemInfo.statusBarHeight, // 胶囊距底部间距
-            menuHeight: menuButtonInfo.height // 胶囊高度
-        }
     },
     globalData: {
         userInfo: null,

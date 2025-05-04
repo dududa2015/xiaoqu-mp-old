@@ -2,10 +2,7 @@ import {
     generateXId,
     generateRandom10DigitNumber,
     getBdAround,
-    formatTime,
     formatDate,
-    getColorFromStorage,
-    getBgColorByType,
     isPointOnPolyline
 } from '../../utils/util'
 import {
@@ -54,6 +51,11 @@ Page({
         compassChangeHandler: null, //罗盘change
     },
     onLoad() {
+        setTimeout(() => {
+            this.setData({
+                showO: true
+            })
+        }, 3000);
         this.getLocation()
         this.getPadding()
 
@@ -62,8 +64,6 @@ Page({
 
         //初始化配置
         this.initStorage()
-        //获取设备id
-        this.getDeviceId()
         // 使用 wx.createMapContext 获取 map 上下文
         this.mapCtx = wx.createMapContext('myMap')
         this.mapCtx.setLocMarkerIcon({
@@ -79,6 +79,9 @@ Page({
             //显示插屏广告
             this.showCPAd()
         }, 3000);
+        // #else
+        //获取设备id
+        this.getDeviceId()
         // #endif
     },
     onShow() {
@@ -206,24 +209,6 @@ Page({
                 })
             }, 500);
         }
-
-        // wx.miniapp.loadNativePlugin({
-        //     pluginId: "wx033a6b34f2c7ea15",
-        //     success(myPlugin) {
-        //         // #if IOS
-        //         const IDFV = myPlugin.getIdentifierForVendor()
-        //         console.log('ios plugin', IDFV)
-        //         // #elif ANDROID
-        //         const ret = myPlugin.getAndroidId({})
-        //         console.log('android plugin', ret)
-        //         // #endif
-
-        //         // plugin 5214FC8D-7E4D-484A-80AD-17351C1183B6
-        //     },
-        //     fail(err) {
-        //         // 启动插件失败
-        //     }
-        // })
         // #endif
     },
     getDeviceId() {

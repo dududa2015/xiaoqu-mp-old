@@ -127,11 +127,12 @@ Component({
                     longitude: result.lng,
                 });
                 let userInfo = wx.getStorageSync('userInfo')
+                
                 let canEditUserMarker = wx.getStorageSync('userId') === result.userId || userInfo.isAdmin
 
                 that.setData({
                     markerType: result.type,
-                    canEditUserMarker,
+                    canEditUserMarker: !!canEditUserMarker,
                     canDeleteUserMarker: true,
                     userMarker: result,
                     remarkTagList,
