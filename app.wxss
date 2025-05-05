@@ -43,6 +43,9 @@ page {
 .t-popup {
   /* box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .1); */
 }
+.t-popup--bottom {
+    padding-bottom: 32rpx !important;
+}
 
 .t-cell-group {
   position: relative;

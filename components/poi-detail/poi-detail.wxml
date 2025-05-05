@@ -33,7 +33,7 @@
                 <image src="/images/poi-detail/edit.png" class="img" mode="" />
                 <view class="b-text">编辑</view>
             </view>
-            <view class="thumb-wrap" wx:if="{{showLike}}" bind:tap="onDelete">
+            <view class="thumb-wrap" wx:if="{{canEditUserMarker && markerType<6}}" bind:tap="onDelete">
                 <image src="/images/poi-detail/delete.png" class="img" mode="" />
                 <view class="b-text">删除</view>
             </view>

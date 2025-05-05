@@ -11,6 +11,7 @@ App({
         this.login(options.query.userId)
         // #else
         this.appInit()
+        this.getDeviceId()
         this.appleLogin()
         // #endif
     },
@@ -77,6 +78,33 @@ App({
             wx.setStorageSync('installDate', new Date().getTime())
         }
         console.log('app init', wx.getStorageSync('installDate'))
+    },
+    //获取设备id
+    getDeviceId() {
+        const start = Date.now();
+        wx.miniapp.loadNativePlugin({
+            pluginId: "wx033a6b34f2c7ea15",
+            success(myPlugin) {
+                console.log('启动插件成功', myPlugin)
+                // 调用插件接口
+                // #if IOS
+                const IDFV = myPlugin.getIdentifierForVendor()
+                console.log('ios plugin', IDFV)
+                // #elif ANDROID
+                const ret = myPlugin.getAndroidId({})
+                console.log('android plugin', ret)
+                // #endif
+                const end = Date.now(); 
+                console.log(`getDeviceId 耗时：${end - start}ms`);
+                // ios plugin 20C13C69-B33C-4641-8074-C2F438A28430
+            },
+            fail(err) {
+                console.log('启动插件失败')
+                const end = Date.now(); 
+                console.log(`getDeviceId 耗时：${end - start}ms`);
+                // 启动插件失败
+            }
+        })
     },
     //自动更新
     autoUpdate() {

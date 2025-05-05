@@ -51,11 +51,6 @@ Page({
         compassChangeHandler: null, //罗盘change
     },
     onLoad() {
-        setTimeout(() => {
-            this.setData({
-                showO: true
-            })
-        }, 3000);
         this.getLocation()
         this.getPadding()
 
@@ -67,21 +62,19 @@ Page({
         // 使用 wx.createMapContext 获取 map 上下文
         this.mapCtx = wx.createMapContext('myMap')
         this.mapCtx.setLocMarkerIcon({
-            iconPath: '/images/loc-marker/tx.png'
+            iconPath: '/images/loc-marker/1.png'
         })
         getApp().globalData.mapCtx = this.mapCtx
         //插屏广告
         // #if MP
         this.initCPAd()
         setTimeout(() => {
-            //初始化激励视频广告
-            this.initAd()
             //显示插屏广告
             this.showCPAd()
         }, 3000);
         // #else
         //获取设备id
-        this.getDeviceId()
+        // this.getDeviceId()
         // #endif
     },
     onShow() {
@@ -139,7 +132,6 @@ Page({
             let targetDate = new Date(installDate)
             targetDate.setHours(targetDate.getHours() + 2);
             let currentDate = new Date()
-            console.log('time')
             console.log(targetDate, currentDate)
             if (targetDate < currentDate) {
                 wx.showModal({
@@ -211,28 +203,6 @@ Page({
         }
         // #endif
     },
-    getDeviceId() {
-        wx.miniapp.loadNativePlugin({
-            pluginId: "wx033a6b34f2c7ea15",
-            success(myPlugin) {
-                console.log('启动插件成功', myPlugin)
-                // 调用插件接口
-                // #if IOS
-                const IDFV = myPlugin.getIdentifierForVendor()
-                console.log('ios plugin', IDFV)
-                // #elif ANDROID
-                const ret = myPlugin.getAndroidId({})
-                console.log('android plugin', ret)
-                // #endif
-
-                // ios plugin 20C13C69-B33C-4641-8074-C2F438A28430
-            },
-            fail(err) {
-                console.log('启动插件失败')
-                // 启动插件失败
-            }
-        })
-    },
     getNotice() {
         const that = this
         getNotice().then(res => {
@@ -272,26 +242,6 @@ Page({
         } else {
             getApp().globalData.padding = 6
             getApp().globalData.isAndroid = true
-        }
-    },
-    //广告
-    initAd() {
-        // 在页面onLoad回调事件中创建激励视频广告实例
-        if (wx.createRewardedVideoAd) {
-            videoAd = wx.createRewardedVideoAd({
-                adUnitId: 'adunit-af4d35726e774efb'
-            })
-            videoAd.onLoad(() => {
-                console.log('激励视频光告加载成功')
-            })
-            videoAd.onError((err) => {
-                console.error('激励视频光告加载失败', err)
-            })
-            videoAd.onClose((res) => {
-                if (res && res.isEnded || res === undefined) {
-                    this.onDelete()
-                }
-            })
         }
     },
     //插屏广告
@@ -367,7 +317,12 @@ Page({
             },
             fail(res) {
                 // 获取位置失败，引导用户开启权限
+                // #if MP
+                console.log(res)
                 that.showSettingDialog();
+                // #else
+                console.log(res)
+                // #endif
             }
         })
     },
@@ -413,9 +368,20 @@ Page({
             wx.startCompass({
                 success: (res) => {
                     const compassChangeHandler = res => {
+                        // #if ANDROID
+                        // android设置rotate比较迟钝，需要至少1000ms设置一次，ios则不必
+                        const now = Date.now()
+                        if (now - this.lastUpdateTime > 1000) { // 1000ms 更新一次
+                            that.setData({
+                                rotate: 360 - res.direction
+                            })
+                            this.lastUpdateTime = now
+                        }
+                        // #else
                         that.setData({
                             rotate: 360 - res.direction
                         })
+                        // #endif
                     }
                     // 监听位置信息
                     wx.onCompassChange(compassChangeHandler)
@@ -1295,9 +1261,20 @@ Page({
             })
         }
     },
+    // onFoot(e){
+    //     this.count = 0
+    //     this.lastUpdateTime = 0 //安卓罗盘1秒钟会变化65次，这个时间用于手动实现节流
+    //     setTimeout(() => {
+    //         this.onFoot2({detail: true})
+    //     }, 1000);
+    //     setTimeout(() => {
+    //         this.onFoot2({detail: false})
+    //     }, 2000);
+    // },
     //步行导航
     onFoot(e) {
         if (e.detail) {
+            this.lastUpdateTime = 0 //安卓罗盘1秒钟会变化65次，这个时间用于手动实现节流
             this.getWxLocation()
             this.getWxCompass()
             //保持屏幕常亮

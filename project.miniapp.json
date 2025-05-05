@@ -13,7 +13,8 @@
             "bluetooth": false,
             "network": false,
             "scanner": false,
-            "xweb": false
+            "xweb": true,
+            "xwebEmbed": true
         },
         "icons": {
             "hdpi": "/Users/zhujian/Desktop/miniprogram/icons/android/mipmap-hdpi/ic_launcher.png",
@@ -28,13 +29,17 @@
         },
         "enableVConsole": "open",
         "privacy": {
-            "enable": true
+            "enable": true,
+            "template": "miniapp-privacy.json"
         },
         "usePluginSdk": {
             "map": "1.2.6"
         },
         "map": {
             "qmapAPIKey": "H2UBZ-6JDC5-VQKIZ-IN4JJ-2G42H-HCFZP"
+        },
+        "gdt": {
+            "splashAd_fetchDelay": 0
         }
     },
     "mini-ios": {
