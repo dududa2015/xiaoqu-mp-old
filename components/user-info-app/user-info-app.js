@@ -11,7 +11,7 @@ Component({
             observer(newVal, oldVal) {
                 //userInfo对象为空，nickName为'点击登录'，如果有昵称则显示昵称
                 let nickName = ''
-                if (newVal) {
+                if (newVal.openId || newVal.appleId) {
                     nickName = newVal.nickName || '小区楼号'
                 } else {
                     newVal = {}
@@ -45,9 +45,9 @@ Component({
     methods: {
         //登录或者编辑
         toLogin() {
-            let userId = wx.getStorageSync('userId')
+            let userInfo = wx.getStorageSync('userInfo')
             let token = wx.getStorageSync('token')
-            if (userId && token) {
+            if (userInfo.openId || userInfo.appleId) {
                 wx.navigateTo({
                     url: '/pages/my/edit/edit',
                 })

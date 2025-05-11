@@ -1245,8 +1245,8 @@ Page({
     },
     //打开个人地图
     toMap() {
-        let userId = wx.getStorageSync('userId')
-        if (userId) {
+        let userInfo = wx.getStorageSync('userInfo')
+        if (userInfo.openId || userInfo.appleId) {
             this.disableMapTap()
             this.setData({
                 showSetting: false,

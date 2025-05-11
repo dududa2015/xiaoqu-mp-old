@@ -1,9 +1,11 @@
 import {
     getUserInfo,
-    getAppleUserInfo
+    getAppleUserInfo,
+    addUserByDeviceId
 } from './apis/user-api'
 App({
     onLaunch(options) {
+        this.getDeviceId()
         // #if MP
         //自动更新，非必要不调用
         this.tryTimes = 3 //login登录失败重试次数
@@ -11,7 +13,6 @@ App({
         this.login(options.query.userId)
         // #else
         this.appInit()
-        this.getDeviceId()
         this.appleLogin()
         // #endif
     },
@@ -61,17 +62,21 @@ App({
     appleLogin() {
         let userId = wx.getStorageSync('userId')
         console.log(new Date().toLocaleDateString() + ' ' + new Date().toTimeString(), userId)
+        //如果缓存中有userId，则获取用户信息，如果没有则根据deviceId生成userId等信息
         if (userId) {
             getAppleUserInfo({
                 userId
             }).then(res => {
-                console.log(res)
+                console.log('appleLogin', res)
                 wx.setStorageSync('userId', res.userId)
                 wx.setStorageSync('token', res.token)
                 wx.setStorageSync('userInfo', res)
             })
+        } else {
+            this.getDeviceId()
         }
     },
+    //没有获取到deviceId，且用户没有登录时，用installDate判断是否超过了7天试用期
     appInit() {
         //第一次启动的时候写入installDate
         if (wx.getStorageSync('installDate') === '') {
@@ -82,28 +87,48 @@ App({
     //获取设备id
     getDeviceId() {
         const start = Date.now();
-        wx.miniapp.loadNativePlugin({
-            pluginId: "wx033a6b34f2c7ea15",
-            success(myPlugin) {
-                console.log('启动插件成功', myPlugin)
-                // 调用插件接口
-                // #if IOS
-                const IDFV = myPlugin.getIdentifierForVendor()
-                console.log('ios plugin', IDFV)
-                // #elif ANDROID
-                const ret = myPlugin.getAndroidId({})
-                console.log('android plugin', ret)
-                // #endif
-                const end = Date.now(); 
-                console.log(`getDeviceId 耗时：${end - start}ms`);
-                // ios plugin 20C13C69-B33C-4641-8074-C2F438A28430
-            },
-            fail(err) {
-                console.log('启动插件失败')
-                const end = Date.now(); 
-                console.log(`getDeviceId 耗时：${end - start}ms`);
-                // 启动插件失败
-            }
+        const deviceId = wx.getStorageSync('deviceId')
+        console.log('getDeviceId', deviceId)
+        if (!deviceId) {
+            const that = this
+            wx.miniapp.loadNativePlugin({
+                pluginId: "wx033a6b34f2c7ea15",
+                success(myPlugin) {
+                    console.log('启动插件成功', myPlugin)
+                    let deviceId = ''
+                    // 调用插件接口
+                    // #if IOS
+                    deviceId = myPlugin.getIdentifierForVendor() //IDFV
+                    wx.setStorageSync('deviceId', deviceId)
+                    console.log('ios plugin', deviceId)
+                    // #elif ANDROID
+                    deviceId = myPlugin.getAndroidId({})
+                    wx.setStorageSync('deviceId', deviceId)
+                    console.log('android plugin', deviceId)
+                    // #endif
+                    const end = Date.now();
+                    console.log(`getDeviceId 耗时：${end - start}ms`);
+                    // ios plugin 20C13C69-B33C-4641-8074-C2F438A28430
+                    that.addDeviceUserInfo(deviceId)
+                },
+                fail(err) {
+                    console.log('启动插件失败')
+                    const end = Date.now();
+                    console.log(`getDeviceId 耗时：${end - start}ms`);
+                    // 启动插件失败
+                }
+            })
+        }
+    },
+    addDeviceUserInfo(deviceId){
+        console.log('addDeviceUserInfo')
+        addUserByDeviceId({
+            deviceId
+        }).then(res => {
+            console.log('addDeviceUserInfo', res)
+            wx.setStorageSync('userId', res.userId)
+            wx.setStorageSync('token', res.token)
+            wx.setStorageSync('userInfo', res)
         })
     },
     //自动更新

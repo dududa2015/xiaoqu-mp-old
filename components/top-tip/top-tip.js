@@ -79,7 +79,6 @@ Component({
             }
         },
         onClick() {
-            debugger
             const userInfo = wx.getStorageSync('userInfo')
             if (!userInfo.isIOSVip && !userInfo.isAndroidVip) {
                 wx.navigateTo({
@@ -88,7 +87,8 @@ Component({
             }
         },
         onAppNoticeClick() {
-            if (!wx.getStorageSync('userId')) {
+            const userInfo = wx.getStorageSync('userInfo')
+            if (userInfo.openId || userInfo.appleId) {
                 wx.navigateTo({
                     url: '/pages/my/login/login',
                 })

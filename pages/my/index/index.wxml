@@ -31,7 +31,7 @@
                 <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell>
             <!-- #else -->
-            <t-cell title="关联小程序" hover arrow url="/pages/my/relate/relate">
+            <t-cell wx:if="{{userInfo.appleId && !userInfo.openId}}" title="关联小程序" hover arrow url="/pages/my/relate/relate">
                 <image src="/images/my/mp.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell>
             <!-- #endif -->
