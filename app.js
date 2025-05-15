@@ -5,7 +5,6 @@ import {
 } from './apis/user-api'
 App({
     onLaunch(options) {
-        this.getDeviceId()
         // #if MP
         //自动更新，非必要不调用
         this.tryTimes = 3 //login登录失败重试次数
@@ -14,6 +13,7 @@ App({
         // #else
         this.appInit()
         this.appleLogin()
+        this.getDeviceId()
         // #endif
     },
     //登录获取用户信息

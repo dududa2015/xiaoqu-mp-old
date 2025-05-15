@@ -37,12 +37,3 @@ export const getMapList = (params) => {
         method: 'GET',
     })
 }
-
-//获取个人地图列表
-export const importHistoryData = (params) => {
-    return request({
-        url: '/map/importHistoryData',
-        data: params,
-        method: 'POST',
-    })
-}

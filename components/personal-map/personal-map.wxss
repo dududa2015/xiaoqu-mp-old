@@ -32,6 +32,7 @@
 }
 
 .cell-wrap {
+    position: relative;
     display: flex;
     align-items: center;
     padding: 24rpx;
@@ -57,6 +58,11 @@
 .current {
     font-weight: 800;
     color: #0074FE;
+}
+
+.current_p {
+    font-weight: 800;
+    color: #E85827;
 }
 
 .desc {

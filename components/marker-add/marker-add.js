@@ -459,12 +459,12 @@ Component({
             let direction = this.getDirection()
             this.data.name = this.data.name + direction
             let enableMap = wx.getStorageSync('enableMap')
-            let mapId = wx.getStorageSync('mapId') || null
+            let mapType = wx.getStorageSync('mapType') || null
             let param = {
                 xId: uid,
                 userId: wx.getStorageSync('userId'),
                 type: this.data.markerTypeIndex,
-                mapId,
+                mapType,
                 name: this.data.name,
                 remark: this.getRemark(),
                 deleted,

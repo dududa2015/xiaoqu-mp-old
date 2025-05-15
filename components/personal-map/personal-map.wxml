@@ -7,38 +7,48 @@
         <view class="img-wrap" slot="image" style="background-color: #0074FE;">
             <t-icon name="map-information-2" size="48rpx" color="#fff" />
         </view>
-        <view class="title-wrap" bind:tap="onMapChoose" data-mapId="" data-name="">
-            <view class="title {{ mapId === '' ? 'current' : '' }}">公共地图</view>
+        <view class="title-wrap" bind:tap="onMapChoose" data-type="1" data-name="公共地图">
+            <view class="title {{ mapType === '1' ? 'current' : '' }}">公共地图</view>
             <view class="desc">所有用户共建的地图</view>
         </view>
         <view class="cell-right">
             <!-- <view class="btn-wrap">
                 进入
             </view> -->
-            <!-- <t-icon name="chevron-right" size="42rpx" color="#333"></t-icon> -->
+            <!-- <t-icon name="chevron-right" size="40rpx" color="#333"></t-icon> -->
         </view>
     </view>
-    <view class="my-map-wrap">
+    <view class="cell-wrap">
+        <view class="img-wrap" slot="image" style="background-color: #E85827;">
+            <t-icon name="map-bubble" size="48rpx" color="#fff" />
+        </view>
+        <view class="title-wrap" bind:tap="onMapChoose" data-type="2" data-name="个人地图">
+            <view class="title {{ mapType === '2' ? 'current_p' : '' }}">个人地图</view>
+            <view class="desc">所有用户共建的地图</view>
+        </view>
+        <view class="cell-right">
+        </view>
+        <image src="/images/my/ellipsis.png" class="ellipsis" mode="" catchtap="onMapTap" data-item="{{item}}" />
+    </view>
+    <!-- <view class="my-map-wrap">
         <block wx:if="{{mapList.length > 0}}">
-            <view wx:for="{{mapList}}" wx:key="index" class="my-map-cell-wrap {{index === mapList.length - 1 ? 'noborder' : ''}}" bind:tap="onMapChoose" data-mapId="{{item.mapId}}" data-name="{{item.name}}">
+            <view wx:for="{{mapList}}" wx:key="index" class="my-map-cell-wrap {{index === mapList.length - 1 ? 'noborder' : ''}}" bind:tap="onMapChoose" data-mapType="{{item.mapType}}" data-name="{{item.name}}">
                 <view class="title-wrap">
-                    <view class="title {{mapId === item.mapId? 'current' : ''}}">{{item.name}}</view>
+                    <view class="title {{mapType === item.mapType? 'current' : ''}}">{{item.name}}</view>
                     <view class="desc">创建于{{item.createdDate}}</view>
                 </view>
                 <image src="/images/my/ellipsis.png" class="ellipsis" mode="" catchtap="onMapTap" data-item="{{item}}"/>
-                <!-- <t-icon class="ellipsis" name="ellipsis" size="36rpx" color="#808080"></t-icon> -->
             </view>
         </block>
         <view class="empty-wrap" wx:else>
             <image src="https://img01.yzcdn.cn/vant/empty-image-default.png" class="img" mode="" />
             <view class="empty-text">您还没有创建个人地图</view>
         </view>
-    </view>
-    <view wx:if="{{mapList.length > 0}}" class="list-tips">温馨提示：您可通过...中的“导入我的标记” 命令，将以往标记的数据导入其中一张个人地图。但此操作仅能执行一次!</view>
+    </view> -->
+    <!-- <view wx:if="{{mapList.length > 0}}" class="list-tips">温馨提示：您可通过...中的“导入我的标记” 命令，将以往标记的数据导入其中一张个人地图。但此操作仅能执行一次!</view>
     <view class="footer">
         <button type="primary" style="background-color: #0074FE; " bind:tap="onAdd">创建个人地图</button>
-        <!-- <text style="color: #808080; font-size: 24rpx;">可在地图上标记专属于您的楼号</text> -->
-    </view>
+    </view> -->
     <t-popup visible="{{showForm}}" placement="center" touchmove='false' style="background:#F5F5F5;padding: 0 32rpx; width: 600rpx">
         <view class="popup-title-wrap">
             <view class="popup-title">个人地图</view>

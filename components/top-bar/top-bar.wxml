@@ -1,27 +1,27 @@
 <!-- #if MP -->
-<view class="top-bar-container-shadow" style="{{position}}: 16rpx">
-</view>
-<cover-view class="top-bar-container" style="{{position}}: 16rpx">
+<!-- <view class="top-bar-container-shadow" style="{{position}}: 16rpx">
+</view> -->
+<view class="top-bar-container" style="{{position}}: 16rpx">
     <!-- 分享 -->
-    <cover-view class="img-wrap-first">
-        <cover-image src="/images/controls/share2.png" class="img" mode="" />
+    <view class="img-wrap-first">
+        <image src="/images/controls/share2.png" class="img" mode="" />
         <button class="share-btn" openType="share">分享</button>
-    </cover-view>
-    <cover-view class="text">分享</cover-view>
+    </view>
+    <view class="text">分享</view>
     <!-- 客服 -->
-    <cover-view class="img-wrap">
-        <cover-image src="/images/controls/service2.png" class="img" mode="">
-        </cover-image>
+    <view class="img-wrap">
+        <image src="/images/controls/service2.png" class="img" mode="">
+        </image>
         <button class="share-btn" openType="contact">客服</button>
-    </cover-view>
-    <cover-view class="text">客服</cover-view>
+    </view>
+    <view class="text">客服</view>
     <!-- 设置 -->
-    <cover-view class="img-wrap" bind:tap="onSetting">
-        <cover-image src="/images/controls/setting.png" class="img" mode="">
-        </cover-image>
-    </cover-view>
-    <cover-view class="text" bind:tap="onSetting">设置</cover-view>
-</cover-view>
+    <view class="img-wrap" bind:tap="onSetting">
+        <image src="/images/controls/setting.png" class="img" mode="">
+        </image>
+    </view>
+    <view class="text" bind:tap="onSetting">设置</view>
+</view>
 <!-- #else -->
 <!-- 以下是app的上边栏 -->
 <view class="top-bar-container-shadow-app" style="top: {{rect.top}}px; {{position}}: 16rpx">

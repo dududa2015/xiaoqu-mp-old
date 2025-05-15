@@ -88,7 +88,7 @@ Component({
         },
         onAppNoticeClick() {
             const userInfo = wx.getStorageSync('userInfo')
-            if (userInfo.openId || userInfo.appleId) {
+            if (!userInfo.openId && !userInfo.appleId) {
                 wx.navigateTo({
                     url: '/pages/my/login/login',
                 })

@@ -68,3 +68,12 @@ export const getRankByUserId = (params) => {
         method: 'GET',
     })
 }
+
+//获取个人地图列表
+export const changeIsPubMap = (params) => {
+    return request({
+        url: '/users/changeIsPubMap',
+        data: params,
+        method: 'POST',
+    })
+}

@@ -57,5 +57,8 @@ Component({
                 }
             });
         },
+        toMap() {
+            this.triggerEvent('toMap');
+        },
     }
 })

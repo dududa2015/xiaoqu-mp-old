@@ -1,8 +1,8 @@
 // api URL
 // const apiUrl = "https://zhuzixi.cn/louhao/lh.asmx";// 公共的请求地址
 // const apiUrl = "http://localhost/louhao/louhao/lh.asmx"
-// const apiUrl = "http://localhost:5213/api"
-const apiUrl = "https://mp.zhuzixi.cn/api"
+const apiUrl = "http://localhost:5213/api"
+// const apiUrl = "https://mp.zhuzixi.cn/api"
 // 封装微信请求方法
 const request = (params) => {
     let url = params.url;

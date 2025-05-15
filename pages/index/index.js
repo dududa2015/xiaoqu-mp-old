@@ -755,15 +755,16 @@ Page({
     },
     getAroundList(lat, lng) {
         const that = this
-        let enableMap = wx.getStorageSync('enableMap')
-        let userId = wx.getStorageSync('userId')
-        let mapId = wx.getStorageSync('mapId')
-
+        const userInfo = wx.getStorageSync('userInfo')
+        const userId = userInfo.userId
+        const isPubMap = userInfo.isPubMap
+        const mapType = wx.getStorageSync('mapType') //只有1和2，1为公共地图，2为个人地图。
         getAroundList({
             lng,
             lat,
             userId,
-            mapId
+            isPubMap,
+            mapType
         }).then(res => {
             let list = res
             //如果db中没有，则请求bd-api数据
@@ -1142,12 +1143,12 @@ Page({
         let longitude = points[index].longitude
         let uid = generateXId(latitude, longitude)
         let userId = wx.getStorageSync('userId')
-        let mapId = wx.getStorageSync('mapId') || null
+        let mapType = wx.getStorageSync('mapType') || null
         let param = {
             xId: uid,
             userId,
             type: this.data.markerTypeIndex,
-            mapId,
+            mapType,
             name: this.data.markerTypeIndex === 7 ? '可通行' : '围墙',
             remark: '',
             lat: latitude,
@@ -1303,7 +1304,6 @@ Page({
             this.setData({
                 rotate: 0
             })
-            wx.setStorageSync('isFoot', false)
         }
         this.disableMapTap()
         this.resetMap()
@@ -1314,9 +1314,9 @@ Page({
     },
     //个人地图选择
     onMapChange(e) {
-        let mapId = e.detail.mapId
+        let mapType = e.detail.mapType
         let mapName = e.detail.mapName
-        console.log(mapId)
+        console.log(mapType)
         this.setData({
             mapName,
             markers: [],
