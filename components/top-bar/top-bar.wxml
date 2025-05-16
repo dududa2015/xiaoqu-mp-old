@@ -32,14 +32,12 @@
         </view>
         <view class="text">分享</view>
     </view>
-    <!-- 个人地图 -->
-    <view bind:tap="toMap">
+    <!-- 搜索 -->
+    <view bind:tap="onChooseLocation">
         <view class="img-wrap">
-            <t-icon name="map-information-2" size="42rpx" color="#000" />
-            <!-- <image src="/images/controls/my-map.png" class="img" mode="" /> -->
+            <t-icon name="search" size="42rpx" color="#000" />
         </view>
-        <view class="text text-4">个人</view>
-        <view class="text text-4">地图</view>
+        <view class="text">搜索</view>
     </view>
     <!-- 设置 -->
     <view bind:tap="onSetting">

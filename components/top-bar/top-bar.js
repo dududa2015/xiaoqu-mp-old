@@ -27,8 +27,18 @@ Component({
      * 组件的方法列表
      */
     methods: {
-        toMap() {
-            this.triggerEvent('toMap');
+        onChooseLocation() {
+            const that = this
+            wx.chooseLocation({
+                success: (res) => {
+                    const {
+                        latitude,
+                        longitude,
+                        name
+                    } = res
+                    this.triggerEvent('onChooseLocation', res)
+                }
+            });
         },
         onSetting() {
             this.triggerEvent('onSetting');

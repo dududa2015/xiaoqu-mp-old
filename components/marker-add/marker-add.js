@@ -459,17 +459,18 @@ Component({
             let direction = this.getDirection()
             this.data.name = this.data.name + direction
             let enableMap = wx.getStorageSync('enableMap')
-            let mapType = wx.getStorageSync('mapType') || null
+            let mapType = wx.getStorageSync('mapType')
+            let isPersonal = mapType === '2' //1为公共地图，2为个人地图
             let param = {
                 xId: uid,
                 userId: wx.getStorageSync('userId'),
                 type: this.data.markerTypeIndex,
-                mapType,
                 name: this.data.name,
                 remark: this.getRemark(),
                 deleted,
                 lat: latitude,
-                lng: longitude
+                lng: longitude,
+                isPersonal
             }
             const that = this
             addMarker(param).then(res => {

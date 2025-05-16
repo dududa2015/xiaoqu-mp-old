@@ -1,10 +1,4 @@
 import {
-    addMap,
-    updateMap,
-    deleteMap,
-    getMapList
-} from '../../apis/map-apis'
-import {
     changeIsPubMap
 } from '../../apis/user-api'
 Component({
@@ -30,9 +24,7 @@ Component({
      * 组件的初始数据
      */
     data: {
-        // opened: false,
-        name: '',
-        mapList: [],
+
     },
 
     /**
@@ -40,16 +32,12 @@ Component({
      */
     methods: {
         init() {
-            // //下面这行，主要是为了opened能打开右边菜单
-            // this.setData({
-            //     mapList: []
-            // })
-            this.getMapList()
             let mapType = wx.getStorageSync('mapType')
+            let userInfo = wx.getStorageSync('userInfo')
             this.setData({
-                mapType
+                mapType,
+                isPubMap: userInfo.isPubMap
             })
-            // this.openedChange()
         },
         onMapChoose(e) {
             //当前选中的地图pId
@@ -70,14 +58,6 @@ Component({
             wx.showActionSheet({
                 itemList: ['导入公共地图', '移除公共地图'],
                 success(res) {
-                    // console.log('用户点击了：', res.tapIndex);
-                    // if (res.tapIndex === 0) {
-                    //     // 执行修改操作
-                    //     that.onEdit(e)
-                    // } else if (res.tapIndex === 1) {
-                    //     // 执行删除操作
-                    //     that.onDelete(e)
-                    // } else 
                     if (res.tapIndex === 0) {
                         // 导入公共地图
                         that.changeIsPubMap(true)
@@ -102,87 +82,6 @@ Component({
             this.setData({
                 inputValue: e.detail.value
             });
-        },
-        //添加个人地图
-        onSave() {
-            let name = this.data.name.replace(/ |　/g, '');
-            if (name === '') {
-                wx.showToast({
-                    title: '名称不能为空',
-                    icon: 'none'
-                })
-                return
-            }
-            const param = {
-                userId: wx.getStorageSync('userId'),
-                name: name
-            }
-            let method = null
-            if (this.currentEditMap) {
-                param.mapType = this.currentEditMap.mapType
-                method = updateMap
-            } else {
-                method = addMap
-            }
-            method(param).then(res => {
-                if (res) {
-                    wx.showToast({
-                        title: '保存成功',
-                    })
-                    this.setData({
-                        showForm: false,
-                        name: false
-                    })
-                    setTimeout(() => {
-                        if (this.currentEditMap) {
-                            this.getMapList()
-                        } else {
-                            this.init()
-                        }
-                    }, 1000);
-
-                } else {
-                    wx.showToast({
-                        title: '保存失败，稍后重试',
-                        icon: 'none'
-                    })
-                    console.log(res)
-                }
-            })
-        },
-        //修改地图名称
-        onEdit(e) {
-            //不为null，表示是修改
-            this.currentEditMap = e.currentTarget.dataset.item
-            this.setData({
-                showForm: true,
-                name: this.currentEditMap.name
-            })
-        },
-        //删除
-        onDelete(e) {
-            wx.showModal({
-                content: '删除后无法恢复，确认要删除吗？',
-                complete: (res) => {
-                    if (res.confirm) {
-                        let mapType = e.currentTarget.dataset.item.mapType
-                        deleteMap({
-                            mapType,
-                            userId: wx.getStorageSync('userId'),
-                        }).then(res => {
-                            if (res) {
-                                wx.showToast({
-                                    title: '删除成功',
-                                })
-                                if (wx.getStorageSync('mapType') === mapType) {
-                                    wx.removeStorageSync('mapType')
-                                }
-                                this.getMapList()
-                            }
-                        })
-                    }
-                }
-            })
         },
         //导入我的标记数据
         changeIsPubMap(isPubMap) {
@@ -215,24 +114,19 @@ Component({
             userInfo.isPubMap = isPubMap
             wx.setStorageSync('userInfo', userInfo)
         },
-        getMapList() {
-            let userId = wx.getStorageSync('userId')
-            const that = this
-            getMapList({
-                userId
-            }).then(res => {
-                if (Array.isArray(res) && res.length > 0) {
-                    that.setData({
-                        mapList: res
-                    })
-                }
-            })
-        },
-        onNameChange(e) {
-            this.setData({
-                name: e.detail.value
-            })
-        },
+        // getMapList() {
+        //     let userId = wx.getStorageSync('userId')
+        //     const that = this
+        //     getMapList({
+        //         userId
+        //     }).then(res => {
+        //         if (Array.isArray(res) && res.length > 0) {
+        //             that.setData({
+        //                 mapList: res
+        //             })
+        //         }
+        //     })
+        // },
         onAdd() {
             //设置为null，表示是新增
             this.currentEditMap = null
