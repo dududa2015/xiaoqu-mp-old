@@ -11,9 +11,11 @@
     <view class="top-wrap">
         <view class="map-name-wrap" bind:tap="toMap">
             <text class="name">{{ mapName || '公共地图'}}</text>
-            <t-icon name="chevron-up-s" size="44rpx" color="#000"></t-icon>
+            <view style="width: 44rpx;">
+                <t-icon name="chevron-up-s" size="44rpx" color="#000" wx:if="{{showUp}}"></t-icon>
+                <t-icon name="chevron-down-s" size="44rpx" color="#000" wx:else></t-icon>
+            </view>
         </view>
-        
     </view>
 </view>
 <!-- #endif -->

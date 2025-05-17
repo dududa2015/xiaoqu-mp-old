@@ -13,11 +13,13 @@ import {
     addMarker,
     getAroundList,
     addMarkerList,
-    deleteMarker,
     getBdRecordCount,
     getNotice,
     deleteNearMarkers
 } from '../../utils/apis'
+import {
+    deleteMarker
+} from '../../apis/marker-apis'
 // 在页面中定义激励视频广告
 let videoAd = null
 // 在页面中定义插屏广告
@@ -250,11 +252,11 @@ Page({
             interstitialAd = wx.createInterstitialAd({
                 adUnitId: 'adunit-6449f8b32a1844a8'
             })
-            interstitialAd.onLoad(() => {})
+            interstitialAd.onLoad(() => { })
             interstitialAd.onError((err) => {
                 console.error('插屏广告加载失败', err)
             })
-            interstitialAd.onClose(() => {})
+            interstitialAd.onClose(() => { })
         }
     },
     //显示插屏广告
@@ -634,6 +636,7 @@ Page({
         this.resetMarker()
         this.resetPolyline()
         this.setData({
+            showUp: false,
             showAdd: true,
             showLocation: true,
             showPOI: false,
@@ -681,6 +684,7 @@ Page({
         let userInfo = wx.getStorageSync('userInfo')
         //如果可以编辑，说明是自己的标记，那么就能删除
         //vip也可以直接删除
+        // #if MP
         if (this.selectedMarker.userId === userInfo.userId || userInfo.isAdmin) {
             wx.showModal({
                 title: '温馨提示',
@@ -712,6 +716,21 @@ Page({
                 }
             })
         }
+        // #else
+        // 个人地图才能删除
+        let mapType = wx.getStorageSync('mapType')
+        if (mapType === 2) {
+            wx.showModal({
+                title: '温馨提示',
+                content: '确认要删除吗？',
+                success(res) {
+                    if (res.confirm) {
+                        that.onDelete()
+                    }
+                }
+            })
+        }
+        // #endif
     },
     //删除标记点
     onDelete(event) {
@@ -721,9 +740,9 @@ Page({
         })
         const that = this
         deleteMarker({
-            xid: that.selectedMarker.xId,
-            userId: that.selectedMarker.userId,
-            deleteUserId: wx.getStorageSync('userId')
+            xId: that.selectedMarker.xId,
+            userId: wx.getStorageSync('userId'),
+            mapType: wx.getStorageSync('mapType')
         }).then(res => {
             if (res) {
                 wx.showToast({
@@ -757,8 +776,8 @@ Page({
         const that = this
         const userInfo = wx.getStorageSync('userInfo')
         const userId = userInfo.userId
-        const isPubMap = userInfo.isPubMap
-        const mapType = wx.getStorageSync('mapType') //只有1和2，1为公共地图，2为个人地图。
+        const isPubMap = userInfo.isPubMap || false
+        const mapType = wx.getStorageSync('mapType') || 1 //只有1和2，1为公共地图，2为个人地图。
         getAroundList({
             lng,
             lat,
@@ -1312,18 +1331,29 @@ Page({
             showForm: false
         })
     },
+    //个人地图关闭
+    onMapClose() {
+        this.disableMapTap()
+        this.setData({
+            showMap: false
+        })
+        this.resetMap()
+        this.showTabBar()
+    },
     //个人地图选择
     onMapChange(e) {
         let mapType = e.detail.mapType
         let mapName = e.detail.mapName
         console.log(mapType)
         this.setData({
+            showUp: false,
             mapName,
             markers: [],
             polyline: [],
             showMap: false
         })
         this.showTabBar()
+        this.resetMap()
         this.getLocation()
         this.setTabBarName()
     },
@@ -1335,14 +1365,6 @@ Page({
                 text: mapName || '小区楼号' // 新的 tabBar 名称
             });
         }, 500);
-    },
-    //个人地图关闭
-    onMapClose() {
-        this.disableMapTap()
-        this.setData({
-            showMap: false
-        })
-        this.showTabBar()
     },
     //打开设置
     onSetting() {

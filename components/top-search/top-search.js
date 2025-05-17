@@ -18,13 +18,10 @@ Component({
                 })
             }
         },
-        showMapName: {
+        showUp: {
             type: Boolean,
-            value: true,
-            observer(newVal, oldVal) {
-                 console.log(newVal)
-            }
-        },
+            value: true
+        }
     },
     /**
      * 组件的初始数据
@@ -58,6 +55,9 @@ Component({
             });
         },
         toMap() {
+            this.setData({
+                showUp: true
+            })
             this.triggerEvent('toMap');
         },
     }

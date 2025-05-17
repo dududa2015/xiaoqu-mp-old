@@ -127,9 +127,11 @@ Component({
                     longitude: result.lng,
                 });
                 let userInfo = wx.getStorageSync('userInfo')
-                
+                // #if MP
                 let canEditUserMarker = wx.getStorageSync('userId') === result.userId || userInfo.isAdmin
-
+                // #else
+                let canEditUserMarker = wx.getStorageSync('mapType') === 2
+                // #endif
                 that.setData({
                     markerType: result.type,
                     canEditUserMarker: !!canEditUserMarker,

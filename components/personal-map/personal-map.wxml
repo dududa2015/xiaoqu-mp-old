@@ -8,7 +8,7 @@
             <t-icon name="map-information-2" size="48rpx" color="#fff" />
         </view>
         <view class="title-wrap" bind:tap="onMapChoose" data-type="1" data-name="公共地图">
-            <view class="title {{ mapType === '1' ? 'current' : '' }}">公共地图</view>
+            <view class="title {{ mapType === 1 ? 'current' : '' }}">公共地图</view>
             <view class="desc">用户共建地图</view>
         </view>
         <view class="cell-right">
@@ -23,7 +23,7 @@
             <t-icon name="map-bubble" size="48rpx" color="#fff" />
         </view>
         <view class="title-wrap" bind:tap="onMapChoose" data-type="2" data-name="个人地图">
-            <view class="title {{ mapType === '2' ? 'current_p' : '' }}">个人地图 </view>
+            <view class="title {{ mapType === 2 ? 'current_p' : '' }}">个人地图 </view>
             <view class="desc">
                 <text wx:if="{{isPubMap}}">个人专属地图，已导入公共地图数据</text>
                 <text wx:else>个人专属地图，未导入公共地图数据</text>
@@ -31,6 +31,8 @@
         </view>
         <view class="cell-right">
         </view>
-        <image src="/images/my/ellipsis.png" class="ellipsis" mode="" catchtap="onMapTap" data-item="{{item}}" />
+        <view class="ellipsis" catchtap="onMapTap">
+            <image src="/images/my/ellipsis.png" mode="" class="ellipsis-img" />
+        </view>
     </view>
 </t-popup>

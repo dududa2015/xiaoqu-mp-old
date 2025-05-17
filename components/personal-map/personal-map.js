@@ -32,16 +32,16 @@ Component({
      */
     methods: {
         init() {
-            let mapType = wx.getStorageSync('mapType')
+            let mapType = wx.getStorageSync('mapType') || 1
             let userInfo = wx.getStorageSync('userInfo')
             this.setData({
                 mapType,
-                isPubMap: userInfo.isPubMap
+                isPubMap: userInfo.isPubMap || false
             })
         },
         onMapChoose(e) {
             //当前选中的地图pId
-            let mapType = e.currentTarget.dataset.type
+            let mapType = parseInt(e.currentTarget.dataset.type)
             let mapName = e.currentTarget.dataset.name
             wx.setStorageSync('mapType', mapType)
             wx.setStorageSync('mapName', mapName)
