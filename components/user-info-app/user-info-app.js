@@ -11,7 +11,8 @@ Component({
             observer(newVal, oldVal) {
                 //userInfo对象为空，nickName为'点击登录'，如果有昵称则显示昵称
                 let nickName = ''
-                if (newVal.openId || newVal.appleId) {
+                // if (newVal.openId || newVal.appleId) {
+                if (newVal) {
                     nickName = newVal.nickName || '小区楼号'
                 } else {
                     newVal = {}

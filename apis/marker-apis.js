@@ -12,6 +12,14 @@ export const deleteMarker = (params) => {
     })
 }
 
+export const getMarkerListUpdate = (params) => {
+    return request({
+        url: '/marker/getMarkerListUpdate',
+        data: params,
+        method: 'GET',
+    })
+}
+
 //获取个人地图列表
 export const getMapList = (params) => {
     return request({

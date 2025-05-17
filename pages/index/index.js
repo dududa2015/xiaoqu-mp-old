@@ -18,7 +18,8 @@ import {
     deleteNearMarkers
 } from '../../utils/apis'
 import {
-    deleteMarker
+    deleteMarker,
+    getMarkerListUpdate
 } from '../../apis/marker-apis'
 // 在页面中定义激励视频广告
 let videoAd = null
@@ -77,6 +78,7 @@ Page({
         // #else
         //获取设备id
         // this.getDeviceId()
+        this.getMarkerListUpdate()
         // #endif
     },
     onShow() {
@@ -252,11 +254,11 @@ Page({
             interstitialAd = wx.createInterstitialAd({
                 adUnitId: 'adunit-6449f8b32a1844a8'
             })
-            interstitialAd.onLoad(() => { })
+            interstitialAd.onLoad(() => {})
             interstitialAd.onError((err) => {
                 console.error('插屏广告加载失败', err)
             })
-            interstitialAd.onClose(() => { })
+            interstitialAd.onClose(() => {})
         }
     },
     //显示插屏广告
@@ -806,6 +808,19 @@ Page({
                 // #endif
             }
         })
+    },
+    getMarkerListUpdate() {
+        let userId = wx.getStorageSync('userId')
+        if (userId) {
+            getMarkerListUpdate({
+                userId
+            }).then(res => {
+                if(Array.isArray(res)){
+                    wx.setStorageSync('markerListUpdate', res)
+                }
+            })
+        }
+
     },
     //删除lat相差为0.0001且lng相差未0.0001且名字相同的数据
     deleteNearMarkers(data) {
