@@ -94,8 +94,10 @@ Component({
     methods: {
         getLouhao(xId) {
             const that = this
+            let mapType = wx.getStorageSync('mapType')
             getMarkerById({
-                xId: xId
+                xId,
+                mapType
             }).then(res => {
                 let result = res
                 let remarkTagList = []
@@ -103,16 +105,16 @@ Component({
                     remarkTagList = result.remark.split(',')
                 }
 
-                if (result.userId === '92918a62b30c') {
-                    remarkTagList.push('来源百度地图')
-                } else {
-                    if (result.isAdmin) {
-                        remarkTagList.push('vip')
-                    }
-                    if (result.isVip) {
-                        remarkTagList.push('管理员')
-                    }
-                }
+                // if (result.userId === '92918a62b30c') {
+                //     remarkTagList.push('来源百度地图')
+                // } else {
+                //     if (result.isAdmin) {
+                //         remarkTagList.push('vip')
+                //     }
+                //     if (result.isVip) {
+                //         remarkTagList.push('管理员')
+                //     }
+                // }
                 this.poiInfo = result
                 //显示楼号信息
                 that.showLouhao({
@@ -140,7 +142,7 @@ Component({
                     remarkTagList,
                     good: result.good ? result.good : 0,
                     bad: result.bad ? result.bad : 0,
-                    nickName: result.nickName ? result.nickName : '匿名',
+                    nickName: result.userId === wx.getStorageSync('userId') ? '您' : '他人',
                     createdDate: this.convertDate(result.createdDate)
                 })
             })

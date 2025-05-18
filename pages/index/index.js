@@ -254,11 +254,11 @@ Page({
             interstitialAd = wx.createInterstitialAd({
                 adUnitId: 'adunit-6449f8b32a1844a8'
             })
-            interstitialAd.onLoad(() => {})
+            interstitialAd.onLoad(() => { })
             interstitialAd.onError((err) => {
                 console.error('插屏广告加载失败', err)
             })
-            interstitialAd.onClose(() => {})
+            interstitialAd.onClose(() => { })
         }
     },
     //显示插屏广告
@@ -764,6 +764,9 @@ Page({
                     markers,
                     polyline
                 })
+                // #if NATIVE
+                that.getMarkerListUpdate()
+                // #endif
                 that.showTabBar()
                 that.resetMap()
             } else {
@@ -792,6 +795,13 @@ Page({
             if (Array.isArray(list) && list.length > 0) {
                 // #if MP
                 that.deleteNearMarkers(list)
+                // #else
+                let mapType = wx.getStorageSync('mapType')
+                //只有当前地图为个人地图时才根据louhao_update表更新aroundList
+                if (mapType === 2) {
+                    let list2 = wx.getStorageSync('markerListUpdate')
+                    list = that.updateAroundList(list, list2)
+                }
                 // #endif
                 that.addAroundList2Map(list)
                 //小于{{数量}}也调用接口，{{数量}}在缓存caches.json里配置
@@ -815,12 +825,31 @@ Page({
             getMarkerListUpdate({
                 userId
             }).then(res => {
-                if(Array.isArray(res)){
+                if (Array.isArray(res)) {
                     wx.setStorageSync('markerListUpdate', res)
                 }
             })
         }
-
+    },
+    //根据louhao_update修改aroundList
+    updateAroundList(a1, a2) {
+        // 创建一个映射以便快速查找a1中的元素
+        const a1Map = new Map(a1.map(item => [item.xId, item]));
+        // 遍历a2数组
+        for (const item of a2) {
+            const existingItem = a1Map.get(item.xId);
+            if (existingItem) {
+                if (item.deleted === 1) {
+                    // 如果deleted=1，从a1中删除
+                    a1Map.delete(item.xId);
+                } else {
+                    // 否则更新a1中的对象
+                    Object.assign(existingItem, item);
+                }
+            }
+        }
+        // 将Map转换回数组
+        return Array.from(a1Map.values());
     },
     //删除lat相差为0.0001且lng相差未0.0001且名字相同的数据
     deleteNearMarkers(data) {

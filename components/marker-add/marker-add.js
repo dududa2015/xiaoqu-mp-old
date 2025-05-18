@@ -460,7 +460,7 @@ Component({
             this.data.name = this.data.name + direction
             let enableMap = wx.getStorageSync('enableMap')
             let mapType = wx.getStorageSync('mapType')
-            let isPersonal = mapType === '2' //1为公共地图，2为个人地图
+            let isPersonal = mapType === 2 //1为公共地图，2为个人地图
             let param = {
                 xId: uid,
                 userId: wx.getStorageSync('userId'),
@@ -519,15 +519,19 @@ Component({
             let deleted = checkString(this.data.name) ? 0 : -1
             let direction = this.getDirection()
             this.data.name = this.data.name + direction
+            let mapType = wx.getStorageSync('mapType')
+            let isPersonal = mapType === 2 //1为公共地图，2为个人地图
             let param = {
                 xId: this.selectedMarker.xId,
-                userId: wx.getStorageSync('userId'),
+                userId: this.selectedMarker.userId,
                 type: this.data.markerTypeIndex,
                 name: this.data.name,
                 remark: this.getRemark(),
                 deleted,
                 lng: longitude,
-                lat: latitude
+                lat: latitude,
+                updateUserId: wx.getStorageSync('userId'),
+                isPersonal
             }
             const that = this
             updateMarker(param).then(res => {

@@ -9,7 +9,7 @@
             距你<text style="font-weight: 500;">{{distance}}</text>, 骑行约<text style="font-weight: 500;">{{duration}}</text>
         </view>
         <view class="poi-desc">{{poiAddress}}</view>
-        <view class="poi-desc" wx:if="{{showNickName}}"> {{nickName}} 编辑于{{createdDate}}</view>
+        <view class="poi-desc" wx:if="{{showNickName}}"> {{nickName}}编辑于{{createdDate}}</view>
     </view>
     <view class="button-wrap">
         <view class="left">
