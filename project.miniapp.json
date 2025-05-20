@@ -94,7 +94,8 @@
     "qmapAPIKey": "H2UBZ-6JDC5-VQKIZ-IN4JJ-2G42H-HCFZP",
     "gdt": {
       "splashAd_defaultEnable": false
-    }
+    },
+    "enableIpad": false
   },
   "mini-plugin": {
     "ios": [

@@ -168,6 +168,7 @@ Page({
                     getAppleUserInfo({
                         code: res.code
                     }).then(res => {
+                        console.log(res)
                         that.setUserInfo(res)
                     })
                 } else {
