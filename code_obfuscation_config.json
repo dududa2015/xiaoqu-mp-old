@@ -81,6 +81,98 @@
 		{
 			"path": "components/map-marker-popup/map-marker-popup.js",
 			"sub_switch": true
+		},
+		{
+			"path": "pages/my/audit/audit.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/index/index.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/login/login.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/newUser/newUser.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/notice/notice.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/relate/relate.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/user-agreement/user-agreement.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/vip/vip.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/personal/list/list.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/setting/setting.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/apple-iap-manager2.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/map.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/map-apis.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/marker-apis.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/user-api.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/bottom-add/bottom-add.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/bottom-location/bottom-location.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/check-tag/check-tag.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/middle-bar/middle-bar.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/navigation-bar/navigation-bar.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/personal-map/personal-map.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/user-info/user-info.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/user-info-app/user-info-app.js",
+			"sub_switch": true
 		}
 	]
 }

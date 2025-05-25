@@ -94,7 +94,7 @@ Component({
     methods: {
         getLouhao(xId) {
             const that = this
-            let mapType = wx.getStorageSync('mapType')
+            let mapType = wx.getStorageSync('mapType') || 1
             getMarkerById({
                 xId,
                 mapType

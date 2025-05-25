@@ -288,8 +288,8 @@ Page({
                 } = res
                 console.log(longitude, latitude)
 
-                longitude = 113.471759
-                latitude =  22.27114
+                // longitude = 113.471759
+                // latitude =  22.27114
                 that.setData({
                     latitude,
                     longitude,
@@ -1055,6 +1055,7 @@ Page({
         markers[index].latitude = marker.latitude
         markers[index].longitude = marker.longitude
         this.setData({
+            showGrid: false,
             showCenterMarker: false,
             markers,
             showAdd: true,
@@ -1526,9 +1527,9 @@ Page({
             showAdd: true,
             showLocation: true
         })
-        if (!this.data.showGrid) {
-            this.showTabBar()
-        }
+        // if (!this.data.showGrid) {
+        //     this.showTabBar()
+        // }
         // if (event.detail) {
         //     this.setData({
         //         showAdd: true,
