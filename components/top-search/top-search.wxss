@@ -63,25 +63,28 @@
 }
 
 .name {
-    /* height: 72rpx;
-    line-height: 72rpx; */
+    height: 44rpx;
+    line-height: 44rpx;
     font-size: 16px;
     font-weight: 600;
     color: #333;
     /* margin: 0 auto; */
 }
-.top-wrap{
+
+.top-wrap {
     background-color: #fff;
     border-radius: 24rpx;
     overflow: hidden;
     box-shadow: 0rpx 4rpx 24rpx 0rpx rgba(100, 101, 102, 0.12);
     z-index: 9999;
 }
+
 .map-name-wrap {
     display: flex;
-    padding: 8rpx 32rpx;
-    height: 50rpx;
+    padding: 12rpx 32rpx;
+    /* height: 50rpx; */
 }
+
 .radio-icon-size {
     font-size: 36rpx;
 }
