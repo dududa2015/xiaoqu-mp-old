@@ -51,6 +51,7 @@
 }
 
 .left-icon {
+    margin-top: 2rpx;
     width: 40rpx;
     height: 40rpx;
 }

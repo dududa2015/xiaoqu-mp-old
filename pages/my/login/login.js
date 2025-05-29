@@ -1,4 +1,5 @@
-//b5cb4a5f5b	bYef8AkiA4
+//1、通过apple登录时，如果之前登录过，会通过appleId关联x_users中之前的账号，如果未登录过，则根据appleId创建一个新的账号
+//
 import {
     getUserInfoByAppLogin,
     getUserInfoByWxLogin,
@@ -86,7 +87,7 @@ Page({
             pwd: e.detail.value
         })
     },
-    //app登录
+    //通过小程序用户编号和用户密码登录
     onLogin() {
         console.log(this.data.userId, this.data.pwd)
         if (this.data.userId.length === 0) {
@@ -104,6 +105,7 @@ Page({
             return
         }
         if (!this.checkAgreed()) return
+        wx.clearStorage()
         getUserInfoByAppLogin({
             userId: this.data.userId,
             pwd: this.data.pwd
@@ -168,6 +170,7 @@ Page({
                     getAppleUserInfo({
                         code: res.code
                     }).then(res => {
+                        console.log(res)
                         that.setUserInfo(res)
                     })
                 } else {

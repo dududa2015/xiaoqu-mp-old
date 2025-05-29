@@ -132,6 +132,7 @@ Page({
             }
             // #endif
         } else {
+            //如果没有登录，每2小时提示一次
             let installDate = wx.getStorageSync('installDate')
             let targetDate = new Date(installDate)
             targetDate.setHours(targetDate.getHours() + 2);
@@ -287,8 +288,8 @@ Page({
                 } = res
                 console.log(longitude, latitude)
 
-                // longitude = 113.47,
-                // latitude = 22.27
+                // longitude = 113.471759
+                // latitude =  22.27114
                 that.setData({
                     latitude,
                     longitude,
@@ -1054,6 +1055,7 @@ Page({
         markers[index].latitude = marker.latitude
         markers[index].longitude = marker.longitude
         this.setData({
+            showGrid: false,
             showCenterMarker: false,
             markers,
             showAdd: true,
@@ -1525,9 +1527,9 @@ Page({
             showAdd: true,
             showLocation: true
         })
-        if (!this.data.showGrid) {
-            this.showTabBar()
-        }
+        // if (!this.data.showGrid) {
+        //     this.showTabBar()
+        // }
         // if (event.detail) {
         //     this.setData({
         //         showAdd: true,
