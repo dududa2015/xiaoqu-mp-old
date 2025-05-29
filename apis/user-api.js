@@ -35,7 +35,7 @@ export const getUserInfoByAppLogin = (params) => {
         method: 'GET',
     })
 }
-//微信登录
+//d1f84a0863微信登录e92817962f
 export const getUserInfoByWxLogin = (params) => {
     return request({
         url: '/users/getUserInfoByWxLogin',

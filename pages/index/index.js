@@ -255,11 +255,11 @@ Page({
             interstitialAd = wx.createInterstitialAd({
                 adUnitId: 'adunit-6449f8b32a1844a8'
             })
-            interstitialAd.onLoad(() => { })
+            interstitialAd.onLoad(() => {})
             interstitialAd.onError((err) => {
                 console.error('插屏广告加载失败', err)
             })
-            interstitialAd.onClose(() => { })
+            interstitialAd.onClose(() => {})
         }
     },
     //显示插屏广告
@@ -278,6 +278,11 @@ Page({
     getLocation() {
         const that = this
         this.disableMapTap()
+        // #if NATIVE
+        if (!this.openNativeSetting()) {
+            return
+        }
+        // #endif
         wx.getLocation({
             type: 'gcj02',
             isHighAccuracy: true,
@@ -288,8 +293,8 @@ Page({
                 } = res
                 console.log(longitude, latitude)
 
-                // longitude = 113.471759
-                // latitude =  22.27114
+                // longitude =  113.39
+                // latitude =  22.52
                 that.setData({
                     latitude,
                     longitude,
@@ -328,6 +333,34 @@ Page({
                 // #else
                 console.log(res)
                 // #endif
+            }
+        })
+    },
+    //定位授权被拒后，打开系统授权页面
+    openNativeSetting() {
+        const appAuthorizeSetting = wx.getAppAuthorizeSetting()
+        //'authorized'/'denied'/'not determined'	
+        if (appAuthorizeSetting.locationAuthorized === 'authorized') {
+            return true
+        }
+        wx.showModal({
+            title: '开启定位权限',
+            content: '用于快速定位您附近的小区楼号',
+            confirmText: '去开启',
+            complete: (res) => {
+                if (res.confirm) {
+                    wx.openAppAuthorizeSetting({
+                        success(res) {
+                            console.log(res)
+                        },
+                        fail(err) {
+                            console.log(err)
+                        },
+                        complete() {
+                            return false
+                        }
+                    })
+                }
             }
         })
     },
