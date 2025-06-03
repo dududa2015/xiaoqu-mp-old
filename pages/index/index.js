@@ -56,17 +56,13 @@ Page({
     onLoad() {
         this.getLocation()
         this.getPadding()
-
+        this.setLocMarkerIcon()
         this.getStatusBar()
         this.getWindowInfo()
 
         //初始化配置
         this.initStorage()
-        // 使用 wx.createMapContext 获取 map 上下文
-        this.mapCtx = wx.createMapContext('myMap')
-        this.mapCtx.setLocMarkerIcon({
-            iconPath: '/images/loc-marker/1.png'
-        })
+
         getApp().globalData.mapCtx = this.mapCtx
         //插屏广告
         // #if MP
@@ -208,6 +204,19 @@ Page({
         }
         // #endif
     },
+    setLocMarkerIcon() {
+        // 使用 wx.createMapContext 获取 map 上下文
+        this.mapCtx = wx.createMapContext('myMap')
+        this.mapCtx.setLocMarkerIcon({
+            iconPath: '/images/loc-marker/1.png',
+            success(res) {
+                console.log(res)
+            },
+            fail(err) {
+                console.log(err)
+            }
+        })
+    },
     getNotice() {
         const that = this
         getNotice().then(res => {
@@ -279,8 +288,10 @@ Page({
         const that = this
         this.disableMapTap()
         // #if NATIVE
-        if (!this.openNativeSetting()) {
-            return
+        let locationed = wx.getStorageSync('locationed')
+        //这里一定要是false
+        if (locationed === false) {
+            this.openNativeSetting()
         }
         // #endif
         wx.getLocation({
@@ -323,6 +334,7 @@ Page({
                 // #else
                 that.getAroundList(latitude, longitude)
                 that.getNotice()
+                wx.setStorageSync('locationed', true)
                 // #endif
             },
             fail(res) {
@@ -331,7 +343,7 @@ Page({
                 console.log(res)
                 that.showSettingDialog();
                 // #else
-                console.log(res)
+                wx.setStorageSync('locationed', false)
                 // #endif
             }
         })
@@ -343,14 +355,18 @@ Page({
         if (appAuthorizeSetting.locationAuthorized === 'authorized') {
             return true
         }
+        const that = this
         wx.showModal({
             title: '开启定位权限',
-            content: '用于快速定位您附近的小区楼号',
+            content: '为了快速定位您附近的小区楼号，我们需要获取您的位置信息。您的数据仅用于地图服务，不会未经允许共享给第三方。',
             confirmText: '去开启',
             complete: (res) => {
                 if (res.confirm) {
                     wx.openAppAuthorizeSetting({
                         success(res) {
+                            console.log('11')
+                            that.setLocMarkerIcon()
+                            console.log('22')
                             console.log(res)
                         },
                         fail(err) {

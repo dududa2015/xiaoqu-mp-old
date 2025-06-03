@@ -13,7 +13,7 @@ App({
         // #else
         this.appInit()
         this.appleLogin()
-        this.getDeviceId()
+        // this.getDeviceId()
         // #endif
     },
     //登录获取用户信息
@@ -72,9 +72,7 @@ App({
                 wx.setStorageSync('token', res.token)
                 wx.setStorageSync('userInfo', res)
             })
-        } else {
-            this.getDeviceId()
-        }
+        } 
     },
     //没有获取到deviceId，且用户没有登录时，用installDate判断是否超过了7天试用期
     appInit() {
@@ -84,7 +82,7 @@ App({
         }
         console.log('app init', wx.getStorageSync('installDate'))
     },
-    //获取设备id
+    //获取设备id==>每次卸载重装后的deviceId都不一样，这个方法没有存在的意义
     getDeviceId() {
         const start = Date.now();
         const deviceId = wx.getStorageSync('deviceId')
