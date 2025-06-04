@@ -9,7 +9,7 @@
         <image src="/images/marker4.png" class="cross" wx:if="{{showCenterMarker && markerTypeIndex === 8}}"></image>
     </map>
     <!-- enable-rotate rotate="{{rotate}}"  -->
-    <top-search rect="{{rect}}" showUp="{{showUp}}" showMapName="{{showMapName}}" mapName="{{mapName}}" bind:toMap="toMap"></top-search>
+    <top-search rect="{{rect}}" showUp="{{showUp}}" showMapName="{{showMapName}}" mapName="{{mapName}}" bind:toMap="toMap" bind:onChooseLocation="onChooseLocation"></top-search>
     <top-tip noticeList="{{noticeList}}"></top-tip>
     <top-bar rect="{{rect}}" position="{{position}}" bind:onChooseLocation="onChooseLocation" bind:onSetting="onSetting"></top-bar>
     <!-- #if NATIVE -->

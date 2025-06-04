@@ -24,8 +24,6 @@
     font-size: 10px !important;
 }
 
-
-
 .img-wrap {
     width: 40rpx;
     height: 40rpx;

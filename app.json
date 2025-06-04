@@ -19,7 +19,8 @@
     "pages/my/login-guide/login-guide",
     "pages/my/user-agreement/user-agreement",
     "pages/my/vip-agreement/vip-agreement",
-    "pages/my/vip-renew/vip-renew"
+    "pages/my/vip-renew/vip-renew",
+    "pages/my/app/ios/ios"
   ],
   "window": {
     "navigationBarTextStyle": "black",

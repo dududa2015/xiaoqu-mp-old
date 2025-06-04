@@ -1,0 +1,7 @@
+{
+    "usingComponents": {
+        "t-icon": "tdesign-miniprogram/icon/icon"
+    },
+    "navigationBarTitleText": "小区楼号地图ios下载",
+    "disableScroll": true
+}

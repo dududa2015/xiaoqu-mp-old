@@ -56,16 +56,15 @@ Page({
     onLoad() {
         this.getLocation()
         this.getPadding()
-        this.setLocMarkerIcon()
         this.getStatusBar()
         this.getWindowInfo()
 
         //初始化配置
         this.initStorage()
-
-        getApp().globalData.mapCtx = this.mapCtx
         //插屏广告
         // #if MP
+        this.mapCtx = wx.createMapContext('myMap')
+        getApp().globalData.mapCtx = this.mapCtx
         this.initCPAd()
         setTimeout(() => {
             //显示插屏广告
@@ -74,6 +73,7 @@ Page({
         // #else
         //获取设备id
         // this.getDeviceId()
+        this.setLocMarkerIcon()
         this.getMarkerListUpdate()
         // #endif
     },
@@ -207,6 +207,7 @@ Page({
     setLocMarkerIcon() {
         // 使用 wx.createMapContext 获取 map 上下文
         this.mapCtx = wx.createMapContext('myMap')
+        getApp().globalData.mapCtx = this.mapCtx
         this.mapCtx.setLocMarkerIcon({
             iconPath: '/images/loc-marker/1.png',
             success(res) {
@@ -794,7 +795,7 @@ Page({
         deleteMarker({
             xId: that.selectedMarker.xId,
             userId: wx.getStorageSync('userId'),
-            mapType: wx.getStorageSync('mapType')
+            mapType: wx.getStorageSync('mapType') || 1
         }).then(res => {
             if (res) {
                 wx.showToast({

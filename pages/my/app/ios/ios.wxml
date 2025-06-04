@@ -1,0 +1,24 @@
+<view class="download-wrap">
+    <!-- <view class="text1">请在App Store应用商店搜索下载</view>
+    <view class="text2">小区楼号地图</view>
+    <view class="list-wrap">
+        <view class="list flex" wx:for="{{rightsList}}">
+            <view>
+                <image src="{{item.imgUrl}}" class="img"></image>
+            </view>
+            <view class="title-wrap">
+                <view class="title">{{item.name}}</view>
+                <view class="desc">{{item.desc}}</view>
+            </view>
+        </view>
+    </view> -->
+    <view class="footer flex f-y-center">
+        <image src="/images/icon-83.5@2x.png" class="logo" mode="" />
+        <text class="footer-text">App Store搜索“小区楼号地图”</text>
+        <view class="flex f-y-center" style="margin-left: 4px;" bind:tap="onCopy">
+            <t-icon name="copy" color="#0074FE" />
+            <text class="copy">复制名称</text>
+        </view>
+    </view>
+    <image src="https://c-ssl.duitang.com/uploads/blog/202506/03/6zS5aE62Fq2aAl9.jpeg" mode="heightFix" class="ios-img" bind:tap="onPreview"/>
+</view>

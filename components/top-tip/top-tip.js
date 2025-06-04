@@ -7,11 +7,11 @@ Component({
             type: String,
             value: '请勿输入门禁密码等敏感信息，违者停用账号'
         },
-        noticeList: {
-            type: Array,
-            //这个默认value没有效果？为啥？？？
-            value: ['请勿输入门禁密码等敏感信息，违者停用账号']
-        }
+        // noticeList: {
+        //     type: Array,
+        //     //这个默认value没有效果？为啥？？？
+        //     value: ['请勿输入门禁密码等敏感信息，违者停用账号']
+        // }
     },
     lifetimes: {
         created() {
@@ -35,7 +35,7 @@ Component({
      */
     data: {
         show: true, //默认显示
-        noticeList: [], //
+        noticeList: ['苹果app已上线，欢迎下载 → '], //
         // noticeListAppWithoutVIP: ['免费试用7天，结束后需要订阅 →'], //不是app会员时显示
         noticeListApp: [],
         content: [
@@ -85,6 +85,12 @@ Component({
                     url: '/pages/my/vip/vip',
                 })
             }
+        },
+        //小程序点击
+        onMPNoticeClick(){
+            wx.navigateTo({
+              url: '/pages/my/app/ios/ios',
+            })
         },
         onAppNoticeClick() {
             const userInfo = wx.getStorageSync('userInfo')

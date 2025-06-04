@@ -1,0 +1,73 @@
+.download-wrap {
+    background-color: #fff;
+    padding: 64rpx;
+    height: calc(100vh - 64px);
+    text-align: center;
+}
+
+.text1 {
+    text-align: center;
+    font-size: 14px;
+}
+
+.text2 {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 8px 0 32px 0;
+}
+.list-wrap{
+    background-color: rgba(0, 116, 254, .1);
+    border-radius: 16rpx;
+    padding: 32rpx 0;
+}
+.list {
+    margin-left: 56rpx;
+    height: 128rpx;
+}
+
+.img {
+    width: 36px;
+    height: 36px;
+}
+
+.title-wrap {
+    margin-left: 32rpx;
+}
+
+.title {
+    font-size: 14px;
+}
+
+.desc {
+    font-size: 12px;
+    color: grey;
+}
+
+.footer {
+    /* margin-top: 64rpx; */
+    padding: 32rpx 24rpx;
+    background-color: rgba(0, 116, 254, .1);
+    border-radius: 16rpx;
+}
+
+.logo {
+    width: 56rpx;
+    height: 56rpx;
+    border-radius: 12rpx;
+}
+
+.footer-text {
+    margin-left: 8px;
+    font-size: 14px;
+}
+
+.copy {
+    margin-left: 2px;
+    font-size: 10px;
+}
+
+.ios-img {
+    margin-top: 64rpx;
+    height: 1000rpx;
+}

@@ -1,6 +1,6 @@
 <view class="top-tip" wx:if="{{show}}">
     <!-- #if MP -->
-    <t-notice-bar class="t-notice-bar_wrap" visible="{{true}}" direction="vertical" interval="{{5000}}" content="{{noticeList}}" prefixIcon="{{false}}" bind:click="click"></t-notice-bar>
+    <t-notice-bar class="t-notice-bar_wrap" visible="{{true}}" direction="vertical" interval="{{5000}}" content="{{noticeList}}" prefixIcon="{{false}}" bind:click="onMPNoticeClick"></t-notice-bar>
     <!-- #else -->
     <t-notice-bar class="t-notice-bar_wrap" visible="{{true}}" direction="vertical" interval="{{5000}}" content="{{noticeListApp}}" prefixIcon="{{false}}" bind:click="onAppNoticeClick"></t-notice-bar>
     <!-- #endif -->

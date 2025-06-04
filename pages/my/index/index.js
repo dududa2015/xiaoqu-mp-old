@@ -34,7 +34,7 @@ Page({
             }).then(res => {
                 if (res) {
                     wx.setStorageSync('userId', res.userId)
-                    wx.setStorageSync('token', res.token)
+                    // wx.setStorageSync('token', res.token)
                     wx.setStorageSync('userInfo', res)
                     this.setData({
                         userInfo: res,

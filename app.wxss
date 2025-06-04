@@ -29,7 +29,7 @@ page {
 }
 
 .t-notice-bar__content--vertical-item {
-  font-size: 14px !important;
+  font-size: 15px !important;
   color: #E85827 !important;
   font-weight: 500;
 }
