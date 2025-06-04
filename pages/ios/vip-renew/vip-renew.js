@@ -1,4 +1,4 @@
-// pages/my/vip-renew/vip-renew.js
+// pages/ios/vip-renew/vip-renew.js
 Page({
 
   /**

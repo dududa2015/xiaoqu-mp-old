@@ -1,4 +1,4 @@
-// pages/my/vip-agreement/vip-agreement.js
+// pages/ios/login-guide/login-guide.js
 Page({
 
   /**
