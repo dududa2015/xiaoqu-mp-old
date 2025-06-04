@@ -1,5 +1,0 @@
-.container{
-    padding: 32rpx;
-    /* height: 100vh; */
-    background-color: #fff;
-}
