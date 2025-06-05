@@ -2,6 +2,9 @@ import ApplePayManager from '../../../utils/apple-iap-manager2';
 import {
     getUserById
 } from '../../../apis/user-api'
+import {
+    getProductList
+} from '../../../apis/product-api'
 Page({
 
     /**
@@ -24,42 +27,43 @@ Page({
             name: '定位图标',
             imgUrl: '/images/my/rights-loc.png'
         }],
+        productList: [], //苹果的付费产品列表
         //6 18	72
         //5 14.9  39.9
-        productList: [{
-                name: '终身会员',
-                price: 99.9,
-                originalPrice: 999,
-                note: '一次付费，永久使用',
-                recommend: '限时特惠',
-                checked: true,
-                productIdentifier: 'com.louhao.xiaoqu.vip'
-            }, {
-                name: '连续包月',
-                price: 6,
-                originalPrice: 8,
-                note: '0.20元/天，可随时取消订阅',
-                // recommend: '限时特惠',
-                checked: false,
-                productIdentifier: 'com.louhao.xiaoqu.month'
-            },
-            {
-                name: '连续包季',
-                price: 15,
-                originalPrice: 24,
-                note: '0.17元/天，可随时取消订阅',
-                checked: false,
-                productIdentifier: 'com.louhao.xiaoqu.season'
-            }, {
-                name: '连续包年',
-                price: 39.9,
-                originalPrice: 96,
-                note: '0.11元/天，可随时取消订阅',
-                recommend: '超值推荐',
-                checked: false,
-                productIdentifier: 'com.louhao.xiaoqu.year'
-            }
-        ]
+        // productList: [{
+        //         name: '终身会员',
+        //         price: 99.9,
+        //         originalPrice: 999,
+        //         note: '一次付费，永久使用',
+        //         recommend: '限时特惠',
+        //         checked: true,
+        //         productIdentifier: 'com.louhao.xiaoqu.vip'
+        //     }, {
+        //         name: '连续包月',
+        //         price: 6,
+        //         originalPrice: 8,
+        //         note: '0.20元/天，可随时取消订阅',
+        //         // recommend: '限时特惠',
+        //         checked: false,
+        //         productIdentifier: 'com.louhao.xiaoqu.month'
+        //     },
+        //     {
+        //         name: '连续包季',
+        //         price: 15,
+        //         originalPrice: 24,
+        //         note: '0.17元/天，可随时取消订阅',
+        //         checked: false,
+        //         productIdentifier: 'com.louhao.xiaoqu.season'
+        //     }, {
+        //         name: '连续包年',
+        //         price: 39.9,
+        //         originalPrice: 96,
+        //         note: '0.11元/天，可随时取消订阅',
+        //         recommend: '超值推荐',
+        //         checked: false,
+        //         productIdentifier: 'com.louhao.xiaoqu.year'
+        //     }
+        // ]
     },
 
     /**
@@ -71,6 +75,18 @@ Page({
         // 初始化支付管理器（如果未全局挂载）
         this.applePayManager = new ApplePayManager(userId).init();
 
+        this.getProductList()
+    },
+    //通过接口获取产品列表--优化用这个方法获取
+    getProductList(){
+        getProductList().then(res=>{
+            this.setData({
+                productList: res
+            })
+        })
+    },
+    //通过苹果sdk获取产品列表
+    getProductListByApple() {
         const productIdentifiers = ['com.louhao.xiaoqu.vip', 'com.louhao.xiaoqu.month', 'com.louhao.xiaoqu.season', 'com.louhao.xiaoqu.year'];
         // 请求商品信息
         this.applePayManager.requestProducts(productIdentifiers)
@@ -103,31 +119,10 @@ Page({
                     }
                     productList.push(find)
                 })
-                // // products.sort((a, b) => a.price - b.price);
-                // products.forEach((element, index) => {                    
-                //     //描述，灰色字体部分
-                //     element.note = this.getProductNote(index, element.price)
-                //     if (element.productIdentifier === 'com.louhao.xiaoqu.vip') {
-                //         element.recommend = '限时特惠'
-                //         element.originalPrice = 499
-                //         element.note = "一次付费，永久使用"
-                //     }
-                //     if (element.productIdentifier === 'com.louhao.xiaoqu.month') {
-                //         element.originalPrice = 8
-                //     }
-                //     if (element.productIdentifier === 'com.louhao.xiaoqu.season') {
-                //         element.originalPrice = 24
-                //     }
-                //     if (element.productIdentifier === 'com.louhao.xiaoqu.year') {
-                //         element.recommend = '超值推荐'
-                //         element.originalPrice = 96
-                //     }
-                //     element.checked = index === 0
-                // });
                 console.log('商品数据', productList)
                 this.setData({
                     productList
-                }); // 更新页面数据
+                });
             })
             .catch(error => {
                 console.error('获取商品失败:', error);
