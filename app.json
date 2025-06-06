@@ -12,7 +12,13 @@
     "pages/my/newUser/newUser",
     "pages/my/markers/markers",
     "pages/my/notice/notice",
-    "pages/my/app/ios/ios"
+    "pages/my/app/ios/ios",
+    "pages/ios/vip/vip",
+    "pages/ios/login/login",
+    "pages/ios/user-agreement/user-agreement",
+    "pages/ios/vip-agreement/vip-agreement",
+    "pages/ios/vip-renew/vip-renew",
+    "pages/ios/relate/relate"
   ],
   "static": [
     {
