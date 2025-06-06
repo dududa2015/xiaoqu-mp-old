@@ -1,4 +1,4 @@
-// pages/admin/admin/admin.js
+// pages/admin/admin/index.js
 Page({
 
   /**

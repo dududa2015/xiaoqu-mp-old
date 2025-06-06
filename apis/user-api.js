@@ -77,3 +77,12 @@ export const changeIsPubMap = (params) => {
         method: 'POST',
     })
 }
+/************************************下面是管理员专用方法*******************************************/
+//获取苹果支付结果列表
+export const getAppleIAPList = (params) => {
+    return request({
+        url: '/users/getAppleIAPList',
+        data: params,
+        method: 'GET',
+    })
+}

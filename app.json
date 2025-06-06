@@ -8,10 +8,11 @@
     "pages/help/help4/help4",
     "pages/setting/setting",
     "pages/my/edit/edit",
-    "pages/my/audit/audit",
     "pages/my/newUser/newUser",
     "pages/my/markers/markers",
     "pages/admin/notice/notice",
+    "pages/admin/index/index",
+    "pages/admin/audit/audit",
     "pages/my/app/ios/ios",
     "pages/ios/vip/vip",
     "pages/ios/login/login",
@@ -19,7 +20,7 @@
     "pages/ios/vip-agreement/vip-agreement",
     "pages/ios/vip-renew/vip-renew",
     "pages/ios/relate/relate",
-    "pages/admin/admin/admin"
+    "pages/admin/apple/apple"
   ],
   "static": [
     {

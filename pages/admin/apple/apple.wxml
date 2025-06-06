@@ -1,0 +1,23 @@
+<view class="container">
+    <t-row class="header">
+        <t-col span="6">日期</t-col>
+        <t-col span="3">终身</t-col>
+        <t-col span="3">月</t-col>
+        <t-col span="3">季</t-col>
+        <t-col span="3">年</t-col>
+        <t-col span="6">金额</t-col>
+    </t-row>
+    <t-row class="body" wx:for="{{appleIAPList}}">
+        <t-col span="6">{{item.purchaseDate}}</t-col>
+        <t-col span="3">{{item.vip}}</t-col>
+        <t-col span="3">{{item.month}}</t-col>
+        <t-col span="3">{{item.season}}</t-col>
+        <t-col span="3">{{item.year}}</t-col>
+        <t-col span="6">{{item.amount}}</t-col>
+    </t-row>
+    <t-row class="body">
+        <t-col span="6">总额</t-col>
+        <!-- <t-col span="12"></t-col> -->
+        <t-col span="6" offset="12">{{totalAmount}}</t-col>
+    </t-row>
+</view>

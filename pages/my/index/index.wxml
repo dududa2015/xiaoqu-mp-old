@@ -51,8 +51,8 @@
     </t-cell-group>
     <!-- #endif -->
 
-    <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;" wx:if="{{showAudit}}">
-      <t-cell title="管理员" hover arrow url="/pages/my/audit/audit">
+    <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;" wx:if="{{isAdministator}}">
+      <t-cell title="管理员" hover arrow url="/pages/admin/index/index">
         <image src="/images/my/admin.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
     </t-cell-group>

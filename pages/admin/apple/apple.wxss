@@ -1,0 +1,24 @@
+.container {
+    background-color: #f7f7f7;
+    /* padding: 32rpx; */
+    text-align: center;
+}
+
+.header {
+    font-weight: 400;
+    font-size: 24rpx;
+    color: rgba(0, 0, 0, 0.9);
+    line-height: 80rpx;
+    height: 80rpx;
+    background: #f7f7f7;
+}
+
+.body {
+    font-weight: 400;
+    font-size: 24rpx;
+    color: rgba(0, 0, 0, 0.9);
+    line-height: 80rpx;
+    background-color: #fff;
+    /* border-bottom: 1rpx solid #dcdcdc; */
+    box-shadow: inset 0rpx -1rpx 0rpx 0rpx #DCDCDC;
+}

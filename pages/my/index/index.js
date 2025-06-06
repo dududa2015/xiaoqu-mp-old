@@ -15,7 +15,7 @@ Page({
     points: 0,
     markers: 0,
     friends: 0,
-    showAudit: false,
+    isAdministator: false,
     showRank: false,
     rankInfo: null
   },
@@ -67,11 +67,11 @@ Page({
     let userInfo = wx.getStorageSync('userInfo')
     if (userInfo && userInfo.userId === '92918a62b30c') {
       this.setData({
-        showAudit: true
+        isAdministator: true
       })
     } else {
       this.setData({
-        showAudit: false
+        isAdministator: false
       })
     }
   },
