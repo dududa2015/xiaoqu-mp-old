@@ -55,7 +55,6 @@
       <t-cell title="管理员" hover arrow url="/pages/my/audit/audit">
         <image src="/images/my/admin.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
-      </t-cell>
     </t-cell-group>
   </view>
 </view>
