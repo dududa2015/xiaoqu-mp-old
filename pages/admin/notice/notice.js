@@ -21,6 +21,11 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
+        let userId = wx.getStorageSync('userId')
+        if (userId !== '92918a62b30c') {
+            wx.navigateBack()
+            return
+        }
         this.getNotice()
     },
 

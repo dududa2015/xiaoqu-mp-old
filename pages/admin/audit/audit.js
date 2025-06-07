@@ -34,11 +34,10 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onLoad() {
-        let userInfo = wx.getStorageSync('userInfo')
-        if (userInfo && userInfo.userId !== '92918a62b30c') {
-            wx.switchTab({
-                url: '/pages/index/index',
-            })
+        let userId = wx.getStorageSync('userId')
+        if (userId !== '92918a62b30c') {
+            wx.navigateBack()
+            return
         }
         this.getAuditList()
         this.getStatistics()

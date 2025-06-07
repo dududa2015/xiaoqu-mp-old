@@ -106,7 +106,7 @@ Component({
                 }
 
                 // if (result.userId === '92918a62b30c') {
-                //     remarkTagList.push('来源百度地图')
+                //     remarkTagList.push('来源系统地图')
                 // } else {
                 //     if (result.isAdmin) {
                 //         remarkTagList.push('vip')
@@ -115,6 +115,12 @@ Component({
                 //         remarkTagList.push('管理员')
                 //     }
                 // }
+                if (result.isAdmin) {
+                    remarkTagList.push('vip')
+                }
+                if (result.isVip) {
+                    remarkTagList.push('管理员')
+                }
                 this.poiInfo = result
                 //显示楼号信息
                 that.showLouhao({
@@ -131,18 +137,21 @@ Component({
                 let userInfo = wx.getStorageSync('userInfo')
                 // #if MP
                 let canEditUserMarker = wx.getStorageSync('userId') === result.userId || userInfo.isAdmin
+                //小程序能删除但要看广告
+                let canDeleteUserMarker = true
                 // #else
                 let canEditUserMarker = wx.getStorageSync('mapType') === 2
+                //app的权限和编辑一样
+                let canDeleteUserMarker = canEditUserMarker
                 // #endif
                 that.setData({
                     markerType: result.type,
                     canEditUserMarker: !!canEditUserMarker,
-                    canDeleteUserMarker: true,
+                    canDeleteUserMarker: canDeleteUserMarker,
                     userMarker: result,
                     remarkTagList,
-                    good: result.good ? result.good : 0,
-                    bad: result.bad ? result.bad : 0,
-                    nickName: result.userId === wx.getStorageSync('userId') ? '您' : '他人',
+                    nickName: result.nickName ? result.nickName : '匿名',
+                    // nickName: result.userId === wx.getStorageSync('userId') ? '您' : '他人',
                     createdDate: this.convertDate(result.createdDate)
                 })
             })
