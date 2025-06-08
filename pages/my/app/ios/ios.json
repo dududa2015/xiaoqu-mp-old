@@ -1,6 +1,8 @@
 {
     "usingComponents": {
-        "t-icon": "tdesign-miniprogram/icon/icon"
+        "t-icon": "tdesign-miniprogram/icon/icon",
+        "t-swiper": "tdesign-miniprogram/swiper/swiper",
+        "t-swiper-nav": "tdesign-miniprogram/swiper-nav/swiper-nav"
     },
     "navigationBarTitleText": "小区楼号地图ios下载",
     "disableScroll": true

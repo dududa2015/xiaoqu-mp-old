@@ -66,6 +66,13 @@
     margin-left: 2px;
     font-size: 10px;
 }
+.recommand{
+    margin-left: 8px;
+    text-align: left;
+    font-size: 20rpx;
+    font-weight: 500;
+    color: #E85827;
+}
 .desc {
     margin-top: 16rpx;
     font-size: 22rpx;

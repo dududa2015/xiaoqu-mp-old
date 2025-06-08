@@ -7,7 +7,7 @@
         <t-col span="3">年</t-col>
         <t-col span="6">金额</t-col>
     </t-row>
-    <t-row class="body" wx:for="{{appleIAPList}}">
+    <t-row class="body" wx:for="{{appleIAPList}}" wx:key="index">
         <t-col span="6">{{item.purchaseDate}}</t-col>
         <t-col span="3">{{item.vip}}</t-col>
         <t-col span="3">{{item.month}}</t-col>

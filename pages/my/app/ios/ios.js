@@ -25,7 +25,19 @@ Page({
             name: '定位图标',
             desc: '在复杂地图环境中保持醒目美观',
             imgUrl: '/images/my/rights-loc.png'
-        }]
+        }],
+        current: 0,
+        autoplay: true,
+        duration: 500,
+        interval: 3000,
+        paginationPosition: 'bottom-right',
+        swiperList: [
+            'https://c-ssl.duitang.com/uploads/blog/202506/03/6zS5aE62Fq2aAl9.jpeg',
+            'https://c-ssl.duitang.com/uploads/blog/202506/08/73SOPEgQteyPgAl.png'
+        ],
+        navigation: {
+            type: 'fraction'
+        },
     },
 
     /**
@@ -40,16 +52,16 @@ Page({
             data: '小区楼号地图-快递外卖极速导航',
             success(res) {
                 wx.showToast({
-                  title: '名称复制成功'
+                    title: '名称复制成功'
                 })
             },
         })
     },
-    onPreview(){
+    onPreview() {
         wx.previewImage({
             current: 'https://c-ssl.duitang.com/uploads/blog/202506/03/lGSx3ZPAHx4a0DN.jpeg', // 当前显示图片的链接
-            urls:  ['https://c-ssl.duitang.com/uploads/blog/202506/03/lGSx3ZPAHx4a0DN.jpeg'] // 需要预览的图片列表
-          })
+            urls: ['https://c-ssl.duitang.com/uploads/blog/202506/03/lGSx3ZPAHx4a0DN.jpeg'] // 需要预览的图片列表
+        })
     },
 
     /**

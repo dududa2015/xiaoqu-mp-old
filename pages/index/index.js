@@ -91,7 +91,7 @@ Page({
         const systemInfo = wx.getSystemInfoSync();
         console.log(systemInfo)
         const isIphone = systemInfo.platform === 'ios' || systemInfo.model.includes('iPhone');
-        if (isIphone && !wx.getStorageSync('showAppNotice') && new Date() > new Date(2025, 5, 8)) {
+        if (isIphone && !wx.getStorageSync('showAppNotice') && new Date() > new Date(2025, 5, 9)) {
             wx.showModal({
                 title: '苹果App下载',
                 content: '同款App已在App Store上架，立即下载体验更佳？',
