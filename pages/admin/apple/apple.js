@@ -25,13 +25,20 @@ Page({
     getAppleIAPList() {
         getAppleIAPList().then(res => {
             const totalAmount = res.reduce((sum, item) => sum + item.amount, 0);
+            const totalVip = res.reduce((sum, item) => sum + item.vip, 0);
+            const totalMonth = res.reduce((sum, item) => sum + item.month, 0);
+            const totalSeason = res.reduce((sum, item) => sum + item.season, 0);
+            const totalYear = res.reduce((sum, item) => sum + item.year, 0);
             this.setData({
                 appleIAPList: res.map(item => ({
                     ...item,
                     purchaseDate: item.purchaseDate.slice(0, 10) // 或其他字符串格式
                 })),
-                totalAmount
-
+                totalAmount,
+                totalVip,
+                totalMonth,
+                totalSeason,
+                totalYear
             })
         })
     },

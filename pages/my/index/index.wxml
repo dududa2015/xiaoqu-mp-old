@@ -1,60 +1,61 @@
 <view class="container" style="margin-top:{{top}}px;">
-  <!-- #if MP -->
-  <user-info userInfo="{{userInfo}}"></user-info>
-  <!-- #else -->
-  <user-info-app userInfo="{{userInfo}}"></user-info-app>
-  <!-- #endif -->
-
-  <!-- #if MP -->
-  <view class="vip-wrap flex f-x-sb f-y-center" bind:tap="onHelp1">
-    <view class="vip-text-wrap">
-      <view class="vip-text">
-        升级VIP终身免费使用
-      </view>
-      <view class="vip-desc">
-        2025年7月1日起，积分达到1000成为vip
-      </view>
-    </view>
-    <view class="vip-upgrade flex f-x-center f-y-center">积分规则</view>
-  </view>
-  <!-- #endif -->
-  <view class="content">
-    <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
-      <!-- #if MP -->
-      <t-cell title="添加到我的小程序" hover arrow url="/pages/help/help2/help2">
-        <image src="/images/my/add-to-mp.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
-      <t-cell title="添加到主屏幕" hover arrow url="/pages/help/help3/help3">
-        <image src="/images/my/add-to-desktop.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
-      <t-cell title="无法添加到主屏幕" hover arrow url="/pages/help/help4/help4">
-        <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
-      <!-- #else -->
-      <t-cell wx:if="{{userInfo.appleId && !userInfo.openId}}" title="关联小程序" hover arrow url="/pages/ios/relate/relate">
-        <image src="/images/my/mp.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
-      <!-- #endif -->
-    </t-cell-group>
     <!-- #if MP -->
-    <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
-      <!-- <t-cell title="意见反馈" hover arrow>
+    <user-info userInfo="{{userInfo}}"></user-info>
+    <!-- #else -->
+    <user-info-app userInfo="{{userInfo}}"></user-info-app>
+    <!-- #endif -->
+
+    <!-- #if MP -->
+    <view class="vip-wrap flex f-x-sb f-y-center" bind:tap="onHelp1">
+        <view class="vip-text-wrap">
+            <view class="vip-text">
+                升级VIP终身免费使用
+            </view>
+            <view class="vip-desc">
+                2025年7月1日起，积分达到1000成为vip
+            </view>
+        </view>
+        <view class="vip-upgrade flex f-x-center f-y-center">积分规则</view>
+    </view>
+    <!-- #endif -->
+    <view class="content">
+        <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
+            <!-- #if MP -->
+            <t-cell title="添加到我的小程序" hover arrow url="/pages/help/help2/help2">
+                <image src="/images/my/add-to-mp.png" class="left-icon" mode="" slot="left-icon" />
+            </t-cell>
+            <t-cell title="添加到主屏幕" hover arrow url="/pages/help/help3/help3">
+                <image src="/images/my/add-to-desktop.png" class="left-icon" mode="" slot="left-icon" />
+            </t-cell>
+            <t-cell title="无法添加到主屏幕" hover arrow url="/pages/help/help4/help4">
+                <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
+            </t-cell>
+            <!-- #else -->
+            <t-cell wx:if="{{userInfo.appleId && !userInfo.openId}}" title="关联小程序" hover arrow url="/pages/ios/relate/relate">
+                <image src="/images/my/mp.png" class="left-icon" mode="" slot="left-icon" />
+            </t-cell>
+            <!-- #endif -->
+        </t-cell-group>
+        <!-- #if MP -->
+        <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
+            <!-- <t-cell title="意见反馈" hover arrow>
                 <image src="/images/my/feedback.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell>
             <button openType="feedback" class="feedback-btn"></button> -->
-      <!-- <t-cell title="去评价" hover arrow bind:tap="onEvaluate" note="五星好评激励作者">
+            <!-- <t-cell title="去评价" hover arrow bind:tap="onEvaluate" note="五星好评激励作者">
                 <image src="/images/my/star.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell> logo-apple-->
-      <t-cell title="苹果App下载" hover arrow bind:tap="onIOS" note="去下载" url="/pages/my/app/ios/ios">
-        <t-icon name="download" slot="left-icon" color="#0074FE" style="margin-top: 2px;"></t-icon>
-      </t-cell>
-    </t-cell-group>
-    <!-- #endif -->
+            <t-cell hover arrow bind:tap="onIOS" note="去下载" url="/pages/my/app/ios/ios" >
+                <text slot="title" style="color: #E85827; font-weight: 600;">苹果App下载</text>
+                <image src="/images/my/download.png" class="left-icon" mode="" slot="left-icon" />
+            </t-cell>
+        </t-cell-group>
+        <!-- #endif -->
 
-    <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;" wx:if="{{isAdministator}}">
-      <t-cell title="管理员" hover arrow url="/pages/admin/index/index">
-        <image src="/images/my/admin.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
-    </t-cell-group>
-  </view>
+        <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;" wx:if="{{isAdministator}}">
+            <t-cell title="管理员" hover arrow url="/pages/admin/index/index">
+                <image src="/images/my/admin.png" class="left-icon" mode="" slot="left-icon" />
+            </t-cell>
+        </t-cell-group>
+    </view>
 </view>

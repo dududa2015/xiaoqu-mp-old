@@ -101,26 +101,24 @@ Component({
             }).then(res => {
                 let result = res
                 let remarkTagList = []
+                let nickName = ''
                 if (result.remark) {
                     remarkTagList = result.remark.split(',')
                 }
 
-                // if (result.userId === '92918a62b30c') {
-                //     remarkTagList.push('来源系统地图')
-                // } else {
-                //     if (result.isAdmin) {
-                //         remarkTagList.push('vip')
-                //     }
-                //     if (result.isVip) {
-                //         remarkTagList.push('管理员')
-                //     }
-                // }
-                if (result.isAdmin) {
-                    remarkTagList.push('vip')
+                if (result.userId === '92918a62b30c') {
+                    remarkTagList.push('来源于系统')
+                    nickName = '系统'
+                } else {
+                    if (result.isAdmin) {
+                        remarkTagList.push('vip')
+                    }
+                    if (result.isVip) {
+                        remarkTagList.push('管理员')
+                    }
+                    nickName = result.nickName ? result.nickName : '匿名'
                 }
-                if (result.isVip) {
-                    remarkTagList.push('管理员')
-                }
+
                 this.poiInfo = result
                 //显示楼号信息
                 that.showLouhao({
@@ -150,7 +148,7 @@ Component({
                     canDeleteUserMarker: canDeleteUserMarker,
                     userMarker: result,
                     remarkTagList,
-                    nickName: result.nickName ? result.nickName : '匿名',
+                    nickName,
                     // nickName: result.userId === wx.getStorageSync('userId') ? '您' : '他人',
                     createdDate: this.convertDate(result.createdDate)
                 })

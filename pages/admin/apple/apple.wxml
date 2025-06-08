@@ -17,7 +17,10 @@
     </t-row>
     <t-row class="body">
         <t-col span="6">总额</t-col>
-        <!-- <t-col span="12"></t-col> -->
-        <t-col span="6" offset="12">{{totalAmount}}</t-col>
+        <t-col span="3">{{totalVip}}</t-col>
+        <t-col span="3">{{totalMonth}}</t-col>
+        <t-col span="3">{{totalSeason}}</t-col>
+        <t-col span="3">{{totalYear}}</t-col>
+        <t-col span="6">{{totalAmount}}</t-col>
     </t-row>
 </view>

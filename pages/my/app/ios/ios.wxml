@@ -14,11 +14,12 @@
     </view> -->
     <view class="footer flex f-y-center">
         <image src="/images/icon-83.5@2x.png" class="logo" mode="" />
-        <text class="footer-text">App Store搜索“小区楼号地图”</text>
+        <text class="footer-text">App Store搜索“<text style="font-weight: 600;">小区楼号地图”</text></text>
         <view class="flex f-y-center" style="margin-left: 4px;" bind:tap="onCopy">
             <t-icon name="copy" color="#0074FE" />
             <text class="copy">复制名称</text>
         </view>
     </view>
+    <view class="desc">安卓版即将上线！预计10月1日前发布，敬请期待 🎉</view>
     <image src="https://c-ssl.duitang.com/uploads/blog/202506/03/6zS5aE62Fq2aAl9.jpeg" mode="heightFix" class="ios-img" bind:tap="onPreview"/>
 </view>

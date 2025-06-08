@@ -36,7 +36,6 @@ Page({
         rotate: 0,
         enable3D: false,
         topAddress: '搜索附近小区',
-        showMapName: true, //是否显示顶部的地图名称
         showAddress: false,
         latitude: 39.909188, //当前位置116.397478,39.909188
         longitude: 116.397478, //当前位置
@@ -66,6 +65,7 @@ Page({
         this.mapCtx = wx.createMapContext('myMap')
         getApp().globalData.mapCtx = this.mapCtx
         this.initCPAd()
+        this.showAppNotice()
         setTimeout(() => {
             //初始化激励视频广告
             this.initAd()
@@ -85,6 +85,29 @@ Page({
             this.checkVip()
         }, 1000);
         // #endif
+    },
+    //显示app下载提示框
+    showAppNotice() {
+        const systemInfo = wx.getSystemInfoSync();
+        console.log(systemInfo)
+        const isIphone = systemInfo.platform === 'ios' || systemInfo.model.includes('iPhone');
+        if (isIphone && !wx.getStorageSync('showAppNotice') && new Date() > new Date(2025, 5, 8)) {
+            wx.showModal({
+                title: '苹果App下载',
+                content: '同款App已在App Store上架，立即下载体验更佳？',
+                confirmText: '立即下载',
+                cancelText: '暂不需要',
+                cancelColor: '#808080',
+                complete: (res) => {
+                    wx.setStorageSync('showAppNotice', true)
+                    if (res.confirm) {
+                        wx.navigateTo({
+                            url: '/pages/my/app/ios/ios',
+                        })
+                    }                    
+                }
+            })
+        }
     },
     checkVip() {
         //如果获取到了用户信息，用createdDate和当前时间相比，如果超过了7天，就自动跳转到vip开通页面
@@ -663,15 +686,9 @@ Page({
         });
     },
     onRegionChange(e) {
-        if (e.type === 'begin' && e.causedBy === 'gesture') {
-            this.setData({
-                showMapName: false
-            })
-        }
-        if (e.type === 'end' && e.causedBy === 'drag') {
-            this.setData({
-                showMapName: true
-            })
+        console.log(e.type, e.causedBy)
+        if (e.detail.centerLocation) {
+            // if (e.type === 'end' && e.causedBy === 'drag') {
             let lat = e.detail.centerLocation.latitude.toFixed(6)
             let lng = e.detail.centerLocation.longitude.toFixed(6)
             let lastLatitude = wx.getStorageSync('lastLatitude') || 0
@@ -689,6 +706,7 @@ Page({
                 wx.setStorageSync('lastLongitude', lng)
             }
         }
+        // }
     },
     on3D() {
         this.setData({
