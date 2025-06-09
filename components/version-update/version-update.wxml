@@ -1,0 +1,3 @@
+<t-popup visible="{{showVersionUpdate}}" placement="center" style=" padding-left: 32rpx; padding-right: 32rpx; width: calc(100% - 150rpx);">
+    <view class="container">不照样</view>
+</t-popup>

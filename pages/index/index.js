@@ -51,6 +51,7 @@ Page({
         showMapAddForm: false, //是否显示创建个人地图的form
         locationChangeHandler: null, //位置change
         compassChangeHandler: null, //罗盘change
+        showVersionUpdate: true
     },
     onLoad() {
         this.getLocation()
@@ -104,7 +105,7 @@ Page({
                         wx.navigateTo({
                             url: '/pages/my/app/ios/ios',
                         })
-                    }                    
+                    }
                 }
             })
         }
@@ -310,11 +311,11 @@ Page({
             interstitialAd = wx.createInterstitialAd({
                 adUnitId: 'adunit-6449f8b32a1844a8'
             })
-            interstitialAd.onLoad(() => {})
+            interstitialAd.onLoad(() => { })
             interstitialAd.onError((err) => {
                 console.error('插屏广告加载失败', err)
             })
-            interstitialAd.onClose(() => {})
+            interstitialAd.onClose(() => { })
         }
     },
     //显示插屏广告
