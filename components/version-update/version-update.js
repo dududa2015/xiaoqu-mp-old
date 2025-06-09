@@ -7,12 +7,7 @@ Component({
     properties: {
         showVersionUpdate: {
             type: Boolean,
-            value: true,
-            // observer(newVal, oldVal) {
-            //     if (!newVal) {
-            //         this.data.xId = -1
-            //     }
-            // }
+            value: false,
         }
     },
 

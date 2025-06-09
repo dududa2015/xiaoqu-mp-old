@@ -1,1 +1,50 @@
 .container {}
+
+.header {
+    width: 100%;
+    height: 278rpx;
+    opacity: 1;
+    border-radius: 24rpx;
+    background: linear-gradient(221.15deg, #0074FE 0%, #B8D9FF 100%);
+
+}
+
+.header-title {
+    padding: 108rpx 0 0 60rpx;
+    font-size: 56rpx;
+    font-weight: 600;
+    letter-spacing: 0px;
+    height: 56rpx;
+    line-height: 56rpx;
+    color: #fff;
+}
+
+.header-desc {
+    margin: 32rpx 0 0 60rpx;
+    font-size: 28rpx;
+    font-weight: 500;
+    letter-spacing: 0rpx;
+    line-height: 28rpx;
+    color: #fff;
+}
+
+.header-version {
+    margin: 16rpx 0 0 60rpx;
+    width: 111rpx;
+    height: 40rpx;
+    border-radius: 8rpx;
+    /* background: rgba(20, 83, 255, 0.38); */
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    /** 文本1 */
+    font-size: 26rpx;
+    font-weight: 500;
+    letter-spacing: 0rpx;
+    line-height: 26rpx;
+    color: #fff;
+}
+
+.content {
+    height: 412rpx;
+}

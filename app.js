@@ -11,7 +11,6 @@ App({
         this.autoUpdate()
         this.login(options.query.userId)
         // #else
-        this.autoUpdate()
         this.appInit()
         this.appleLogin()
         // this.getDeviceId()
@@ -73,7 +72,7 @@ App({
                 wx.setStorageSync('token', res.token)
                 wx.setStorageSync('userInfo', res)
             })
-        } 
+        }
     },
     //没有获取到deviceId，且用户没有登录时，用installDate判断是否超过了7天试用期
     appInit() {
@@ -119,7 +118,7 @@ App({
             })
         }
     },
-    addDeviceUserInfo(deviceId){
+    addDeviceUserInfo(deviceId) {
         console.log('addDeviceUserInfo')
         addUserByDeviceId({
             deviceId

@@ -1,3 +1,12 @@
-<t-popup visible="{{showVersionUpdate}}" placement="center" style=" padding-left: 32rpx; padding-right: 32rpx; width: calc(100% - 150rpx);">
-    <view class="container">不照样</view>
+<t-popup visible="{{showVersionUpdate}}" placement="center" style="width: calc(100% - 150rpx);">
+    <view class="container">
+        <view class="header">
+            <view class="header-title">
+                发现新版本
+            </view>
+            <view class="header-desc">体验全新升级…</view>
+            <view class="header-version">V1.0.6</view>
+        </view>
+        <view class="content"></view>
+    </view>
 </t-popup>

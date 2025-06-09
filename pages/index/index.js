@@ -76,6 +76,7 @@ Page({
         // #else
         //获取设备id
         // this.getDeviceId()
+        this.appUpdate()
         this.setLocMarkerIcon()
         this.getMarkerListUpdate()
         // #endif
@@ -311,11 +312,11 @@ Page({
             interstitialAd = wx.createInterstitialAd({
                 adUnitId: 'adunit-6449f8b32a1844a8'
             })
-            interstitialAd.onLoad(() => { })
+            interstitialAd.onLoad(() => {})
             interstitialAd.onError((err) => {
                 console.error('插屏广告加载失败', err)
             })
-            interstitialAd.onClose(() => { })
+            interstitialAd.onClose(() => {})
         }
     },
     //显示插屏广告
@@ -380,7 +381,6 @@ Page({
                 }, 50);
                 // #else
                 that.getAroundList(latitude, longitude)
-                that.getNotice()
                 wx.setStorageSync('locationed', true)
                 // #endif
             },
@@ -687,7 +687,6 @@ Page({
         });
     },
     onRegionChange(e) {
-        console.log(e.type, e.causedBy)
         if (e.detail.centerLocation) {
             // if (e.type === 'end' && e.causedBy === 'drag') {
             let lat = e.detail.centerLocation.latitude.toFixed(6)
@@ -1641,6 +1640,44 @@ Page({
         setTimeout(() => {
             this.disableTap = false
         }, 100);
+    },
+    //app更新
+    appUpdate() {
+        const that = this
+        getNotice().then(res => {
+            let result = JSON.parse(res.content)
+            that.setData({
+                noticeList: result.noticeList,
+            })
+            that.count = res.count
+
+            // #if IOS
+            let iosVersion = res.iosVersion //从服务端取来的版本号
+            const appBaseInfo = wx.getAppBaseInfo();
+            let appVersion = appBaseInfo.host.appVersion //api获取到的app当前版本
+            console.log('版本号：', appVersion, iosVersion)
+            let needUpdate = this.compareVersions(appVersion, iosVersion)
+            that.setData({
+                showVersionUpdate: needUpdate
+            })
+            // #elif ANDROID
+            let androidVersion = resp.androidVersion
+            // #endif
+        })
+    },
+    //版本号比较
+    compareVersions(current, latest) {
+        const currentParts = current.split('.').map(Number);
+        const latestParts = latest.split('.').map(Number);
+
+        for (let i = 0; i < Math.max(currentParts.length, latestParts.length); i++) {
+            const currentPart = currentParts[i] || 0;
+            const latestPart = latestParts[i] || 0;
+
+            if (currentPart < latestPart) return true;
+            if (currentPart > latestPart) return false;
+        }
+        return false;
     },
     onShareAppMessage() {
         return {
