@@ -27,7 +27,7 @@
             </view>
         </view>
     </view>
-    <view class="desc">安卓版即将上线！预计10月1日前发布，敬请期待 🎉</view>
+    <view class="desc">安卓版预计10月1日前发布，敬请期待 🎉</view>
     <t-swiper current="{{current}}" autoplay="{{autoplay}}" duration="{{duration}}" interval="{{interval}}" navigation="{{navigation}}" paginationPosition="{{paginationPosition}}" list="{{swiperList}}" height="1000rpx" image-props="{{ { mode: 'heightFix' } }}" style="margin-top: 32rpx;">
     </t-swiper>
     <!-- <image src="https://c-ssl.duitang.com/uploads/blog/202506/03/6zS5aE62Fq2aAl9.jpeg" mode="heightFix" class="ios-img" bind:tap="onPreview" /> -->

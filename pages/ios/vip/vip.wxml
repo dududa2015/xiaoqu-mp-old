@@ -24,7 +24,7 @@
             <view class="title">会员选择</view>
         </view>
         <view class="vip-wrap flex">
-            <view class="{{ item.checked? 'box box-selected':'box'}}" wx:for="{{productList}}" wx:key="index" bind:tap="onVipChange" data-productIdentifier="{{item.productIdentifier}}">
+            <view class="{{ index === 0 ? 'box box-selected':'box'}}" wx:for="{{productList}}" wx:key="index" bind:tap="onVipChange" data-productIdentifier="{{item.productIdentifier}}">
                 <view class="name">{{item.localizedTitle || item.name}}</view>
                 <view class="price"><text class="price-sign">￥</text>{{item.price}}元</view>
                 <view class="original-price">￥{{item.originalPrice}}元</view>

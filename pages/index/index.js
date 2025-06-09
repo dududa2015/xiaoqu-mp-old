@@ -127,7 +127,7 @@ Page({
                     this.toVip('会员在' + userInfo.iosVipExpiredDate + '已过期，请续费')
                 }
             } else {
-                const targetDate = new Date(userInfo.createdDate.replace(" ", "T"));
+                const targetDate = new Date(userInfo.createdDateApp);
                 targetDate.setDate(targetDate.getDate() + 7);
                 const currentDate = new Date();
                 if (targetDate < currentDate) {
