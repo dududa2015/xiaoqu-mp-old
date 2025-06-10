@@ -1648,6 +1648,8 @@ Page({
             let result = JSON.parse(res.content)
             that.setData({
                 noticeList: result.noticeList,
+                iosContent: res.iosContent,
+                androidContent: res.androidContent
             })
             that.count = res.count
 

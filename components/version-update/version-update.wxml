@@ -1,12 +1,16 @@
-<t-popup visible="{{showVersionUpdate}}" placement="center" style="width: calc(100% - 150rpx);">
+<t-popup visible="{{showVersionUpdate}}" placement="center" style="width: 550rpx;">
     <view class="container">
         <view class="header">
-            <view class="header-title">
-                发现新版本
-            </view>
-            <view class="header-desc">体验全新升级…</view>
-            <view class="header-version">V1.0.6</view>
+            <image src="https://c-ssl.duitang.com/uploads/blog/202506/10/6zS5aE62Fq2BzZP.png" class="header-img"></image>
         </view>
-        <view class="content"></view>
+        <view class="content">
+            <text class="text">
+                {{contentList}}
+            </text>
+        </view>
+        <view class="footer">
+            <view class="btn1" bind:tap="onCancel">暂不更新</view>
+            <view class="btn2" bind:tap="onUpdate">立即升级</view>
+        </view>
     </view>
 </t-popup>

@@ -8,6 +8,15 @@ Component({
         showVersionUpdate: {
             type: Boolean,
             value: false,
+        },
+        iosContent: {
+            type: String,
+            value: '',
+            observer(newVal, oldVal) {
+                this.setData({
+                    contentList: newVal.replace('；', '\n')
+                })
+            }
         }
     },
 
@@ -22,6 +31,23 @@ Component({
      * 组件的方法列表
      */
     methods: {
-
+        onUpdate() {
+            wx.miniapp.jumpToAppStore({
+                success: (res) => {
+                    console.log('success:', res);
+                    this.setData({
+                        showVersionUpdate:false
+                    })
+                },
+                fail: (res) => {
+                    console.log('fail:', res);
+                }  
+            });
+        },
+        onCancel(){
+            this.setData({
+                showVersionUpdate:false
+            })
+        }
     }
 })

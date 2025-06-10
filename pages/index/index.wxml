@@ -26,5 +26,5 @@
     <map-setting showSetting="{{showSetting}}" bind:onSettingClose="onSettingClose" bind:onLocIcon="onLocIcon" bind:onSatellite="onSatellite" bind:mapChange="mapChange" bind:onPosition="onPosition" bind:onRotate="onRotate" bind:on3D="on3D"></map-setting>
     <personal-map showMap="{{showMap}}" bind:onMapChange="onMapChange" bind:onMapClose="onMapClose"></personal-map>
     <!-- 版本升级提示 -->
-    <version-update showVersionUpdate="{{showVersionUpdate}}"></version-update>
+    <version-update showVersionUpdate="{{showVersionUpdate}}" iosContent="{{iosContent}}"></version-update>
 </view>
