@@ -77,6 +77,12 @@
                 <t-switch value="{{enable3D}}" slot="note" size="small" bind:change="on3DChange" />
             </view>
         </view>
+        <view class="last-row flex f-x-sb">
+            <view class="row-title">屏幕常亮</view>
+            <view class="row-title">
+                <t-switch value="{{enableScreenOn}}" slot="note" size="small" bind:change="onScreenOnChange" />
+            </view>
+        </view>
         <!-- #endif -->
     </view>
 

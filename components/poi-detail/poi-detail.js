@@ -106,18 +106,18 @@ Component({
                     remarkTagList = result.remark.split(',')
                 }
 
-                if (result.userId === '92918a62b30c') {
-                    remarkTagList.push('来源于系统')
-                    nickName = '系统'
-                } else {
-                    if (result.isAdmin) {
-                        remarkTagList.push('vip')
-                    }
-                    if (result.isVip) {
-                        remarkTagList.push('管理员')
-                    }
-                    nickName = result.nickName ? result.nickName : '匿名'
+                // if (result.userId === '92918a62b30c') {
+                //     // remarkTagList.push('来源于系统')
+                //     nickName = '系统'
+                // } else {
+                if (result.isAdmin) {
+                    remarkTagList.push('vip')
                 }
+                if (result.isVip) {
+                    remarkTagList.push('管理员')
+                }
+                nickName = result.nickName ? result.nickName : '匿名'
+                // }
 
                 this.poiInfo = result
                 //显示楼号信息
@@ -138,7 +138,7 @@ Component({
                 //小程序能删除但要看广告
                 let canDeleteUserMarker = true
                 // #else
-                let canEditUserMarker = wx.getStorageSync('mapType') === 2
+                let canEditUserMarker = wx.getStorageSync('userId') === result.userId || wx.getStorageSync('mapType') === 2
                 //app的权限和编辑一样
                 let canDeleteUserMarker = canEditUserMarker
                 // #endif

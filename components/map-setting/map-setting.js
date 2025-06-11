@@ -200,6 +200,13 @@ Component({
             wx.setStorageSync('enable3D', e.detail.value)
             this.triggerEvent('on3D', e.detail.value)
         },
+        //开启屏幕常亮
+        onScreenOnChange(e) {
+            wx.setKeepScreenOn({
+                keepScreenOn: e.detail.value
+            })
+            wx.setStorageSync('enableScreenOn', e.detail.value)
+        },
         startAnimation() {
             // 定时器，控制边框显示隐藏
             const interval = setInterval(() => {

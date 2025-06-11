@@ -198,6 +198,7 @@ Page({
         const enableRotate = wx.getStorageSync('enableRotate')
         const enableSatellite = wx.getStorageSync('enableSatellite')
         const enable3D = wx.getStorageSync('enable3D')
+        const enableScreenOn = wx.getStorageSync('enableScreenOn')
         const locIconIndex = wx.getStorageSync('locIconIndex')
 
         if (position) {
@@ -220,6 +221,10 @@ Page({
                 enable3D
             })
         }
+
+        wx.setKeepScreenOn({
+            keepScreenOn: !!enableScreenOn
+        })
 
         // #if NATIVE
         if (locIconIndex) {
@@ -810,19 +815,28 @@ Page({
             })
         }
         // #else
-        // 个人地图才能删除
-        let mapType = wx.getStorageSync('mapType')
-        if (mapType === 2) {
-            wx.showModal({
-                title: '温馨提示',
-                content: '确认要删除吗？',
-                success(res) {
-                    if (res.confirm) {
-                        that.onDelete()
-                    }
+        // // 个人地图才能删除
+        // let mapType = wx.getStorageSync('mapType')
+        // if (mapType === 2) {
+        //     wx.showModal({
+        //         title: '温馨提示',
+        //         content: '确认要删除吗？',
+        //         success(res) {
+        //             if (res.confirm) {
+        //                 that.onDelete()
+        //             }
+        //         }
+        //     })
+        // }
+        wx.showModal({
+            title: '温馨提示',
+            content: '确认要删除吗？',
+            success(res) {
+                if (res.confirm) {
+                    that.onDelete()
                 }
-            })
-        }
+            }
+        })
         // #endif
     },
     //删除标记点
