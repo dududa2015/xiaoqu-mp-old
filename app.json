@@ -20,7 +20,8 @@
     "pages/ios/vip-agreement/vip-agreement",
     "pages/ios/vip-renew/vip-renew",
     "pages/ios/relate/relate",
-    "pages/admin/apple/apple"
+    "pages/admin/apple/apple",
+    "pages/search/search"
   ],
   "static": [
     {

@@ -51,7 +51,8 @@ Page({
         showMapAddForm: false, //是否显示创建个人地图的form
         locationChangeHandler: null, //位置change
         compassChangeHandler: null, //罗盘change
-        showVersionUpdate: true
+        showVersionUpdate: false,
+        showChooseLocation: false,
     },
     onLoad() {
         this.getLocation()
@@ -254,11 +255,10 @@ Page({
         const that = this
         getNotice().then(res => {
             if (res) {
-                let result = JSON.parse(res.content)
                 that.setData({
-                    noticeList: result.noticeList,
+                    noticeList: res.noticeList,
                 })
-                that.count = res.count
+                that.bdCount = res.bdCount
             } else { //2025年把这个else删除
                 that.setData({
                     noticeList: ["请勿标记门禁密码，违者停用账号"]
@@ -692,26 +692,27 @@ Page({
         });
     },
     onRegionChange(e) {
+        console.log(e)
         if (e.detail.centerLocation) {
-            // if (e.type === 'end' && e.causedBy === 'drag') {
-            let lat = e.detail.centerLocation.latitude.toFixed(6)
-            let lng = e.detail.centerLocation.longitude.toFixed(6)
-            let lastLatitude = wx.getStorageSync('lastLatitude') || 0
-            let lastLongitude = wx.getStorageSync('lastLongitude') || 0
-            //如果经度或纬度移动超过0.003度,那么就获取周围的标记点
-            let latlng = parseFloat(lat) + parseFloat(lng)
-            let latlngStorage = parseFloat(lastLatitude) + parseFloat(lastLongitude)
-            //2024-09-21由0.0015改为0.001
-            // if (Math.abs(latlng - latlngStorage) >= 0.001) {
-            if (Math.abs(parseFloat(lat) - parseFloat(lastLatitude)) >= 0.0005 ||
-                Math.abs(parseFloat(lng) - parseFloat(lastLongitude)) >= 0.0005
-            ) {
-                this.getAroundList(lat, lng)
-                wx.setStorageSync('lastLatitude', lat)
-                wx.setStorageSync('lastLongitude', lng)
+            if (e.type === 'end' && e.causedBy === 'drag') {
+                let lat =this.truncateToSixDecimals(e.detail.centerLocation.latitude) 
+                let lng = this.truncateToSixDecimals(e.detail.centerLocation.longitude)
+                let lastLatitude = wx.getStorageSync('lastLatitude') || 0
+                let lastLongitude = wx.getStorageSync('lastLongitude') || 0
+                //如果经度或纬度移动超过0.003度,那么就获取周围的标记点
+                let latlng = parseFloat(lat) + parseFloat(lng)
+                let latlngStorage = parseFloat(lastLatitude) + parseFloat(lastLongitude)
+                //2024-09-21由0.0015改为0.001
+                // if (Math.abs(latlng - latlngStorage) >= 0.001) {
+                if (Math.abs(parseFloat(lat) - parseFloat(lastLatitude)) >= 0.0005 ||
+                    Math.abs(parseFloat(lng) - parseFloat(lastLongitude)) >= 0.0005
+                ) {
+                    this.getAroundList(lat, lng)
+                    wx.setStorageSync('lastLatitude', lat)
+                    wx.setStorageSync('lastLongitude', lng)
+                }
             }
         }
-        // }
     },
     on3D() {
         this.setData({
@@ -911,15 +912,15 @@ Page({
                 that.addAroundList2Map(list)
                 //小于{{数量}}也调用接口，{{数量}}在缓存caches.json里配置
                 // #if MP
-                //注释百度接口 2025-03-22
-                // if (list.length < (that.count || 5)) {
-                //     that.addBdAroundList(lng, lat)
-                // }
+                //注释百度接口 2025-03-22,打开接口2025-06-12
+                if (list.length < (that.bdCount || 5)) {
+                    that.addBdAroundList(lng, lat)
+                }
                 // #endif
             } else {
                 // #if MP
                 //注释百度接口 2025-03-22
-                // that.addBdAroundList(lng, lat)
+                that.addBdAroundList(lng, lat)
                 // #endif
             }
         })
@@ -1066,6 +1067,7 @@ Page({
     },
     //把百度生成的点添加到地图上并写入db
     addAndWriteBdAroundList(results) {
+        console.log(results)
         let poiList = []
         for (const item of results) {
             let o = this.getBuildingName(item.name)
@@ -1080,8 +1082,8 @@ Page({
                     name,
                     community,
                     remark: '',
-                    lat: item.location.lat,
-                    lng: item.location.lng
+                    lat: this.truncateToSixDecimals(item.location.lat),
+                    lng: this.truncateToSixDecimals(item.location.lng)
                 }
                 poiList.push(s)
             }
@@ -1527,6 +1529,15 @@ Page({
         })
         this.hideTabBar()
     },
+    onShowChooseLocation() {
+        this.hideTabBar()
+        // this.setData({
+        //     showChooseLocation: true
+        // })
+        wx.navigateTo({
+          url: '/pages/search/search',
+        })
+    },
     //设置关闭
     onSettingClose() {
         this.disableMapTap()
@@ -1659,13 +1670,12 @@ Page({
     appUpdate() {
         const that = this
         getNotice().then(res => {
-            let result = JSON.parse(res.content)
             that.setData({
-                noticeList: result.noticeList,
+                noticeList: res.noticeList,
                 iosContent: res.iosContent,
                 androidContent: res.androidContent
             })
-            that.count = res.count
+            that.bdCount = res.bdCount
 
             // #if IOS
             let iosVersion = res.iosVersion //从服务端取来的版本号
@@ -1694,6 +1704,15 @@ Page({
             if (currentPart > latestPart) return false;
         }
         return false;
+    },
+    //保留6位小数，后面的截断，而非四舍五入
+    truncateToSixDecimals(num) {
+        const str = num.toString();
+        const decimalIndex = str.indexOf('.');
+
+        if (decimalIndex === -1) return num; // 没有小数部分
+
+        return parseFloat(str.substring(0, decimalIndex + 7)); // 保留6位小数
     },
     onShareAppMessage() {
         return {

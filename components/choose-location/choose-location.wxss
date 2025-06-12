@@ -1,0 +1,68 @@
+.cotainer {}
+
+.t-popup {
+    background-color: none !important;
+}
+
+.search-wrap {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: calc(100% - 24px);
+    height: 96rpx;
+    /* background-color: #F4F5F6; */
+    padding: 12px;
+    background: linear-gradient(to bottom, transparent, #F4F5F6 50%);
+}
+.search {
+
+    border-radius: 16rpx;
+    overflow: hidden;
+ }
+
+ .search-bar {
+    /* position: absolute;
+    top: 100px;
+    left: 15px;
+    right: 15px; */
+    background-color: white;
+    padding: 10px 15px;
+    border-radius: 12px;
+    /* box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); */
+    display: flex;
+    align-items: center;
+}
+.search-bar image {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+.search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.content {
+    padding: 0 12px;
+    width: calc(100% - 24px);
+    border: none;
+    background-color: #F4F5F6;
+    /* width: 100%; */
+    height: 40vh;
+}
+
+
+
+.addr-list {
+    background-color: #fff;
+    height: 40vh;
+    border-radius: 12px 12px 0 0;
+    overflow: auto;
+    --td-radio-font-size:14px;
+    --td-radio-label-line-height:20px;
+    --td-radio-content-font-size: 12px;
+    --td-radio-content-line-height: 18px;
+}

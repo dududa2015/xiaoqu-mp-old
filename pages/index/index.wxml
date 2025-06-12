@@ -11,7 +11,7 @@
     <!-- enable-rotate rotate="{{rotate}}"  -->
     <top-search rect="{{rect}}" showUp="{{showUp}}" showMapName="{{showMapName}}" mapName="{{mapName}}" bind:toMap="toMap" bind:onChooseLocation="onChooseLocation"></top-search>
     <top-tip noticeList="{{noticeList}}"></top-tip>
-    <top-bar rect="{{rect}}" position="{{position}}" bind:onChooseLocation="onChooseLocation" bind:onSetting="onSetting"></top-bar>
+    <top-bar rect="{{rect}}" position="{{position}}" bind:onChooseLocation="onChooseLocation" bind:onSetting="onSetting" bind:onShowChooseLocation="onShowChooseLocation"></top-bar>
     <!-- #if NATIVE -->
     <middle-bar position="{{position}}" bind:onFoot="onFoot"></middle-bar>
     <!-- #endif -->
@@ -26,5 +26,8 @@
     <map-setting showSetting="{{showSetting}}" bind:onSettingClose="onSettingClose" bind:onLocIcon="onLocIcon" bind:onSatellite="onSatellite" bind:mapChange="mapChange" bind:onPosition="onPosition" bind:onRotate="onRotate" bind:on3D="on3D"></map-setting>
     <personal-map showMap="{{showMap}}" bind:onMapChange="onMapChange" bind:onMapClose="onMapClose"></personal-map>
     <!-- 版本升级提示 -->
+    <!-- #if NATIVE -->
     <version-update showVersionUpdate="{{showVersionUpdate}}" iosContent="{{iosContent}}"></version-update>
+    <choose-location showChooseLocation="{{showChooseLocation}}"></choose-location>
+    <!-- #endif -->
 </view>

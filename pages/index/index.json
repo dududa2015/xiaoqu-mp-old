@@ -19,7 +19,8 @@
         "marker-add-grid": "/components/marker-add-grid/marker-add-grid",
         "map-setting": "/components/map-setting/map-setting",
         "personal-map": "/components/personal-map/personal-map",
-        "version-update": "/components/version-update/version-update"
+        "version-update": "/components/version-update/version-update",
+        "choose-location": "/components/choose-location/choose-location"
     },
     "navigationBarTitleText": "小区楼号",
     "navigationStyle": "custom"
