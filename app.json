@@ -14,14 +14,7 @@
     "pages/admin/index/index",
     "pages/admin/audit/audit",
     "pages/my/app/ios/ios",
-    "pages/ios/vip/vip",
-    "pages/ios/login/login",
-    "pages/ios/user-agreement/user-agreement",
-    "pages/ios/vip-agreement/vip-agreement",
-    "pages/ios/vip-renew/vip-renew",
-    "pages/ios/relate/relate",
-    "pages/admin/apple/apple",
-    "pages/search/search"
+    "pages/admin/apple/apple"
   ],
   "static": [
     {
@@ -29,8 +22,47 @@
       "platforms": [
         "mini-ios"
       ]
+    },
+    {
+      "pattern": "pages/android/*",
+      "platforms": [
+        "mini-android"
+      ]
+    },
+    {
+      "pattern": "pages/native/*",
+      "platforms": [
+        "mini-ios",
+        "mini-android"
+      ]
     }
   ],
+  "mini-ios": {
+    "pages": [
+      "pages/index/index",
+      "pages/my/index/index",
+      "pages/my/edit/edit",
+      "pages/my/newUser/newUser",
+      "pages/my/markers/markers",
+      "pages/admin/notice/notice",
+      "pages/admin/index/index",
+      "pages/admin/audit/audit",
+      "pages/my/app/ios/ios",
+      "pages/admin/apple/apple",
+      "pages/ios/vip/vip",
+      "pages/ios/login/login",
+      "pages/ios/user-agreement/user-agreement",
+      "pages/ios/vip-agreement/vip-agreement",
+      "pages/ios/vip-renew/vip-renew",
+      "pages/ios/relate/relate",
+      "pages/search/search"
+    ]
+  },
+  "mini-android": {
+    "pages": [
+      "pages/search/search"
+    ]
+  },
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "Weixin",

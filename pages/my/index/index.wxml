@@ -31,6 +31,9 @@
                 <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell>
             <!-- #else -->
+            <t-cell  title="升级会员" hover arrow url="/pages/ios/vip/vip">
+                <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
+            </t-cell>
             <t-cell wx:if="{{userInfo.appleId && !userInfo.openId}}" title="关联小程序" hover arrow url="/pages/ios/relate/relate">
                 <image src="/images/my/mp.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell>
@@ -54,6 +57,9 @@
 
         <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;" wx:if="{{isAdministator}}">
             <t-cell title="管理员" hover arrow url="/pages/admin/index/index">
+                <image src="/images/my/admin.png" class="left-icon" mode="" slot="left-icon" />
+            </t-cell>
+            <t-cell title="测试" hover arrow url="/pages/ios/vip/vip">
                 <image src="/images/my/admin.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell>
         </t-cell-group>
