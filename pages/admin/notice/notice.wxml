@@ -1,11 +1,22 @@
 <view class="container">
-  <t-input model:value="{{notice1}}" placeholder="请输入公告一" maxlength="120">
-    <text slot="label">公告一<text style="color: #e34d59"> *</text> </text>
-  </t-input>
-  <t-input model:value="{{notice2}}" label="公告二" placeholder="请输入公告二" maxlength="120">
-  </t-input>
-  <t-input model:value="{{count}}" type="number" placeholder="请输入标记数量" borderless maxlength="10">
+  <t-textarea model:value="{{notice1}}" label="公告一" t-class="textarea" placeholder="请输入公告一" disableDefaultPadding="{{true}}" />
+
+  <t-textarea model:value="{{notice2}}" label="公告二" t-class="textarea" placeholder="请输入公告二" disableDefaultPadding="{{true}}" />
+
+  <t-input model:value="{{bdCount}}" t-class="input" type="number" placeholder="请输入标记数量" borderless maxlength="10">
     <text slot="label">标记数量<text style="color: #e34d59"> *</text> </text>
+  </t-input>
+
+  <t-textarea model:value="{{iosContent}}" label="苹果更新功能" t-class="textarea120" placeholder="请输入苹果更新功能" disableDefaultPadding="{{true}}" />
+
+  <t-input model:value="{{iosVersion}}" t-class="input" type="number" placeholder="请输入苹果版本" borderless maxlength="10">
+    <text slot="label">苹果版本<text style="color: #e34d59"> *</text> </text>
+  </t-input>
+
+  <t-textarea model:value="{{androidContent}}" label="安卓更新功能" t-class="textarea120" placeholder="请输入安卓更新功能" disableDefaultPadding="{{true}}" />
+
+  <t-input model:value="{{androidVersion}}" t-class="input" type="number" placeholder="请输入安卓版本" borderless maxlength="10">
+    <text slot="label">安卓版本<text style="color: #e34d59"> *</text> </text>
   </t-input>
 </view>
 <view class="btn-wrap">

@@ -3,7 +3,7 @@
   <view class="content">
     <t-cell-group wx:if="{{pwdList.length > 0}}">
       <t-swipe-cell wx:for="{{pwdList}}" wx:key="index" opened="{{index === 0?opened:false}}">
-        <t-cell title="{{item.name}}" hover arrow url="/pages/password/edit/edit?pId={{item.pId}}" bordered="{{index !== pwdList.length-1}}" />
+        <t-cell title="{{item.name}}" hover arrow bordered="{{index !== pwdList.length-1}}" />
         <view slot="right" class="btn delete-btn" bind:tap="onDelete" data-pId="{{item.pId}}">删除</view>
       </t-swipe-cell>
     </t-cell-group>

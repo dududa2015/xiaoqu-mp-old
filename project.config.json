@@ -1,39 +1,39 @@
 {
-	"compileType": "miniprogram",
-	"setting": {
-		"coverView": true,
-		"es6": true,
-		"postcss": true,
-		"minified": true,
-		"enhance": true,
-		"showShadowRootInWxmlPanel": true,
-		"packNpmRelationList": [],
-		"babelSetting": {
-			"ignore": [],
-			"disablePlugins": [],
-			"outputPath": ""
-		},
-		"condition": true,
-		"ignoreUploadUnusedFiles": true
-	},
-	"condition": {},
-	"editorSetting": {
-		"tabIndent": "auto",
-		"tabSize": 2
-	},
-	"libVersion": "3.6.1",
-	"packOptions": {
-		"ignore": [
-			{
-				"value": "/projectmaps",
-				"type": "folder"
-			}
-		],
-		"include": []
-	},
-	"appid": "wx41e901a3427cc9af",
-	"projectArchitecture": "multiPlatform",
-	"simulatorPluginLibVersion": {
-		"wxext14566970e7e9f62": "3.6.5-29"
-	}
+  "compileType": "miniprogram",
+  "setting": {
+    "coverView": true,
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "enhance": true,
+    "showShadowRootInWxmlPanel": true,
+    "packNpmRelationList": [],
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "condition": true,
+    "ignoreUploadUnusedFiles": true
+  },
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "auto",
+    "tabSize": 2
+  },
+  "libVersion": "3.6.1",
+  "packOptions": {
+    "ignore": [
+      {
+        "value": "/projectmaps",
+        "type": "folder"
+      }
+    ],
+    "include": []
+  },
+  "appid": "wx41e901a3427cc9af",
+  "projectArchitecture": "multiPlatform",
+  "simulatorPluginLibVersion": {
+    "wxext14566970e7e9f62": "3.6.5-29"
+  }
 }

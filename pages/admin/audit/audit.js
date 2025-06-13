@@ -115,11 +115,6 @@ Page({
             visible: false
         })
     },
-    toAddPage() {
-        wx.navigateTo({
-            url: '/pages/password/edit/edit',
-        })
-    },
     onMarkerTap(event) {
         const { item } = event.currentTarget.dataset
         this.setData({

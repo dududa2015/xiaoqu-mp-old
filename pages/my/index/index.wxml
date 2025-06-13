@@ -59,9 +59,6 @@
             <t-cell title="管理员" hover arrow url="/pages/admin/index/index">
                 <image src="/images/my/admin.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell>
-            <t-cell title="测试" hover arrow url="/pages/ios/vip/vip">
-                <image src="/images/my/admin.png" class="left-icon" mode="" slot="left-icon" />
-            </t-cell>
         </t-cell-group>
     </view>
 </view>

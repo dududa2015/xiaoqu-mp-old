@@ -101,11 +101,6 @@ import {
         }
       })
     },
-    toAddPage() {
-      wx.navigateTo({
-        url: '/pages/password/edit/edit',
-      })
-    },
     /**
      * 生命周期函数--监听页面隐藏
      */

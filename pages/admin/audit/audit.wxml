@@ -25,11 +25,19 @@
         新增用户
       </view>
     </view>
+    <view class="statistics-item" bind:tap="onNewUser">
+      <view class="statistics-number">
+        {{statistics.baiduNumber}}
+      </view>
+      <view class="statistics-desc">
+        百度调用次数
+      </view>
+    </view>
   </view>
   <view class="content">
     <t-cell-group wx:if="{{auditList.length > 0}}">
       <t-swipe-cell wx:for="{{auditList}}" wx:key="index">
-        <t-cell title="{{index+1}}、 {{item.name}}" hover arrow url="/pages/password/edit/edit?pId={{item.pId}}" bordered="{{index !== auditList.length-1}}" note="{{item.type}}" bind:tap="onMarkerTap" data-item="{{item}}" />
+        <t-cell title="{{index+1}}、 {{item.name}}" hover arrow bordered="{{index !== auditList.length-1}}" note="{{item.type}}" bind:tap="onMarkerTap" data-item="{{item}}" />
         <view slot="right" class="btn-wrapper">
           <view class="btn delete-btn-1" bind:tap="auditNotPassed" data-points="10" data-item="{{item}}">
             删扣10
