@@ -1,0 +1,34 @@
+<view class="cotainer">
+    <!-- 自定义导航栏 -->
+    <view class="custom-nav" style="height:{{navHeight}}px;padding-top:{{statusBarHeight}}px">
+        <!-- 返回按钮 -->
+        <view class="nav-back" bind:tap="navBack">
+            <t-icon name="chevron-left" size="28px" />
+        </view>
+        <!-- 标题 -->
+        <view class="nav-title">地图选点</view>
+    </view>
+    <map id="searchMap" style="width: 100%;height:60vh" latitude="{{latitude}}" longitude="{{longitude}}" show-location="true" bindregionchange="onRegionChange">
+      <image src="/images/marker0.png" class="cross"></image>
+        <bottom-location position="{{position}}" bottom="{{bottom}}" bind:onLocation="onLocation"></bottom-location>
+        <view class="search-wrap">
+            <view class="search-bar" bind:tap="openSearchPOI">
+                <image src="/images/controls/search.png" mode="" />
+                <input type="text" placeholder="搜索地点" disabled />
+            </view>
+        </view>
+    </map>
+    <view class="content">
+        <view class="addr-list">
+            <t-radio-group t-class="horizontal-box" value="{{index}}" bind:change="onPoiChange">
+                <t-radio wx:for="{{poiList}}" wx:key="index" value="{{index}}" icon="line" placement="right" content="{{item.address}}">
+                <view slot="label" class="flex f-y-center">
+                    <t-icon name="location" size="16px" />
+                    <text style="margin-left: 4px;">{{item.name}}</text>
+                </view>
+                </t-radio>
+            </t-radio-group>
+            <button bind:tap="choosePoi">确认选点</button>
+        </view>
+    </view>
+</view>

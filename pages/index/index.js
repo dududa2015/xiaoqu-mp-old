@@ -83,11 +83,30 @@ Page({
     // #endif
   },
   onShow() {
+    this.amapSearch()
     // #if NATIVE
     setTimeout(() => {
       this.checkVip()
     }, 1000);
     // #endif
+  },
+  //用于处理搜索结果
+  amapSearch() {
+    let poi = wx.getStorageSync('poi')
+    if (poi) {
+      let latitude = parseFloat(poi.latitude)
+      let longitude = parseFloat(poi.longitude)
+
+      this.mapCtx.moveToLocation({
+        latitude,
+        longitude
+      })
+      this.addMarker2Map(latitude, longitude)
+      this.getAroundList(latitude, longitude)
+      wx.removeStorage({
+        key: 'poi',
+      })
+    }
   },
   //显示app下载提示框
   showAppNotice() {
@@ -1530,12 +1549,12 @@ Page({
     this.hideTabBar()
   },
   onShowChooseLocation() {
-    this.hideTabBar()
+    // this.hideTabBar()
     // this.setData({
     //     showChooseLocation: true
     // })
     wx.navigateTo({
-      url: '/pages/search/search',
+      url: '/pages/search/index/index',
     })
   },
   //设置关闭

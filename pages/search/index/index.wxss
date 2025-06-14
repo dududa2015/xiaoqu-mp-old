@@ -22,10 +22,18 @@
     font-size: 18px;
     font-weight: 500;
 }
-
+.cross {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%);
+  margin-top: -50px;
+  height: 50px;
+  width: 30px;
+}
 .search-wrap {
     position: absolute;
-    bottom: 0;
+    bottom: -1px;
     left: 0;
     width: calc(100% - 24px);
     height: 96rpx;

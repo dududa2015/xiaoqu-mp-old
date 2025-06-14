@@ -1,0 +1,102 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.search-wrap {
+  width: calc(100% - 24px);
+  height: 96rpx;
+  /* background-color: #F4F5F6; */
+  padding: 12px;
+  background: linear-gradient(to bottom, transparent, #F4F5F6 50%);
+}
+
+.search {
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.search-bar {
+  /* position: absolute;
+  top: 100px;
+  left: 15px;
+  right: 15px; */
+  background-color: white;
+  padding: 10px 15px;
+  border-radius: 12px;
+  /* box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); */
+  display: flex;
+  align-items: center;
+}
+
+.search-bar image {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.search-bar text {
+  font-size: 16px;
+  color: #0074FE;
+}
+
+.content {
+  padding: 0 12px;
+  padding-bottom: env(safe-area-inset-bottom);
+  width: calc(100% - 24px);
+  height: calc(100vh - 152rpx);
+  overflow-y: auto;
+  border: none;
+  background-color: #F4F5F6;
+}
+
+.content::-webkit-scrollbar {
+  display: none;
+}
+
+.addr-list {
+  position: relative;
+  background-color: #fff;
+  height: 100%;
+  border-radius: 12px;
+  overflow: auto;
+  --td-spacer: 0;
+  --td-cell-description-font-size: 13px;
+  --td-cell-horizontal-padding: 16px;
+  --td-cell-vertical-padding: 10px;
+}
+
+.addr-list button {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 45px;
+  line-height: 45px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #fff;
+  background-color: #0074FE;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.clear {
+  margin: 8px;
+  text-align: right;
+  font-size: 12px;
+  color: #A9A9A9;
+}

@@ -55,12 +55,14 @@
       "pages/ios/vip-agreement/vip-agreement",
       "pages/ios/vip-renew/vip-renew",
       "pages/ios/relate/relate",
-      "pages/search/search"
+      "pages/search/index/index",
+      "pages/search/search/search"
     ]
   },
   "mini-android": {
     "pages": [
-      "pages/search/search"
+      "pages/search/index/index",
+      "pages/search/search/search"
     ]
   },
   "window": {

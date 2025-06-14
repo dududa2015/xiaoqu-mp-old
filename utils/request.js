@@ -1,6 +1,6 @@
 // api URL
-const apiUrl = "http://localhost:5213/api"
-// const apiUrl = "https://mp.zhuzixi.cn/api"
+// const apiUrl = "http://localhost:5213/api"
+const apiUrl = "https://mp.zhuzixi.cn/api"
 // 封装微信请求方法
 const request = (params) => {
   let url = params.url;
@@ -47,7 +47,7 @@ const request = (params) => {
           })
           // #endif
           reject('')
-        } else if (res.statusCode === 500) {
+        } else if (res.statusCode === 500 || res.statusCode === 403) {
           reject('')
         } else {
           resolve(res.data)

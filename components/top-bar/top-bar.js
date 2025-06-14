@@ -28,18 +28,18 @@ Component({
      */
     methods: {
         onChooseLocation() {
-            const that = this
-            wx.chooseLocation({
-                success: (res) => {
-                    const {
-                        latitude,
-                        longitude,
-                        name
-                    } = res
-                    this.triggerEvent('onChooseLocation', res)
-                }
-            });
-            // this.triggerEvent('onShowChooseLocation')
+            // const that = this
+            // wx.chooseLocation({
+            //     success: (res) => {
+            //         const {
+            //             latitude,
+            //             longitude,
+            //             name
+            //         } = res
+            //         this.triggerEvent('onChooseLocation', res)
+            //     }
+            // });
+            this.triggerEvent('onShowChooseLocation')
         },
         onSetting() {
             this.triggerEvent('onSetting');

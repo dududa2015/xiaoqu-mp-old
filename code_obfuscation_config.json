@@ -1,178 +1,186 @@
 {
-  "desc": "关于本文件的更多信息，请参考文档 代码加固开发者文档: https://developers.weixin.qq.com/miniprogram/dev/devtools/code_obfuscation.html",
-  "switch": true,
-  "configs": [
-    {
-      "path": "pages/index/index.js",
-      "sub_switch": true
-    },
-    {
-      "path": "utils/util.js",
-      "sub_switch": true
-    },
-    {
-      "path": "utils/const.js",
-      "sub_switch": true
-    },
-    {
-      "path": "utils/api.js",
-      "sub_switch": true
-    },
-    {
-      "path": "utils/apis.js",
-      "sub_switch": true
-    },
-    {
-      "path": "utils/request.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/color-picker/color-picker.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/suggestions-input/suggestions-input.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/bottom-bar/bottom-bar.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/top-bar/top-bar.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/top-search/top-search.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/top-tip/top-tip.js",
-      "sub_switch": true
-    },
-    {
-      "path": "pages/my/edit/edit.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/poi-detail/poi-detail.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/marker-add/marker-add.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/marker-filter/marker-filter.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/marker-add-grid/marker-add-grid.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/map-setting/map-setting.js",
-      "sub_switch": true
-    },
-    {
-      "path": "pages/my/markers/markers.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/map-marker-popup/map-marker-popup.js",
-      "sub_switch": true
-    },
-    {
-      "path": "pages/my/audit/audit.js",
-      "sub_switch": true
-    },
-    {
-      "path": "pages/my/index/index.js",
-      "sub_switch": true
-    },
-    {
-      "path": "pages/ios/login/login.js",
-      "sub_switch": true
-    },
-    {
-      "path": "pages/my/newUser/newUser.js",
-      "sub_switch": true
-    },
-    {
-      "path": "pages/my/notice/notice.js",
-      "sub_switch": true
-    },
-    {
-      "path": "pages/ios/relate/relate.js",
-      "sub_switch": true
-    },
-    {
-      "path": "pages/ios/user-agreement/user-agreement.js",
-      "sub_switch": true
-    },
-    {
-      "path": "pages/ios/vip/vip.js",
-      "sub_switch": true
-    },
-    {
-      "path": "pages/personal/list/list.js",
-      "sub_switch": true
-    },
-    {
-      "path": "pages/setting/setting.js",
-      "sub_switch": true
-    },
-    {
-      "path": "utils/apple-iap-manager2.js",
-      "sub_switch": true
-    },
-    {
-      "path": "utils/map.js",
-      "sub_switch": true
-    },
-    {
-      "path": "apis/map-apis.js",
-      "sub_switch": true
-    },
-    {
-      "path": "apis/marker-apis.js",
-      "sub_switch": true
-    },
-    {
-      "path": "apis/user-api.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/bottom-add/bottom-add.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/bottom-location/bottom-location.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/check-tag/check-tag.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/middle-bar/middle-bar.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/navigation-bar/navigation-bar.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/personal-map/personal-map.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/user-info/user-info.js",
-      "sub_switch": true
-    },
-    {
-      "path": "components/user-info-app/user-info-app.js",
-      "sub_switch": true
-    }
-  ]
+	"desc": "关于本文件的更多信息，请参考文档 代码加固开发者文档: https://developers.weixin.qq.com/miniprogram/dev/devtools/code_obfuscation.html",
+	"switch": true,
+	"configs": [
+		{
+			"path": "pages/index/index.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/util.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/const.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/api.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/apis.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/request.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/color-picker/color-picker.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/suggestions-input/suggestions-input.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/bottom-bar/bottom-bar.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/top-bar/top-bar.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/top-search/top-search.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/top-tip/top-tip.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/edit/edit.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/poi-detail/poi-detail.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/marker-add/marker-add.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/marker-filter/marker-filter.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/marker-add-grid/marker-add-grid.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/map-setting/map-setting.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/markers/markers.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/map-marker-popup/map-marker-popup.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/audit/audit.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/index/index.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/ios/login/login.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/newUser/newUser.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/notice/notice.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/ios/relate/relate.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/ios/user-agreement/user-agreement.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/ios/vip/vip.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/personal/list/list.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/setting/setting.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/apple-iap-manager2.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/map.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/map-apis.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/marker-apis.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/user-api.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/bottom-add/bottom-add.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/bottom-location/bottom-location.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/check-tag/check-tag.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/middle-bar/middle-bar.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/navigation-bar/navigation-bar.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/personal-map/personal-map.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/user-info/user-info.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/user-info-app/user-info-app.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/search/index/index.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/search/search/search.js",
+			"sub_switch": true
+		}
+	]
 }
