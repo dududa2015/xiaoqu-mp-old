@@ -435,9 +435,7 @@ Page({
         if (res.confirm) {
           wx.openAppAuthorizeSetting({
             success(res) {
-              console.log('11')
               that.setLocMarkerIcon()
-              console.log('22')
               console.log(res)
             },
             fail(err) {

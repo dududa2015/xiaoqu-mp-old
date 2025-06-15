@@ -73,6 +73,7 @@ Page({
   },
   getAroundByLocation(longitude, latitude) {
     let location = longitude + ',' + latitude
+    let types = '' //120000
     getAroundByLocation({
       location
     }).then(res => {
