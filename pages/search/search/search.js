@@ -1,6 +1,9 @@
 import {
-  getAmapPoiListByKeyword
+  getAmapPoiListByTips
 } from '../../../apis/amap-apis'
+import {
+  convertToKilometers
+} from '../../../utils/util'
 Page({
 
   /**
@@ -39,33 +42,53 @@ Page({
           this.init()
           return
         }
-        this.getAmapPoiListByKeyword(value); // 实际查询逻辑
+        this.getAmapPoiListByTips(value); // 实际查询逻辑
       }, this.data.searchDelay)
     });
   },
-  getAmapPoiListByKeyword(keywords) {
+  getAmapPoiListByTips(keywords) {
     let city = wx.getStorageSync('city')
-
-    getAmapPoiListByKeyword({
+    let latitude = wx.getStorageSync('latitude')
+    let longitude = wx.getStorageSync('longitude')
+    let location = longitude + ',' + latitude
+    getAmapPoiListByTips({
+      location,
       keywords,
-      region: city
+      // types: 12000,
+      city,
     }).then(res => {
+      // 在 map 中跳过无效项（返回 null 再过滤）。因为搜索北京市或深圳市的时候，location会是[],
+      // 检查location是否有效和filter(Boolean);是为了自动过滤null/undefined
       let poiList = res.map(item => {
+        // 检查location是否有效
+        if (Array.isArray(item.location) || !item.location?.includes(',')) {
+          return null; // 返回null后续过滤
+        }
         // 解析经纬度
         const [longitude, latitude] = item.location.split(',').map(Number);
         // 拼接完整地址
-        const fullAddress = `${item.pname}${item.cityname}${item.address}`;
+        const fullAddress = `${item.district}${item.address}`;
         // 返回转换后的对象
         return {
           address: fullAddress,
           latitude: latitude,
           longitude: longitude,
-          name: item.name
+          name: item.name,
+          hightlightName: this.getHighlightText(item.name, keywords),
+          distance: convertToKilometers(item.distance)
         };
-      })
+      }).filter(Boolean); // 自动过滤null/undefined
+      console.log(poiList)
       this.setData({
         poiList
       })
+    })
+  },
+  // 生成高亮文本
+  getHighlightText(text, keyword) {
+    const regex = new RegExp(keyword, 'gi')
+    return text.replace(regex, match => {
+      return `<span style="color: #0074FE;">${match}</span>`
     })
   },
   //选择
@@ -80,9 +103,14 @@ Page({
         if (poiList.length >= 10) {
           poiList.pop()
         }
-        poiList.unshift(poi);
+        //不要distance
+        poiList.unshift({
+          address: poi.address,
+          latitude: poi.latitude,
+          longitude: poi.longitude,
+          name: poi.name
+        });
       } else {
-        debugger
         // 从原位置移除该项
         const [movedItem] = poiList.splice(index, 1);
         // 添加到数组开头

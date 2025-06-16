@@ -24,9 +24,6 @@ Page({
         longitude
       })
       this.getAroundByLocation(longitude, latitude)
-      wx.removeStorage({
-        key: 'poi',
-      })
     }
   },
   /**
@@ -89,6 +86,17 @@ Page({
           longitude: longitude,
           name: item.name
         };
+      })
+
+      let poi = wx.getStorageSync('poi')
+      if(poi){
+        let index = poiList.findIndex(item=>item.name === poi.name)
+        if(index === -1){
+          poiList.unshift(poi)
+        }
+      }
+      wx.removeStorage({
+        key: 'poi',
       })
       this.setData({
         poiList

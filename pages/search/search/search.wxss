@@ -70,7 +70,6 @@
   border-radius: 12px;
   overflow: auto;
   --td-spacer: 0;
-  --td-cell-description-font-size: 13px;
   --td-cell-horizontal-padding: 16px;
   --td-cell-vertical-padding: 10px;
 }
@@ -89,9 +88,22 @@
   background-color: #0074FE;
 }
 
+.distance {
+  white-space: nowrap;
+  font-size: 14px;
+  margin-right: 8px;
+  font-weight: 400;
+}
+
+.description {
+  font-size: 13px;
+}
+
 .title {
+  white-space: nowrap;
   font-size: 16px;
   font-weight: 500;
+  margin-left: 4px;
 }
 
 .clear {

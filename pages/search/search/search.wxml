@@ -9,10 +9,15 @@
   <view class="content">
     <view class="addr-list">
       <t-cell-group>
-        <t-cell wx:for="{{poiList}}" wx:key="index" description="{{item.address}}" hover bind:tap="onChoose" data-item="{{item}}">
+        <t-cell wx:for="{{poiList}}" wx:key="index" hover bind:tap="onChoose" data-item="{{item}}">
           <view slot="title" class="flex f-y-center">
             <t-icon name="location" size="16px" />
-            <text class="title" style="margin-left: 4px;">{{item.name}}</text>
+            <rich-text class="title" nodes="{{item.hightlightName || item.name}}"></rich-text>
+            <!-- <text class="title" >{{item.name}}</text> -->
+          </view>
+          <view slot="description" class="flex f-y-fs">
+            <!-- <text class="distance">{{item.distance}}</text> -->
+            <text class="description">{{item.address}}</text>
           </view>
         </t-cell>
         <view class="clear">
