@@ -1,3 +1,6 @@
+import {
+  msgSecurityCheck
+} from '../apis/msg-sec-check-apis'
 const { words, auditedList } = require('./const.js');
 import api from './api.js'
 import {
@@ -131,14 +134,12 @@ const msgSecCheck = msg => {
   })
   return new Promise((resolve, reject) => {
     let t = this;
-    api.post('https://zhuzixi.cn/louhao/lh.asmx/msgSecCheck', {
-      content: msg,
-    }).then(res => {
+    msgSecurityCheck({content:msg}).then(res => {
       wx.hideLoading()
-      if (res.errcode === "87014") {
+      if (!res.isContentSafe) {
         wx.showToast({
-          title: '输入有违规内容',
-          icon: 'error',
+          title: '您输入的内容疑似违规，请重新输入',
+          icon: 'none',
           mask: true
         })
         resolve(false)

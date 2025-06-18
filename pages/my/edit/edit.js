@@ -1,6 +1,9 @@
 import {
   updateNickName
 } from '../../../apis/user-api'
+import {
+  msgSecCheck
+} from '../../../utils/util'
 Page({
 
   /**
@@ -87,11 +90,11 @@ Page({
       if (this.data.name) {
         this.onSave()
       }
+    } else {
+      this.setData({
+        showDialog: false
+      })
     }
-    this.setData({
-      showDialog: false
-    })
-    console.log(e)
   },
   onNameChange(e) {
     console.log(e.detail.value)
@@ -101,34 +104,29 @@ Page({
   },
   //保存昵称
   onSave() {
-    // if (this.data.nickName.trim().length === 0) {
-    //     wx.showToast({
-    //         title: '请输入昵称',
-    //         icon: 'none'
-    //     })
-    //     return
-    // }
     const param = {
       userId: wx.getStorageSync('userId'),
       nickName: this.data.name
     }
-    updateNickName(param).then(res => {
+    msgSecCheck(this.data.name).then(res => {
       if (res) {
-        wx.showToast({
-          title: '保存成功',
-          mask: true
-        })
-        this.setData({
-          nickName: this.data.name
-        })
-        // setTimeout(() => {
-        //     wx.navigateBack()
-        // }, 1500);
-      } else {
-        wx.showToast({
-          title: '保存失败',
-          icon: 'error',
-          mask: true
+        updateNickName(param).then(res => {
+          if (res) {
+            wx.showToast({
+              title: '保存成功',
+              mask: true
+            })
+            this.setData({
+              nickName: this.data.name,
+              showDialog: false
+            })
+          } else {
+            wx.showToast({
+              title: '保存失败',
+              icon: 'error',
+              mask: true
+            })
+          }
         })
       }
     })
