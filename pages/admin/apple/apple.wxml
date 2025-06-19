@@ -15,8 +15,8 @@
         <t-col span="3">{{item.year}}</t-col>
         <t-col span="6">{{item.amount}}</t-col>
     </t-row>
-    <t-row class="body">
-        <t-col span="6">总额</t-col>
+    <t-row class="sum">
+        <t-col span="6">合计</t-col>
         <t-col span="3">{{totalVip}}</t-col>
         <t-col span="3">{{totalMonth}}</t-col>
         <t-col span="3">{{totalSeason}}</t-col>

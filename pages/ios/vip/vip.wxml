@@ -34,7 +34,8 @@
         </view>
     </view>
     <view class="tips">
-        温馨提醒：您也可以免费使用微信小程序<text class="mp-name" bind:tap="toMP">【小区楼号分布图】</text>
+        <!-- 温馨提醒：您也可以免费使用微信小程序 -->
+        <!-- <text class="mp-name" bind:tap="toMP">【小区楼号分布图】</text> -->
     </view>
     <view class="footer">
         <button type="primary" style="background-color: rgba(219, 179, 122, 1); " bind:tap="onPurchase">开通会员</button>

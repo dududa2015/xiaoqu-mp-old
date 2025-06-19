@@ -40,6 +40,7 @@ Page({
         totalSeason,
         totalYear
       })
+      wx.stopPullDownRefresh()
     })
   },
 
