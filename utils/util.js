@@ -136,7 +136,7 @@ const msgSecCheck = msg => {
     let t = this;
     msgSecurityCheck({content:msg}).then(res => {
       wx.hideLoading()
-      if (!res.isContentSafe) {
+      if (res !== '' && !res.isContentSafe) {
         wx.showToast({
           title: '您输入的内容疑似违规，请重新输入',
           icon: 'none',

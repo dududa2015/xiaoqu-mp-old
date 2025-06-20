@@ -33,8 +33,8 @@
             </view>
         </view>
     </view>
-    <view class="tips">
-        <!-- 温馨提醒：您也可以免费使用微信小程序 -->
+    <view class="tips" wx:if="{{showTips}}">
+        温馨提醒：终身会员从7月起，每月上调5元
         <!-- <text class="mp-name" bind:tap="toMP">【小区楼号分布图】</text> -->
     </view>
     <view class="footer">

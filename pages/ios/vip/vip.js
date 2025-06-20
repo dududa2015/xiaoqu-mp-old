@@ -77,6 +77,17 @@ Page({
 
     this.getProductList()
     this.getProductListByApple()
+
+    this.init()
+  },
+  init() {
+    //控制显示是否显示温馨提醒
+    let userInfo = wx.getStorageSync('userInfo')
+    if (userInfo && userInfo.openId) {
+      this.setData({
+        showTips: true
+      })
+    }
   },
   //通过接口获取产品列表--优化用这个方法获取
   getProductList() {

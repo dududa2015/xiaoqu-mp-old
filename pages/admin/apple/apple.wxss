@@ -24,8 +24,8 @@
 }
 
 .sum {
-  font-weight: 500;
-  font-size: 24rpx;
+  font-weight: 600;
+  font-size: 26rpx;
   color: rgba(0, 0, 0, 0.9);
   line-height: 80rpx;
   background-color: #fff;

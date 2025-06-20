@@ -64,8 +64,8 @@ Page({
     this.initStorage()
     //插屏广告
     // #if MP
-    this.mapCtx = wx.createMapContext('myMap')
-    getApp().globalData.mapCtx = this.mapCtx
+    // this.mapCtx = wx.createMapContext('myMap')
+    // getApp().globalData.mapCtx = this.mapCtx
     this.initCPAd()
     this.showAppNotice()
     setTimeout(() => {
@@ -97,7 +97,7 @@ Page({
       let latitude = parseFloat(poi.latitude)
       let longitude = parseFloat(poi.longitude)
 
-      this.mapCtx.moveToLocation({
+      this.getMapContext().moveToLocation({
         latitude,
         longitude
       })
@@ -249,7 +249,7 @@ Page({
     // #if NATIVE
     if (locIconIndex) {
       setTimeout(() => {
-        this.mapCtx.setLocMarkerIcon({
+        this.getMapContext().setLocMarkerIcon({
           iconPath: `/images/loc-marker/${locIconIndex}.png`
         })
       }, 500);
@@ -258,9 +258,9 @@ Page({
   },
   setLocMarkerIcon() {
     // 使用 wx.createMapContext 获取 map 上下文
-    this.mapCtx = wx.createMapContext('myMap')
-    getApp().globalData.mapCtx = this.mapCtx
-    this.mapCtx.setLocMarkerIcon({
+    // this.mapCtx = wx.createMapContext('myMap')
+    // getApp().globalData.mapCtx = this.mapCtx
+    this.getMapContext().setLocMarkerIcon({
       iconPath: '/images/loc-marker/1.png',
       success(res) {
         console.log(res)
@@ -456,7 +456,7 @@ Page({
         success: (res) => {
           const locationChangeHandler = res => {
             console.log('onLocationChange', res)
-            this.mapCtx.moveToLocation({
+            this.getMapContext().moveToLocation({
               longitude: res.longitude,
               latitude: res.latitude,
               success: function () {
@@ -521,7 +521,7 @@ Page({
     }
   },
   updateLocationIconRotation(direction) {
-    this.mapCtx.setLocation({
+    this.getMapContext().setLocation({
       rotate: -direction,
       success: () => {
         console.log('定位图标旋转成功');
@@ -569,7 +569,7 @@ Page({
       latitude,
       longitude
     } = event.detail
-    this.mapCtx.moveToLocation({
+    this.getMapContext().moveToLocation({
       latitude: latitude,
       longitude: longitude
     })
@@ -709,28 +709,61 @@ Page({
     });
   },
   onRegionChange(e) {
-    console.log(e)
-    if (e.detail.centerLocation) {
-      if (e.type === 'end' && e.causedBy === 'drag') {
-        let lat = this.truncateToSixDecimals(e.detail.centerLocation.latitude)
-        let lng = this.truncateToSixDecimals(e.detail.centerLocation.longitude)
-        let lastLatitude = wx.getStorageSync('lastLatitude') || 0
-        let lastLongitude = wx.getStorageSync('lastLongitude') || 0
-        //如果经度或纬度移动超过0.003度,那么就获取周围的标记点
-        let latlng = parseFloat(lat) + parseFloat(lng)
-        let latlngStorage = parseFloat(lastLatitude) + parseFloat(lastLongitude)
-        //2024-09-21由0.0015改为0.001
-        // if (Math.abs(latlng - latlngStorage) >= 0.001) {
-        if (Math.abs(parseFloat(lat) - parseFloat(lastLatitude)) >= 0.0005 ||
-          Math.abs(parseFloat(lng) - parseFloat(lastLongitude)) >= 0.0005
-        ) {
-          this.getAroundList(lat, lng)
-          wx.setStorageSync('lastLatitude', lat)
-          wx.setStorageSync('lastLongitude', lng)
-        }
-      }
+    // 1. 添加调试日志，方便问题排查
+    console.log('地图区域变化事件:', e);
+
+    // 2. 提前返回条件判断
+    if (!e.detail?.centerLocation || e.type !== 'end' || e.causedBy !== 'drag') {
+      return;
+    }
+
+    // 3. 提取并处理坐标数据
+    const {
+      latitude,
+      longitude
+    } = e.detail.centerLocation;
+    const currentLat = this.truncateToSixDecimals(latitude);
+    const currentLng = this.truncateToSixDecimals(longitude);
+
+    // 4. 获取上次存储的坐标
+    const lastLatitude = parseFloat(wx.getStorageSync('lastLatitude')) || 0;
+    const lastLongitude = parseFloat(wx.getStorageSync('lastLongitude')) || 0;
+
+    // 5. 计算坐标变化量
+    const latDiff = Math.abs(currentLat - lastLatitude);
+    const lngDiff = Math.abs(currentLng - lastLongitude);
+
+    // 6. 判断是否需要获取周边标记点 (阈值0.0005度)
+    const MIN_DIFF_THRESHOLD = 0.0005; // 约50米左右的变化
+    if (latDiff >= MIN_DIFF_THRESHOLD || lngDiff >= MIN_DIFF_THRESHOLD) {
+      this.getAroundList(currentLat, currentLng);
+      wx.setStorageSync('lastLatitude', currentLat);
+      wx.setStorageSync('lastLongitude', currentLng);
     }
   },
+  // onRegionChange(e) {
+  //   console.log(e)
+  //   if (e.detail.centerLocation) {
+  //     if (e.type === 'end' && e.causedBy === 'drag') {
+  //       let lat = this.truncateToSixDecimals(e.detail.centerLocation.latitude)
+  //       let lng = this.truncateToSixDecimals(e.detail.centerLocation.longitude)
+  //       let lastLatitude = wx.getStorageSync('lastLatitude') || 0
+  //       let lastLongitude = wx.getStorageSync('lastLongitude') || 0
+  //       //如果经度或纬度移动超过0.003度,那么就获取周围的标记点
+  //       let latlng = parseFloat(lat) + parseFloat(lng)
+  //       let latlngStorage = parseFloat(lastLatitude) + parseFloat(lastLongitude)
+  //       //2024-09-21由0.0015改为0.001
+  //       // if (Math.abs(latlng - latlngStorage) >= 0.001) {
+  //       if (Math.abs(parseFloat(lat) - parseFloat(lastLatitude)) >= 0.0005 ||
+  //         Math.abs(parseFloat(lng) - parseFloat(lastLongitude)) >= 0.0005
+  //       ) {
+  //         this.getAroundList(lat, lng)
+  //         wx.setStorageSync('lastLatitude', lat)
+  //         wx.setStorageSync('lastLongitude', lng)
+  //       }
+  //     }
+  //   }
+  // },
   on3D() {
     this.setData({
       enable3D: true
@@ -1189,7 +1222,7 @@ Page({
   onChooseMarker() {
     this.disableMapTap()
     const that = this
-    this.mapCtx.getCenterLocation({
+    this.getMapContext().getCenterLocation({
       success: function (res) {
         const {
           longitude,
@@ -1416,7 +1449,7 @@ Page({
     this.moveToLocation(latitude, longitude)
   },
   moveToLocation(latitude, longitude) {
-    this.mapCtx.moveToLocation({
+    this.getMapContext().moveToLocation({
       latitude: latitude,
       longitude: longitude
     })
@@ -1572,7 +1605,7 @@ Page({
   //更改定位图标
   onLocIcon(event) {
     console.log(event.detail)
-    this.mapCtx.setLocMarkerIcon({
+    this.getMapContext().setLocMarkerIcon({
       iconPath: `/images/loc-marker/${event.detail}.png`
     })
   },
@@ -1659,15 +1692,14 @@ Page({
       showAdd: true,
       showLocation: true
     })
-    // if (!this.data.showGrid) {
-    //     this.showTabBar()
-    // }
-    // if (event.detail) {
-    //     this.setData({
-    //         showAdd: true,
-    //         showLocation: true
-    //     })
-    // }
+  },
+  //获取地图上下文的方法
+  getMapContext() {
+    if (!this.mapCtx || !this.mapCtx.moveToLocation) { // ✅ 检查是否失效
+      this.mapCtx = wx.createMapContext('myMap');
+      getApp().globalData.mapCtx = this.mapCtx
+    }
+    return this.mapCtx;
   },
   buildPolylineColor(type) {
     if (type === 7) {
@@ -1689,7 +1721,7 @@ Page({
     getNotice().then(res => {
       that.setData({
         noticeList: res.noticeList,
-        iosContent: res.iosContent,
+
         androidContent: res.androidContent
       })
       that.bdCount = res.bdCount
@@ -1701,7 +1733,9 @@ Page({
       console.log('版本号：', appVersion, iosVersion)
       let needUpdate = this.compareVersions(appVersion, iosVersion)
       that.setData({
-        showVersionUpdate: needUpdate
+        showVersionUpdate: needUpdate,
+        iosContent: res.iosContent,
+        iosForceUpdate: res.iosForceUpdate
       })
       // #elif ANDROID
       let androidVersion = resp.androidVersion

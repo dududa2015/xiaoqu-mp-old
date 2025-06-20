@@ -14,9 +14,13 @@ Component({
             value: '',
             observer(newVal, oldVal) {
                 this.setData({
-                    contentList: newVal.replace('；', '\n')
+                    contentList: newVal.replace(/;/g, '\n').replace(/；/g, '\n')
                 })
             }
+        },
+        iosForceUpdate:{
+          type: Boolean,
+          value: false
         }
     },
 

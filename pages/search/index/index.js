@@ -33,9 +33,11 @@ Page({
     let latitude = wx.getStorageSync('latitude')
     let longitude = wx.getStorageSync('longitude')
     this.mapCtx = wx.createMapContext('searchMap')
+    let position = wx.getStorageSync('position')
     this.setData({
       longitude,
-      latitude
+      latitude,
+      position
     })
     this.initNavBar()
     this.getAroundByLocation(longitude, latitude)

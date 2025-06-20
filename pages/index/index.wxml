@@ -27,7 +27,7 @@
     <personal-map showMap="{{showMap}}" bind:onMapChange="onMapChange" bind:onMapClose="onMapClose"></personal-map>
     <!-- 版本升级提示 -->
     <!-- #if NATIVE -->
-    <version-update showVersionUpdate="{{showVersionUpdate}}" iosContent="{{iosContent}}"></version-update>
+    <version-update showVersionUpdate="{{showVersionUpdate}}" iosContent="{{iosContent}}" iosForceUpdate="{{iosForceUpdate}}"></version-update>
     <choose-location showChooseLocation="{{showChooseLocation}}"></choose-location>
     <!-- #endif -->
 </view>
