@@ -27,6 +27,7 @@ let videoAd = null
 let interstitialAd = null
 Page({
   data: {
+    isSetLocMarkerIcon: false, //是否设置了定位点图标
     rect: {},
     tips: '', //顶部的提示语
     position: 'right', //地图控件的展示位置，左和右
@@ -85,6 +86,8 @@ Page({
   onShow() {
     this.amapSearch()
     // #if NATIVE
+    this.initLocMarkerIcon()
+
     setTimeout(() => {
       this.checkVip()
     }, 1000);
@@ -219,7 +222,7 @@ Page({
     const enableSatellite = wx.getStorageSync('enableSatellite')
     const enable3D = wx.getStorageSync('enable3D')
     const enableScreenOn = wx.getStorageSync('enableScreenOn')
-    const locIconIndex = wx.getStorageSync('locIconIndex')
+
 
     if (position) {
       this.setData({
@@ -245,16 +248,28 @@ Page({
     wx.setKeepScreenOn({
       keepScreenOn: !!enableScreenOn
     })
-
-    // #if NATIVE
-    if (locIconIndex) {
-      setTimeout(() => {
-        this.getMapContext().setLocMarkerIcon({
-          iconPath: `/images/loc-marker/${locIconIndex}.png`
-        })
-      }, 500);
+  },
+  initLocMarkerIcon() {
+    if (!this.data.isSetLocMarkerIcon) {
+      const locIconIndex = wx.getStorageSync('locIconIndex')
+      if (locIconIndex) {
+        setTimeout(() => {
+          console.log('地图实例:', this.getMapContext());
+          this.getMapContext().setLocMarkerIcon({
+            iconPath: `/images/loc-marker/${locIconIndex}.png`,
+            success(res) {
+              this.setData({
+                isSetLocMarkerIcon: true
+              });
+              console.log('setLocMarkerIcon successful')
+            },
+            fail(err) {
+              console.log(err)
+            }
+          })
+        }, 500);
+      }
     }
-    // #endif
   },
   setLocMarkerIcon() {
     // 使用 wx.createMapContext 获取 map 上下文

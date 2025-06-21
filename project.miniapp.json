@@ -1,8 +1,8 @@
 {
   "miniVersion": "v2",
   "name": "小区楼号地图",
-  "version": "1.0.6",
-  "versionCode": 20250613,
+  "version": "1.0.7",
+  "versionCode": 20250621,
   "i18nFilePath": "i18n",
   "mini-android": {
     "resourcePath": "miniapp/android/nativeResources",
@@ -54,7 +54,7 @@
       "WeAppOthers": false,
       "WeAppIdaas": true
     },
-    "enableVConsole": "open",
+    "enableVConsole": "close",
     "icons": {
       "mainIcon120": "/Users/zhujian/Desktop/miniprogram/icons/ios/AppIcon.appiconset/icon-40@3x.png",
       "mainIcon180": "/Users/zhujian/Desktop/miniprogram/icons/ios/AppIcon.appiconset/icon-60@3x.png",
@@ -107,7 +107,7 @@
     "buildCloud": {
       "useRemote": true,
       "p12": "miniapp/ios/iosCloudBuildMaterial/PC5SUA5M62_DISTRIBUTION_1779677648000.p12",
-      "p12passwordEncrypted": "DAiQyK4AUJU8YD0k4yi76lNXrXWrzK1xdfzRb9eDWwS+d3uC717qpq1FTKe+EpYrCdk6puZH+vfHOg3PrEITKxH3sNRtDtGW/R6JroskKMkoO6olQbTbtvaZFlxdF505VzBDXy2wwttPDdX103Yez4YmOM53tQfwJ9Yvx38YeY0=",
+      "p12passwordEncrypted": "K8k/ZScAs6WLw5DalV2okBdkGEFaF8nCl8RTcKaIrcwnPNnn9AhUr3oq/JHIp0brvf2iJb4bhDXpxuvzDYuIO1OJ9MTWvrlByfjUsVibjFnLb7Eeodak4twD/72ncQiqFX7G5d+eDJ0GjV/5ugO2+QXwlb9DD9EJ7vqyoSVgqfk=",
       "certificate": "Apple Distribution: jian zhu (BB8CM6ZM4C)",
       "profile": "miniapp/ios/iosCloudBuildMaterial/YF3MG24973_IOS_APP_STORE_1779677648000.mobileprovision"
     },

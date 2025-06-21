@@ -181,6 +181,10 @@
 		{
 			"path": "pages/search/search/search.js",
 			"sub_switch": true
+		},
+		{
+			"path": "components/version-update/version-update.js",
+			"sub_switch": true
 		}
 	]
 }
