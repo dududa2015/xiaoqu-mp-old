@@ -189,22 +189,6 @@ const getColorFromStorage = n => {
     return '#0074FE'
   }
 }
-//根据类型获取背景色
-const getBgColorByType = (type) => {
-  let bgColor = ''
-  if (type === 0) {
-    bgColor = '#0074FE'
-  } else if (type === 1) {
-    bgColor = '#E85827'
-  } else if (type >= 2 && type <= 6) {
-    bgColor = '#8c444f'
-  } else if (type === 7) {
-    bgColor = '#3CB371'
-  } else {
-    bgColor = '#dc143c'
-  }
-  return bgColor
-}
 
 function isPointOnSegment(p, q, r) {
   if (q.latitude <= Math.max(p.latitude, r.latitude) &&
@@ -272,7 +256,6 @@ module.exports = {
   msgSecCheck,
   getBdAround,
   getColorFromStorage,
-  getBgColorByType,
   isPointOnPolyline,
   checkString
 }

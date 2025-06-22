@@ -122,6 +122,27 @@ Page({
       });
     }
   },
+  //客服
+  toCS(){
+    console.log('toCS')
+    wx.navigateTo({
+      url: '/pages/my/customerService/customerService',
+        success: (res) => {
+        console.log('launchMiniProgram success:', res)
+      },
+      fail:(err) =>{
+        console.log(err)
+      }
+    })
+    // wx.miniapp.launchMiniProgram({
+    //   userName: 'gh_37d525095f5a', //小程序原始ID
+    //   path: 'pages/my/customerService/customerService',
+    //   miniprogramType: 0, //0 release ，1 test, 2 preview
+    //   success: (res) => {
+    //     console.log('launchMiniProgram success:', res)
+    //   }
+    // })
+  },
   onShareAppMessage() {
 
   }

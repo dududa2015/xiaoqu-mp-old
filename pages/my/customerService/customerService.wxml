@@ -1,0 +1,5 @@
+<view class="container">
+  <t-button theme="light" content="点我进入客服" size="large" style="width: 280rpx;">
+  </t-button>
+  <button class="share-btn" openType="contact">客服</button>
+</view>

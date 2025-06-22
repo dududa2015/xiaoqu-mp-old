@@ -27,7 +27,7 @@ let videoAd = null
 let interstitialAd = null
 Page({
   data: {
-    isSetLocMarkerIcon: false, //是否设置了定位点图标
+    // isSetLocMarkerIcon: false, //是否设置了定位点图标
     rect: {},
     tips: '', //顶部的提示语
     position: 'right', //地图控件的展示位置，左和右
@@ -250,7 +250,7 @@ Page({
     })
   },
   initLocMarkerIcon() {
-    if (!this.data.isSetLocMarkerIcon) {
+    if (!this.isSetLocMarkerIcon) {
       const locIconIndex = wx.getStorageSync('locIconIndex')
       if (locIconIndex) {
         setTimeout(() => {
@@ -258,9 +258,7 @@ Page({
           this.getMapContext().setLocMarkerIcon({
             iconPath: `/images/loc-marker/${locIconIndex}.png`,
             success(res) {
-              this.setData({
-                isSetLocMarkerIcon: true
-              });
+              this.isSetLocMarkerIcon = true
               console.log('setLocMarkerIcon successful')
             },
             fail(err) {
