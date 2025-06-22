@@ -35,10 +35,6 @@
 			"sub_switch": true
 		},
 		{
-			"path": "components/bottom-bar/bottom-bar.js",
-			"sub_switch": true
-		},
-		{
 			"path": "components/top-bar/top-bar.js",
 			"sub_switch": true
 		},
