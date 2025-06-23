@@ -65,8 +65,6 @@ Page({
     this.initStorage()
     //插屏广告
     // #if MP
-    // this.mapCtx = wx.createMapContext('myMap')
-    // getApp().globalData.mapCtx = this.mapCtx
     this.initCPAd()
     this.showAppNotice()
     setTimeout(() => {
@@ -217,12 +215,13 @@ Page({
   },
   //设置
   initStorage() {
+    this.getMapContext()
+
     const position = wx.getStorageSync('position')
     const enableRotate = wx.getStorageSync('enableRotate')
     const enableSatellite = wx.getStorageSync('enableSatellite')
     const enable3D = wx.getStorageSync('enable3D')
     const enableScreenOn = wx.getStorageSync('enableScreenOn')
-
 
     if (position) {
       this.setData({
@@ -270,9 +269,6 @@ Page({
     }
   },
   setLocMarkerIcon() {
-    // 使用 wx.createMapContext 获取 map 上下文
-    // this.mapCtx = wx.createMapContext('myMap')
-    // getApp().globalData.mapCtx = this.mapCtx
     this.getMapContext().setLocMarkerIcon({
       iconPath: '/images/loc-marker/1.png',
       success(res) {
@@ -1710,8 +1706,9 @@ Page({
   getMapContext() {
     if (!this.mapCtx || !this.mapCtx.moveToLocation) { // ✅ 检查是否失效
       this.mapCtx = wx.createMapContext('myMap');
-      getApp().globalData.mapCtx = this.mapCtx
     }
+    //给marker-add用
+    getApp().globalData.mapCtx = this.mapCtx
     return this.mapCtx;
   },
   buildPolylineColor(type) {
