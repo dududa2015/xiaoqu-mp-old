@@ -18,7 +18,7 @@
     <view>❇️ 免除小程序内的广告（封面广告除外）</view>
   </view>
   <view class="subtitle">管理员 权益</view>
-  <view>当您标记地点达到 <text class="point"> 800 </text>个时，您将成为管理员。作为管理员，您将享有以下特权：</view>
+  <view>当您标记地点达到 <text class="point"> 1000 </text>个时，您将成为管理员。作为管理员，您将享有以下特权：</view>
   <view>
     <view>❇️ 免看广告删除用户的违规或者错误的标记</view>
   </view>

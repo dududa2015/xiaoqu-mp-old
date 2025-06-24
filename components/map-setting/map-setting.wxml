@@ -13,30 +13,7 @@
             <view class="{{enableSatellite   ? 'text text-checked' : 'text'}}">卫星地图</view>
         </view>
     </view>
-
-    <!-- 个人地图设置 -->
-    <!-- <view class="setting {{isShowBorder ? 'border-show' : 'border-hidden'}}">
-        <view class="row flex f-x-sb">
-            <view class="row-title flex f-y-center">
-                <text>开启个人地图</text>
-                <t-icon class="help-icon" color="#999" name="help-circle" size="24rpx" data-key="showMapConfirm" bind:tap="showDialog"></t-icon>
-            </view>
-            <view class="row-title">
-                <t-switch value="{{enableMap}}" slot="note" size="small" bind:change="onPersonalmapChange" />
-            </view>
-        </view>
-        <view class="last-row flex f-x-sb">
-            <view class="row-title flex f-y-center">
-                <text>导入个人数据</text>
-                <t-icon class="help-icon" color="#999" name="help-circle" size="24rpx" data-key="showImportPersonalDataConfirm" bind:tap="showDialog"></t-icon>
-            </view>
-            <view class="row-title">
-                <t-switch value="{{enableImportPersonalData}}" slot="note" size="small" bind:change="onImportPersonalDataChange" />
-            </view>
-        </view>
-    </view> -->
     <!-- 位置、形状、旋转设置 -->
-
     <view class="setting">
         <!-- #if NATIVE-->
         <view class="row flex f-x-sb" style="padding: 16rpx 24rpx">
@@ -71,7 +48,7 @@
             </view>
         </view>
         <!-- #if NATIVE-->
-        <view class="last-row flex f-x-sb">
+        <view class="row flex f-x-sb">
             <view class="row-title">3D楼块</view>
             <view class="row-title">
                 <t-switch value="{{enable3D}}" slot="note" size="small" bind:change="on3DChange" />
