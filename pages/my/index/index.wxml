@@ -24,12 +24,12 @@
       <t-cell title="添加到我的小程序" hover arrow url="/pages/help/help2/help2">
         <image src="/images/my/add-to-mp.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
-      <t-cell title="添加到主屏幕" hover arrow url="/pages/help/help3/help3">
-        <image src="/images/my/add-to-desktop.png" class="left-icon" mode="" slot="left-icon" />
+      <t-cell title="无法定位" hover arrow url="/pages/help/help3/help3">
+        <image src="/images/my/loc-help.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
-      <t-cell title="无法添加到主屏幕" hover arrow url="/pages/help/help4/help4">
+      <!-- <t-cell title="无法添加到主屏幕" hover arrow url="/pages/help/help4/help4">
         <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
+      </t-cell> -->
       <!-- #else -->
       <t-cell title="升级会员" hover arrow url="/pages/ios/vip/vip">
         <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />

@@ -1,6 +1,8 @@
 {
   "usingComponents": {
-    "t-image": "tdesign-miniprogram/image/image"
+    "t-image": "tdesign-miniprogram/image/image",
+    "t-swiper": "tdesign-miniprogram/swiper/swiper",
+    "t-swiper-nav": "tdesign-miniprogram/swiper-nav/swiper-nav"
   },
-  "navigationBarTitleText": "添加到主屏幕"
+  "navigationBarTitleText": "无法定位解决方法"
 }
