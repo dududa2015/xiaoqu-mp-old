@@ -107,10 +107,10 @@ Component({
         pointsCount: 0,
         action: '新增',
         title: '楼号',
-        showChooseMarker: false, //是否显示选点按钮
+        // showChooseMarker: false, //是否显示选点按钮
         showForm: false, //是否显示底部的编辑表单
         markerType: ['楼号', '出入口', '公厕', '其他'],
-        markerTypeIndex: 0,
+        // markerTypeIndex: 0,
         remarkTagList: [], //用于显示标记点详情用
 
         tagDirection: [{

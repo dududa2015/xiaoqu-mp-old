@@ -9,7 +9,7 @@
     <!-- #endif -->
   </view>
   <!-- #if MP -->
-  <view class="tips">温馨提示：用户密码由小程序随机生成</view>
+  <view class="tips">温馨提示：用户编号和用户密码由小程序随机生成</view>
   <!-- #endif -->
   <!-- #if NATIVE -->
   <view class="btn-wrap">

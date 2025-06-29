@@ -27,6 +27,7 @@ let videoAd = null
 let interstitialAd = null
 Page({
   data: {
+    mapName: '', //地图名称
     // isSetLocMarkerIcon: false, //是否设置了定位点图标
     rect: {},
     tips: '', //顶部的提示语
