@@ -36,6 +36,7 @@ Page({
     isVip: false, //是否vip
     scale: 17,
     rotate: 0,
+    skew: 0, //倾斜角度，范围 0 ~ 40 , 关于 z 轴的倾角
     enable3D: false,
     topAddress: '搜索附近小区',
     showAddress: false,
@@ -241,7 +242,8 @@ Page({
     }
     if (typeof enable3D === 'boolean') {
       this.setData({
-        enable3D
+        enable3D,
+        skew: enable3D ? 20 : 0
       })
     }
 
@@ -774,11 +776,6 @@ Page({
   //     }
   //   }
   // },
-  on3D() {
-    this.setData({
-      enable3D: true
-    })
-  },
   //显示选点按钮
   onAdd() {
     this.disableMapTap()
@@ -1642,7 +1639,8 @@ Page({
   //3D楼块，事件来自设置页面
   on3D(event) {
     this.setData({
-      enable3D: event.detail
+      enable3D: event.detail,
+      skew: event.detail? 20: 0
     })
   },
   //添加，从marker-add-grid组件的点击事件

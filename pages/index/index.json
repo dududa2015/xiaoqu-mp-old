@@ -23,5 +23,6 @@
         "choose-location": "/components/choose-location/choose-location"
     },
     "navigationBarTitleText": "小区楼号",
+    "disableScroll": true,
     "navigationStyle": "custom"
 }

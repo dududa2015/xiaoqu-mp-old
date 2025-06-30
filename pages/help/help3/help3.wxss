@@ -17,8 +17,10 @@
 
 .text-wrap {
   margin: 16rpx 0;
+  line-height: 36rpx;
 }
 
 .img-wrap {
+  margin: 12px 0;
   text-align: center;
 }

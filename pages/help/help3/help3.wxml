@@ -2,7 +2,7 @@
   <view class="title">三种解决办法，请依次执行：</view>
   <view class="row">
     <view class="text-wrap">
-      1️、轻触右上角···或者箭头，再轻触重新进入小程序
+      1、轻触右上角···或者箭头，再轻触重新进入小程序
     </view>
     <view class="img-wrap">
       <t-image src="https://c-ssl.duitang.com/uploads/blog/202506/25/M6SmnEv6FBLQdN1.png" height="400" mode="heightFix" />
@@ -10,7 +10,7 @@
   </view>
   <view class="row">
     <view class="text-wrap">
-      2️、在最近使用的小程序里删除访问记录，重新搜索【小区楼号分布图】并打开
+      2、在最近使用的小程序里删除访问记录，重新搜索【小区楼号分布图】并打开
     </view>
     <!-- <view class="img-wrap">
       <t-image src="https://c-ssl.duitang.com/uploads/blog/202408/03/LySmAEJwFqL6a5Q.png" height="80" mode="heightFix" />
