@@ -6,6 +6,10 @@ import {
   getMarkerById,
   updateMarkerLikes
 } from '../../utils/apis'
+import {
+  getCommunityName,
+  getBicycleRoute
+} from '../../apis/amap-apis'
 Component({
   /**
    * 组件的属性列表
@@ -56,7 +60,7 @@ Component({
       value: false,
       observer(newVal, oldVal) {
         if (!newVal) {
-          this.data.xId = -1          
+          this.data.xId = -1
         } else {
           let userInfo = wx.getStorageSync('userInfo')
           this.setData({
@@ -204,83 +208,48 @@ Component({
       wx.showLoading({
         title: '正在加载',
       })
-      wx.request({
-        url: 'https://restapi.amap.com/v4/direction/bicycling',
-        data: {
-          key: '7c6da0c2a92ccbed26533582e1043e61',
-          origin: longitude + ',' + latitude,
-          destination: lng + ',' + lat
-        },
-        method: 'GET',
-        header: {
-          'content-type': 'application/json'
-        },
-        success(res) {
-          if (res.data.errcode === 30007) {
-            that.setData({
-              walkingMsg: '路径规划长度超出限制'
+      getBicycleRoute({
+        origin: longitude + ',' + latitude,
+        destination: lng + ',' + lat
+      }).then(res => {
+        console.log(res)
+        let distance = convertToKilometers(res.distance)
+        let duration = convertSecondsToHMS(res.duration)
+        let pl = []
+        for (const s of res.steps) {
+          let polylineList = s.polyline.split(';')
+          for (const p of polylineList) {
+            let poly = p.split(',')
+            pl.push({
+              longitude: poly[0],
+              latitude: poly[1]
             })
-            return
           }
-          let path = res.data.data.paths[0]
-          let distance = convertToKilometers(path.distance)
-          let duration = convertSecondsToHMS(path.duration)
-          let steps = path.steps
-          let pl = []
-          for (const s of steps) {
-            let polylineList = s.polyline.split(';')
-            for (const p of polylineList) {
-              let poly = p.split(',')
-              pl.push({
-                longitude: poly[0],
-                latitude: poly[1]
-              })
-            }
-          }
-
-          that.setData({
-            distance: distance,
-            duration: duration,
-            walkingMsg: ''
-          })
-          that.triggerEvent('getPolyline', {
-            polyline: [{
-              points: pl,
-              color: '#0052d9',
-              width: 4
-            }]
-          });
-        },
-        fail: function (res) {
-          console.log('showPolyline fail');
-        },
-        complete: function (res) {
-          wx.hideLoading()
         }
+
+        that.setData({
+          distance: distance,
+          duration: duration,
+          walkingMsg: ''
+        })
+        that.triggerEvent('getPolyline', {
+          polyline: [{
+            points: pl,
+            color: '#0052d9',
+            width: 4
+          }]
+        });
       })
     },
     getLocationDetail(latitude, longitude) {
-      const that = this
-      wx.request({
-        url: 'https://restapi.amap.com/v3/geocode/regeo',
-        data: {
-          key: '7c6da0c2a92ccbed26533582e1043e61',
-          location: `${longitude},${latitude}`
-        },
-        method: 'GET',
-        header: {
-          'content-type': 'application/json'
-        },
-        success(res) {
-          that.geocoder = res.data.regeocode
-          that.setData({
-            poiCommunity: res.data.regeocode.addressComponent.neighborhood.name,
-            poiAddress: res.data.regeocode.formatted_address
-          })
-        },
-        fail: function (res) {
-          console.log('fail');
-        },
+      let location = longitude + ',' + latitude
+      getCommunityName({
+        location
+      }).then(res => {
+        this.setData({
+          poiCommunity: res.communityName,
+          poiAddress: res.formattedAddress
+        })
       })
     },
     openLocation(e) {

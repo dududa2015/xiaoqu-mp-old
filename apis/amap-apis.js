@@ -27,3 +27,19 @@ export const getAmapPoiListByTips = (params) => {
       method: 'GET',
   })
 }
+//获取小区名称
+export const getCommunityName = (params) => {
+  return request({
+      url: '/amap/getCommunityName',
+      data: params,
+      method: 'GET',
+  })
+}
+//骑行路线
+export const getBicycleRoute = (params) => {
+  return request({
+      url: '/amap/getBicycleRoute',
+      data: params,
+      method: 'GET',
+  })
+}

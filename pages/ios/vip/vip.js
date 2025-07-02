@@ -83,6 +83,12 @@ Page({
   init() {
     //控制显示是否显示温馨提醒
     let userInfo = wx.getStorageSync('userInfo')
+    if(!userInfo || !userInfo.userId){
+      wx.navigateTo({
+        url: '/pages/ios/login/login',
+      })
+      return
+    }
     if (userInfo && userInfo.openId) {
       this.setData({
         showTips: true
