@@ -14,6 +14,7 @@
 
 .poi-tag-warp {
   padding-left: 0;
+  line-height: 60rpx;
 }
 
 .poi-tag {
@@ -21,7 +22,7 @@
 }
 
 .poi-desc {
-  color: #515151;
+  color: rgba(0, 0, 0, 0.5);
   line-height: 36rpx;
   font-size: 22rpx;
   font-weight: 400;

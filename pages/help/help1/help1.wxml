@@ -3,7 +3,7 @@
 
   <view class="subtitle">积分获取方式</view>
   <view>
-    <view>❇️ 标记地点：从2025年7月1日起，为了防止部分人乱标记楼号，每标记一个地点获得分数由<text class="point"> 1 </text>改为<text class="point">0.1</text>积分。</view>
+    <view>❇️ 标记地点：从2025年7月1日起，为了防止部分人乱标记楼号，标记楼号将不积分</view>
     <view wx:if="{{show}}">❇️邀请朋友：通过<text class="point">首页的分享按钮</text>，每成功邀请一位新朋友且新朋友在一周内须至少登录本小程序3次，您将获得<text class="point"> 10 </text>积分。</view>
   </view>
   <view class="subtitle">积分惩罚方式</view>
