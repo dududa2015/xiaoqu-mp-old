@@ -1,14 +1,14 @@
 <view class="container">
-    <t-cell-group>
-        <t-cell title="审核" hover arrow url="/pages/admin/audit/audit">
-            <image src="/images/admin/audit.png" class="left-icon" mode="" slot="left-icon" />
-        </t-cell>
-        <t-cell title="apple统计" hover arrow url="/pages/admin/apple/apple">
-            <image src="/images/admin/apple.png" class="left-icon" mode="" slot="left-icon" />
-        </t-cell>
-        <t-cell title="通知公告" hover arrow hover arrow url="/pages/admin/notice/notice"> 
-            <image src="/images/admin/notice.png" class="left-icon" mode="" slot="left-icon" />
-        </t-cell>
+  <t-cell-group>
+    <t-cell title="审核" hover arrow url="/pages/admin/audit/audit">
+      <image src="/images/admin/audit.png" class="left-icon" mode="" slot="left-icon" />
+    </t-cell>
+    <t-cell title="apple统计" hover arrow url="/pages/admin/statistics/statistics">
+      <image src="/images/admin/apple.png" class="left-icon" mode="" slot="left-icon" />
+    </t-cell>
+    <t-cell title="通知公告" hover arrow hover arrow url="/pages/admin/notice/notice">
+      <image src="/images/admin/notice.png" class="left-icon" mode="" slot="left-icon" />
+    </t-cell>
 
-    </t-cell-group>
+  </t-cell-group>
 </view>
