@@ -72,7 +72,7 @@ Page({
         totalMonth,
         totalSeason,
         totalYear,
-        totalAmount,
+        totalAmount: totalAmount.toFixed(2),
       })
     })
   },
