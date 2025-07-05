@@ -3,7 +3,7 @@
     <t-cell title="审核" hover arrow url="/pages/admin/audit/audit">
       <image src="/images/admin/audit.png" class="left-icon" mode="" slot="left-icon" />
     </t-cell>
-    <t-cell title="apple统计" hover arrow url="/pages/admin/statistics/statistics">
+    <t-cell title="apple统计" hover arrow url="/pages/admin/stats/stats">
       <image src="/images/admin/apple.png" class="left-icon" mode="" slot="left-icon" />
     </t-cell>
     <t-cell title="通知公告" hover arrow hover arrow url="/pages/admin/notice/notice">

@@ -1,9 +1,0 @@
-page {
-  background-color: #fff;
-}
-
-.canvas {
-  width: 100%;
-  height: 500rpx;
-  /* transform: scale(0.5) */
-}

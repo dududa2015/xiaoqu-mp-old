@@ -14,9 +14,9 @@
     "pages/admin/index/index",
     "pages/admin/audit/audit",
     "pages/my/app/ios/ios",
-    "pages/admin/apple/apple",
-    "pages/my/customerService/customerService",
-    "pages/admin/statistics/statistics"
+    "pages/admin/stats/stats",
+    "pages/my/customerService/customerService"
+    
   ],
   "static": [
     {
