@@ -48,11 +48,10 @@ Page({
   //月统计数据
   getAppleMonthStats() {
     getAppleMonthStats({
-      year: 2025
+      year: this.data.year
     }).then(res => {
       let monthStats = this.buildMonthStats(res)
       this.lineCharts(monthStats.categories, monthStats.seriesData)
-      console.log(monthStats)
     })
   },
   //天统计
@@ -190,6 +189,7 @@ Page({
       series: [{
           name: '2025年',
           data: seriesData,
+          color: '#0074FE',
           format: function (val) {
             return val.toFixed(2) + '万';
           }
@@ -220,6 +220,7 @@ Page({
     this.setData({
       year: e.detail.value
     });
+    this.getAppleMonthStats()
   },
   onYearMonthChange(e) {
     this.setData({

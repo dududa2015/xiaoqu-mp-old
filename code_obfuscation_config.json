@@ -181,6 +181,26 @@
 		{
 			"path": "components/version-update/version-update.js",
 			"sub_switch": true
+		},
+		{
+			"path": "pages/admin/stats/stats.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/admin/apple/apple.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/admin/audit/audit.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/admin/index/index.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/admin/notice/notice.js",
+			"sub_switch": true
 		}
 	]
 }

@@ -64,7 +64,7 @@ function getTextByteLen(text) {
   });
   return length;
 }
-//根据类型获取背景色
+//根据类型获取背景色，紫色：#722ED1
 function getBgColorByType(type) {
   let bgColor = ''
   if (type === 0) {

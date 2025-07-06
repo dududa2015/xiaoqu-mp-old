@@ -16,7 +16,6 @@
     "pages/my/app/ios/ios",
     "pages/admin/stats/stats",
     "pages/my/customerService/customerService"
-    
   ],
   "static": [
     {
@@ -51,6 +50,7 @@
       "pages/admin/audit/audit",
       "pages/my/app/ios/ios",
       "pages/admin/apple/apple",
+      "pages/admin/stats/stats",
       "pages/ios/vip/vip",
       "pages/ios/login/login",
       "pages/ios/user-agreement/user-agreement",
