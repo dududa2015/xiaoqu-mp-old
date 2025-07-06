@@ -33,7 +33,7 @@ Page({
     let latitude = wx.getStorageSync('latitude')
     let longitude = wx.getStorageSync('longitude')
     this.mapCtx = wx.createMapContext('searchMap')
-    let position = wx.getStorageSync('position')
+    let position = wx.getStorageSync('position') || 'left'
     this.setData({
       longitude,
       latitude,

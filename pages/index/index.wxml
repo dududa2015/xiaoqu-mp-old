@@ -1,7 +1,7 @@
 <wxs module="tools" src="../../utils/wxs/includes.wxs"></wxs>
 
 <view class="container">
-    <map id="myMap" style="width: 100%; height: {{windowInfo.windowHeight || 850}}px;" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" scale="{{scale}}" enable-rotate="{{enableRotate}}" rotate="{{rotate}}" show-location=" true" show-scale="{{true}}" show-compass="{{rotate}}" enable-satellite="{{enableSatellite}}" enable-3D="{{enable3D}}" skew="{{20}}" bindpoitap="onPoiTap" bindtap="onMapTap" bindlabeltap="onLabelTap" bindcallouttap="onLabelTap" bindpolylinetap="onPolylineTap" bindregionchange="onRegionChange">
+    <map id="myMap" style="width: 100%; height: {{windowInfo.windowHeight || 850}}px;" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" polygons="{{polygons}}" scale="{{scale}}" enable-rotate="{{enableRotate}}" rotate="{{rotate}}" show-location=" true" show-scale="{{true}}" show-compass="{{rotate}}" enable-satellite="{{enableSatellite}}" enable-3D="{{enable3D}}" skew="{{20}}" bindpoitap="onPoiTap" bindtap="onMapTap" bindlabeltap="onLabelTap" bindcallouttap="onLabelTap" bindpolylinetap="onPolylineTap" bindregionchange="onRegionChange">
         <image src="/images/marker0.png" class="cross" wx:if="{{showCenterMarker && markerTypeIndex === 0}}"></image>
         <image src="/images/marker1.png" class="cross" wx:if="{{showCenterMarker && (markerTypeIndex === 1 ) }}"></image>
         <image src="/images/marker2.png" class="cross" wx:if="{{showCenterMarker && (markerTypeIndex >=2 && markerTypeIndex <= 6)}}"></image>

@@ -43,6 +43,7 @@ const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted) => 
   }
   return markers
 }
+
 function getAnchorX(name) {
   if (getApp().globalData.isAndroid) {
     let len = getTextByteLen(name)
@@ -51,10 +52,11 @@ function getAnchorX(name) {
     return 0
   }
 }
+
 function getTextByteLen(text) {
   var length = 0;
   text.split('').map(function (char) {
-    if (char.charCodeAt(0) > 255) {//字符编码大于255，说明是双字节字符  
+    if (char.charCodeAt(0) > 255) { //字符编码大于255，说明是双字节字符  
       length += 2;
     } else {
       length++;
@@ -101,6 +103,33 @@ const buildPolyline = (points, type, xId) => {
   }
   return polyline
 }
+
+const buildPolygon = (polyline) => {
+  const points = polyline.split('_')
+    .map(coordPair => {
+      const [longitude, latitude] = coordPair.split(',');
+
+      // 验证坐标格式
+      if (!longitude || !latitude || isNaN(longitude) || isNaN(latitude)) {
+        throw new Error(`Invalid coordinate format: ${coordPair}`);
+      }
+
+      return {
+        longitude: parseFloat(longitude),
+        latitude: parseFloat(latitude)
+      };
+    });
+
+  return {
+    dashArray: [4, 1],
+    points,
+    strokeWidth: 2,
+    strokeColor: '#0074FE',
+    fillColor: '#0074FE20',
+    zIndex: 0
+  };
+}
+
 function buildPolylineColor(type) {
   if (type === 7) {
     return '#3CB371'
@@ -111,5 +140,6 @@ function buildPolylineColor(type) {
 
 module.exports = {
   buildMarkers,
-  buildPolyline
+  buildPolyline,
+  buildPolygon
 }

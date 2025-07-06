@@ -1,4 +1,4 @@
-<view class="middle-bar-container" style="bottom: 45%; {{position}}: 16rpx" bind:tap="onFoot">
+<view class="middle-bar-container" style="bottom: 45%; {{position}}: 24rpx" bind:tap="onFoot">
     <!-- 步行 -->
     <view class="foot-wrap shadow">
         <view class="img-wrap">

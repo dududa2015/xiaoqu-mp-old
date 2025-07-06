@@ -1,7 +1,7 @@
 <!-- #if MP -->
 <!-- <view class="top-bar-container-shadow" style="{{position}}: 16rpx">
 </view> -->
-<view class="top-bar-container" style="{{position}}: 16rpx">
+<view class="top-bar-container" style="{{position}}: 24rpx">
     <!-- 分享 -->
     <view class="img-wrap-first">
         <image src="/images/controls/share2.png" class="img" mode="" />
@@ -24,7 +24,7 @@
 </view>
 <!-- #else -->
 <!-- 以下是app的上边栏 -->
-<view class="top-bar-container-shadow-app" style="top: {{rect.top}}px; {{position}}: 16rpx">
+<view class="top-bar-container-shadow-app" style="top: {{rect.top}}px; {{position}}: 24rpx">
     <!-- 分享 -->
     <view bind:tap="toShare">
         <view class="img-wrap-first">

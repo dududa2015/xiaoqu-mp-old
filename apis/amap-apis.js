@@ -43,3 +43,11 @@ export const getBicycleRoute = (params) => {
       method: 'GET',
   })
 }
+//点击小区名字时获取边界
+export const getPolylineByCommunity = (params) => {
+  return request({
+      url: '/amap/getPolylineByCommunity',
+      data: params,
+      method: 'GET',
+  })
+}

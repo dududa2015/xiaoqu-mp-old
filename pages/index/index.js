@@ -7,7 +7,8 @@ import {
 } from '../../utils/util'
 import {
   buildMarkers,
-  buildPolyline
+  buildPolyline,
+  buildPolygon
 } from '../../utils/map'
 import {
   addMarker,
@@ -21,6 +22,9 @@ import {
   deleteMarker,
   getMarkerListUpdate
 } from '../../apis/marker-apis'
+import {
+  getPolylineByCommunity
+} from '../../apis/amap-apis'
 // 在页面中定义激励视频广告
 let videoAd = null
 // 在页面中定义插屏广告
@@ -388,8 +392,8 @@ Page({
         } = res
         console.log(longitude, latitude)
 
-        // longitude =  113.39
-        // latitude =  22.52
+        longitude = 113.471588
+        latitude = 22.270992
         that.setData({
           latitude,
           longitude,
@@ -608,11 +612,32 @@ Page({
     })
     const {
       latitude,
-      longitude
+      longitude,
+      name
     } = e.detail
+    console.log(latitude, longitude, name)
     this.resetPolyline()
     this.addMarker2Map(latitude, longitude)
     this.moveToLocation(latitude, longitude)
+    // #if NATIVE
+    this.getPolylineByCommunity(longitude + ',' + latitude, name)
+    // #endif
+    
+  },
+  getPolylineByCommunity(location, name) {
+    getPolylineByCommunity({
+      location
+    }).then(res => {
+      if (res.polyline) {
+        let polygon = buildPolygon(res.polyline)
+        console.log(polygon)
+        let polygons = []
+        polygons.push(polygon)
+        this.setData({
+          polygons
+        })
+      }
+    })
   },
   //用户标记点的label或callout点击
   onLabelTap(e) {
@@ -799,7 +824,8 @@ Page({
       showGrid: false,
       showMap: false,
       showSetting: false,
-      bottom: 0
+      bottom: 0,
+      polygons: []
     })
   },
   //去掉id为-1的标记
@@ -1640,7 +1666,7 @@ Page({
   on3D(event) {
     this.setData({
       enable3D: event.detail,
-      skew: event.detail? 20: 0
+      skew: event.detail ? 20 : 0
     })
   },
   //添加，从marker-add-grid组件的点击事件
