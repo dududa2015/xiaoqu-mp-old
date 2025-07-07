@@ -392,8 +392,8 @@ Page({
         } = res
         console.log(longitude, latitude)
 
-        longitude = 113.471588
-        latitude = 22.270992
+        // longitude = 113.471588
+        // latitude = 22.270992
         that.setData({
           latitude,
           longitude,
