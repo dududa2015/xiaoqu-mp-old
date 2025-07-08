@@ -619,14 +619,15 @@ Page({
     this.resetPolyline()
     this.addMarker2Map(latitude, longitude)
     this.moveToLocation(latitude, longitude)
-    // #if NATIVE
-    this.getPolylineByCommunity(longitude + ',' + latitude, name)
-    // #endif
-    
+
+    this.getPolylineByCommunity(longitude, latitude, name)
+
   },
-  getPolylineByCommunity(location, name) {
+  getPolylineByCommunity(longitude, latitude, name) {
     getPolylineByCommunity({
-      location
+      longitude,
+      latitude,
+      name
     }).then(res => {
       if (res.polyline) {
         let polygon = buildPolygon(res.polyline)

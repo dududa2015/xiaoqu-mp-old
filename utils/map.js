@@ -121,7 +121,7 @@ const buildPolygon = (polyline) => {
     });
 
   return {
-    dashArray: [4, 1],
+    dashArray: [20, 8],
     points,
     strokeWidth: 2,
     strokeColor: '#0074FE',
