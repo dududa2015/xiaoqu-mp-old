@@ -41,6 +41,10 @@ Component({
             // });
             this.triggerEvent('onShowChooseLocation')
         },
+        onNoAd(){
+          console.log('noad')
+          this.triggerEvent('onNoAdOpen');
+        },
         onSetting() {
             this.triggerEvent('onSetting');
         },

@@ -1,33 +1,34 @@
 <wxs module="tools" src="../../utils/wxs/includes.wxs"></wxs>
 
 <view class="container">
-    <map id="myMap" style="width: 100%; height: {{windowInfo.windowHeight || 850}}px;" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" polygons="{{polygons}}" scale="{{scale}}" enable-rotate="{{enableRotate}}" rotate="{{rotate}}" show-location=" true" show-scale="{{true}}" show-compass="{{rotate}}" enable-satellite="{{enableSatellite}}" enable-3D="{{enable3D}}" skew="{{20}}" bindpoitap="onPoiTap" bindtap="onMapTap" bindlabeltap="onLabelTap" bindcallouttap="onLabelTap" bindpolylinetap="onPolylineTap" bindregionchange="onRegionChange">
-        <image src="/images/marker0.png" class="cross" wx:if="{{showCenterMarker && markerTypeIndex === 0}}"></image>
-        <image src="/images/marker1.png" class="cross" wx:if="{{showCenterMarker && (markerTypeIndex === 1 ) }}"></image>
-        <image src="/images/marker2.png" class="cross" wx:if="{{showCenterMarker && (markerTypeIndex >=2 && markerTypeIndex <= 6)}}"></image>
-        <image src="/images/marker3.png" class="cross" wx:if="{{showCenterMarker && markerTypeIndex === 7}}"></image>
-        <image src="/images/marker4.png" class="cross" wx:if="{{showCenterMarker && markerTypeIndex === 8}}"></image>
-    </map>
-    <!-- enable-rotate rotate="{{rotate}}"  -->
-    <top-search rect="{{rect}}" showUp="{{showUp}}" showMapName="{{showMapName}}" mapName="{{mapName}}" bind:toMap="toMap" bind:onChooseLocation="onChooseLocation"></top-search>
-    <top-tip noticeList="{{noticeList}}"></top-tip>
-    <top-bar rect="{{rect}}" position="{{position}}" bind:onChooseLocation="onChooseLocation" bind:onSetting="onSetting" bind:onShowChooseLocation="onShowChooseLocation"></top-bar>
-    <!-- #if NATIVE -->
-    <middle-bar position="{{position}}" bind:onFoot="onFoot"></middle-bar>
-    <!-- #endif -->
-    <!-- 底部添加和定位按钮 -->
-    <bottom-add position="{{position}}" bind:onAdd="onAdd" wx:if="{{showAdd}}"></bottom-add>
-    <bottom-location position="{{position}}" bottom="{{bottom}}" bind:onLocation="getLocation" wx:if="{{showLocation}}"></bottom-location>
-    <ad-custom unit-id="adunit-49b176d9a7ef45d4" wx:if="{{!isVip}}" style="position: absolute;bottom: 0; {{position==='right'?'left':'right'}}: 0"></ad-custom>
-    <poi-detail showPOI="{{showPOI}}" xId="{{xId}}" poiDetail="{{poiDetail}}" windowInfo="{{windowInfo}}" bind:moveToCenter="moveToCenter" bind:getPolyline="getPolyline" bind:onDelete="onUserMarkerDelete" bind:onEdit="onUserMarkerEdit"></poi-detail>
-    <marker-add-grid show="{{showGrid}}" bind:getMarkerTypeIndex="getMarkerTypeIndex" bind:createMap="createMap"></marker-add-grid>
-    <marker-add markerTypeIndex="{{markerTypeIndex}}" showForm="{{showForm}}" showChooseMarker="{{showChooseMarker}}" markerDetail="{{markerDetail}}" mapCtx="{{mapCtx}}" bind:addUserMarkerByUser="addUserMarkerByUser" bind:updateUserMarkerByUser="updateUserMarkerByUser" bind:showBottomBar="showBottomBar" bind:onFormClose="onFormClose" bind:onChooseMarker="onChooseMarker" bind:onBackChooseMarker="onBackChooseMarker" bind:onFinishChooseMarker="onFinishChooseMarker" bind:onCancelChooseMarker="onCancelChooseMarker"></marker-add>
-    <!-- <marker-filter bind:getCheckedIndex="getCheckedIndex"></marker-filter> -->
-    <map-setting showSetting="{{showSetting}}" bind:onSettingClose="onSettingClose" bind:onLocIcon="onLocIcon" bind:onSatellite="onSatellite" bind:mapChange="mapChange" bind:onPosition="onPosition" bind:onRotate="onRotate" bind:on3D="on3D"></map-setting>
-    <personal-map showMap="{{showMap}}" bind:onMapChange="onMapChange" bind:onMapClose="onMapClose"></personal-map>
-    <!-- 版本升级提示 -->
-    <!-- #if NATIVE -->
-    <version-update showVersionUpdate="{{showVersionUpdate}}" iosContent="{{iosContent}}" iosForceUpdate="{{iosForceUpdate}}"></version-update>
-    <choose-location showChooseLocation="{{showChooseLocation}}"></choose-location>
-    <!-- #endif -->
+  <map id="myMap" style="width: 100%; height: {{windowInfo.windowHeight || 850}}px;" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" polygons="{{polygons}}" scale="{{scale}}" enable-rotate="{{enableRotate}}" rotate="{{rotate}}" show-location=" true" show-scale="{{true}}" show-compass="{{rotate}}" enable-satellite="{{enableSatellite}}" enable-3D="{{enable3D}}" skew="{{20}}" bindpoitap="onPoiTap" bindtap="onMapTap" bindlabeltap="onLabelTap" bindcallouttap="onLabelTap" bindpolylinetap="onPolylineTap" bindregionchange="onRegionChange">
+    <image src="/images/marker0.png" class="cross" wx:if="{{showCenterMarker && markerTypeIndex === 0}}"></image>
+    <image src="/images/marker1.png" class="cross" wx:if="{{showCenterMarker && (markerTypeIndex === 1 ) }}"></image>
+    <image src="/images/marker2.png" class="cross" wx:if="{{showCenterMarker && (markerTypeIndex >=2 && markerTypeIndex <= 6)}}"></image>
+    <image src="/images/marker3.png" class="cross" wx:if="{{showCenterMarker && markerTypeIndex === 7}}"></image>
+    <image src="/images/marker4.png" class="cross" wx:if="{{showCenterMarker && markerTypeIndex === 8}}"></image>
+  </map>
+  <!-- enable-rotate rotate="{{rotate}}"  -->
+  <no-ad showNoAd="{{showNoAd}}" videoCount="{{videoCount}}" bind:onNoAdClose="onNoAdClose" bind:onViewAd="onViewAd"></no-ad>
+  <top-search rect="{{rect}}" showUp="{{showUp}}" showMapName="{{showMapName}}" mapName="{{mapName}}" bind:toMap="toMap" bind:onChooseLocation="onChooseLocation"></top-search>
+  <top-tip noticeList="{{noticeList}}"></top-tip>
+  <top-bar rect="{{rect}}" position="{{position}}" bind:onChooseLocation="onChooseLocation" bind:onSetting="onSetting" bind:onShowChooseLocation="onShowChooseLocation" bind:onNoAdOpen="onNoAdOpen"></top-bar>
+  <!-- #if NATIVE -->
+  <middle-bar position="{{position}}" bind:onFoot="onFoot"></middle-bar>
+  <!-- #endif -->
+  <!-- 底部添加和定位按钮 -->
+  <bottom-add position="{{position}}" bind:onAdd="onAdd" wx:if="{{showAdd}}"></bottom-add>
+  <bottom-location position="{{position}}" bottom="{{bottom}}" bind:onLocation="getLocation" wx:if="{{showLocation}}"></bottom-location>
+  <ad-custom unit-id="adunit-49b176d9a7ef45d4" wx:if="{{!isVip && videoCount < 2}}" style="position: absolute;bottom: 0; {{position==='right'?'left':'right'}}: 0"></ad-custom>
+  <poi-detail showPOI="{{showPOI}}" xId="{{xId}}" poiDetail="{{poiDetail}}" windowInfo="{{windowInfo}}" bind:moveToCenter="moveToCenter" bind:getPolyline="getPolyline" bind:onDelete="onUserMarkerDelete" bind:onEdit="onUserMarkerEdit"></poi-detail>
+  <marker-add-grid show="{{showGrid}}" bind:getMarkerTypeIndex="getMarkerTypeIndex" bind:createMap="createMap"></marker-add-grid>
+  <marker-add markerTypeIndex="{{markerTypeIndex}}" showForm="{{showForm}}" showChooseMarker="{{showChooseMarker}}" markerDetail="{{markerDetail}}" mapCtx="{{mapCtx}}" bind:addUserMarkerByUser="addUserMarkerByUser" bind:updateUserMarkerByUser="updateUserMarkerByUser" bind:showBottomBar="showBottomBar" bind:onFormClose="onFormClose" bind:onChooseMarker="onChooseMarker" bind:onBackChooseMarker="onBackChooseMarker" bind:onFinishChooseMarker="onFinishChooseMarker" bind:onCancelChooseMarker="onCancelChooseMarker"></marker-add>
+  <!-- <marker-filter bind:getCheckedIndex="getCheckedIndex"></marker-filter> -->
+  <map-setting showSetting="{{showSetting}}" bind:onSettingClose="onSettingClose" bind:onLocIcon="onLocIcon" bind:onSatellite="onSatellite" bind:mapChange="mapChange" bind:onPosition="onPosition" bind:onRotate="onRotate" bind:on3D="on3D"></map-setting>
+  <personal-map showMap="{{showMap}}" bind:onMapChange="onMapChange" bind:onMapClose="onMapClose"></personal-map>
+  <!-- 版本升级提示 -->
+  <!-- #if NATIVE -->
+  <version-update showVersionUpdate="{{showVersionUpdate}}" iosContent="{{iosContent}}" iosForceUpdate="{{iosForceUpdate}}"></version-update>
+  <choose-location showChooseLocation="{{showChooseLocation}}"></choose-location>
+  <!-- #endif -->
 </view>

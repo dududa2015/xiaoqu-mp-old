@@ -241,6 +241,25 @@ const isAppVip = (expiredDate) => {
      
   }
 
+  // 设置N天过期的缓存
+const setStorageWithExpire = (key, data, days = 1) =>{
+  const expireTime = Date.now() + days * 24 * 60 * 60 * 1000
+  const cacheData = { data, expireTime }
+  wx.setStorageSync(key, cacheData)
+}
+
+// 获取缓存（自动清理过期数据）
+const getStorageWithExpire=(key)=> {
+  const cacheData = wx.getStorageSync(key)
+  if (!cacheData) return null
+  
+  if (Date.now() > cacheData.expireTime) {
+    wx.removeStorageSync(key)
+    return null
+  }
+  return cacheData.data
+}
+
 module.exports = {
   formatTime,
   formatDate,
@@ -257,5 +276,7 @@ module.exports = {
   getBdAround,
   getColorFromStorage,
   isPointOnPolyline,
-  checkString
+  checkString,
+  setStorageWithExpire,
+  getStorageWithExpire
 }

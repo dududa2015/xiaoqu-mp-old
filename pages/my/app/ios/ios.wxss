@@ -46,7 +46,7 @@
 
 .footer {
     /* margin-top: 64rpx; */
-    padding: 32rpx 24rpx;
+    padding: 32rpx 20rpx;
     background-color: rgba(0, 116, 254, .1);
     border-radius: 16rpx;
 }

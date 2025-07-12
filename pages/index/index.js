@@ -3,7 +3,9 @@ import {
   generateRandom10DigitNumber,
   getBdAround,
   formatDate,
-  isPointOnPolyline
+  isPointOnPolyline,
+  setStorageWithExpire,
+  getStorageWithExpire
 } from '../../utils/util'
 import {
   buildMarkers,
@@ -60,6 +62,7 @@ Page({
     compassChangeHandler: null, //罗盘change
     showVersionUpdate: false,
     showChooseLocation: false,
+    showNoAd: false //显示广告弹窗
   },
   onLoad() {
     this.getLocation()
@@ -341,7 +344,21 @@ Page({
       })
       videoAd.onClose((res) => {
         if (res && res.isEnded || res === undefined) {
-          this.onDelete()
+          if (wx.getStorageSync('videoType') === 1) {
+            this.onDelete()
+          } else {
+            let videoCount = getStorageWithExpire('videoCount') || 0
+            videoCount = videoCount + 1
+            this.setData({
+              videoCount
+            })
+            if (videoCount === 2) {
+              wx.showModal({
+                content: '已获得24小时免广告'
+              })
+            }
+            setStorageWithExpire('videoCount', videoCount)
+          }
         }
       })
     }
@@ -363,7 +380,12 @@ Page({
   showCPAd() {
     //如果不是vip展示插屏广告
     let userInfo = wx.getStorageSync('userInfo')
-    if (!(userInfo && userInfo.isVip)) {
+    let videoCount = getStorageWithExpire('videoCount')
+    this.setData({
+      videoCount
+    })
+    console.log('videoCount', videoCount)
+    if (!(userInfo && userInfo.isVip) && videoCount < 2) {
       if (interstitialAd) {
         interstitialAd.show().catch((err) => {
           console.error('插屏广告显示失败', err)
@@ -825,6 +847,7 @@ Page({
       showGrid: false,
       showMap: false,
       showSetting: false,
+      showNoAd: false,
       bottom: 0,
       polygons: []
     })
@@ -862,6 +885,7 @@ Page({
   },
   //删除用户标记点
   onUserMarkerDelete(event) {
+    wx.setStorageSync('videoType', 1)
     this.selectedMarker = event.detail
     const that = this
     let userInfo = wx.getStorageSync('userInfo')
@@ -1612,6 +1636,38 @@ Page({
       showForm: false
     })
     this.hideTabBar()
+  },
+  //打开观看广告弹窗
+  onNoAdOpen() {
+    this.setData({
+      showNoAd: true,
+      showMap: false,
+      showGrid: false,
+      showForm: false
+    })
+    this.hideTabBar()
+  },
+  //关闭观看广告弹窗
+  onNoAdClose() {
+    this.disableMapTap()
+    this.setData({
+      showNoAd: false
+    })
+    this.showTabBar()
+  },
+  //观看广告
+  onViewAd() {
+    wx.setStorageSync('videoType', 2)
+    if (videoAd) {
+      videoAd.show().catch(() => {
+        // 失败重试
+        videoAd.load()
+          .then(() => videoAd.show())
+          .catch(err => {
+            console.error('激励视频 广告显示失败', err)
+          })
+      })
+    }
   },
   onShowChooseLocation() {
     // this.hideTabBar()

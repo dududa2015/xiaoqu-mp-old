@@ -45,7 +45,7 @@
 
 .text {
     font-size: 20rpx;
-    font-weight: 500;
+    font-weight: 600;
     color: #333;
     line-height: 36rpx;
     height: 36rpx;

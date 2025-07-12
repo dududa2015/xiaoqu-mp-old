@@ -1,5 +1,6 @@
 {
     "usingComponents": {
+        "no-ad": "/components/no-ad/no-ad",
         "top-search": "/components/top-search/top-search",
         "top-tip": "/components/top-tip/top-tip",
         "top-bar": "/components/top-bar/top-bar",

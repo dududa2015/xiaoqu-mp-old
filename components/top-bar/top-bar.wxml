@@ -9,12 +9,17 @@
     </view>
     <view class="text">分享</view>
     <!-- 客服 -->
-    <view class="img-wrap">
+    <!-- <view class="img-wrap">
         <image src="/images/controls/service2.png" class="img" mode="">
         </image>
         <button class="share-btn" openType="contact">客服</button>
     </view>
-    <view class="text">客服</view>
+    <view class="text">客服</view> -->
+    <view class="img-wrap" bind:tap="onNoAd">
+        <image src="/images/my/noad.png" class="img" mode="">
+        </image>
+    </view>
+    <view class="text" bind:tap="onNoAd">去广告</view>
     <!-- 设置 -->
     <view class="img-wrap" bind:tap="onSetting">
         <image src="/images/controls/setting.png" class="img" mode="">
