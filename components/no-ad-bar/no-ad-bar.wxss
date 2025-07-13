@@ -4,9 +4,9 @@
   opacity: 0.95;
 }
 
-.foot-wrap {
+.no-ad-wrap {
   background-color: #fff;
-  padding: 12rpx 16rpx;
+  padding: 12rpx 12rpx;
   border-radius: 24rpx;
   margin-bottom: 16rpx;
 }

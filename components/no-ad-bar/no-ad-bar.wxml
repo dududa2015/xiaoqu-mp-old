@@ -1,5 +1,5 @@
 <view class="middle-bar-container" style="top: 176rpx; {{position === 'left'? 'right' : 'left'}}: 24rpx" bind:tap="onFoot">
-    <view class="foot-wrap shadow" bind:tap="onNoAd">
+    <view class="no-ad-wrap shadow" bind:tap="onNoAd">
         <view class="img-wrap">
             <image src="/images/my/noad.png" class="img" mode="" />
         </view>

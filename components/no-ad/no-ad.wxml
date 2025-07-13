@@ -1,11 +1,40 @@
-<t-popup visible="{{showNoAd}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#fff;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx);">
+<t-popup visible="{{showNoAd}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#F5F5F5;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx);box-shadow: 0 -4rpx 16rpx rgba(0, 116, 254, 0.1);">
   <view class="close-btn" bind:tap="onClose">
-    <image src="/images/controls/cross.png" mode="" style="width: 40rpx; height: 40rpx;" />
+        <image src="/images/controls/cross.png" mode="" style="width: 40rpx; height: 40rpx;" />
+    </view>
+    <view class="popup-title">看视频免广告</view>
+
+  <!-- 内容描述 -->
+  <view class="popup-content">
+    <view style="font-size: 28rpx; color: #666; line-height: 1.6; margin-bottom: 16rpx;">
+      观看2段短视频广告，即可获得24小时免弹窗和格子广告的特权。
+    </view>
+    <view class="popup-note" style="font-size: 24rpx; color: #999;">
+      （注意：封面广告无法免去）
+    </view>
+
+    <!-- 进度显示 -->
+    <view class="progress-container" style=" background-color: #fff;padding: 32rpx 0;">
+      <view style="display: flex; justify-content: space-between; margin-bottom: 12rpx;">
+        <text style="font-size: 26rpx; color: #666;">完成进度</text>
+        <text style="font-size: 26rpx; color: #0074FE; font-weight: 500;">{{number || 0}}/2</text>
+      </view>
+      <view style="height: 12rpx; background: #eaeff5; border-radius: 6rpx; overflow: hidden;">
+        <view style="height: 100%; background: linear-gradient(to right, #0074FE, #00a1ff); border-radius: 6rpx; width: {{(number || 0)/2 * 100}}%; transition: width 0.3s ease;"></view>
+      </view>
+    </view>
   </view>
-  <view class="popup-title">看视频免广告</view>
-  <view class="popup-desc">观看2段短视频广告，即可获得24小时免弹窗和格子广告的特权。（注意：封面广告无法免去）</view>
-  <!-- 位置、形状、旋转设置 免首页的弹窗和格子广告-->
+  <!-- 主要按钮 -->
   <view class="margin16">
-    <button type="primary" disabled="{{number === 2}}" style="background-color: #0074FE; " bind:tap="onViewAd">观看广告({{number|| 0}}/2)</button>
+    <button type="primary" disabled="{{number === 2}}" style="background: linear-gradient(to right, #0074FE, #00a1ff); border: none; border-radius: 50rpx; height: 88rpx; font-size: 32rpx; font-weight: 500; box-shadow: 0 4rpx 16rpx rgba(0, 116, 254, 0.3);" bind:tap="onViewAd">
+      {{number === 2 ? '已获得特权' : '观看广告'}}
+    </button>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="popup-footer" style="margin-top: 24rpx; text-align: center;">
+    <view style="font-size: 24rpx; color: #999;">
+      特权生效后，24小时内不再显示弹窗和格子广告
+    </view>
   </view>
 </t-popup>

@@ -216,8 +216,10 @@ Page({
       wx.navigateBack()
     } else {
       wx.showToast({
-        title: '登录失败',
-        icon: 'none'
+        title: '登录失败，请使用其他方式登录',
+        icon: 'none',
+        duration: 3000,
+        mask: true
       })
     }
   },
