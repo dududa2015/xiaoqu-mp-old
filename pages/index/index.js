@@ -1530,6 +1530,7 @@ Page({
       this.disableMapTap()
       this.setData({
         showSetting: false,
+        showNoAd: false,
         showMap: true,
         showGrid: false,
         showForm: false
@@ -1631,9 +1632,11 @@ Page({
     this.disableMapTap()
     this.setData({
       showSetting: true,
+      showNoAd: false,
       showMap: false,
       showGrid: false,
-      showForm: false
+      showForm: false,
+      showPOI: false
     })
     this.hideTabBar()
   },
@@ -1643,7 +1646,9 @@ Page({
       showNoAd: true,
       showMap: false,
       showGrid: false,
-      showForm: false
+      showForm: false,
+      showSetting: false,
+      showPOI: false,
     })
     this.hideTabBar()
   },
