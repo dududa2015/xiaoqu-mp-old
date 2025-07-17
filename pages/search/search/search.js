@@ -2,6 +2,10 @@ import {
   getAmapPoiListByTips
 } from '../../../apis/amap-apis'
 import {
+  suggestion
+} from '../../../apis/tmap-apis'
+
+import {
   convertToKilometers
 } from '../../../utils/util'
 Page({
@@ -42,37 +46,28 @@ Page({
           this.init()
           return
         }
-        this.getAmapPoiListByTips(value); // 实际查询逻辑
+        this.suggestion(value); // 实际查询逻辑
       }, this.data.searchDelay)
     });
   },
-  getAmapPoiListByTips(keywords) {
+  suggestion(keywords) {
     let city = wx.getStorageSync('city')
     let latitude = wx.getStorageSync('latitude')
     let longitude = wx.getStorageSync('longitude')
-    let location = longitude + ',' + latitude
-    getAmapPoiListByTips({
-      location,
+    suggestion({
+      latitude,
+      longitude,
       keywords,
-      // types: 12000,
       city,
     }).then(res => {
       // 在 map 中跳过无效项（返回 null 再过滤）。因为搜索北京市或深圳市的时候，location会是[],
       // 检查location是否有效和filter(Boolean);是为了自动过滤null/undefined
       let poiList = res.map(item => {
-        // 检查location是否有效
-        if (Array.isArray(item.location) || !item.location?.includes(',')) {
-          return null; // 返回null后续过滤
-        }
-        // 解析经纬度
-        const [longitude, latitude] = item.location.split(',').map(Number);
-        // 拼接完整地址
-        const fullAddress = `${item.district}${item.address}`;
         // 返回转换后的对象
         return {
-          address: fullAddress,
-          latitude: latitude,
-          longitude: longitude,
+          address: item.address,
+          latitude: item.latitude,
+          longitude: item.longitude,
           name: item.name,
           hightlightName: this.getHighlightText(item.name, keywords),
           distance: convertToKilometers(item.distance)

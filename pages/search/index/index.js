@@ -1,7 +1,9 @@
+// import {
+//   getAroundByLocation
+// } from '../../../apis/amap-apis'
 import {
   getAroundByLocation
-} from '../../../apis/amap-apis'
-
+} from '../../../apis/tmap-apis'
 Page({
 
   /**
@@ -76,19 +78,20 @@ Page({
     getAroundByLocation({
       location
     }).then(res => {
-      let poiList = res.map(item => {
-        // 解析经纬度
-        const [longitude, latitude] = item.location.split(',').map(Number);
-        // 拼接完整地址
-        const fullAddress = `${item.pname}${item.cityname}${item.address}`;
-        // 返回转换后的对象
-        return {
-          address: fullAddress,
-          latitude: latitude,
-          longitude: longitude,
-          name: item.name
-        };
-      })
+      let poiList = res
+      // let poiList = res.map(item => {
+      //   // 解析经纬度
+      //   const [longitude, latitude] = item.location.split(',').map(Number);
+      //   // 拼接完整地址
+      //   const fullAddress = `${item.pname}${item.cityname}${item.address}`;
+      //   // 返回转换后的对象
+      //   return {
+      //     address: fullAddress,
+      //     latitude: latitude,
+      //     longitude: longitude,
+      //     name: item.name
+      //   };
+      // })
 
       let poi = wx.getStorageSync('poi')
       if(poi){

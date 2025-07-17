@@ -17,7 +17,7 @@
           </view>
           <view slot="description" class="flex f-y-fs">
             <!-- <text class="distance">{{item.distance}}</text> -->
-            <text class="description">{{item.address}}</text>
+            <text class="description">{{item.distance}} {{item.address}}</text>
           </view>
         </t-cell>
         <view class="clear">

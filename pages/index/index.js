@@ -428,6 +428,11 @@ Page({
         // #endif
       },
       fail(res) {
+        wx.showToast({
+          title: res.errMsg,
+          icon: 'none',
+          duration: 3000
+        })
         // 获取位置失败，引导用户开启权限
         // #if MP
         console.log(res)

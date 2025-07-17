@@ -96,7 +96,9 @@
 }
 
 .description {
-  font-size: 13px;
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .title {
