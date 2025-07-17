@@ -81,7 +81,7 @@ Page({
       this.initAd()
       //显示插屏广告
       this.showCPAd()
-    }, 3000);
+    }, 15000);
     // #else
     //获取设备id
     // this.getDeviceId()
@@ -344,21 +344,7 @@ Page({
       })
       videoAd.onClose((res) => {
         if (res && res.isEnded || res === undefined) {
-          if (wx.getStorageSync('videoType') === 1) {
-            this.onDelete()
-          } else {
-            let videoCount = getStorageWithExpire('videoCount') || 0
-            videoCount = videoCount + 1
-            this.setData({
-              videoCount
-            })
-            if (videoCount === 2) {
-              wx.showModal({
-                content: '已获得24小时免广告'
-              })
-            }
-            setStorageWithExpire('videoCount', videoCount)
-          }
+          this.onDelete()
         }
       })
     }
@@ -369,23 +355,18 @@ Page({
       interstitialAd = wx.createInterstitialAd({
         adUnitId: 'adunit-6449f8b32a1844a8'
       })
-      interstitialAd.onLoad(() => {})
+      interstitialAd.onLoad(() => { })
       interstitialAd.onError((err) => {
         console.error('插屏广告加载失败', err)
       })
-      interstitialAd.onClose(() => {})
+      interstitialAd.onClose(() => { })
     }
   },
   //显示插屏广告
   showCPAd() {
     //如果不是vip展示插屏广告
     let userInfo = wx.getStorageSync('userInfo')
-    let videoCount = getStorageWithExpire('videoCount')
-    this.setData({
-      videoCount
-    })
-    console.log('videoCount', videoCount)
-    if (!(userInfo && userInfo.isVip) && videoCount < 2) {
+    if (!(userInfo && userInfo.isVip)) {
       if (interstitialAd) {
         interstitialAd.show().catch((err) => {
           console.error('插屏广告显示失败', err)
@@ -1639,40 +1620,6 @@ Page({
       showPOI: false
     })
     this.hideTabBar()
-  },
-  //打开观看广告弹窗
-  onNoAdOpen() {
-    this.setData({
-      showNoAd: true,
-      showMap: false,
-      showGrid: false,
-      showForm: false,
-      showSetting: false,
-      showPOI: false,
-    })
-    this.hideTabBar()
-  },
-  //关闭观看广告弹窗
-  onNoAdClose() {
-    this.disableMapTap()
-    this.setData({
-      showNoAd: false
-    })
-    this.showTabBar()
-  },
-  //观看广告
-  onViewAd() {
-    wx.setStorageSync('videoType', 2)
-    if (videoAd) {
-      videoAd.show().catch(() => {
-        // 失败重试
-        videoAd.load()
-          .then(() => videoAd.show())
-          .catch(err => {
-            console.error('激励视频 广告显示失败', err)
-          })
-      })
-    }
   },
   onShowChooseLocation() {
     // this.hideTabBar()

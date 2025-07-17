@@ -14,14 +14,11 @@
   <top-bar rect="{{rect}}" position="{{position}}" bind:onChooseLocation="onChooseLocation" bind:onSetting="onSetting" bind:onShowChooseLocation="onShowChooseLocation"></top-bar>
   <!-- #if NATIVE -->
   <middle-bar position="{{position}}" bind:onFoot="onFoot"></middle-bar>
-  <!-- #elif MP -->
-  <no-ad showNoAd="{{showNoAd}}" videoCount="{{videoCount}}" bind:onNoAdClose="onNoAdClose" bind:onViewAd="onViewAd"></no-ad>
-  <no-ad-bar wx:if="{{isVip}}" position="{{position}}" bind:onNoAdOpen="onNoAdOpen"></no-ad-bar>
   <!-- #endif -->
   <!-- 底部添加和定位按钮 -->
   <bottom-add position="{{position}}" bind:onAdd="onAdd" wx:if="{{showAdd}}"></bottom-add>
   <bottom-location position="{{position}}" bottom="{{bottom}}" bind:onLocation="getLocation" wx:if="{{showLocation}}"></bottom-location>
-  <ad-custom unit-id="adunit-49b176d9a7ef45d4" wx:if="{{!isVip && videoCount < 2}}" style="position: absolute;bottom: 0; {{position==='right'?'left':'right'}}: 0"></ad-custom>
+  <ad-custom unit-id="adunit-49b176d9a7ef45d4" wx:if="{{!isVip}}" style="position: absolute;bottom: 0; {{position==='right'?'left':'right'}}: 0"></ad-custom>
   <poi-detail showPOI="{{showPOI}}" xId="{{xId}}" poiDetail="{{poiDetail}}" windowInfo="{{windowInfo}}" bind:moveToCenter="moveToCenter" bind:getPolyline="getPolyline" bind:onDelete="onUserMarkerDelete" bind:onEdit="onUserMarkerEdit"></poi-detail>
   <marker-add-grid show="{{showGrid}}" bind:getMarkerTypeIndex="getMarkerTypeIndex" bind:createMap="createMap"></marker-add-grid>
   <marker-add markerTypeIndex="{{markerTypeIndex}}" showForm="{{showForm}}" showChooseMarker="{{showChooseMarker}}" markerDetail="{{markerDetail}}" mapCtx="{{mapCtx}}" bind:addUserMarkerByUser="addUserMarkerByUser" bind:updateUserMarkerByUser="updateUserMarkerByUser" bind:showBottomBar="showBottomBar" bind:onFormClose="onFormClose" bind:onChooseMarker="onChooseMarker" bind:onBackChooseMarker="onBackChooseMarker" bind:onFinishChooseMarker="onFinishChooseMarker" bind:onCancelChooseMarker="onCancelChooseMarker"></marker-add>
