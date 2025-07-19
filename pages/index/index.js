@@ -1768,9 +1768,9 @@ Page({
   appUpdate() {
     const that = this
     getNotice().then(res => {
+      getApp().globalData.mapType = res.mapType
       that.setData({
-        noticeList: res.noticeList,
-
+        noticeList: res.noticeList,        
         androidContent: res.androidContent
       })
       that.bdCount = res.bdCount

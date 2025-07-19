@@ -1,9 +1,4 @@
-// import {
-//   getAroundByLocation
-// } from '../../../apis/amap-apis'
-import {
-  getAroundByLocation
-} from '../../../apis/tmap-apis'
+const { explore } = require(`../../../apis/${getApp().globalData.mapType}-apis`);
 Page({
 
   /**
@@ -73,10 +68,9 @@ Page({
     });
   },
   getAroundByLocation(longitude, latitude) {
-    let location = longitude + ',' + latitude
-    let types = '' //120000
-    getAroundByLocation({
-      location
+    explore({
+      longitude,
+      latitude
     }).then(res => {
       let poiList = res
       // let poiList = res.map(item => {

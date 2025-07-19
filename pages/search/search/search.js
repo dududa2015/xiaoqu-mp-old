@@ -1,10 +1,4 @@
-import {
-  getAmapPoiListByTips
-} from '../../../apis/amap-apis'
-import {
-  suggestion
-} from '../../../apis/tmap-apis'
-
+const { suggestion } = require(`../../../apis/${getApp().globalData.mapType}-apis`);
 import {
   convertToKilometers
 } from '../../../utils/util'
@@ -55,8 +49,8 @@ Page({
     let latitude = wx.getStorageSync('latitude')
     let longitude = wx.getStorageSync('longitude')
     suggestion({
-      latitude,
       longitude,
+      latitude,      
       keywords,
       city,
     }).then(res => {

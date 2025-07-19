@@ -163,6 +163,7 @@ App({
         mapCtx: null,
         currentPolylineIndex: 0,
         isAndroid: false,
-        padding: 3
+        padding: 3,
+        mapType: 'amap'
     }
 })
