@@ -18,3 +18,12 @@ export const suggestion = (params) => {
       method: 'GET',
   })
 }
+
+//暂未使用
+export const Geocoder = (params) => {
+  return request({
+      url: '/tmap/Geocoder',
+      data: params,
+      method: 'GET',
+  })
+}

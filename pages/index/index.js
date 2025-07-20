@@ -1011,11 +1011,6 @@ Page({
           that.addBdAroundList(lng, lat)
         }
         // #endif
-      } else {
-        // #if MP
-        //注释百度接口 2025-03-22
-        that.addBdAroundList(lng, lat)
-        // #endif
       }
     })
   },
