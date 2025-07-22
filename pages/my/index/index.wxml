@@ -19,7 +19,7 @@
   </view>
   <!-- #endif -->
   <view class="content">
-    <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
+    <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
       <!-- #if MP -->
       <t-cell title="添加到我的小程序" hover arrow url="/pages/help/help2/help2">
         <image src="/images/my/add-to-mp.png" class="left-icon" mode="" slot="left-icon" />
@@ -43,7 +43,7 @@
       <!-- #endif -->
     </t-cell-group>
     <!-- #if MP -->
-    <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;">
+    <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
       <!-- <t-cell title="意见反馈" hover arrow>
                 <image src="/images/my/feedback.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell>
@@ -58,7 +58,7 @@
     </t-cell-group>
     <!-- #endif -->
 
-    <t-cell-group style="margin-top: 32rpx;border-radius: 32rpx; overflow: hidden;" wx:if="{{isAdministator}}">
+    <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;" wx:if="{{isAdministator}}">
       <t-cell title="管理员" hover arrow url="/pages/admin/index/index">
         <image src="/images/my/admin.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>

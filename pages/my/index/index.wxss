@@ -1,11 +1,11 @@
 .container {
-    margin: 32rpx;
+    margin: 24rpx;
 }
 
 
 .vip-wrap {
     padding: 0 32rpx;
-    margin-top: 36rpx;
+    margin-top: 24rpx;
     background-image: url(https://c-ssl.duitang.com/uploads/blog/202408/30/q4Sz90N4HxGg8w4.png);
     background-size: cover;
     height: 124rpx;

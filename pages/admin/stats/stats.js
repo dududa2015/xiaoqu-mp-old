@@ -8,8 +8,8 @@ import {
 Page({
   data: {
     chooseIndex: 0,
-    year: 2025,
-    yearMonth: '2025-07'
+    year: '',
+    yearMonth: '',
   },
   onLoad() {
     this.init()
@@ -62,15 +62,27 @@ Page({
       let dailyList = this.buildDailyList(res)
       const totalAmount = dailyList.reduce((sum, item) => sum + item.amount, 0);
       const totalVip = dailyList.reduce((sum, item) => sum + item.vip, 0);
-      const totalMonth = dailyList.reduce((sum, item) => sum + item.monthSubscribe + item.monthRenew, 0);
-      const totalSeason = dailyList.reduce((sum, item) => sum + item.seasonSubscribe + item.seasonRenew, 0);
-      const totalYear = dailyList.reduce((sum, item) => sum + item.yearSubscribe + item.yearRenew, 0);
+      //月订阅
+      const totalMonthSubscribe = dailyList.reduce((sum, item) => sum + item.monthSubscribe, 0);
+      //月续订
+      const totalMonthRenew = dailyList.reduce((sum, item) => sum + item.monthRenew, 0);
+      //季订阅
+      const totalSeasonSubscribe = dailyList.reduce((sum, item) => sum + item.seasonSubscribe, 0);
+      //季续订
+      const totalSeasonRenew = dailyList.reduce((sum, item) => sum + item.seasonRenew, 0);
+      //年订阅
+      const totalYearSubscribe = dailyList.reduce((sum, item) => sum + item.yearSubscribe, 0);
+      //年续订
+      const totalYearRenew = dailyList.reduce((sum, item) => sum + item.yearRenew, 0);
       this.setData({
         dailyList,
         totalVip,
-        totalMonth,
-        totalSeason,
-        totalYear,
+        totalMonthSubscribe,
+        totalMonthRenew,
+        totalSeasonSubscribe,
+        totalSeasonRenew,
+        totalYearSubscribe,
+        totalYearRenew,
         totalAmount: totalAmount.toFixed(2),
       })
     })

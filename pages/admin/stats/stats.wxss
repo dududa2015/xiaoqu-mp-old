@@ -10,9 +10,9 @@
 }
 
 .box {
-  width: calc(100% - 24px);
+  width: calc(100% - 48rpx);
   box-sizing: content-box;
-  margin: 12px;
+  margin: 24rpx;
   background-color: #fff;
   border-radius: 8rpx;
 }
@@ -29,7 +29,7 @@
 
 .picker {
   /* width: calc(686rpx - 24px); */
-  margin-right: 8px;
+  margin-right: 16rpx;
   font-size: 28rpx;
   color: #333;
   font-weight: 500;

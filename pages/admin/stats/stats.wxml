@@ -5,12 +5,12 @@
         <t-button theme="{{chooseIndex === 0 ? 'primary': 'light'}}" size="small" style="margin: 0 0 0 8px;" bind:tap="onChoose" data-index="0">月明细</t-button>
         <t-button theme="{{chooseIndex === 1 ? 'primary': 'light'}}" size="small" style="margin:0 0 0 8px;" bind:tap="onChoose" data-index="1">月走势</t-button>
       </span>
-      <picker wx:if="{{chooseIndex === 0 }}" mode="date" value="{{yearMonth}}" fields="month" bindchange="onYearMonthChange">
+      <picker wx:if="{{chooseIndex === 0 }}" mode="date" value="{{yearMonth}}" fields="month" start="2025-06" end="{{yearMonth}}" bindchange="onYearMonthChange">
         <view class="picker">
           <text style="margin-left: 8px;">月份: </text> <text style="margin-left: 8px;">{{yearMonth}}</text>
         </view>
       </picker>
-      <picker wx:if="{{chooseIndex === 1 }}" mode="date" value="{{year}}" fields="year" start="2025" end="2035" bindchange="onYearChange">
+      <picker wx:if="{{chooseIndex === 1 }}" mode="date" value="{{year}}" fields="year" start="2025" end="{{year}}" bindchange="onYearChange">
         <view class="picker">
           <text style="margin-left: 8px;">年份: </text> <text style="margin-left: 8px;">{{year}}</text>
         </view>
@@ -29,19 +29,21 @@
       </t-row>
       <t-row class="body" wx:for="{{dailyList}}" wx:key="index">
         <t-col span="6">{{item.date}}</t-col>
-        <t-col span="3">{{item.vip}}</t-col>
-        <t-col span="3">{{item.monthSubscribe}}-{{item.monthRenew}}</t-col>
+        <t-col span="2">{{item.vip}}</t-col>
+        <t-col span="4">{{item.monthSubscribe}}-{{item.monthRenew}}</t-col>
         <t-col span="3">{{item.seasonSubscribe}}-{{item.seasonRenew}}</t-col>
         <t-col span="3">{{item.yearSubscribe}}-{{item.yearRenew}}</t-col>
         <t-col span="6">{{item.amount}}</t-col>
       </t-row>
       <t-row class="sum">
         <t-col span="6">合计</t-col>
-        <t-col span="3">{{totalVip}}</t-col>
-        <t-col span="3">{{totalMonth}}</t-col>
-        <t-col span="3">{{totalSeason}}</t-col>
-        <t-col span="3">{{totalYear}}</t-col>
-        <t-col span="6">{{totalAmount}}</t-col>
+        <t-col span="2">{{totalVip}}</t-col>
+        <t-col span="4">{{totalMonthSubscribe}}-{{totalMonthRenew}}</t-col>
+        <t-col span="3">{{totalSeasonSubscribe}}-{{totalSeasonRenew}}</t-col>
+        <t-col span="3">{{totalYearSubscribe}}-{{totalYearRenew}}</t-col>
+        <t-col span="6">
+          {{totalAmount}}
+        </t-col>
       </t-row>
     </view>
     <view class="chart-wrap" wx:if="{{chooseIndex === 1}}">
