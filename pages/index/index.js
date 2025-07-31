@@ -27,6 +27,9 @@ import {
 import {
   getPolylineByCommunity
 } from '../../apis/amap-apis'
+import {
+  getAroundCommunityList
+} from '../../apis/community-apis'
 // 在页面中定义激励视频广告
 let videoAd = null
 // 在页面中定义插屏广告
@@ -106,13 +109,15 @@ Page({
     if (poi) {
       let latitude = parseFloat(poi.latitude)
       let longitude = parseFloat(poi.longitude)
-
+      let name = poi.name
+      this.getPolylineByCommunity(longitude, latitude, name)
       this.getMapContext().moveToLocation({
         latitude,
         longitude
       })
       this.addMarker2Map(latitude, longitude)
       this.getAroundList(latitude, longitude)
+      this.getAroundCommunityList(latitude, longitude)
       wx.removeStorage({
         key: 'poi',
       })
@@ -355,11 +360,11 @@ Page({
       interstitialAd = wx.createInterstitialAd({
         adUnitId: 'adunit-6449f8b32a1844a8'
       })
-      interstitialAd.onLoad(() => { })
+      interstitialAd.onLoad(() => {})
       interstitialAd.onError((err) => {
         console.error('插屏广告加载失败', err)
       })
-      interstitialAd.onClose(() => { })
+      interstitialAd.onClose(() => {})
     }
   },
   //显示插屏广告
@@ -413,6 +418,7 @@ Page({
           let userInfo = wx.getStorageSync('userInfo')
           if (userInfo) {
             that.getAroundList(latitude, longitude)
+            that.getAroundCommunityList(latitude, longitude)
             that.getNotice()
             that.setData({
               tips: userInfo.remark,
@@ -424,6 +430,7 @@ Page({
         }, 50);
         // #else
         that.getAroundList(latitude, longitude)
+        that.getAroundCommunityList(latitude, longitude)
         wx.setStorageSync('locationed', true)
         // #endif
       },
@@ -599,6 +606,7 @@ Page({
     })
     this.addMarker2Map(latitude, longitude)
     this.getAroundList(latitude, longitude)
+    this.getAroundCommunityList(latitude, longitude)
   },
   onPoiTap(e) {
     if (this.data.showForm || this.disableTap || this.data.showChooseMarker) {
@@ -637,8 +645,8 @@ Page({
       latitude,
       name
     }).then(res => {
-      if (res.polyline) {
-        let polygon = buildPolygon(res.polyline)
+      if (res.polygon) {
+        let polygon = buildPolygon(res.polygon)
         console.log(polygon)
         let polygons = []
         polygons.push(polygon)
@@ -783,6 +791,7 @@ Page({
     const MIN_DIFF_THRESHOLD = 0.0005; // 约50米左右的变化
     if (latDiff >= MIN_DIFF_THRESHOLD || lngDiff >= MIN_DIFF_THRESHOLD) {
       this.getAroundList(currentLat, currentLng);
+      this.getAroundCommunityList(currentLat, currentLng);
       wx.setStorageSync('lastLatitude', currentLat);
       wx.setStorageSync('lastLongitude', currentLng);
     }
@@ -1012,6 +1021,27 @@ Page({
         }
         // #endif
       }
+    })
+  },
+  //获取周围的小区
+  getAroundCommunityList(lat, lng) {
+    getAroundCommunityList({
+      lng,
+      lat
+    }).then(res => {
+      let poiList = []
+      for (const item of res) {
+        let s = {
+          xId: generateXId(item.lat, item.lng),
+          type: 10,
+          name: '🏠︎' + item.name,
+          lat: this.truncateToSixDecimals(item.lat),
+          lng: this.truncateToSixDecimals(item.lng)
+        }
+        poiList.push(s)
+        console.log(poiList)
+      }
+      this.addAroundList2Map(poiList)
     })
   },
   getMarkerListUpdate() {
@@ -1763,9 +1793,9 @@ Page({
   appUpdate() {
     const that = this
     getNotice().then(res => {
-      getApp().globalData.mapType = res.mapType
+      getApp().globalData.mapType = res.mapType || 'amap'
       that.setData({
-        noticeList: res.noticeList,        
+        noticeList: res.noticeList,
         androidContent: res.androidContent
       })
       that.bdCount = res.bdCount

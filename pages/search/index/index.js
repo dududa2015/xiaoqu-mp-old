@@ -101,7 +101,7 @@ Page({
         poiList
       })
       if (Array.isArray(res) && res.length > 0) {
-        wx.setStorageSync('city', res[0].cityname)
+        wx.setStorageSync('city', res[0].city)
       }
     })
   },

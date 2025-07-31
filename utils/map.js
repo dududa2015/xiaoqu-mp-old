@@ -18,13 +18,13 @@ const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted) => 
     markers.callout = null
     markers.label = {
       content: name,
-      borderWidth: 0.2,
+      borderWidth: 0.4,
       borderColor: "#f7f7f7",
-      borderRadius: 7,
+      borderRadius: 8,
       bgColor,
       color: "#fff",
       padding: 3,
-      fontSize: 11,
+      fontSize: 12,
       textAlign: "center",
       anchorY: -16,
       anchorX: anchorX
@@ -75,8 +75,10 @@ function getBgColorByType(type) {
     bgColor = '#8c444f'
   } else if (type === 7) {
     bgColor = '#3CB371'
-  } else {
+  } else if(type === 8) {
     bgColor = '#dc143c'
+  } else {
+    bgColor= '#B23AEE'
   }
   return bgColor
 }
@@ -121,7 +123,7 @@ const buildPolygon = (polyline) => {
     });
 
   return {
-    dashArray: [20, 8],
+    dashArray: [30, 10],
     points,
     strokeWidth: 2,
     strokeColor: '#0074FE',

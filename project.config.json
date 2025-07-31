@@ -15,7 +15,7 @@
 		},
 		"condition": true,
 		"ignoreUploadUnusedFiles": true,
-		"uglifyFileName": false
+		"uglifyFileName": true
 	},
 	"condition": {},
 	"editorSetting": {

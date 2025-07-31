@@ -35,8 +35,11 @@ const isStringNumber = value => {
 const convertToKilometers = meters => {
   if (meters > 1000) {
     return (meters / 1000).toFixed(1) + '公里'; // 转换为公里  
-  }
-  return meters + '米'; // 返回米  
+  } else if(meters <= 1000){
+    return meters + '米'; // 返回米  
+  } else {
+    return ''
+  }  
 }
 //日期转换
 const convertDate = inputDateTime => {

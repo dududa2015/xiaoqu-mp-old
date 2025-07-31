@@ -2,6 +2,20 @@ import {
   request
 } from "../utils/request"
 
+export const explore = (params) => {
+  return request({
+      url: '/amap/explore',
+      data: params,
+      method: 'GET',
+  })
+}
+export const suggestion = (params) => {
+  return request({
+      url: '/amap/Suggestion',
+      data: params,
+      method: 'GET',
+  })
+}
 //根据经纬度获取POI列表，用于地图选点第一步
 export const getAroundByLocation = (params) => {
   return request({

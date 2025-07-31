@@ -15,7 +15,7 @@
             <rich-text class="title" nodes="{{item.hightlightName || item.name}}"></rich-text>
             <!-- <text class="title" >{{item.name}}</text> -->
           </view>
-          <view slot="description" class="flex f-y-fs">
+          <view slot="description" class="flex f-y-fe">
             <!-- <text class="distance">{{item.distance}}</text> -->
             <text class="description">{{item.distance}} {{item.address}}</text>
           </view>

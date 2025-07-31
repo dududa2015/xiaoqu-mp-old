@@ -19,7 +19,7 @@ export const suggestion = (params) => {
   })
 }
 
-//暂未使用
+//逆地址解析,可以获取到小区名称
 export const Geocoder = (params) => {
   return request({
       url: '/tmap/Geocoder',
