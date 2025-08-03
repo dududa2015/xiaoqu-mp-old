@@ -1,5 +1,6 @@
 // api URL
-const apiUrl = "http://localhost:5213/api"
+// const apiUrl = "http://localhost:5213/api"
+const apiUrl = "https://test.zhuzixi.cn/api"
 // const apiUrl = "https://mp.zhuzixi.cn/api"
 // 封装微信请求方法
 const request = (params) => {

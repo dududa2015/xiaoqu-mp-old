@@ -10,3 +10,13 @@ export const getAroundCommunityList = (params) => {
       method: 'GET',
   })
 }
+
+//获取小区详情
+export const getCommunityDetail = (params) => {
+  return request({
+      url: '/community/getCommunityDetail',
+      data: params,
+      method: 'GET',
+  })
+}
+

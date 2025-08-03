@@ -28,7 +28,8 @@ import {
   getPolylineByCommunity
 } from '../../apis/amap-apis'
 import {
-  getAroundCommunityList
+  getAroundCommunityList,
+  getCommunityDetail
 } from '../../apis/community-apis'
 // 在页面中定义激励视频广告
 let videoAd = null
@@ -400,8 +401,8 @@ Page({
         } = res
         console.log(longitude, latitude)
 
-        // longitude = 113.471588
-        // latitude = 22.270992
+        longitude = 113.471588
+        latitude = 22.270992
         that.setData({
           latitude,
           longitude,
@@ -659,6 +660,12 @@ Page({
   //用户标记点的label或callout点击
   onLabelTap(e) {
     console.log(e)
+    let markerId = e.detail.markerId
+    //如果为999开头，说明是小区的标记
+    if (markerId.toString().startsWith('999')) {
+      this.getCommunityDetail(markerId.toString())
+      return
+    }
     if (this.data.showForm || this.disableTap || this.data.showChooseMarker) {
       return
     }
@@ -676,6 +683,37 @@ Page({
       showAdd: false,
       showLocation: false,
       showGrid: false
+    })
+  },
+  //根据id获取小区详情
+  getCommunityDetail(id) {
+    getCommunityDetail({
+      id
+    }).then(res => {
+      console.log(res)
+      //aoi
+      let polygon = buildPolygon(res.community.polygon)
+      let polygons = []
+      polygons.push(polygon)
+      this.setData({
+        polygons
+      })
+      //door
+      let doorList = []
+      for (const item of res.doorList) {
+        const parts = item.name.split("-");
+        const name = parts.length > 1 ? parts[1] : ""; // 避免无 "-" 时报错
+        let s = {
+          xId: item.id,
+          type: 1,
+          name,
+          lat: this.truncateToSixDecimals(item.lat),
+          lng: this.truncateToSixDecimals(item.lng)
+        }
+        doorList.push(s)
+      }
+      this.addAroundList2Map(doorList)
+
     })
   },
 
@@ -1032,14 +1070,13 @@ Page({
       let poiList = []
       for (const item of res) {
         let s = {
-          xId: generateXId(item.lat, item.lng),
+          xId: item.id,
           type: 10,
           name: '🏠︎' + item.name,
           lat: this.truncateToSixDecimals(item.lat),
           lng: this.truncateToSixDecimals(item.lng)
         }
         poiList.push(s)
-        console.log(poiList)
       }
       this.addAroundList2Map(poiList)
     })
