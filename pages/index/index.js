@@ -661,8 +661,8 @@ Page({
   onLabelTap(e) {
     console.log(e)
     let markerId = e.detail.markerId
-    //如果为999开头，说明是小区的标记
-    if (markerId.toString().startsWith('999')) {
+    //如果为888开头，说明是小区的标记
+    if (markerId.toString().startsWith('888')) {
       this.getCommunityDetail(markerId.toString())
       return
     }
@@ -692,12 +692,14 @@ Page({
     }).then(res => {
       console.log(res)
       //aoi
-      let polygon = buildPolygon(res.community.polygon)
-      let polygons = []
-      polygons.push(polygon)
-      this.setData({
-        polygons
-      })
+      if (res.community.polygon) {
+        let polygon = buildPolygon(res.community.polygon)
+        let polygons = []
+        polygons.push(polygon)
+        this.setData({
+          polygons
+        })
+      }
       //door
       let doorList = []
       for (const item of res.doorList) {
@@ -884,6 +886,15 @@ Page({
       bottom: 0,
       polygons: []
     })
+    let markers = []
+    this.data.markers.forEach(element => {
+      if (!element.id.toString().startsWith('999')) {
+        markers.push(element)
+      }
+    });
+    this.setData({
+      markers
+    })
   },
   //去掉id为-1的标记
   resetMarker() {
@@ -1053,10 +1064,10 @@ Page({
         that.addAroundList2Map(list)
         //小于{{数量}}也调用接口，{{数量}}在缓存caches.json里配置
         // #if MP
-        //注释百度接口 2025-03-22,打开接口2025-06-12
-        if (list.length < (that.bdCount || 5)) {
-          that.addBdAroundList(lng, lat)
-        }
+        //注释百度接口 2025-03-22,打开接口2025-06-12，注释于2025-08-06
+        // if (list.length < (that.bdCount || 5)) {
+        //   that.addBdAroundList(lng, lat)
+        // }
         // #endif
       }
     })
@@ -1070,7 +1081,7 @@ Page({
       let poiList = []
       for (const item of res) {
         let s = {
-          xId: item.id,
+          xId: item.hashId,
           type: 10,
           name: '🏠︎' + item.name,
           lat: this.truncateToSixDecimals(item.lat),
