@@ -1089,7 +1089,10 @@ Page({
         }
         poiList.push(s)
       }
-      this.addAroundList2Map(poiList)
+      //加个定时器，为了防止小区标记在普通标记下面
+      setTimeout(() => {
+        this.addAroundList2Map(poiList)
+      }, 200);      
     })
   },
   getMarkerListUpdate() {
