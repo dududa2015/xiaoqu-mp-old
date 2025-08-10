@@ -9,9 +9,6 @@ import {
 import {
   getBicycleRoute
 } from '../../apis/amap-apis'
-import {
-  addCommunity
-} from '../../apis/community-apis'
 Component({
   /**
    * 组件的属性列表
@@ -194,8 +191,6 @@ Component({
       })
       this.latitude = latitude //保存点击的位置
       this.longitude = longitude
-
-      this.getLocationDetail(latitude, longitude)
     },
 
     showPolyline() {
@@ -241,17 +236,6 @@ Component({
             width: 4
           }]
         });
-      })
-    },
-    getLocationDetail(lat, lng) {
-      addCommunity({
-        lat,
-        lng
-      }).then(res => {
-        // this.setData({
-        //   poiCommunity: res.communityName,
-        //   poiAddress: res.formattedAddress
-        // })
       })
     },
     openLocation(e) {

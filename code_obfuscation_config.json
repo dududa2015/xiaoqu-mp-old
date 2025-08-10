@@ -201,6 +201,30 @@
 		{
 			"path": "pages/admin/notice/notice.js",
 			"sub_switch": true
+		},
+		{
+			"path": "apis/amap-apis.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/apple-stats-apis.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/community-apis.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/msg-sec-check-apis.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/product-api.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/tmap-apis.js",
+			"sub_switch": true
 		}
 	]
 }

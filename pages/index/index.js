@@ -28,6 +28,7 @@ import {
   getPolylineByCommunity
 } from '../../apis/amap-apis'
 import {
+  addCommunity,
   getAroundCommunityList,
   getCommunityFullDetail
 } from '../../apis/community-apis'
@@ -638,8 +639,8 @@ Page({
     this.addMarker2Map(latitude, longitude)
     this.moveToLocation(latitude, longitude)
 
-    this.getPolylineByCommunity(longitude, latitude, name)
-
+    // this.getPolylineByCommunity(longitude, latitude, name)
+    this.addCommunity(latitude, longitude)
   },
   getPolylineByCommunity(longitude, latitude, name) {
     getPolylineByCommunity({
@@ -667,6 +668,10 @@ Page({
       this.getCommunityFullDetail(markerId.toString())
       return
     }
+    //如果为999开头，说明是小区门的标记，不查询详情
+    if (markerId.toString().startsWith('999')) {
+      return
+    }
     if (this.data.showForm || this.disableTap || this.data.showChooseMarker) {
       return
     }
@@ -686,6 +691,15 @@ Page({
       showGrid: false
     })
   },
+  //根据点击的坐标添加小区、门、边界。
+  addCommunity(lat, lng) {
+    addCommunity({
+      lat,
+      lng
+    }).then(res => {
+      console.log(res)
+    })
+  },
   //根据id获取小区详情
   getCommunityFullDetail(id) {
     getCommunityFullDetail({
@@ -703,11 +717,11 @@ Page({
       }
       //door
       let doorList = []
-      res.doorList.forEach((item,index)=>{
+      res.doorList.forEach((item, index) => {
         const parts = item.name.split("-");
         const name = parts.length > 1 ? parts[1] : ""; // 避免无 "-" 时报错
         let s = {
-          xId: '999'+ item.communityId.slice(0, 10) + index,
+          xId: '999' + item.communityId.slice(0, 10) + index,
           type: 1,
           name,
           lat: this.truncateToSixDecimals(item.lat),
@@ -1106,7 +1120,7 @@ Page({
       //加个定时器，为了防止小区标记在普通标记下面
       setTimeout(() => {
         this.addAroundList2Map(poiList)
-      }, 100);      
+      }, 100);
     })
   },
   getMarkerListUpdate() {
