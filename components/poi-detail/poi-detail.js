@@ -7,9 +7,11 @@ import {
   updateMarkerLikes
 } from '../../utils/apis'
 import {
-  getCommunityName,
   getBicycleRoute
 } from '../../apis/amap-apis'
+import {
+  addCommunity
+} from '../../apis/community-apis'
 Component({
   /**
    * 组件的属性列表
@@ -241,15 +243,15 @@ Component({
         });
       })
     },
-    getLocationDetail(latitude, longitude) {
-      let location = longitude + ',' + latitude
-      getCommunityName({
-        location
+    getLocationDetail(lat, lng) {
+      addCommunity({
+        lat,
+        lng
       }).then(res => {
-        this.setData({
-          poiCommunity: res.communityName,
-          poiAddress: res.formattedAddress
-        })
+        // this.setData({
+        //   poiCommunity: res.communityName,
+        //   poiAddress: res.formattedAddress
+        // })
       })
     },
     openLocation(e) {

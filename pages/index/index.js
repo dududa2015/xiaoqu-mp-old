@@ -29,7 +29,7 @@ import {
 } from '../../apis/amap-apis'
 import {
   getAroundCommunityList,
-  getCommunityDetail
+  getCommunityFullDetail
 } from '../../apis/community-apis'
 // 在页面中定义激励视频广告
 let videoAd = null
@@ -610,6 +610,7 @@ Page({
     this.getAroundCommunityList(latitude, longitude)
   },
   onPoiTap(e) {
+    console.log(e)
     if (this.data.showForm || this.disableTap || this.data.showChooseMarker) {
       return
     }
@@ -663,7 +664,7 @@ Page({
     let markerId = e.detail.markerId
     //如果为888开头，说明是小区的标记
     if (markerId.toString().startsWith('888')) {
-      this.getCommunityDetail(markerId.toString())
+      this.getCommunityFullDetail(markerId.toString())
       return
     }
     if (this.data.showForm || this.disableTap || this.data.showChooseMarker) {
@@ -686,8 +687,8 @@ Page({
     })
   },
   //根据id获取小区详情
-  getCommunityDetail(id) {
-    getCommunityDetail({
+  getCommunityFullDetail(id) {
+    getCommunityFullDetail({
       id
     }).then(res => {
       console.log(res)
@@ -702,18 +703,31 @@ Page({
       }
       //door
       let doorList = []
-      for (const item of res.doorList) {
+      res.doorList.forEach((item,index)=>{
         const parts = item.name.split("-");
         const name = parts.length > 1 ? parts[1] : ""; // 避免无 "-" 时报错
         let s = {
-          xId: item.id,
+          xId: '999'+ item.communityId.slice(0, 10) + index,
           type: 1,
           name,
           lat: this.truncateToSixDecimals(item.lat),
           lng: this.truncateToSixDecimals(item.lng)
         }
         doorList.push(s)
-      }
+      })
+
+      // for (const item of res.doorList) {
+      //   const parts = item.name.split("-");
+      //   const name = parts.length > 1 ? parts[1] : ""; // 避免无 "-" 时报错
+      //   let s = {
+      //     xId: item.id,
+      //     type: 1,
+      //     name,
+      //     lat: this.truncateToSixDecimals(item.lat),
+      //     lng: this.truncateToSixDecimals(item.lng)
+      //   }
+      //   doorList.push(s)
+      // }
       this.addAroundList2Map(doorList)
 
     })
@@ -1081,7 +1095,7 @@ Page({
       let poiList = []
       for (const item of res) {
         let s = {
-          xId: item.hashId,
+          xId: '888' + item.id.slice(0, 12),
           type: 10,
           name: '🏠︎' + item.name,
           lat: this.truncateToSixDecimals(item.lat),
@@ -1092,7 +1106,7 @@ Page({
       //加个定时器，为了防止小区标记在普通标记下面
       setTimeout(() => {
         this.addAroundList2Map(poiList)
-      }, 200);      
+      }, 100);      
     })
   },
   getMarkerListUpdate() {
