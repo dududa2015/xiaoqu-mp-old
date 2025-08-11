@@ -362,11 +362,11 @@ Page({
       interstitialAd = wx.createInterstitialAd({
         adUnitId: 'adunit-6449f8b32a1844a8'
       })
-      interstitialAd.onLoad(() => {})
+      interstitialAd.onLoad(() => { })
       interstitialAd.onError((err) => {
         console.error('插屏广告加载失败', err)
       })
-      interstitialAd.onClose(() => {})
+      interstitialAd.onClose(() => { })
     }
   },
   //显示插屏广告
@@ -402,8 +402,8 @@ Page({
         } = res
         console.log(longitude, latitude)
 
-        longitude = 113.471588
-        latitude = 22.270992
+        // longitude = 113.471588
+        // latitude = 22.270992
         that.setData({
           latitude,
           longitude,
