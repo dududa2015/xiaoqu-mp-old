@@ -34,7 +34,7 @@
         </view>
     </view>
     <view class="tips" wx:if="{{showTips}}">
-        温馨提醒：终身会员从7月起，每月涨价5元
+        <!-- 温馨提醒：终身会员从7月起，每月涨价5元 -->
         <!-- <text class="mp-name" bind:tap="toMP">【小区楼号分布图】</text> -->
     </view>
     <view class="footer">

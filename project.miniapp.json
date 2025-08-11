@@ -1,8 +1,8 @@
 {
   "miniVersion": "v2",
   "name": "小区楼号地图",
-  "version": "1.0.8",
-  "versionCode": 20250707,
+  "version": "1.0.9",
+  "versionCode": 20250811,
   "i18nFilePath": "i18n",
   "mini-android": {
     "resourcePath": "miniapp/android/nativeResources",
@@ -43,7 +43,7 @@
     }
   },
   "mini-ios": {
-    "sdkVersion": "1.6.10",
+    "sdkVersion": "1.6.23",
     "toolkitVersion": "0.0.9",
     "useExtendedSdk": {
       "WeAppOpenFuns": true,
@@ -107,7 +107,7 @@
     "buildCloud": {
       "useRemote": true,
       "p12": "miniapp/ios/iosCloudBuildMaterial/PC5SUA5M62_DISTRIBUTION_1779677648000.p12",
-      "p12passwordEncrypted": "rY2GbkeMqlT4QZA2+cOqgIE+ARoG2rFlAXXqx+oDvf/o8IzN/UIc4OizfVSHu0owTH2NNkEaaZLNTJE0WWWH5hKH0R3s2zaLv6Cdfrwi95B8NqJR/e0YPXWoOWxZVC0WSmiaygvJqReQkn8d4G57yjQX1C3KC9joLxi9kHXuBic=",
+      "p12passwordEncrypted": "Uj0gH+ST116nwpuQvinUEZ30eDhaIwB/Qtc+6sWE8/BE0bBkB4I1myKpPirGKDquHUUjzL4odN0VunL8Xvl68IByFnxJ/JDpVARvSC3FX2Z5PQXr7UTCOrfrHXL3vUDlU4qGAmF9eXhZe1sCW5CHHigBPrPrD39RgEPGqhGGJr8=",
       "certificate": "Apple Distribution: jian zhu (BB8CM6ZM4C)",
       "profile": "miniapp/ios/iosCloudBuildMaterial/YF3MG24973_IOS_APP_STORE_1779677648000.mobileprovision"
     },

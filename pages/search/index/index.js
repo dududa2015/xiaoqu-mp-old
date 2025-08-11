@@ -1,9 +1,10 @@
-const { explore } = require(`../../../apis/${getApp().globalData.mapType}-apis`);
+// const { explore } = require(`../../../apis/${getApp().globalData.mapType}-apis`);
+const apis = {
+  tmap: require('../../../apis/tmap-apis'),
+  amap: require('../../../apis/amap-apis')
+};
+const { explore } = apis[getApp().globalData.mapType];
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     statusBarHeight: 0, // 状态栏高度
     navHeight: 44, // 导航栏高度

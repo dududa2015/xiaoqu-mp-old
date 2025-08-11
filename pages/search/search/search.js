@@ -1,4 +1,9 @@
-const { suggestion } = require(`../../../apis/${getApp().globalData.mapType}-apis`);
+// const { suggestion } = require(`../../../apis/${getApp().globalData.mapType}-apis`);
+const apis = {
+  tmap: require('../../../apis/tmap-apis'),
+  amap: require('../../../apis/amap-apis')
+};
+const { suggestion } = apis[getApp().globalData.mapType];
 import {
   convertToKilometers
 } from '../../../utils/util'
