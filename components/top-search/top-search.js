@@ -29,6 +29,7 @@ Component({
     data: {
         topAddress: '搜索附近小区',
         firstChar: '',
+        isFlipped: false //初始未翻转
     },
     ready: function () {
         let mapName = wx.getStorageSync('mapName')
@@ -56,7 +57,8 @@ Component({
         },
         toMap() {
             this.setData({
-                showUp: true
+                showUp: true,
+                isFlipped: !this.data.isFlipped
             })
             this.triggerEvent('toMap');
         },

@@ -24,7 +24,7 @@ const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted) => 
       bgColor,
       color: "#fff",
       padding: 3,
-      fontSize: 12,
+      fontSize: 11,
       textAlign: "center",
       anchorY: -16,
       anchorX: anchorX

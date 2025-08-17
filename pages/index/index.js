@@ -362,11 +362,11 @@ Page({
       interstitialAd = wx.createInterstitialAd({
         adUnitId: 'adunit-6449f8b32a1844a8'
       })
-      interstitialAd.onLoad(() => { })
+      interstitialAd.onLoad(() => {})
       interstitialAd.onError((err) => {
         console.error('插屏广告加载失败', err)
       })
-      interstitialAd.onClose(() => { })
+      interstitialAd.onClose(() => {})
     }
   },
   //显示插屏广告
@@ -1621,11 +1621,16 @@ Page({
       this.setData({
         showSetting: false,
         showNoAd: false,
-        showMap: true,
+        showMap: !this.data.showMap, //点击个人地图时实现开和关两种状态
         showGrid: false,
         showForm: false
       })
-      this.hideTabBar()
+      if (this.data.showMap) {
+        this.hideTabBar()
+      } else {
+        this.showTabBar()
+      }
+
     } else {
       wx.navigateTo({
         url: '/pages/ios/login/login',

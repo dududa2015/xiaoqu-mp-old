@@ -81,10 +81,16 @@
 
 .map-name-wrap {
     display: flex;
-    padding: 12rpx 32rpx;
+    padding: 12rpx 24rpx;
     /* height: 50rpx; */
 }
-
+.down-icon {
+  transition: transform 0.5s ease; /* 平滑过渡效果 */
+}
+/* 翻转状态：从向上变为向下（180°旋转） */
+.flipped {
+  transform: rotate(180deg);
+}
 .radio-icon-size {
     font-size: 36rpx;
 }
