@@ -1,0 +1,35 @@
+.close-btn {
+  position: absolute;
+  right: -24rpx;
+  top: 0;
+  width: 100rpx;
+  height: 72rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-wrap {
+  /* width: calc(100% - 64rpx); */
+  /* padding: 32rpx; */
+}
+
+.form-title {
+  margin-left: 24rpx;
+  font-weight: 600;
+  font-size: 32rpx;
+  line-height: 96rpx;
+}
+
+.input-wrap {
+  padding: 24rpx 0;
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.footer {
+  padding: 32rpx 0;
+  width: 100%;
+  text-align: center;
+}

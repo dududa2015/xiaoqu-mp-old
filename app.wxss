@@ -11,6 +11,9 @@ page {
   /* --td-font-size-m: 28rpx; */
   --td-cell-title-font-size: 28rpx;
   --td-input-prefix-icon-color: rgba(150, 151, 153, 1);
+  --td-radio-icon-size: 44rpx;
+  --td-radio-font-size: 28rpx;
+  --td-radio-label-line-height: 36rpx;
 }
 
 .page-body {

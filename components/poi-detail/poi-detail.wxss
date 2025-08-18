@@ -115,7 +115,7 @@
   justify-content: space-between;
   align-items: center;
   border-top: 1px solid #F6F8FC;
-  height: 50px;
+  padding-bottom: 16rpx;
 }
 
 .left {
@@ -126,8 +126,8 @@
 }
 
 .thumb-wrap {
-  width: 80rpx;
-  height: 80rpx;
+  width: 72rpx;
+  height: 72rpx;
   text-align: center;
   display: flex;
   /* 使用flexbox */

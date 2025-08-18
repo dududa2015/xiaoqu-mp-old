@@ -37,7 +37,7 @@
       <t-cell title="猜你想输入" wx:if="{{markerTypeIndex === 0}}">
         <suggestions-input style="margin-left: 16rpx;" slot="note" markerTypeIndex="{{markerTypeIndex}}" suggestionsName="{{suggestionsName}}" bind:getSuggestions="getSuggestions"></suggestions-input>
       </t-cell>
-      <t-cell title="大门朝向" wx:if="{{markerTypeIndex === 0}}">
+      <t-cell title="门的朝向" wx:if="{{markerTypeIndex === 0}}">
         <view style="margin-left: 16rpx;" slot="note">
           <t-check-tag wx:for="{{tagDirection}}" wx:key="index" theme="default" checked="{{item.checked}}" bindchange="onTagDirectionChange" data-item="{{item}}" variant="dark" size="medium" content="" style="margin:0 4rpx 0 0">{{item.name}}</t-check-tag>
         </view>

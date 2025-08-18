@@ -1,0 +1,38 @@
+<!-- <t-popup visible="{{showFeedback}}" placement="bottom" style="background:#f7f7f7;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx);" bind:visible-change="onVisibleChange">
+  <view class="guide-wrap">
+    <view class="title">反馈</view>
+    <view class="content">
+      <t-radio-group t-class="theme-card" default-value="radio1" borderless>
+        <t-radio label="重复标记" value="0" default-checked />
+        <t-radio label="错误标记" value="1" />
+        <t-radio label="涉嫌侵犯他人隐私" value="3" />
+        <t-radio label="其他原因" value="4" />
+      </t-radio-group>
+    </view>
+    <view class="footer">
+      <t-button style="color: #333333;" size="large" block variant="text" bind:tap="onSave"> 关闭</t-button>
+    </view>
+  </view>
+</t-popup> -->
+
+<t-popup visible="{{showFeedback}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#f7f7f7;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx);">
+  <view class="close-btn" bind:tap="onClose">
+    <image src="/images/controls/cross.png" mode="" style="width: 40rpx; height: 40rpx;" />
+  </view>
+
+  <view class="form-wrap">
+    <view class="form-title">反馈标记</view>
+    <view class="input-wrap">
+      <t-radio-group t-class="theme-card" value="{{selectedReason}}" borderless bind:change="onChange">
+        <t-radio label="错误标记" value="0" default-checked />
+        <t-radio label="重复标记" value="1" />
+        <t-radio label="涉嫌侵犯他人隐私" value="3" />
+        <t-radio label="其他原因" value="4" />
+      </t-radio-group>
+    </view>
+  </view>
+  <view class="footer">
+    <t-button theme="primary" size="large" block bind:tap="onSave">保存</t-button>
+    <!-- <button type="primary" style="background-color:#0074FE;" bind:tap="onSaveMarker">保存</button> -->
+  </view>
+</t-popup>

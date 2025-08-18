@@ -307,6 +307,9 @@ Component({
     //删除标记
     onDelete() {
       this.triggerEvent('onDelete', this.poiInfo)
+    },
+    onFeedback(){
+      this.triggerEvent('onFeedback', this.poiInfo)
     }
   }
 })

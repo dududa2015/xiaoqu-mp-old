@@ -31,11 +31,15 @@
       </view> -->
       <view class="thumb-wrap" wx:if="{{canEditUserMarker && markerType<6}}" bind:tap="onEdit">
         <image src="/images/poi-detail/edit.png" class="img" mode="" />
-        <view class="b-text">编辑</view>
+        <view class="b-text">修改</view>
       </view>
       <view class="thumb-wrap" wx:if="{{canDeleteUserMarker}}" bind:tap="onDelete">
         <image src="/images/poi-detail/delete.png" class="img" mode="" />
         <view class="b-text">删除</view>
+      </view>
+      <view class="thumb-wrap" bind:tap="onFeedback">
+        <image src="/images/poi-detail/feedback.png" class="img" mode="" />
+        <view class="b-text">反馈</view>
       </view>
     </view>
     <view class="right">

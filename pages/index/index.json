@@ -15,6 +15,7 @@
     "t-check-tag": "tdesign-miniprogram/check-tag/check-tag",
     "suggestions-input": "/components/suggestions-input/suggestions-input",
     "poi-detail": "/components/poi-detail/poi-detail",
+    "marker-feedback": "/components/marker-feedback/marker-feedback",
     "marker-add": "/components/marker-add/marker-add",
     "marker-add-grid": "/components/marker-add-grid/marker-add-grid",
     "map-setting": "/components/map-setting/map-setting",

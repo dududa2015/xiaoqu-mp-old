@@ -56,6 +56,7 @@ Page({
     showPOI: false, //是否显示底部的POI描述
     showCenterMarker: false, //是否显示中心标记点
     showChooseMarker: false, //是否显示选点按钮
+    showFeedback: false, //是否显示反馈按钮
     showLocation: true,
     showAdd: true,
     showLocation: true,
@@ -612,7 +613,7 @@ Page({
   },
   onPoiTap(e) {
     console.log(e)
-    if (this.data.showForm || this.disableTap || this.data.showChooseMarker) {
+    if (this.data.showForm || this.disableTap || this.data.showChooseMarker || this.data.showFeedback) {
       return
     }
     //如果grid显示，点击poi关闭grid
@@ -663,6 +664,14 @@ Page({
   onLabelTap(e) {
     console.log(e)
     let markerId = e.detail.markerId
+    if (this.data.showForm || this.disableTap || this.data.showChooseMarker || this.data.showFeedback) {
+      return
+    }
+    //如果grid显示，点击label关闭grid
+    if (this.data.showGrid || this.data.showSetting) {
+      this.onMapTap()
+      return
+    }
     //如果为888开头，说明是小区的标记
     if (markerId.toString().startsWith('888')) {
       this.getCommunityFullDetail(markerId.toString())
@@ -670,14 +679,6 @@ Page({
     }
     //如果为999开头，说明是小区门的标记，不查询详情
     if (markerId.toString().startsWith('999')) {
-      return
-    }
-    if (this.data.showForm || this.disableTap || this.data.showChooseMarker) {
-      return
-    }
-    //如果grid显示，点击label关闭grid
-    if (this.data.showGrid || this.data.showSetting) {
-      this.onMapTap()
       return
     }
     this.hideTabBar()
@@ -905,6 +906,7 @@ Page({
     this.setData({
       showUp: false,
       showAdd: true,
+      showFeedback: false,
       showLocation: true,
       showPOI: false,
       showGrid: false,
@@ -1613,6 +1615,20 @@ Page({
       markerDetail: event.detail
     })
   },
+  //反馈
+  onFeedback(event) {
+    this.disableMapTap()
+    this.setData({
+      showFeedback: true,
+      markerDetail: event.detail
+    })
+  },
+  onCloseFeedback(){
+    this.disableMapTap()
+    this.setData({
+      showFeedback: false
+    })
+  },
   //打开个人地图
   toMap() {
     let userInfo = wx.getStorageSync('userInfo')
@@ -1735,6 +1751,15 @@ Page({
     })
     this.hideTabBar()
   },
+  //设置关闭
+  onSettingClose() {
+    this.disableMapTap()
+    this.setData({
+      showSetting: false
+    })
+    this.resetMap()
+    this.showTabBar()
+  },
   onShowChooseLocation() {
     // this.hideTabBar()
     // this.setData({
@@ -1743,14 +1768,6 @@ Page({
     wx.navigateTo({
       url: '/pages/search/index/index',
     })
-  },
-  //设置关闭
-  onSettingClose() {
-    this.disableMapTap()
-    this.setData({
-      showSetting: false
-    })
-    this.showTabBar()
   },
   //更改图层
   onSatellite(event) {
