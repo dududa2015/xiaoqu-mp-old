@@ -24,10 +24,10 @@
     <view class="form-title">反馈标记</view>
     <view class="input-wrap">
       <t-radio-group t-class="theme-card" value="{{selectedReason}}" borderless bind:change="onChange">
-        <t-radio label="错误标记" value="0" default-checked />
+        <t-radio label="错误标记" value="0" />
         <t-radio label="重复标记" value="1" />
-        <t-radio label="涉嫌侵犯他人隐私" value="3" />
-        <t-radio label="其他原因" value="4" />
+        <t-radio label="涉嫌侵犯他人隐私" value="2" />
+        <t-radio label="其他原因" value="3" />
       </t-radio-group>
     </view>
   </view>

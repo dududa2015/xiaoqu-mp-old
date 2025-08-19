@@ -28,3 +28,12 @@ export const getMapList = (params) => {
         method: 'GET',
     })
 }
+
+//批量审核不通过,不扣分 
+export const auditNotPassedList = (params) => {
+  return request({
+      url: '/marker/auditNotPassedList',
+      data: params,
+      method: 'POST',
+  })
+}

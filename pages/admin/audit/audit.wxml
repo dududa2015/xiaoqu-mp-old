@@ -42,8 +42,8 @@
           <view class="btn delete-btn-1" bind:tap="auditNotPassed" data-points="10" data-item="{{item}}">
             删扣10
           </view>
-          <view class="btn delete-btn-2" bind:tap="auditNotPassed" data-points="1" data-item="{{item}}">
-            删扣1
+          <view class="btn delete-btn-2" bind:tap="auditNotPassed" data-points="0" data-item="{{item}}">
+            删不扣
           </view>
         </view>
       </t-swipe-cell>

@@ -7,6 +7,6 @@
     "t-fab": "tdesign-miniprogram/fab/fab",
     "map-marker-popup": "/components/map-marker-popup/map-marker-popup"
   },
-  "navigationBarTitleText": "审核(通过)",
+  "navigationBarTitleText": "审核(删除)",
   "enablePullDownRefresh": true
 }

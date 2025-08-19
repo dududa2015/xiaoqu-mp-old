@@ -15,7 +15,8 @@
     "pages/admin/audit/audit",
     "pages/my/app/ios/ios",
     "pages/admin/stats/stats",
-    "pages/my/customerService/customerService"
+    "pages/my/customerService/customerService",
+    "pages/admin/auditNot/auditNot"
   ],
   "static": [
     {
