@@ -34,10 +34,10 @@ Page({
       }).then(res => {
         if (res) {
           wx.setStorageSync('userId', res.userId)
-          // wx.setStorageSync('token', res.token)
           wx.setStorageSync('userInfo', res)
           this.setData({
             userInfo: res,
+            isAdministator: res.userId === '92918a62b30c'
           })
         }
       })
@@ -63,18 +63,18 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
-    let userInfo = wx.getStorageSync('userInfo')
-    if (userInfo && userInfo.userId === '92918a62b30c') {
-      this.setData({
-        isAdministator: true
-      })
-    } else {
-      this.setData({
-        isAdministator: false
-      })
-    }
-  },
+  // onLoad(options) {
+  //   let userInfo = wx.getStorageSync('userInfo')
+  //   if (userInfo && userInfo.userId === '92918a62b30c') {
+  //     this.setData({
+  //       isAdministator: true
+  //     })
+  //   } else {
+  //     this.setData({
+  //       isAdministator: false
+  //     })
+  //   }
+  // },
   onReady() {
     // #if MP
     this.getStatusBar()

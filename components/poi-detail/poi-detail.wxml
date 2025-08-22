@@ -37,7 +37,7 @@
         <image src="/images/poi-detail/delete.png" class="img" mode="" />
         <view class="b-text">删除</view>
       </view>
-      <view class="thumb-wrap" bind:tap="onFeedback">
+      <view class="thumb-wrap" wx:if="{{showFeedback}}" bind:tap="onFeedback">
         <image src="/images/poi-detail/feedback.png" class="img" mode="" />
         <view class="b-text">反馈</view>
       </view>

@@ -4,15 +4,17 @@
       <!-- <image src="/images/admin/audit.png" class="left-icon" mode="" slot="left-icon" /> -->
       <t-icon name="check" slot="left-icon" size="48rpx" color="#0000ff"></t-icon>
     </t-cell>
-    <t-cell  title="审核(删除)" hover arrow url="/pages/admin/auditNot/auditNot">
+    <t-cell title="审核(删除)" hover arrow url="/pages/admin/auditNot/auditNot">
       <t-icon name="close" slot="left-icon" size="48rpx" color="#ff0000"></t-icon>
-    </t-cell>
-    <t-cell title="apple统计" hover arrow url="/pages/admin/stats/stats">
-      <image src="/images/admin/apple.png" class="left-icon" mode="" slot="left-icon" />
     </t-cell>
     <t-cell title="通知公告" hover arrow hover arrow url="/pages/admin/notice/notice">
       <image src="/images/admin/notice.png" class="left-icon" mode="" slot="left-icon" />
     </t-cell>
+  </t-cell-group>
 
+  <t-cell-group style="margin-top: 24rpx;">
+    <t-cell title="apple统计" hover arrow url="/pages/admin/stats/stats">
+      <image src="/images/admin/apple.png" class="left-icon" mode="" slot="left-icon" />
+    </t-cell>
   </t-cell-group>
 </view>

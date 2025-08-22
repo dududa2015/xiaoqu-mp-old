@@ -32,6 +32,7 @@ Component({
         }
       }
     },
+    //点击地图自带的poi时才会有值
     poiDetail: {
       type: Object,
       value: {},
@@ -43,6 +44,7 @@ Component({
             remarkTagList: [],
             canEditUserMarker: false,
             canDeleteUserMarker: false,
+            showFeedback: false,
             duration: 0,
             distance: 0
           })
@@ -94,6 +96,7 @@ Component({
     duration: '', //耗时
     canEditUserMarker: false, //用户的标记点是否可以编辑
     canDeleteUserMarker: false, //用户的标记点是否可以删除 
+    isYours: false, //是否自己的标记
     poiCommunity: '',
   },
 
@@ -142,6 +145,7 @@ Component({
           longitude: result.lng,
         });
         let userInfo = wx.getStorageSync('userInfo')
+        let showFeedback = wx.getStorageSync('userId') !== result.userId
         // #if MP
         let canEditUserMarker = wx.getStorageSync('userId') === result.userId || userInfo.isAdmin
         //小程序能删除但要看广告
@@ -155,10 +159,11 @@ Component({
           markerType: result.type,
           canEditUserMarker: !!canEditUserMarker,
           canDeleteUserMarker: canDeleteUserMarker,
+          showFeedback,
           userMarker: result,
           remarkTagList,
-          nickName,
-          // nickName: result.userId === wx.getStorageSync('userId') ? '您' : '他人',
+          // nickName,
+          nickName: result.userId === wx.getStorageSync('userId') ? '您' : nickName,
           createdDate: this.convertDate(result.createdDate)
         })
       })
