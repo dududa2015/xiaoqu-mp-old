@@ -43,6 +43,9 @@
     width: 28rpx;
     height: 28rpx;
   }
+  .id-tag{
+    margin-left: 16rpx;
+  }
   
   .t-tag {
     font-size: 16rpx;

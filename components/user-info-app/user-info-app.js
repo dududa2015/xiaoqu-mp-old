@@ -11,17 +11,19 @@ Component({
       observer(newVal, oldVal) {
         //userInfo对象为空，nickName为'点击登录'，如果有昵称则显示昵称
         let nickName = ''
+        let userId = ''
         // if (newVal.openId || newVal.appleId) {
         if (newVal && (newVal.openId || newVal.appleId)) {
           nickName = newVal.nickName || '小区楼号'
+          userId = newVal.userId.slice(-8)
         } else {
           newVal = {}
           nickName = '点击登录'
-        }
+        }        
+
         this.setData({
-          nickName
-        })
-        this.setData({
+          nickName,
+          userId,
           points: this.convertToWan(newVal ? newVal.points : 0),
           markers: this.convertToWan(newVal ? newVal.markers : 0),
           friends: this.convertToWan(newVal ? newVal.friends : 0),
