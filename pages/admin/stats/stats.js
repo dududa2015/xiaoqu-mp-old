@@ -10,6 +10,8 @@ Page({
     chooseIndex: 0,
     year: '',
     yearMonth: '',
+    endMonth: '', //年月的end
+    endYear: '', //年的end
   },
   onLoad() {
     this.init()
@@ -17,11 +19,16 @@ Page({
     this.getAppleDailyStats()
   },
   init() {
-    const year = this.getCurrentYear()
+    
     const yearMonth = this.getCurrentYearMonth()
-    this.setData({
+    const endMonth = this.getCurrentYearMonth()
+    const year = this.getCurrentYear()
+    const endYear = this.getCurrentYear()
+    this.setData({      
+      yearMonth,
+      endMonth,
       year,
-      yearMonth
+      endYear
     })
   },
   getCurrentYearMonth() {

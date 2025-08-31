@@ -2,7 +2,8 @@ import {
   auditNotPassed,
 } from '../../../utils/apis'
 import {
-  getMarkerList
+  getMarkerList,
+  recover
 } from '../../../apis/marker-feedback-apis'
 import {
   auditNotPassedList
@@ -69,6 +70,15 @@ Page({
         })
       }
     })
+  },
+  //恢复
+  async recover(e) {
+    const that = this
+    const item = e.currentTarget.dataset.item
+    const points = e.currentTarget.dataset.points
+    console.log(item)
+    const res = await recover(JSON.stringify(item.xId))
+    console.log(res)
   },
   //审核删除
   onAudit() {

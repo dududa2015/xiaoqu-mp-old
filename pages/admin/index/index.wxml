@@ -1,10 +1,10 @@
 <view class="container">
   <t-cell-group>
-    <t-cell title="审核（通过）" hover arrow url="/pages/admin/audit/audit">
+    <t-cell title="审核" hover arrow url="/pages/admin/audit/audit">
       <!-- <image src="/images/admin/audit.png" class="left-icon" mode="" slot="left-icon" /> -->
       <t-icon name="check" slot="left-icon" size="48rpx" color="#0000ff"></t-icon>
     </t-cell>
-    <t-cell title="审核(删除)" hover arrow url="/pages/admin/auditNot/auditNot">
+    <t-cell title="纠错" hover arrow url="/pages/admin/auditNot/auditNot">
       <t-icon name="close" slot="left-icon" size="48rpx" color="#ff0000"></t-icon>
     </t-cell>
     <t-cell title="通知公告" hover arrow hover arrow url="/pages/admin/notice/notice">

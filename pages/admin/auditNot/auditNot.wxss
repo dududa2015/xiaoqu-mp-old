@@ -1,5 +1,6 @@
 .container {
   padding: 32rpx;
+  --td-cell-note-font-size: 13px;
 }
 
 .statistics-wrap {
