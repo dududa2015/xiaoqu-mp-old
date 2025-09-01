@@ -51,10 +51,10 @@ export const getAppleUserInfo = (params) => {
         method: 'GET',
     })
 }
-//通过deviceId创建用户--用于进入app时，如果没有userId，就根据deviceId创建一个基础的用户
-export const addUserByDeviceId = (params) => {
+//通过deviceId创建日志表--用于进入app时根据userId和deviceId创建日志表
+export const addUserDeviceLog = (params) => {
     return request({
-        url: '/users/addUserByDeviceId',
+        url: '/users/addUserDeviceLog',
         data: params,
         method: 'GET',
     })

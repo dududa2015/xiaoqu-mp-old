@@ -37,9 +37,10 @@
       <t-cell title="客户服务" hover arrow bind:tap="toCS">
         <image src="/images/my/customer-service.png" class="left-icon"  mode="" slot="left-icon" />
       </t-cell>
-      <t-cell wx:if="{{userInfo.appleId && !userInfo.openId}}" title="关联小程序" hover arrow url="/pages/ios/relate/relate">
+      <!--取消关联功能-->
+      <!-- <t-cell wx:if="{{userInfo.appleId && !userInfo.openId}}" title="关联小程序" hover arrow url="/pages/ios/relate/relate">
         <image src="/images/my/mp.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
+      </t-cell> -->
       <!-- #endif -->
     </t-cell-group>
     <!-- #if MP -->

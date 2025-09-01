@@ -1,7 +1,7 @@
 // api URL
 // const apiUrl = "http://localhost:5213/api"
-// const apiUrl = "https://test.zhuzixi.cn/api"
-const apiUrl = "https://mp.zhuzixi.cn/api"
+const apiUrl = "https://test.zhuzixi.cn/api"
+// const apiUrl = "https://mp.zhuzixi.cn/api"
 // 封装微信请求方法
 const request = (params) => {
   let url = params.url;
@@ -36,6 +36,7 @@ const request = (params) => {
           wx.showModal({
             title: '登录提示',
             content: '需要先登录才能进行操作',
+            showCancel: false,
             success(res) {
               if (res.confirm) {
                 wx.navigateTo({
@@ -49,6 +50,11 @@ const request = (params) => {
           // #endif
           reject('')
         } else if (res.statusCode === 500 || res.statusCode === 403) {
+          wx.showModal({
+            title: res.data.title,
+            content: res.data.message,
+            showCancel: false
+          })
           reject('')
         } else {
           resolve(res.data)
