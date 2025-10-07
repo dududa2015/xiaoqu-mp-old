@@ -91,6 +91,7 @@ Page({
         totalYearSubscribe,
         totalYearRenew,
         totalAmount: totalAmount.toFixed(2),
+        totalAmount85: (totalAmount * 0.85).toFixed(2)
       })
     })
   },
@@ -105,7 +106,7 @@ Page({
       if (productId.includes("month")) return count * 6 / 10000;
       if (productId.includes("season")) return count * 15 / 10000;
       if (productId.includes("year")) return count * 39.9 / 10000;
-      if (productId.includes("vip")) return count * 54.8 / 10000;
+      if (productId.includes("vip")) return count * 79.9 / 10000;
       return 0;
     };
 
@@ -117,7 +118,7 @@ Page({
       acc[month] += sum;
       return acc;
     }, {});
-    const categories = Object.keys(groupedData).sort(); // 按月份排序
+    const categories = Object.keys(groupedData); // 按月份排序
     const seriesData = categories.map(month => groupedData[month]);
     return {
       categories,
@@ -174,7 +175,7 @@ Page({
     // 2. 转换为对象数组并计算amount
     const result = Object.entries(aggregatedData).map(([date, products]) => {
       const amount =
-        products.vip * 54.8 +
+        products.vip * 79.9 +
         (products.monthSubscribe + products.monthRenew) * 6 +
         (products.seasonSubscribe + products.seasonRenew) * 15 +
         (products.yearSubscribe + products.yearRenew) * 39.9;

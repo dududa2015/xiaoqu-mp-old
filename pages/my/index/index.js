@@ -37,7 +37,7 @@ Page({
           wx.setStorageSync('userInfo', res)
           this.setData({
             userInfo: res,
-            isAdministator: res.userId === '92918a62b30c'
+            isAdministator: res.userId === '92918a62b30c' || res.userId === 'f55b972720be'
           })
         }
       })
@@ -60,21 +60,6 @@ Page({
     })
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  // onLoad(options) {
-  //   let userInfo = wx.getStorageSync('userInfo')
-  //   if (userInfo && userInfo.userId === '92918a62b30c') {
-  //     this.setData({
-  //       isAdministator: true
-  //     })
-  //   } else {
-  //     this.setData({
-  //       isAdministator: false
-  //     })
-  //   }
-  // },
   onReady() {
     // #if MP
     this.getStatusBar()

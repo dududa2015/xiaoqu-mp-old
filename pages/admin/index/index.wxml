@@ -4,6 +4,9 @@
       <!-- <image src="/images/admin/audit.png" class="left-icon" mode="" slot="left-icon" /> -->
       <t-icon name="check" slot="left-icon" size="48rpx" color="#0000ff"></t-icon>
     </t-cell>
+    <t-cell title="审核个人地图" hover arrow url="/pages/admin/auditApp/auditApp">
+      <t-icon name="check" slot="left-icon" size="48rpx" color="#ee88ff"></t-icon>
+    </t-cell>
     <t-cell title="纠错" hover arrow url="/pages/admin/auditNot/auditNot">
       <t-icon name="close" slot="left-icon" size="48rpx" color="#ff0000"></t-icon>
     </t-cell>

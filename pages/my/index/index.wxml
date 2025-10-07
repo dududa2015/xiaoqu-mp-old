@@ -30,17 +30,20 @@
       <!-- <t-cell title="无法添加到主屏幕" hover arrow url="/pages/help/help4/help4">
         <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell> -->
-      <!-- #else -->
+      <!-- #elif IOS -->
       <t-cell title="升级会员" hover arrow url="/pages/ios/vip/vip">
         <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
       <t-cell title="客户服务" hover arrow bind:tap="toCS">
         <image src="/images/my/customer-service.png" class="left-icon"  mode="" slot="left-icon" />
       </t-cell>
-      <!--取消关联功能-->
-      <!-- <t-cell wx:if="{{userInfo.appleId && !userInfo.openId}}" title="关联小程序" hover arrow url="/pages/ios/relate/relate">
-        <image src="/images/my/mp.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell> -->
+      <!-- #elif ANDROID -->
+      <t-cell title="升级会员" hover arrow url="/pages/android/vip/vip">
+        <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
+      </t-cell>
+      <t-cell title="客户服务" hover arrow bind:tap="toCS">
+        <image src="/images/my/customer-service.png" class="left-icon"  mode="" slot="left-icon" />
+      </t-cell>
       <!-- #endif -->
     </t-cell-group>
     <!-- #if MP -->

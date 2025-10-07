@@ -1913,7 +1913,7 @@ Page({
         iosForceUpdate: res.iosForceUpdate
       })
       // #elif ANDROID
-      let androidVersion = resp.androidVersion
+      let androidVersion = res.androidVersion
       // #endif
     })
   },

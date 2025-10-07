@@ -1,67 +1,73 @@
 <view class="container">
-    <!-- <view class="mobile">{{phoneMask}}</view>
+  <!-- <view class="mobile">{{phoneMask}}</view>
     <view class="mobile-desc">一键登录由运营商提供认证服务</view>
 
     <view class="button-desc">未注册的手机号将自动注册并登录</view> -->
-    <view class="logo-wrap">
-        <image class="logo-img" src="https://c-ssl.duitang.com/uploads/blog/202503/11/y9SD3p84tbdGzxx.png"></image>
-        <view class="logo-text">小区楼号地图</view>
-    </view>
-    <view class="input-wrap">
-        <t-input prefixIcon="user" value="{{userId}}" placeholder="请输入小程序用户编号" maxlength="20" borderless bind:change="onUserIdInput" />
-    </view>
-    <view class="input-wrap">
-        <t-input prefixIcon="lock-on" value="{{pwd}}" type="password" placeholder="请输入小程序用户密码" maxlength="20" borderless bind:change="onPwdInput" />
-    </view>
-    <view class="input-tip" bind:tap="toGuide">登录指引</view>
-    <!-- <view class="logo-desc">欢迎登录进行使用！</view> -->
-    <t-button class="button" theme="primary" size="large" block bind:tap="onLogin">登 录</t-button>
+  <view class="logo-wrap">
+    <image class="logo-img" src="https://c-ssl.duitang.com/uploads/blog/202503/11/y9SD3p84tbdGzxx.png"></image>
+    <view class="logo-text">小区楼号地图</view>
+  </view>
+  <view class="input-wrap">
+    <t-input prefixIcon="user" value="{{userId}}" placeholder="请输入小程序用户编号" maxlength="20" borderless bind:change="onUserIdInput" />
+  </view>
+  <view class="input-wrap">
+    <t-input prefixIcon="lock-on" value="{{pwd}}" type="password" placeholder="请输入小程序用户密码" maxlength="20" borderless bind:change="onPwdInput" />
+  </view>
+  <view class="input-tip" bind:tap="toGuide">登录指引</view>
+  <!-- <view class="logo-desc">欢迎登录进行使用！</view> -->
+  <t-button class="button" theme="primary" size="large" block bind:tap="onLogin">登 录</t-button>
 
-    <view class="others flex f-x-center f-y-center">
-        <view class="line"></view>
-        <view class="others-text">其他登录方式</view>
-        <view class="line"></view>
-    </view>
-    <view class="others-img">
-        <image src="/images/login/wx.png" wx:if="{{hasWechatInstall}}" class="img" mode="" bind:tap="wxLogin" />
-        <!-- #if IOS -->
-        <image src="/images/login/apple.png" class="img" mode="" bind:tap="appleLogin" />
-        <!-- #endif -->
-    </view>
+  <view class="others flex f-x-center f-y-center">
+    <view class="line"></view>
+    <view class="others-text">其他登录方式</view>
+    <view class="line"></view>
+  </view>
+  <view class="others-img">
+    <image src="/images/login/wx.png" wx:if="{{hasWechatInstall}}" class="img" mode="" bind:tap="wxLogin" />
+    <!-- #if IOS -->
+    <image src="/images/login/apple.png" class="img" mode="" bind:tap="appleLogin" />
+    <!-- #endif -->
+  </view>
 
-    <view class="agree-wrap flex f-x-center f-y-center">
-        <t-checkbox block="{{false}}" borderless="{{true}}" value="{{agreed}}" custom-style="background:#f7f7f7"  bind:change="agreedChange">
-        </t-checkbox>
-        <view class="agree">已阅读并同意
-            <span class="agree-blue" bind:tap="toUseAgreement">《用户协议》</span>
-            <span class="agree-blue" bind:tap="toUserPrivacy">《隐私政策》</span>
-            <!-- <span class="agree-blue">{{agreeText}}</span>并授权获取本机号码 -->
-        </view>
+  <view class="agree-wrap flex f-x-center f-y-center">
+    <t-checkbox block="{{false}}" borderless="{{true}}" value="{{agreed}}" custom-style="background:#f7f7f7" bind:change="agreedChange">
+    </t-checkbox>
+    <view class="agree">已阅读并同意
+      <span class="agree-blue" bind:tap="toUseAgreement">《用户协议》</span>
+      <span class="agree-blue" bind:tap="toUserPrivacy">《隐私政策》</span>
+      <!-- <span class="agree-blue">{{agreeText}}</span>并授权获取本机号码 -->
     </view>
+  </view>
 </view>
 
 <t-popup visible="{{showGuide}}" placement="center" style="width: 80%;" bind:visible-change="onVisibleChange">
-    <view class="guide-wrap">
-        <view class="title">登录指引</view>
-        <view class="content">
-            <view class="row red">
-                提示：如果没用过微信小程序【小区楼号分布图】，请直接用微信或者苹果登录
-            </view>
-            <view class="row">
-                1、进入微信小程序【小区楼号分布图】的个人中心，点击昵称进入个人信息
-            </view>
-            <view class="row">
-                2、分别复制【用户编号】和【用户密码】
-            </view>
-            <view class="row">
-                3、回到此页面粘贴【用户编号】和【用户密码】
-            </view>
-            <view class="row">
-                4、点击登录，登录成功后将自动关联上微信小程序
-            </view>
-        </view>
-        <view class="footer">
-            <t-button style="color: #333333;" size="large" block variant="text" bind:tap="closeGuide"> 关闭</t-button>
-        </view>
+  <view class="guide-wrap">
+    <view class="title">登录指引</view>
+    <view class="content">
+      <!-- #if IOS -->
+      <view class="row red">
+        提示：如果没用过微信小程序【小区楼号分布图】，请直接用微信或者苹果登录
+      </view>
+      <!-- #elif ANDROID -->
+      <view class="row red">
+        提示：如果没用过微信小程序【小区楼号分布图】，请直接用微信登录
+      </view>
+      <!-- #endif -->
+      <view class="row">
+        1、进入微信小程序【小区楼号分布图】的个人中心，点击昵称进入个人信息
+      </view>
+      <view class="row">
+        2、分别复制【用户编号】和【用户密码】
+      </view>
+      <view class="row">
+        3、回到此页面粘贴【用户编号】和【用户密码】
+      </view>
+      <view class="row">
+        4、点击登录，登录成功后将自动关联上微信小程序
+      </view>
     </view>
+    <view class="footer">
+      <t-button style="color: #333333;" size="large" block variant="text" bind:tap="closeGuide"> 关闭</t-button>
+    </view>
+  </view>
 </t-popup>

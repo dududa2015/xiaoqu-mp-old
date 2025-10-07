@@ -1,13 +1,9 @@
 import {
-  auditNotPassed,
-} from '../../../utils/apis'
-import {
-  getMarkerList,
-  recover
-} from '../../../apis/marker-feedback-apis'
-import {
-  auditNotPassedList
-} from '../../../apis/marker-apis'
+  getMarkerUpdateList,
+  auditPassed,
+  auditPassed2
+} from '../../../apis/marker-update-api'
+
 Page({
 
   /**
@@ -42,17 +38,16 @@ Page({
       wx.navigateBack()
       return
     }
-    this.getMarkerList()
+    this.getMarkerUpdateList()
   },
   //单个审核不通过且扣分
-  auditNotPassed(e) {
+  onAuditNot(e) {
     const that = this
     const item = e.currentTarget.dataset.item
     const points = e.currentTarget.dataset.points
-    auditNotPassed({
-      xId: item.xId,
-      userId: item.userId,
-      points
+
+    auditPassed2({
+      xId: item.xId
     }).then(res => {
       if (res) {
         wx.showToast({
@@ -78,13 +73,13 @@ Page({
     const points = e.currentTarget.dataset.points
     console.log(item)
     const res = await recover(JSON.stringify(item.xId))
-    this.getMarkerList()
+    this.getMarkerUpdateList()
   },
   //审核删除
   onAudit() {
     const that = this
     let xIdList = this.data.auditList.map(item => item.xId)
-    auditNotPassedList(xIdList).then(res => {
+    auditPassed(xIdList).then(res => {
       wx.showToast({
         title: res ? '审核成功' : '审核失败'
       })
@@ -92,14 +87,14 @@ Page({
         auditList: []
       })
       setTimeout(() => {
-        that.getMarkerList()
+        that.getMarkerUpdateList()
       }, 1000);
     })
   },
   //获取审核列表
-  getMarkerList() {
+  getMarkerUpdateList() {
     const that = this
-    getMarkerList().then(res => {
+    getMarkerUpdateList().then(res => {
       if (res && res.length > 0) {
         that.setData({
           auditList: res

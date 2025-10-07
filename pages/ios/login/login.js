@@ -242,14 +242,28 @@ Page({
     })
   },
   toUseAgreement() {
+    // #if IOS
     wx.navigateTo({
       url: '/pages/ios/user-agreement/user-agreement?type=1',
     })
+    // #elif ANDROID
+    wx.navigateTo({
+      url: '/pages/android/user-agreement/user-agreement?type=1',
+    })
+    // #endif
+    
   },
   toUserPrivacy() {
+    // #if IOS
     wx.navigateTo({
       url: '/pages/ios/user-agreement/user-agreement?type=2',
     })
+    // #elif ANDROID
+    wx.navigateTo({
+      url: '/pages/android/user-agreement/user-agreement?type=2',
+    })
+    // #endif
+    
   },
   /**
    * 生命周期函数--监听页面隐藏
