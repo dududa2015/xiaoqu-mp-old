@@ -16,7 +16,7 @@
   </view>
 </view>
 </view>
-<t-fab wx:if="{{auditList.length > 0}}" icon="close" bind:click="onAudit" draggable text="删除" aria-label="通过"></t-fab>
+<t-fab wx:if="{{auditList.length > 0}}" icon="check" bind:click="onAudit" draggable text="通过" aria-label="通过"></t-fab>
 
 
 <map-marker-popup item="{{item}}"></map-marker-popup>

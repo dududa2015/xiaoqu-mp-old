@@ -147,7 +147,7 @@ Component({
         let userInfo = wx.getStorageSync('userInfo')
         let showFeedback = wx.getStorageSync('userId') !== result.userId
         // #if MP
-        let canEditUserMarker = wx.getStorageSync('userId') === result.userId || userInfo.isAdmin
+        let canEditUserMarker = wx.getStorageSync('userId') === result.userId
         //小程序能删除但要看广告
         let canDeleteUserMarker = true
         // #else

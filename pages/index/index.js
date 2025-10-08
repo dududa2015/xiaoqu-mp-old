@@ -71,10 +71,10 @@ Page({
     showNoAd: false //显示广告弹窗
   },
   onLoad() {
+    this.getWindowInfo()
     this.getLocation()
     this.getPadding()
     this.getStatusBar()
-    this.getWindowInfo()
 
     //初始化配置
     this.initStorage()
@@ -320,11 +320,20 @@ Page({
     })
   },
   getWindowInfo() {
-    const windowInfo = wx.getWindowInfo()
-    this.setData({
-      windowInfo
-    })
-
+    if (wx.getWindowInfo) {
+      const windowInfo = wx.getWindowInfo()
+      console.log('windowInfo', windowInfo)
+      this.setData({
+        mapHeight: windowInfo.windowHeight
+      })
+    }
+    else {
+      const systemInfo = wx.getSystemInfoSync();
+      console.log('systemInfo', systemInfo)
+      this.setData({
+        mapHeight: systemInfo.windowHeight
+      })
+    }
   },
   //获取callout的padding，android和iphone的padding不一样
   getPadding() {

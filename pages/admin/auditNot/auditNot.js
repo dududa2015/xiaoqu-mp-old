@@ -86,7 +86,7 @@ Page({
     let xIdList = this.data.auditList.map(item => item.xId)
     auditNotPassedList(xIdList).then(res => {
       wx.showToast({
-        title: res ? '审核成功' : '审核失败'
+        title: res ? '删除成功' : '删除失败'
       })
       that.setData({
         auditList: []

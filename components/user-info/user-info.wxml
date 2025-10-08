@@ -10,6 +10,7 @@
                     {{userInfo.nickName || '小区楼号'}}
                     <image src="/images/my/v.png" mode="" class="v-img" wx:if="{{isVip}}" />
                     <image src="/images/my/admin.png" mode="" class="v-img" wx:if="{{isAdmin}}" />
+                    <t-tag size="small" variant="light" class="id-tag" theme="primary">id: {{userId}}</t-tag>
                 </view>
                 <view>
                     <t-icon name="chevron-right" size="48rpx" />
