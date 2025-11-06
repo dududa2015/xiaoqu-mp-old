@@ -80,7 +80,7 @@
       "pages/admin/apple/apple",
       "pages/admin/stats/stats",
       "pages/android/vip/vip",
-      "pages/ios/login/login",
+      "pages/android/login/login",
       "pages/android/user-agreement/user-agreement",
       "pages/android/vip-agreement/vip-agreement",
       "pages/android/vip-renew/vip-renew",

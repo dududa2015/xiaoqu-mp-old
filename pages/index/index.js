@@ -58,6 +58,7 @@ Page({
     showChooseMarker: false, //是否显示选点按钮
     showFeedback: false, //是否显示反馈按钮
     showLocation: true,
+    bottom: 0,
     showAdd: true,
     showLocation: true,
     markers: [],
@@ -104,6 +105,18 @@ Page({
     setTimeout(() => {
       this.checkVip()
     }, 1000);
+    const childComp = this.selectComponent('#topTip');
+    if (childComp){
+      childComp.initNotice()
+    }
+    // #endif
+
+    // #if ANDROID
+    if(new Date() > new Date('2025/12/01')) {
+      wx.redirectTo({
+        url: '/pages/android/vip/vip',
+      }) 
+    }
     // #endif
   },
   //用于处理搜索结果
@@ -207,9 +220,16 @@ Page({
             if (res.confirm) {
               let ts = Date.now() + 1 * 60 * 60 * 1000
               wx.setStorageSync('installDate', ts)
+              // #if IOS
               wx.navigateTo({
                 url: '/pages/ios/login/login',
               })
+              // #else
+              wx.navigateTo({
+                url: '/pages/android/login/login',
+              })
+              // #endif
+              
             }
           }
         })
@@ -1923,6 +1943,8 @@ Page({
       })
       // #elif ANDROID
       let androidVersion = res.androidVersion
+      console.log('androidandroidandroidandroid', androidVersion)
+      
       // #endif
     })
   },

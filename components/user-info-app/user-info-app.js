@@ -55,9 +55,16 @@ Component({
           url: '/pages/my/edit/edit',
         })
       } else {
+        // #if IOS
         wx.navigateTo({
           url: '/pages/ios/login/login',
         })
+        // #elif ANDROID
+        wx.navigateTo({
+          url: '/pages/android/login/login',
+        })
+        // #endif
+        
       }
     },
     showToast(event) {

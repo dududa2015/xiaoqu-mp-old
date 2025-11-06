@@ -35,7 +35,7 @@ Page({
      */
     onLoad() {
         let userId = wx.getStorageSync('userId')
-        if (userId !== '92918a62b30c') {
+        if (userId !== '92918a62b30c' && userId !== 'f55b972720be') {
             wx.navigateBack()
             return
         }

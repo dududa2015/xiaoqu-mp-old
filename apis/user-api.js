@@ -10,6 +10,14 @@ export const getUserInfo = (params) => {
         method: 'GET',
     })
 }
+// 获取用户信息--用于安卓审核登录
+export const getUserByIdTest = (params) => {
+  return request({
+      url: '/users/getUserByIdTest',
+      data: params,
+      method: 'GET',
+  })
+}
 
 //用于个人中心
 export const getUserById = (params) => {

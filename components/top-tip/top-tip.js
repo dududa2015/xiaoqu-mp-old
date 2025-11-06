@@ -48,22 +48,31 @@ Component({
   },
   lifetimes: {
     attached() {
-      const userInfo = wx.getStorageSync('userInfo')
-      if (userInfo.isIOSVip || userInfo.isAndroidVip) {
-        this.setData({
-          noticeListApp: ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
-        })
-      } else {
-        this.setData({
-          noticeListApp: ['免费试用7天，结束后需要订阅 →']
-        })
-      }
+      
     }
   },
   /**
    * 组件的方法列表
    */
   methods: {
+    initNotice(){
+      const userInfo = wx.getStorageSync('userInfo')
+      if (userInfo.isIOSVip || userInfo.isAndroidVip) {
+        this.setData({
+          noticeListApp: ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
+        })
+      } else {
+        // #if ANDROID
+        this.setData({
+          noticeListApp: ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
+        })
+        // #else
+        this.setData({
+          noticeListApp: ['免费试用7天，结束后需要订阅 →']
+        })
+        // #endif        
+      }
+    },
     showNotices() {
       let currentDate = new Date();
       //当提示语被关闭时写入缓存，有效期一天
