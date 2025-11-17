@@ -225,6 +225,14 @@
 		{
 			"path": "apis/tmap-apis.js",
 			"sub_switch": true
+		},
+		{
+			"path": "pages/android/login/login.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/android/vip/vip.js",
+			"sub_switch": true
 		}
 	]
 }

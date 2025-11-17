@@ -3,11 +3,6 @@
     <t-input value="{{nickName}}" type="text" readonly maxlength="10" placeholder="请输入昵称" suffixIcon="chevron-right" bind:nicknamereview="onNickNameReview" bind:change="onNickNameChange" bind:tap="showNickNameDialog">
       <text slot="label">昵称<text style="color: #e34d59"> *</text> </text>
     </t-input>
-    <!-- #if MP -->
-    <!--不要这个，否则可能被人利用-->
-    <!-- <t-input label="用户编号" value="{{userId}}" readonly suffixIcon="copy" bind:tap="onUserIdCopy" />
-    <t-input label="用户密码" value="**********" readonly borderless suffixIcon="copy" bind:tap="onPwdCopy" /> -->
-    <!-- #endif -->
   </view>
   <!-- #if MP -->
   <!-- <view class="tips">温馨提示：用户编号和用户密码由小程序随机生成</view> -->

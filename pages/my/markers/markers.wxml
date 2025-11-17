@@ -1,6 +1,17 @@
 <view class="content">
   <t-cell-group wx:if="{{list.length > 0}}">
-    <t-cell wx:for="{{list}}" wx:key="index" title="{{index+1}}、 {{item.name}}" hover arrow note="{{item.typeName}}" bind:tap="onMarkerTap" data-item="{{item}}" />
+    <t-cell wx:for="{{list}}" wx:key="index" hover arrow note="{{item.typeName}}" bind:tap="onMarkerTap" data-item="{{item}}">
+      <text slot="title" wx:if="{{item.deleted === 0}}">{{index+1}}、 {{item.name}}</text>
+      <span slot="title" wx:if="{{item.deleted === -1}}">
+        <text>{{index+1}}、 {{item.name}}</text>
+        <t-tag class="margin-16" variant="light" theme="warning" size="small">审核中</t-tag>
+        <!-- <text style="color: red; font-size: 24rpx;"> (审核中)</text> -->
+      </span>
+      <span slot="title" wx:if="{{item.deleted === 1}}">
+        <text>{{index+1}}、 {{item.name}}</text>
+        <t-tag class="margin-16" variant="light" theme="danger" size="small">已删除</t-tag>
+      </span>
+    </t-cell>
   </t-cell-group>
   <view wx:else>
     <image src="https://img01.yzcdn.cn/vant/empty-image-default.png" class="img" mode="" />

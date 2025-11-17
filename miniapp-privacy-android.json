@@ -1,0 +1,33 @@
+{
+    "title": "隐私政策协议",
+    "confirm": "同意并接受",
+    "cancel": "暂不同意",
+    "message": "在使用本产品前，请您务必仔细阅读并充分理解__a__及__b__的全部内容。当您点击 “同意” 或继续使用本产品时，即视为您已完全接受上述条款的约束。为保障产品核心功能的正常运行，我们将依法收集您的部分必要信息及相关权限：\n1、设备传感器信息（由本 APP 及微信 OpenSDK 收集，用于辅助定位、导航转向计算等）；\n2、Wi-Fi SSID（无线网络名称）、Wi-Fi BSSID（无线网络物理 MAC 地址）（由本 APP 及微信 OpenSDK 收集，用于优化定位精度、适配网络环境等）；\n3、设备 IP 地址（由微信 OpenSDK 收集，用于保障网络连接稳定性、辅助定位等）。",
+    "messageLinks": {
+        "__a__": {
+            "text": "《服务协议》",
+            "url": "https://mp.zhuzixi.cn/agreement.html"
+        },
+        "__b__": {
+            "text": "《隐私政策》",
+            "url": "https://mp.zhuzixi.cn/policy.html"
+        }
+    },
+    "styles": {
+        "title": {
+            "color": "#000000"
+        },
+        "confirmButton": {
+            "color": "#000000"
+        },
+        "cancelButton": {
+            "color": "#000000"
+        },
+        "message": {
+            "color": "#000000"
+        },
+        "messageLinks": {
+            "color": "#0000ff"
+        }
+    }
+}

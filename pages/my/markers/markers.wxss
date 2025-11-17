@@ -4,7 +4,9 @@
   overflow: hidden;
   text-align: center;
 }
-
+.margin-16{
+  margin-left: 16rpx;
+}
 .img {
   margin-top: 100rpx;
   width: 400rpx;

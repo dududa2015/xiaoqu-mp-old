@@ -106,16 +106,16 @@ Page({
       this.checkVip()
     }, 1000);
     const childComp = this.selectComponent('#topTip');
-    if (childComp){
+    if (childComp) {
       childComp.initNotice()
     }
     // #endif
 
     // #if ANDROID
-    if(new Date() > new Date('2025/12/01')) {
+    if (new Date() > new Date('2025/12/01')) {
       wx.redirectTo({
         url: '/pages/android/vip/vip',
-      }) 
+      })
     }
     // #endif
   },
@@ -206,20 +206,27 @@ Page({
       }
       // #endif
     } else {
-      //如果没有登录，每2小时提示一次
-      let installDate = wx.getStorageSync('installDate')
-      let targetDate = new Date(installDate)
-      targetDate.setHours(targetDate.getHours() + 2);
-      let currentDate = new Date()
-      console.log(targetDate, currentDate)
-      if (targetDate < currentDate) {
+      // 1. 获取存储的安装日期（若未存储则为首次安装）
+      let installDate = wx.getStorageSync('installDate');
+      const now = new Date().getTime(); // 当前时间戳（毫秒）
+      const sevenDays = 7 * 24 * 60 * 60 * 1000; // 7天的毫秒数（604800000）
+
+      // 2. 首次安装时存储当前日期
+      if (!installDate) {
+        installDate = now;
+        wx.setStorageSync('installDate', installDate); // 存储安装时间戳
+      }
+
+      // 3. 判断是否超过7天
+      if (now - installDate > sevenDays) {
+        // 超过7天，提示登录
         wx.showModal({
-          content: '您已经用了一段时间了，请先登录',
+          content: '请登录后继续使用',
+          confirmText: '去登录',
           showCancel: false,
-          complete: (res) => {
+          success: (res) => {
             if (res.confirm) {
-              let ts = Date.now() + 1 * 60 * 60 * 1000
-              wx.setStorageSync('installDate', ts)
+              // 点击"去登录"，跳转到登录页面（根据你的项目路径修改）
               // #if IOS
               wx.navigateTo({
                 url: '/pages/ios/login/login',
@@ -229,11 +236,10 @@ Page({
                 url: '/pages/android/login/login',
               })
               // #endif
-              
             }
           }
-        })
-      }
+        });
+      }     
     }
   },
   toVip(content) {
@@ -346,8 +352,7 @@ Page({
       this.setData({
         mapHeight: windowInfo.windowHeight
       })
-    }
-    else {
+    } else {
       const systemInfo = wx.getSystemInfoSync();
       console.log('systemInfo', systemInfo)
       this.setData({
@@ -1138,6 +1143,7 @@ Page({
       lat
     }).then(res => {
       let poiList = []
+      if (res.length === 0) return
       for (const item of res) {
         let s = {
           xId: '888' + item.id.slice(0, 12),
@@ -1150,8 +1156,17 @@ Page({
       }
       //加个定时器，为了防止小区标记在普通标记下面
       setTimeout(() => {
+        //每次只显示一个小区的边界和出入口
+        let markers = this.data.markers
+        if (Array.isArray(markers) && markers.length > 0) {
+          markers = markers.filter(item => !String(item.id).startsWith('888'))
+          this.setData({
+            markers
+          })
+        }
+        this.getCommunityFullDetail(poiList[0].xId.toString())
         this.addAroundList2Map(poiList)
-      }, 100);
+      }, 1);
     })
   },
   getMarkerListUpdate() {
@@ -1652,7 +1667,7 @@ Page({
       markerDetail: event.detail
     })
   },
-  onCloseFeedback(){
+  onCloseFeedback() {
     this.disableMapTap()
     this.setData({
       showFeedback: false
@@ -1944,7 +1959,7 @@ Page({
       // #elif ANDROID
       let androidVersion = res.androidVersion
       console.log('androidandroidandroidandroid', androidVersion)
-      
+
       // #endif
     })
   },

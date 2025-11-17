@@ -19,24 +19,11 @@ Page({
    */
   onLoad(options) {
     let userInfo = wx.getStorageSync('userInfo')
-    console.log(userInfo)
-    // #if MP
-    if (userInfo) {
-      this.userId = userInfo.userId.substring(userInfo.userId.length - 10)
-      this.pwd = userInfo.openId.substring(userInfo.openId.length - 10)
-      this.setData({
-        userId: this.userId,
-        pwd: this.pwd,
-        nickName: userInfo.nickName
-      })
-    }
-    // #else
     if (userInfo) {
       this.setData({
         nickName: userInfo.nickName
       })
     }
-    // #endif
   },
   onNickNameReview(e) {
     console.log(e)

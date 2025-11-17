@@ -82,6 +82,7 @@
       "pages/android/vip/vip",
       "pages/android/login/login",
       "pages/android/user-agreement/user-agreement",
+      "pages/android/user-policy/user-policy",
       "pages/android/vip-agreement/vip-agreement",
       "pages/android/vip-renew/vip-renew",
       "pages/search/index/index",

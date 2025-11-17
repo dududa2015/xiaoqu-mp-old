@@ -31,7 +31,7 @@
 
 .footer {
     position: fixed;
-    bottom: 0;
+    bottom: 36rpx;
     left: 50%;
     transform: translateX(-50%);
     width: 90%;

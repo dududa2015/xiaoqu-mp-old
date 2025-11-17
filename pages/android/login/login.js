@@ -214,7 +214,15 @@ Page({
       wx.setStorageSync('token', res.token)
       wx.setStorageSync('appleId', res.appleId)
       wx.setStorageSync('userInfo', res)
-      wx.navigateBack()
+      wx.showModal({
+        content: '登录成功',
+        showCancel: false,
+        complete: (res) => {
+          if (res.confirm) {
+            wx.navigateBack()
+          }
+        }
+      })
     } else {
       wx.showToast({
         title: '登录失败，请使用其他方式登录',
@@ -249,10 +257,10 @@ Page({
     })
     // #elif ANDROID
     wx.navigateTo({
-      url: '/pages/android/user-agreement/user-agreement?type=1',
+      url: '/pages/android/user-agreement/user-agreement',
     })
     // #endif
-    
+
   },
   toUserPrivacy() {
     // #if IOS
@@ -260,11 +268,12 @@ Page({
       url: '/pages/ios/user-agreement/user-agreement?type=2',
     })
     // #elif ANDROID
+    //ios 和android的不一样
     wx.navigateTo({
-      url: '/pages/android/user-agreement/user-agreement?type=2',
+      url: '/pages/android/user-policy/user-policy'
     })
     // #endif
-    
+
   },
   /**
    * 生命周期函数--监听页面隐藏
