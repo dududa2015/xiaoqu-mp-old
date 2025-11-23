@@ -1,3 +1,4 @@
+ 
 /* 模拟h2标题样式 */
 .h2-title {
   font-size: 34rpx;
@@ -34,6 +35,10 @@
 .link {
   color: #2f80ed;
   text-decoration: underline;
+  user-select: text; /* 允许选择文本 */
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
 }
 
 /* 页面容器样式（可选，控制整体边距） */

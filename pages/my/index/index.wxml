@@ -22,14 +22,14 @@
         <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
       <t-cell title="客户服务" hover arrow bind:tap="toCS">
-        <image src="/images/my/customer-service.png" class="left-icon"  mode="" slot="left-icon" />
+        <image src="/images/my/customer-service.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
       <!-- #elif ANDROID -->
       <!-- <t-cell title="升级会员" hover arrow url="/pages/android/vip/vip">
         <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell> -->
       <t-cell title="客户服务" hover arrow bind:tap="toCS">
-        <image src="/images/my/customer-service.png" class="left-icon"  mode="" slot="left-icon" />
+        <image src="/images/my/customer-service.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
       <!-- #endif -->
     </t-cell-group>
@@ -54,5 +54,13 @@
         <image src="/images/my/admin.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
     </t-cell-group>
+
+    <!-- #if ANDROID -->
+    <view class="footer flex f-x-center f-y-center">
+      <navigator class="margin8 text-underline" url="/pages/android/user-agreement/user-agreement">用户协议</navigator>
+      <view class="margin8">|</view>
+      <navigator class="margin8 text-underline" url="/pages/android/user-policy/user-policy">隐私政策</navigator>
+    </view>
+    <!-- #endif -->
   </view>
 </view>

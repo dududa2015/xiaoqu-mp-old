@@ -239,7 +239,7 @@ Page({
             }
           }
         });
-      }     
+      }
     }
   },
   toVip(content) {
@@ -516,88 +516,6 @@ Page({
         }
       }
     })
-  },
-  getWxLocation() {
-    let that = this;
-    try {
-      wx.startLocationUpdate({
-        success: (res) => {
-          const locationChangeHandler = res => {
-            console.log('onLocationChange', res)
-            this.getMapContext().moveToLocation({
-              longitude: res.longitude,
-              latitude: res.latitude,
-              success: function () {
-                console.log('地图中心已成功移动到指定位置');
-              },
-              fail: function (err) {
-                console.error('移动地图中心时出错:', err);
-              },
-              complete: function () {
-                console.log('移动地图中心操作完成');
-              }
-            })
-          }
-          // 监听位置信息
-          wx.onLocationChange(locationChangeHandler)
-          that.setData({
-            locationChangeHandler
-          });
-        },
-        fail: (err) => {
-          console.log('update fail', err)
-        }
-      })
-    } catch (error) {
-
-    }
-  },
-  getWxCompass() {
-    let that = this;
-    try {
-      // 开启罗盘功能
-      wx.startCompass({
-        success: (res) => {
-          const compassChangeHandler = res => {
-            // #if ANDROID
-            // android设置rotate比较迟钝，需要至少1000ms设置一次，ios则不必
-            const now = Date.now()
-            if (now - this.lastUpdateTime > 1000) { // 1000ms 更新一次
-              that.setData({
-                rotate: 360 - res.direction
-              })
-              this.lastUpdateTime = now
-            }
-            // #else
-            that.setData({
-              rotate: 360 - res.direction
-            })
-            // #endif
-          }
-          // 监听位置信息
-          wx.onCompassChange(compassChangeHandler)
-          that.setData({
-            compassChangeHandler
-          })
-        },
-        fail: (err) => {
-          console.log('update fail', err)
-        }
-      })
-    } catch (error) {
-
-    }
-  },
-  updateLocationIconRotation(direction) {
-    this.getMapContext().setLocation({
-      rotate: -direction,
-      success: () => {
-        console.log('定位图标旋转成功');
-      },
-      fail: (err) => {
-        console.error('定位图标旋转失败:', err);
-      }
-    });
   },
   // 显示设置引导对话框
   showSettingDialog: function () {
@@ -1697,16 +1615,7 @@ Page({
       })
     }
   },
-  // onFoot(e){
-  //     this.count = 0
-  //     this.lastUpdateTime = 0 //安卓罗盘1秒钟会变化65次，这个时间用于手动实现节流
-  //     setTimeout(() => {
-  //         this.onFoot2({detail: true})
-  //     }, 1000);
-  //     setTimeout(() => {
-  //         this.onFoot2({detail: false})
-  //     }, 2000);
-  // },
+  // #if NATIVE
   //步行导航
   onFoot(e) {
     if (e.detail) {
@@ -1747,6 +1656,79 @@ Page({
       showForm: false
     })
   },
+
+  getWxLocation() {
+    let that = this;
+    try {
+      wx.startLocationUpdate({
+        success: (res) => {
+          const locationChangeHandler = res => {
+            console.log('onLocationChange', res)
+            this.getMapContext().moveToLocation({
+              longitude: res.longitude,
+              latitude: res.latitude,
+              success: function () {
+                console.log('地图中心已成功移动到指定位置');
+              },
+              fail: function (err) {
+                console.error('移动地图中心时出错:', err);
+              },
+              complete: function () {
+                console.log('移动地图中心操作完成');
+              }
+            })
+          }
+          // 监听位置信息
+          wx.onLocationChange(locationChangeHandler)
+          that.setData({
+            locationChangeHandler
+          });
+        },
+        fail: (err) => {
+          console.log('update fail', err)
+        }
+      })
+    } catch (error) {
+
+    }
+  },
+  getWxCompass() {
+    let that = this;
+    try {
+      // 开启罗盘功能
+      wx.startCompass({
+        success: (res) => {
+          const compassChangeHandler = res => {
+            // #if ANDROID
+            // android设置rotate比较迟钝，需要至少1000ms设置一次，ios则不必
+            const now = Date.now()
+            if (now - this.lastUpdateTime > 1000) { // 1000ms 更新一次
+              that.setData({
+                rotate: 360 - res.direction
+              })
+              this.lastUpdateTime = now
+            }
+            // #else
+            that.setData({
+              rotate: 360 - res.direction
+            })
+            // #endif
+          }
+          // 监听位置信息
+          wx.onCompassChange(compassChangeHandler)
+          that.setData({
+            compassChangeHandler
+          })
+        },
+        fail: (err) => {
+          console.log('update fail', err)
+        }
+      })
+    } catch (error) {
+
+    }
+  },
+  // #endif
   //个人地图关闭
   onMapClose() {
     this.disableMapTap()
