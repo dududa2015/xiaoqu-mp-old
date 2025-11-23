@@ -797,6 +797,11 @@ Page({
       latitude,
       longitude
     } = e.detail.centerLocation;
+
+    const {
+      northeast,
+      southwest
+    } = e.detail.region;
     const currentLat = this.truncateToSixDecimals(latitude);
     const currentLng = this.truncateToSixDecimals(longitude);
 
@@ -816,30 +821,19 @@ Page({
       wx.setStorageSync('lastLatitude', currentLat);
       wx.setStorageSync('lastLongitude', currentLng);
     }
+    //将视野范围扩大0.001度
+    const expand = 0.01;
+    // 按经纬度筛选可视范围内标记
+    const markers = this.data.markers.filter(marker => {
+      return marker.latitude <= northeast.latitude + expand &&
+        marker.latitude >= southwest.latitude - expand &&
+        marker.longitude <= northeast.longitude + expand &&
+        marker.longitude >= southwest.longitude - expand;
+    });
+    this.setData({
+      markers
+    });
   },
-  // onRegionChange(e) {
-  //   console.log(e)
-  //   if (e.detail.centerLocation) {
-  //     if (e.type === 'end' && e.causedBy === 'drag') {
-  //       let lat = this.truncateToSixDecimals(e.detail.centerLocation.latitude)
-  //       let lng = this.truncateToSixDecimals(e.detail.centerLocation.longitude)
-  //       let lastLatitude = wx.getStorageSync('lastLatitude') || 0
-  //       let lastLongitude = wx.getStorageSync('lastLongitude') || 0
-  //       //如果经度或纬度移动超过0.003度,那么就获取周围的标记点
-  //       let latlng = parseFloat(lat) + parseFloat(lng)
-  //       let latlngStorage = parseFloat(lastLatitude) + parseFloat(lastLongitude)
-  //       //2024-09-21由0.0015改为0.001
-  //       // if (Math.abs(latlng - latlngStorage) >= 0.001) {
-  //       if (Math.abs(parseFloat(lat) - parseFloat(lastLatitude)) >= 0.0005 ||
-  //         Math.abs(parseFloat(lng) - parseFloat(lastLongitude)) >= 0.0005
-  //       ) {
-  //         this.getAroundList(lat, lng)
-  //         wx.setStorageSync('lastLatitude', lat)
-  //         wx.setStorageSync('lastLongitude', lng)
-  //       }
-  //     }
-  //   }
-  // },
   //显示选点按钮
   onAdd() {
     this.disableMapTap()
