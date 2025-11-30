@@ -27,7 +27,7 @@
       "xhdpi": "",
       "xxhdpi": ""
     },
-    "enableVConsole": "close",
+    "enableVConsole": "open",
     "privacy": {
       "enable": true,
       "template": "miniapp-privacy-android.json"

@@ -24,7 +24,7 @@
             <view class="title">会员选择</view>
         </view>
         <view class="vip-wrap flex">
-            <view class="{{ item.checked ? 'box box-selected':'box'}}" wx:for="{{productList}}" wx:key="index" bind:tap="onVipChange" data-productIdentifier="{{item.productIdentifier}}">
+            <view class="{{ item.checked ? 'box box-selected':'box'}}" wx:for="{{productList}}" wx:key="index" bind:tap="onVipChange" data-index="{{index}}">
                 <view class="name">{{item.localizedTitle || item.name}}</view>
                 <view class="price"><text class="price-sign">￥</text>{{item.price}}元</view>
                 <view class="original-price">￥{{item.originalPrice}}元</view>
@@ -33,19 +33,17 @@
             </view>
         </view>
     </view>
-    <view class="tips" wx:if="{{showTips}}">
-        <!-- 温馨提醒：终身会员从7月起，每月涨价5元 -->
-        <!-- <text class="mp-name" bind:tap="toMP">【小区楼号分布图】</text> -->
+    <view class="tips" >
+        <block wx:if="{{currentProduct.productIdentifier === 'com.louhao.xiaoqu.vip'}}">
+        温馨提醒：2026年3月起将调整为88元
+        </block>
+        <block wx:else>温馨提醒：非订阅，到期手动续费</block>
     </view>
     <view class="footer">
         <button type="primary" style="background-color: rgba(219, 179, 122, 1); " bind:tap="onPurchase">开通会员</button>
         <view class="agree-wrap flex f-x-center f-y-center">
-            <!-- <view class="restore" bind:tap="onRestore">
-                恢复购买
-            </view> -->
             <span class="agree" bind:tap="toUseAgreement">会员服务协议</span>
                 <span style="margin-left: 4px;">·</span>
-                <span class="agree" style="margin-left: 4px;" bind:tap="toRenew">自动续费规则</span>
         </view>
     </view>
 </view>

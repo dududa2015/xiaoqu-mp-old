@@ -110,14 +110,6 @@ Page({
       childComp.initNotice()
     }
     // #endif
-
-    // #if ANDROID
-    if (new Date() > new Date('2025/12/01')) {
-      wx.redirectTo({
-        url: '/pages/android/vip/vip',
-      })
-    }
-    // #endif
   },
   //用于处理搜索结果
   amapSearch() {
@@ -197,7 +189,7 @@ Page({
           this.toVip('会员于' + userInfo.androidVipExpiredDate + '已过期，请续费')
         }
       } else {
-        const targetDate = new Date(userInfo.createdDate.replace(" ", "T"));
+        const targetDate = new Date(userInfo.createdDate);
         targetDate.setDate(targetDate.getDate() + 7);
         const currentDate = new Date();
         if (targetDate < currentDate) {
@@ -249,9 +241,15 @@ Page({
       showCancel: false,
       complete: (res) => {
         if (res.confirm) {
+          // #if IOS
           wx.navigateTo({
             url: '/pages/ios/vip/vip',
           })
+          // #else
+          wx.navigateTo({
+            url: '/pages/android/vip/vip',
+          })
+          // #endif
         }
       }
     })

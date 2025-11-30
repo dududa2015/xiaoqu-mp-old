@@ -1,7 +1,7 @@
 import ApplePayManager from '../../../utils/apple-iap-manager2';
 import {
-  getUserById
-} from '../../../apis/user-api'
+  createAppOrder
+} from '../../../apis/wechatpay-apis'
 import {
   getProductList
 } from '../../../apis/product-api'
@@ -27,43 +27,43 @@ Page({
       name: '定位图标',
       imgUrl: '/images/my/rights-loc.png'
     }],
-    productList: [], //苹果的付费产品列表
-    //6 18	72
-    //5 14.9  39.9
-    // productList: [{
-    //         name: '终身会员',
-    //         price: 99.9,
-    //         originalPrice: 999,
-    //         note: '一次付费，永久使用',
-    //         recommend: '限时特惠',
-    //         checked: true,
-    //         productIdentifier: 'com.louhao.xiaoqu.vip'
-    //     }, {
-    //         name: '连续包月',
-    //         price: 6,
-    //         originalPrice: 8,
-    //         note: '0.20元/天，可随时取消订阅',
-    //         // recommend: '限时特惠',
-    //         checked: false,
-    //         productIdentifier: 'com.louhao.xiaoqu.month'
-    //     },
-    //     {
-    //         name: '连续包季',
-    //         price: 15,
-    //         originalPrice: 24,
-    //         note: '0.17元/天，可随时取消订阅',
-    //         checked: false,
-    //         productIdentifier: 'com.louhao.xiaoqu.season'
-    //     }, {
-    //         name: '连续包年',
-    //         price: 39.9,
-    //         originalPrice: 96,
-    //         note: '0.11元/天，可随时取消订阅',
-    //         recommend: '超值推荐',
-    //         checked: false,
-    //         productIdentifier: 'com.louhao.xiaoqu.year'
-    //     }
-    // ]
+    currentProductIdentifier: 'com.louhao.xiaoqu.vip', //当前
+    currentProduct: null,
+    productList: [{
+      "productId": 1,
+      "productIdentifier": "com.louhao.xiaoqu.vip",
+      "name": "终身会员",
+      "description": "小区楼号终身会员",
+      "price": 68,
+      "originalPrice": 499.00,
+      "note": "一次付费，永久使用",
+      "recommend": "超值推荐",
+      "checked": true
+    }, {
+      "productId": 2,
+      "productIdentifier": "com.louhao.xiaoqu.month",
+      "name": "1个月",
+      "description": "小区楼号1个月会员",
+      "price": 6.00,
+      "originalPrice": 8.00,
+      "note": "0.20元/天，不会自动续费"
+    }, {
+      "productId": 3,
+      "productIdentifier": "com.louhao.xiaoqu.season",
+      "name": "3个月",
+      "description": "小区楼号3个月会员",
+      "price": 15.00,
+      "originalPrice": 24.00,
+      "note": "0.17元/天，不会自动续费"
+    }, {
+      "productId": 4,
+      "productIdentifier": "com.louhao.xiaoqu.year",
+      "name": "12个月",
+      "description": "小区楼号12个月会员",
+      "price": 49.00,
+      "originalPrice": 96.00,
+      "note": "0.11元/天，不会自动续费"
+    }], //付费产品列表
   },
 
   /**
@@ -75,25 +75,23 @@ Page({
     // 初始化支付管理器（如果未全局挂载）
     this.applePayManager = new ApplePayManager(userId).init();
 
-    this.getProductList()
-    this.getProductListByApple()
+    // this.getProductList()
+    // this.getProductListByApple()
 
     this.init()
   },
   init() {
     //控制显示是否显示温馨提醒
     let userInfo = wx.getStorageSync('userInfo')
-    if(!userInfo || !userInfo.userId){
+    if (!userInfo || !userInfo.userId) {
       wx.navigateTo({
-        url: '/pages/ios/login/login',
+        url: '/pages/android/login/login',
       })
       return
     }
-    if (userInfo && userInfo.openId) {
-      this.setData({
-        showTips: true
-      })
-    }
+    this.setData({
+      currentProduct: this.data.productList[0]
+    })
   },
   //通过接口获取产品列表--优化用这个方法获取
   getProductList() {
@@ -108,53 +106,6 @@ Page({
       console.log('请求商品信息', productList)
     })
   },
-  //通过苹果sdk获取产品列表
-  getProductListByApple() {
-    const productIdentifiers = ['com.louhao.xiaoqu.vip', 'com.louhao.xiaoqu.month', 'com.louhao.xiaoqu.season', 'com.louhao.xiaoqu.year'];
-    // 请求商品信息
-    this.applePayManager.requestProducts(productIdentifiers)
-      .then(products => {
-        let productList = []
-        console.log('请求商品信息', products)
-        productIdentifiers.forEach(item => {
-          console.log(item)
-          let find = products.find(product => {
-            return item === product.productIdentifier
-          })
-          if (find.productIdentifier === 'com.louhao.xiaoqu.vip') {
-            find.recommend = '限时特惠'
-            find.originalPrice = 499
-            find.note = "一次付费，永久使用"
-            find.checked = true
-          }
-          if (find.productIdentifier === 'com.louhao.xiaoqu.month') {
-            find.originalPrice = 8
-            find.note = this.getProductNote(0, find.price)
-          }
-          if (find.productIdentifier === 'com.louhao.xiaoqu.season') {
-            find.originalPrice = 24
-            find.note = this.getProductNote(1, find.price)
-          }
-          if (find.productIdentifier === 'com.louhao.xiaoqu.year') {
-            find.recommend = '超值推荐'
-            find.originalPrice = 96
-            find.note = this.getProductNote(2, find.price)
-          }
-          productList.push(find)
-        })
-        console.log('商品数据', productList)
-        // this.setData({
-        //     productList
-        // });
-      })
-      .catch(error => {
-        console.error('获取商品失败:', error);
-        wx.showToast({
-          title: '获取商品失败',
-          icon: 'none'
-        });
-      });
-  },
   getProductNote(index, price) {
     if (index === 0) {
       return `${(price / 30).toFixed(2)}元/天，可随时取消订阅`
@@ -165,7 +116,6 @@ Page({
     } else {
       return '可随时取消订阅'
     }
-
   },
   onUnload() {
     // 清理资源
@@ -175,54 +125,95 @@ Page({
     }
   },
   onVipChange(event) {
-    const productIdentifier = event.currentTarget.dataset.productidentifier
+    const index = event.currentTarget.dataset.index
+    const currentProduct = this.data.productList[index]
     const productList = this.data.productList.map((item, i) => {
-      item.checked = item.productIdentifier === productIdentifier;
+      item.checked = i === index;
       return item;
     });
-    console.log(productList)
-    this.setData({
-      productList
-    });
-  },
-  //支付
-  onPurchase() {
-    //获取productId
-    const productIdentifier = this.data.productList.find(item => item.checked).productIdentifier
-    wx.showLoading({
-      title: '正在支付...',
-      mask: true
-    })
-    // 发起购买
-    this.applePayManager.purchaseProduct(productIdentifier)
-      .then(transaction => {
-        console.log('购买成功:', transaction);
-        wx.showToast({
-          title: '购买成功',
-        })
-        //购买成功后调用获取用户信息的接口，并返回上一页
-        setTimeout(() => {
-          this.getUserInfo()
-        }, 1500);
 
-      })
-      .catch(error => {
-        console.error('购买失败:', error);
-        // "未能完成操作。（SKErrorDomain错误2。）"
-        let description = error.localizedDescription
-        const index = description.indexOf("。");
-        if (index !== -1) {
-          description = description.substring(0, index);
+    this.setData({
+      productList,
+      currentProduct
+    });
+    console.log(this.data.currentProduct)
+  },
+  //支付 1715931589
+  async onPurchase() {
+    const param = {
+      // AppId: "wx3490241c9a011b50",
+      userId: wx.getStorageSync('userId'),
+      Amount: this.data.currentProduct.price, //* 100,
+      ProductId: this.data.currentProduct.productIdentifier,
+      Description: this.data.currentProduct.description,
+    }
+    const data = await createAppOrder(param)
+    console.log(data)
+    this.requestPayment(data)
+  },
+  requestPayment(data) {
+    // 假设从你的服务端接口收到了所有支付参数
+    wx.miniapp.requestPayment({
+      mchId: '1715931589', // 你的商户号
+      prepayId: data.prepayId, // 服务端返回的prepay_id
+      nonceStr: data.nonceStr, // 随机字符串
+      package: 'Sign=WXPay', // 固定值
+      timeStamp: data.timeStamp, // 示例时间戳，字符串格式的秒级时间戳      
+      sign: data.paySign, // 服务端计算好的V3签名
+      success: (res) => {
+        console.warn('wx.miniapp.requestPayment success:', res);
+        wx.showModal({
+          content: '支付成功',
+          showCancel: false,
+          confirmText: '好的',
+          success(res) {
+            if (res.confirm) {
+              wx.navigateBack()
+            }
+          }
+        });
+        // 支付成功，跳转到成功页面或进行其他业务操作
+      },
+      fail: (res) => {
+        console.error('wx.miniapp.requestPayment res:', res);
+        // 处理失败情况
+        if (res.errMsg && res.errMsg.includes('cancel')) {
+          // 用户取消支付
+          wx.showToast({
+            title: '用户取消支付',
+            icon: 'none'
+          });
+        } else {
+          // 处理其他错误
+          wx.showToast({
+            title: '支付失败',
+            icon: 'none'
+          });
         }
-        wx.showToast({
-          title: description,
-          icon: 'none'
-        })
-      }).finally(() => {
-        setTimeout(() => {
-          wx.hideToast()
-        }, 3000);
-      })
+      }
+    })
+  },
+  getProductName(index) {
+    let productName = ''
+    switch (index) {
+      case 0:
+        productName = '小区楼号终身会员'
+        break;
+      case 1:
+        productName = '小区楼号1个月会员'
+        break;
+      case 2:
+        productName = '小区楼号3个月会员'
+        break;
+      case 3:
+        productName = '小区楼号12个月会员'
+        break;
+      default:
+        productName = '小区楼号1个月会员'
+        break;
+    }
+
+    return productName
   },
   //恢复购买
   onRestore() {

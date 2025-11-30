@@ -20,7 +20,12 @@ Component({
           newVal = {}
           nickName = '点击登录'
         }        
-
+        let vipExpiredDate = ''
+        // #if IOS
+        vipExpiredDate = this.formatDate(newVal.iosVipExpiredDate)
+        // #else
+        vipExpiredDate = this.formatDate(newVal.androidVipExpiredDate)
+        // #endif
         this.setData({
           nickName,
           userId,
@@ -29,7 +34,7 @@ Component({
           friends: this.convertToWan(newVal ? newVal.friends : 0),
           deleted: this.convertToWan(newVal ? newVal.deleted : 0),
           showVip: new Date(newVal.iosVipExpiredDate) > new Date() || new Date(newVal.androidVipExpiredDate) > new Date(),
-          vipExpiredDate: this.formatDate(newVal.iosVipExpiredDate) || this.formatDate(newVal.androidVipExpiredDate)
+          vipExpiredDate
         })
       }
     }
