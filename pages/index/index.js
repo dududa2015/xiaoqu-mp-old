@@ -193,7 +193,8 @@ Page({
         targetDate.setDate(targetDate.getDate() + 7);
         const currentDate = new Date();
         if (targetDate < currentDate) {
-          this.toVip('免费试用结束，请开启订阅')
+          //TODO: 去掉注释
+          // this.toVip('免费试用结束，请开启订阅')
         }
       }
       // #endif
@@ -395,11 +396,11 @@ Page({
       interstitialAd = wx.createInterstitialAd({
         adUnitId: 'adunit-6449f8b32a1844a8'
       })
-      interstitialAd.onLoad(() => {})
+      interstitialAd.onLoad(() => { })
       interstitialAd.onError((err) => {
         console.error('插屏广告加载失败', err)
       })
-      interstitialAd.onClose(() => {})
+      interstitialAd.onClose(() => { })
     }
   },
   //显示插屏广告

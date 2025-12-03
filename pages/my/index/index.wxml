@@ -28,6 +28,9 @@
       <t-cell title="升级会员" hover arrow url="/pages/android/vip/vip">
         <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
+      <t-cell title="缴费记录" hover arrow url="">
+        <image src="/images/my/pay.png" class="left-icon" mode="" slot="left-icon" />
+      </t-cell>
       <t-cell title="客户服务" hover arrow bind:tap="toCS">
         <image src="/images/my/customer-service.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
