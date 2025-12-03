@@ -43,7 +43,7 @@ Page({
       "productId": 2,
       "productIdentifier": "com.louhao.xiaoqu.month",
       "name": "1个月",
-      "description": "小区楼号1个月会员",
+      "description": "月度会员",
       "price": 6.00,
       "originalPrice": 8.00,
       "note": "0.20元/天，不会自动续费"
@@ -51,7 +51,7 @@ Page({
       "productId": 3,
       "productIdentifier": "com.louhao.xiaoqu.season",
       "name": "3个月",
-      "description": "小区楼号3个月会员",
+      "description": "季度会员",
       "price": 15.00,
       "originalPrice": 24.00,
       "note": "0.17元/天，不会自动续费"
@@ -59,7 +59,7 @@ Page({
       "productId": 4,
       "productIdentifier": "com.louhao.xiaoqu.year",
       "name": "12个月",
-      "description": "小区楼号12个月会员",
+      "description": "年度会员",
       "price": 49.00,
       "originalPrice": 96.00,
       "note": "0.11元/天，不会自动续费"

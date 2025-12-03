@@ -1,0 +1,130 @@
+<!--pages/android/refund/refund.wxml-->
+<view class="refund-container">
+  <!-- 订单信息卡片 -->
+  <view wx:if="{{orderInfo}}" class="order-info-card">
+    <view class="order-header-card">
+      <view class="order-header">
+        <view class="order-title-section">
+          <text class="order-product-name">{{orderInfo.productName}}</text>
+        </view>
+        <text class="order-amount">¥{{orderAmountText}}</text>
+      </view>
+    </view>
+    
+    <!-- 退款计算摘要 -->
+    <view class="refund-summary-card">
+      <view class="summary-header">
+        <text class="summary-title">退款计算</text>
+      </view>
+      <view class="summary-content">
+        <view class="summary-row">
+          <text class="summary-label">订单金额</text>
+          <text class="summary-value">¥{{orderAmountText}}</text>
+        </view>
+        <view class="summary-row" wx:if="{{usedDays > 0}}">
+          <text class="summary-label">已使用天数</text>
+          <text class="summary-value">{{usedDays}}天</text>
+        </view>
+        <view class="summary-row" wx:if="{{usedDays > 0}}">
+          <text class="summary-label">扣除金额</text>
+          <text class="summary-value deduction">-¥{{deductionAmountText}}</text>
+        </view>
+        <view class="summary-divider"></view>
+        <view class="summary-row total">
+          <text class="summary-label">可退金额</text>
+          <text class="summary-value refund">¥{{maxRefundAmountText}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 退款提示 -->
+    <view class="refund-tip-card" wx:if="{{refundTip}}">
+      <view class="tip-content" wx:class="{{canRefund ? 'tip-success' : 'tip-error'}}">
+        <text class="tip-icon">{{canRefund ? '✓' : '✗'}}</text>
+        <text class="tip-text">{{refundTip}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 订单号输入 -->
+  <view wx:else class="order-input-card">
+    <view class="input-header">
+      <text class="input-title">查询订单</text>
+    </view>
+    <view class="input-content">
+      <t-input 
+        placeholder="请输入订单号" 
+        value="{{orderNo}}"
+        bind:change="onOrderNoInput"
+        class="order-input"
+      />
+      <t-button 
+        theme="primary"
+        size="medium"
+        bind:tap="onQueryOrder"
+        disabled="{{loading || !orderNo}}"
+        class="query-btn"
+        block
+      >
+        {{loading ? '查询中...' : '查询订单'}}
+      </t-button>
+    </view>
+  </view>
+
+  <!-- 退款原因 -->
+  <view wx:if="{{orderInfo && canRefund}}" class="reason-section">
+    <view class="section-title">退款原因</view>
+    <view class="reason-card">
+      <view class="reason-list">
+        <view 
+          wx:for="{{reasonList}}" 
+          wx:key="index"
+          class="reason-item {{selectedReasonIndex === index ? 'reason-item-active' : ''}}"
+          data-index="{{index}}"
+          bindtap="onReasonSelect"
+        >
+          <text class="reason-text">{{item}}</text>
+        </view>
+      </view>
+      
+      <view wx:if="{{showCustomReason}}" class="custom-reason-wrapper">
+        <t-textarea 
+          placeholder="请详细说明退款原因（选填）" 
+          value="{{customReason}}"
+          bind:change="onCustomReasonInput"
+          maxlength="100"
+          class="custom-reason-input"
+        />
+      </view>
+    </view>
+  </view>
+
+  <!-- 退款规则说明 -->
+  <view wx:if="{{orderInfo && canRefund}}" class="refund-rule-card">
+    <view class="rule-title">退款说明</view>
+    <view class="rule-content">
+      <text class="rule-text">• 会员订单支持7天无理由退款</text>
+      <text class="rule-text">• 退款将按已使用天数扣除费用（每天0.3元）</text>
+      <text class="rule-text">• 退款将在1-3个工作日内原路退回</text>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-section">
+    <t-button 
+      wx:if="{{canRefund && orderInfo}}"
+      theme="primary"
+      size="large"
+      block
+      bind:tap="onSubmit"
+      class="submit-btn"
+      disabled="{{selectedReasonIndex === -1 && !showCustomReason}}"
+    >
+      提交退款申请
+    </t-button>
+    <view wx:else class="disabled-tip">
+      <text class="tip-text">{{orderInfo ? '已超过7天，无法退款' : '请先查询订单信息'}}</text>
+    </view>
+  </view>
+</view>
+

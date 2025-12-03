@@ -1,0 +1,95 @@
+<!--pages/android/order/list/list.wxml-->
+<view class="order-list-container">
+  <!-- 状态筛选 -->
+  <view class="tabs-wrapper">
+    <view class="tabs-header">
+      <t-tabs 
+        value="{{statusFilter}}" 
+        bind:change="onStatusFilter" 
+        theme="tag"
+      >
+        <t-tab-panel 
+          wx:for="{{statusOptions}}" 
+          wx:key="value"
+          value="{{item.value}}"
+          label="{{item.label}}"
+        />
+      </t-tabs>
+      <view class="order-count" wx:if="{{totalCount > 0}}">
+        <text class="count-text">共{{totalCount}}条</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 订单列表 -->
+  <scroll-view 
+    class="order-scroll" 
+    scroll-y 
+    refresher-enabled="{{true}}"
+    refresher-triggered="{{loading}}"
+    bindrefresherrefresh="onPullDownRefresh"
+    bindscrolltolower="onReachBottom"
+  >
+    <view class="order-list-content">
+      <!-- 骨架屏加载 -->
+      <view wx:if="{{loading && orderList.length === 0}}" class="skeleton-wrapper">
+        <view wx:for="{{[1,2,3]}}" wx:key="index" class="skeleton-card">
+          <t-skeleton theme="paragraph" row="3" />
+        </view>
+      </view>
+      
+      <view wx:if="{{orderList.length === 0 && !loading}}" class="empty-state">
+        <view class="empty-icon">📋</view>
+        <text class="empty-text">{{emptyText}}</text>
+        <text class="empty-desc">{{emptyDesc}}</text>
+      </view>
+
+      <view 
+        wx:for="{{orderList}}" 
+        wx:key="orderNo" 
+        class="order-card order-status-{{item.status}}"
+        data-order-no="{{item.orderNo}}"
+        bindtap="onViewDetail"
+      >
+        <view class="order-card-content">
+          <view class="order-header">
+            <view class="order-title-section">
+              <text class="order-product-name">{{item.productName}}</text>
+              <view class="order-status-tags">
+                <t-tag 
+                  theme="{{item.status === '1' ? 'primary' : item.status === '4' ? 'warning' : item.status === '3' ? 'success' : 'default'}}"
+                  size="small"
+                  variant="light"
+                >
+                  {{item.statusText}}
+                </t-tag>
+                <t-tag 
+                  wx:if="{{item.canRefund}}"
+                  theme="warning"
+                  size="small"
+                  variant="light"
+                >
+                  可退款
+                </t-tag>
+              </view>
+            </view>
+            <text class="order-amount">¥{{item.amountText}}</text>
+          </view>
+          <view class="order-footer" wx:if="{{item.timeText}}">
+            <text class="order-time">{{item.timeText}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 加载更多 -->
+      <view wx:if="{{loading && orderList.length > 0}}" class="loading-wrapper">
+        <t-loading theme="dots" size="40rpx" text="加载中..." />
+      </view>
+      
+      <view wx:if="{{!hasMore && orderList.length > 0}}" class="no-more">
+        <t-divider>没有更多了</t-divider>
+      </view>
+    </view>
+  </scroll-view>
+</view>
+

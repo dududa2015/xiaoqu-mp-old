@@ -85,6 +85,9 @@
       "pages/android/user-policy/user-policy",
       "pages/android/vip-agreement/vip-agreement",
       "pages/android/vip-renew/vip-renew",
+      "pages/android/order/list/list",
+      "pages/android/order/detail/detail",
+      "pages/android/refund/refund",
       "pages/search/index/index",
       "pages/search/search/search"
     ]
