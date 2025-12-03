@@ -13,7 +13,6 @@ Page({
       this.setData({
         orderNo: options.orderNo
       })
-      this.loadOrderDetail()
     } else {
       wx.showToast({
         title: '订单号不能为空',
@@ -22,6 +21,12 @@ Page({
       setTimeout(() => {
         wx.navigateBack()
       }, 1500)
+    }
+  },
+
+  onShow() {
+    if (this.data.orderNo) {
+      this.loadOrderDetail()
     }
   },
 
@@ -34,39 +39,25 @@ Page({
 
       console.log('订单详情响应:', response)
 
-      // 检查响应数据，支持多种可能的字段名
-      if (response && (response.OutTradeNo || response.outTradeNo)) {
-        // 直接使用 TradeState（微信支付状态）
-        const tradeState = (response.TradeState || response.tradeState || 'NOTPAY').toUpperCase()
-
-        // 获取时间信息（优先使用SuccessTime，如果为空则使用当前时间作为占位）
-        const successTime = response.SuccessTime || response.successTime
-        const timeForDisplay = successTime || new Date().toISOString()
-
-        // 格式化订单信息
+      // 检查响应数据
+      if (response && response.outTradeNo) {
+        // 格式化订单信息，只保留必要字段
         const formattedInfo = {
-          orderNo: response.OutTradeNo || response.outTradeNo || this.data.orderNo,
-          totalAmount: response.Amount || response.amount || 0,
-          amountText: this.formatAmount(response.Amount || response.amount || 0),
-          status: tradeState,
-          statusText: this.getStatusText({ status: tradeState }),
-          createTime: this.formatTime(timeForDisplay),
-          payTime: successTime ? this.formatTime(successTime) : '',
-          completeTime: successTime ? this.formatTime(successTime) : '',
-          productName: response.description,
-          productDesc: this.getProductDescFromAttach(response.Attach || response.attach),
-          memberType: this.getMemberTypeFromAttach(response.Attach || response.attach),
-          quantity: 1,
-          price: response.Amount || response.amount || 0,
-          priceText: this.formatAmount(response.Amount || response.amount || 0),
+          outTradeNo: response.outTradeNo || this.data.orderNo,
+          tradeState: (response.tradeState || 'NOTPAY').toUpperCase(),
+          amount: response.amount || 0,
+          successTime: response.successTime || '',
+          description: response.description || '',
+          createdDate: response.createdDate || '',
+          // 用于显示的格式化字段
+          amountText: this.formatAmount(response.amount || 0),
+          statusText: this.getStatusText({ status: (response.tradeState || 'NOTPAY').toUpperCase() }),
+          createTimeText: response.createdDate ? this.formatTime(response.createdDate) : '',
+          payTimeText: response.successTime ? this.formatTime(response.successTime) : '',
           refundable: this.isRefundable({
-            status: tradeState,
-            successTime: successTime
-          }),
-          expireTime: successTime ? this.calculateExpireTime(
-            successTime,
-            this.getMemberTypeFromAttach(response.Attach || response.attach)
-          ) : ''
+            status: (response.tradeState || 'NOTPAY').toUpperCase(),
+            successTime: response.successTime
+          })
         }
 
         this.setData({
@@ -99,78 +90,6 @@ Page({
   },
 
 
-  // 从Attach字段解析产品信息（Attach可能是JSON字符串）
-  getProductNameFromAttach(attach) {
-    if (!attach) return '会员订单'
-    try {
-      const attachObj = typeof attach === 'string' ? JSON.parse(attach) : attach
-      const productId = attachObj.productId || attachObj.ProductId
-      return this.getProductName(productId)
-    } catch (e) {
-      // 如果不是JSON，尝试直接作为产品ID
-      return this.getProductName(attach)
-    }
-  },
-
-  getProductDescFromAttach(attach) {
-    if (!attach) return '会员订单'
-    try {
-      const attachObj = typeof attach === 'string' ? JSON.parse(attach) : attach
-      const productId = attachObj.productId || attachObj.ProductId
-      return this.getProductDesc(productId)
-    } catch (e) {
-      const productId = attach
-      return this.getProductDesc(productId)
-    }
-  },
-
-  getMemberTypeFromAttach(attach) {
-    if (!attach) return 'monthly'
-    try {
-      const attachObj = typeof attach === 'string' ? JSON.parse(attach) : attach
-      const productId = attachObj.productId || attachObj.ProductId
-      return this.getMemberType(productId)
-    } catch (e) {
-      const productId = attach
-      return this.getMemberType(productId)
-    }
-  },
-
-  // 根据产品ID获取产品名称
-  getProductName(productId) {
-    if (!productId) return '会员订单'
-    const productMap = {
-      'com.louhao.xiaoqu.month': '月度会员',
-      'com.louhao.xiaoqu.season': '季度会员',
-      'com.louhao.xiaoqu.year': '年度会员',
-      'com.louhao.xiaoqu.vip': 'VIP会员'
-    }
-    return productMap[productId] || productId || '会员订单'
-  },
-
-  // 根据产品ID获取产品描述
-  getProductDesc(productId) {
-    if (!productId) return '会员订单'
-    const descMap = {
-      'com.louhao.xiaoqu.month': '月度会员，有效期30天',
-      'com.louhao.xiaoqu.season': '季度会员，有效期90天',
-      'com.louhao.xiaoqu.year': '年度会员，有效期365天',
-      'com.louhao.xiaoqu.vip': 'VIP会员，永久有效'
-    }
-    return descMap[productId] || '会员订单'
-  },
-
-  // 根据产品ID获取会员类型
-  getMemberType(productId) {
-    if (!productId) return 'monthly'
-    const typeMap = {
-      'com.louhao.xiaoqu.month': 'monthly',
-      'com.louhao.xiaoqu.season': 'quarterly',
-      'com.louhao.xiaoqu.year': 'yearly',
-      'com.louhao.xiaoqu.vip': 'vip'
-    }
-    return typeMap[productId] || 'monthly'
-  },
 
   // 获取订单状态文本（直接使用 TradeState）
   getStatusText(order) {
@@ -216,7 +135,16 @@ Page({
   // 格式化时间（完整格式）
   formatTime(timeStr) {
     if (!timeStr) return ''
-    const date = new Date(timeStr)
+    // 处理 createdDate 格式 "2025/12/03 21:45:54"，转换为标准格式
+    let normalizedTime = timeStr
+    if (timeStr.includes('/')) {
+      normalizedTime = timeStr.replace(/\//g, '-')
+    }
+    const date = new Date(normalizedTime)
+    // 检查日期是否有效
+    if (isNaN(date.getTime())) {
+      return timeStr // 如果解析失败，返回原始字符串
+    }
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, '0')
     const day = String(date.getDate()).padStart(2, '0')
@@ -225,27 +153,12 @@ Page({
     return `${year}-${month}-${day} ${hour}:${minute}`
   },
 
-  // 计算会员到期时间
-  calculateExpireTime(createTime, memberType) {
-    if (!createTime || !memberType) return ''
-    const createDate = new Date(createTime)
-    let days = 30 // 默认30天
-
-    if (memberType === 'quarterly') {
-      days = 90
-    } else if (memberType === 'yearly') {
-      days = 365
-    }
-
-    const expireDate = new Date(createDate.getTime() + days * 24 * 60 * 60 * 1000)
-    return this.formatTime(expireDate.toISOString())
-  },
 
   // 申请退款
   onRefund() {
     if (this.data.orderInfo && this.data.orderInfo.refundable) {
       wx.navigateTo({
-        url: `/pages/android/refund/refund?orderNo=${this.data.orderInfo.orderNo}&orderAmount=${this.data.orderInfo.totalAmount}`
+        url: `/pages/android/refund/refund?orderNo=${this.data.orderInfo.outTradeNo}&orderAmount=${this.data.orderInfo.amount}`
       })
     } else {
       wx.showToast({
@@ -257,8 +170,9 @@ Page({
 
   // 复制订单号
   onCopyOrderNo() {
+    const orderNo = this.data.orderInfo?.outTradeNo || this.data.orderNo
     wx.setClipboardData({
-      data: this.data.orderNo,
+      data: orderNo,
       success: () => {
         wx.showToast({
           title: '订单号已复制',

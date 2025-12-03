@@ -342,6 +342,43 @@ Page({
     })
   },
 
+  // 格式化金额（分转元）
+  formatAmount(amount) {
+    if (!amount && amount !== 0) return '0.00'
+    return (amount / 100).toFixed(2)
+  },
+
+  // 获取退款状态文本
+  getRefundStatusText(status) {
+    const statusMap = {
+      'PROCESSING': '处理中',
+      'SUCCESS': '退款成功',
+      'CLOSED': '退款关闭',
+      'ABNORMAL': '退款异常',
+      'REVOKED': '已撤销'
+    }
+    return statusMap[status] || '未知状态'
+  },
+
+  // 获取退款状态提示信息
+  getRefundStatusMessage(status) {
+    const statusUpper = String(status).toUpperCase()
+    switch (statusUpper) {
+      case 'PROCESSING':
+        return '退款申请正在处理中，我们将在1-3个工作日内完成退款'
+      case 'SUCCESS':
+        return '退款已成功，请查收您的账户'
+      case 'CLOSED':
+        return '退款已关闭'
+      case 'ABNORMAL':
+        return '退款处理异常，请联系客服处理'
+      case 'REVOKED':
+        return '退款已撤销'
+      default:
+        return '我们将在1-3个工作日内处理您的退款申请'
+    }
+  },
+
   // 提交退款请求（使用真实API）
   async submitRefundRequest() {
     wx.showLoading({
@@ -364,13 +401,34 @@ Page({
 
       wx.hideLoading()
 
-      if (response && (response.OutRefundNo || response.RefundId)) {
-        const refundNo = response.OutRefundNo || response.outRefundNo || response.RefundId || response.refundId || ''
+      // 检查响应数据，支持小写字段名
+      if (response && (response.outRefundNo || response.refundId || response.OutRefundNo || response.RefundId)) {
+        const outRefundNo = response.outRefundNo || response.OutRefundNo || ''
+        const refundId = response.refundId || response.RefundId || ''
+        const status = (response.status || '').toUpperCase()
+        const amount = response.amount || 0
+        const amountText = this.formatAmount(amount)
+
+        // 根据状态获取提示信息
+        const statusText = this.getRefundStatusText(status)
+        const statusMessage = this.getRefundStatusMessage(status)
+
+        // 构建提示内容
+        let content = `退款申请已提交\n\n`
+        if (outRefundNo) {
+          content += `退款单号：${outRefundNo}\n`
+        }
+        if (refundId) {
+          content += `微信退款单号：${refundId}\n`
+        }
+        content += `退款金额：¥${amountText}\n`
+        content += `退款状态：${statusText}\n\n`
+        content += statusMessage
 
         // 提交成功
         wx.showModal({
           title: '提交成功',
-          content: `退款申请已提交${refundNo ? '，退款单号：' + refundNo : ''}\n我们将在1-3个工作日内处理您的退款申请`,
+          content: content,
           showCancel: false,
           success: (res) => {
             if (res.confirm) {

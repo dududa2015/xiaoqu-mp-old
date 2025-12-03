@@ -22,6 +22,9 @@ Page({
       emptyText: this.getEmptyText(statusFilter),
       emptyDesc: this.getEmptyDesc(statusFilter)
     })
+  },
+
+  onShow() {
     this.loadOrderList(true)
   },
 
