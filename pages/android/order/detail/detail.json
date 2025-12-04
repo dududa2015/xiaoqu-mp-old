@@ -1,7 +1,7 @@
 {
   "navigationBarTitleText": "订单详情",
-  "navigationBarBackgroundColor": "#1890ff",
-  "navigationBarTextStyle": "white",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
   "backgroundColor": "#f5f5f5",
   "usingComponents": {
     "t-skeleton": "tdesign-miniprogram/skeleton/skeleton",

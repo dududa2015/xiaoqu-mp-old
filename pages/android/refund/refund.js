@@ -1,6 +1,12 @@
 // pages/android/refund/refund.js
 import { queryOrder } from '../../../apis/order-api.js'
 import { applyRefund } from '../../../apis/refund-api.js'
+import { 
+  isRefundable, 
+  formatAmount, 
+  getProductNameFromAttach,
+  calculateUsedDays
+} from '../../../utils/order-utils.js'
 
 Page({
   data: {
@@ -16,6 +22,10 @@ Page({
     selectedReasonIndex: -1,
     customReason: '',
     showCustomReason: false,
+    reasonError: '', // 退款原因错误提示
+    customReasonError: '', // 自定义原因错误提示
+    agreedToAgreement: false, // 是否同意退款协议
+    agreementError: '', // 协议错误提示
     orderInfo: null, // 订单信息
     loading: false, // 是否正在加载
     maxRefundAmount: 0, // 最大可退款金额（单位：分）
@@ -99,13 +109,16 @@ Page({
           return
         }
 
-        // 计算已使用天数（从支付成功时间开始计算）
-        const payTime = new Date(successTime)
-        const daysDiff = Math.floor((now - payTime) / (24 * 60 * 60 * 1000))
-        const usedDays = daysDiff
+        // 计算已使用天数（从支付成功时间开始计算，不包含当天）
+        // 今天支付的订单：usedDays = 0
+        // 昨天支付的订单：usedDays = 1
+        const usedDays = calculateUsedDays(successTime)
         
-        // 检查是否在7天内
-        const canRefund = usedDays <= 7
+        // 检查是否在7天内（使用统一的 isRefundable 函数）
+        const canRefund = isRefundable({
+          status: tradeState,
+          successTime: successTime
+        })
         
         // 计算扣除金额（每天0.3元）
         const deductionPerDay = 30 // 0.3元 = 30分
@@ -122,14 +135,16 @@ Page({
         if (!canRefund) {
           refundTip = '该订单已超过7天，无法退款'
         } else if (usedDays > 0) {
+          // 有使用天数，显示已使用天数
           refundTip = `已使用${usedDays}天，扣除¥${deductionAmountYuan}`
         } else {
-          refundTip = '未使用，可全额退款'
+          // 使用天数为0，不显示提示
+          refundTip = ''
         }
         
         // 从Attach解析产品信息
         const attach = response.Attach || response.attach
-        const productName = this.getProductNameFromAttach(attach)
+        const productName = getProductNameFromAttach(attach)
         
         this.setData({
           orderInfo: {
@@ -144,7 +159,7 @@ Page({
           maxRefundAmount: refundAmount,
           maxRefundAmountText: refundAmountYuan,
           orderAmountText: totalAmountYuan,
-          usedDays: usedDays,
+          usedDays: usedDays, // 已使用天数（不包含当天）
           deductionAmount: deductionAmount,
           deductionAmountText: deductionAmountYuan,
           canRefund: canRefund,
@@ -186,29 +201,6 @@ Page({
     }
   },
 
-  // 从Attach字段解析产品名称
-  getProductNameFromAttach(attach) {
-    if (!attach) return '会员订单'
-    try {
-      const attachObj = typeof attach === 'string' ? JSON.parse(attach) : attach
-      const productId = attachObj.productId || attachObj.ProductId
-      return this.getProductName(productId)
-    } catch (e) {
-      return this.getProductName(attach)
-    }
-  },
-
-  // 根据产品ID获取产品名称
-  getProductName(productId) {
-    if (!productId) return '会员订单'
-    const productMap = {
-      'com.louhao.xiaoqu.month': '月度会员',
-      'com.louhao.xiaoqu.season': '季度会员',
-      'com.louhao.xiaoqu.year': '年度会员',
-      'com.louhao.xiaoqu.vip': 'VIP会员'
-    }
-    return productMap[productId] || productId || '会员订单'
-  },
 
   // 查询订单按钮点击
   onQueryOrder() {
@@ -242,14 +234,18 @@ Page({
       this.setData({
         selectedReasonIndex: index,
         showCustomReason: true,
-        refundReason: ''
+        refundReason: '',
+        reasonError: '', // 清除错误提示
+        customReason: ''
       })
     } else {
       this.setData({
         selectedReasonIndex: index,
         showCustomReason: false,
         refundReason: reason,
-        customReason: ''
+        customReason: '',
+        reasonError: '', // 清除错误提示
+        customReasonError: '' // 清除自定义原因错误
       })
     }
   },
@@ -259,12 +255,66 @@ Page({
     const value = e.detail.value || e.detail
     this.setData({
       customReason: value,
-      refundReason: value
+      refundReason: value,
+      customReasonError: '' // 清除错误提示
+    })
+    
+    // 实时验证
+    this.validateCustomReason(value)
+  },
+
+  // 自定义原因失焦验证
+  onCustomReasonBlur() {
+    this.validateCustomReason(this.data.customReason)
+  },
+
+  // 验证自定义原因
+  validateCustomReason(value) {
+    if (this.data.showCustomReason) {
+      if (!value || value.trim() === '') {
+        this.setData({
+          customReasonError: '请详细说明退款原因'
+        })
+        return false
+      } else if (value.trim().length < 5) {
+        this.setData({
+          customReasonError: '退款原因至少需要5个字符'
+        })
+        return false
+      } else {
+        this.setData({
+          customReasonError: ''
+        })
+        return true
+      }
+    }
+    return true
+  },
+
+  // 切换协议同意状态
+  onToggleAgreement() {
+    this.setData({
+      agreedToAgreement: !this.data.agreedToAgreement,
+      agreementError: '' // 清除错误提示
+    })
+  },
+
+  // 查看退款协议
+  onViewAgreement() {
+    wx.navigateTo({
+      url: '/pages/android/refund/agreement/agreement'
     })
   },
 
   // 表单验证
   validateForm() {
+    let isValid = true
+    const errors = {
+      reasonError: '',
+      customReasonError: '',
+      agreementError: ''
+    }
+
     // 检查是否可退款（7天内）
     if (!this.data.canRefund) {
       wx.showToast({
@@ -313,15 +363,35 @@ Page({
       }
     }
 
-    if (!this.data.refundReason || this.data.refundReason.trim() === '') {
-      wx.showToast({
-        title: '请选择退款原因',
-        icon: 'none'
-      })
-      return false
+    // 验证退款原因
+    if (this.data.selectedReasonIndex === -1 && !this.data.showCustomReason) {
+      errors.reasonError = '请选择退款原因'
+      isValid = false
+    } else if (this.data.showCustomReason) {
+      // 验证自定义原因
+      if (!this.validateCustomReason(this.data.customReason)) {
+        isValid = false
+      }
     }
 
-    return true
+    // 验证退款协议
+    if (!this.data.agreedToAgreement) {
+      errors.agreementError = '请先阅读并同意退款协议'
+      isValid = false
+    }
+
+    // 更新错误状态
+    this.setData(errors)
+
+    if (!isValid) {
+      // 滚动到错误位置
+      wx.pageScrollTo({
+        scrollTop: 0,
+        duration: 300
+      })
+    }
+
+    return isValid
   },
 
   // 提交退款申请
@@ -342,11 +412,6 @@ Page({
     })
   },
 
-  // 格式化金额（分转元）
-  formatAmount(amount) {
-    if (!amount && amount !== 0) return '0.00'
-    return (amount / 100).toFixed(2)
-  },
 
   // 获取退款状态文本
   getRefundStatusText(status) {
@@ -407,7 +472,7 @@ Page({
         const refundId = response.refundId || response.RefundId || ''
         const status = (response.status || '').toUpperCase()
         const amount = response.amount || 0
-        const amountText = this.formatAmount(amount)
+        const amountText = formatAmount(amount)
 
         // 根据状态获取提示信息
         const statusText = this.getRefundStatusText(status)

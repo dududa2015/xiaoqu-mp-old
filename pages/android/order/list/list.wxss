@@ -23,13 +23,18 @@ page {
 .tabs-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding-top: 16rpx;
+  gap: 16rpx;
+}
+
+.tabs-container {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .order-count {
   flex-shrink: 0;
-  margin-left: 16rpx;
 }
 
 .count-text {
@@ -116,7 +121,7 @@ page {
 }
 
 .order-amount {
-  color: #ff4d4f;
+  color: #333333;
   font-weight: 700;
   font-size: 36rpx;
   letter-spacing: 0.5rpx;

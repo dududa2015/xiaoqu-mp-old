@@ -1,5 +1,13 @@
 // pages/android/order/list/list.js
 import { getOrdersByUserId } from '../../../../apis/order-api'
+import { 
+  isRefundable, 
+  formatAmount, 
+  formatTime, 
+  getStatusText, 
+  getProductNameFromAttach,
+  convertOrderFromApi
+} from '../../../../utils/order-utils.js'
 
 Page({
   data: {
@@ -67,7 +75,7 @@ Page({
 
         if (response && Array.isArray(response)) {
           // 转换后端数据格式为前端格式
-          const convertedOrders = response.map(order => this.convertOrderFromApi(order))
+          const convertedOrders = response.map(order => convertOrderFromApi(order))
           this.setData({ allOrders: convertedOrders })
           
           // 根据实际订单状态生成筛选选项
@@ -86,7 +94,7 @@ Page({
           // 可退款：状态为1（已支付）且可退款
           filteredOrders = filteredOrders.filter(order => {
             const status = String(order.status)
-            return status === '1' && this.isRefundable(order)
+            return status === '1' && isRefundable(order)
           })
         } else {
           // 根据状态码筛选
@@ -111,12 +119,12 @@ Page({
           amount: order.amount,
           status: status,
           createTime: order.createdDate || order.createTime,
-          productName: order.description || '会员订单',
-          refundable: this.isRefundable(order),
-          statusText: this.getStatusText({ status: status }),
-          amountText: this.formatAmount(order.amount),
-          timeText: this.formatTime(order.createdDate || order.createTime),
-          canRefund: this.isRefundable(order)
+          productName: order.description || getProductNameFromAttach(order.attach) || '会员订单',
+          refundable: isRefundable(order),
+          statusText: getStatusText({ status: status }),
+          amountText: formatAmount(order.amount),
+          timeText: formatTime(order.createdDate || order.createTime),
+          canRefund: isRefundable(order)
         }
       })
 
@@ -186,7 +194,7 @@ Page({
       statusSet.add(status)
       
       // 检查是否有可退款的订单
-      if (status === '1' && this.isRefundable(order)) {
+      if (status === '1' && isRefundable(order)) {
         hasRefundable = true
       }
     })
@@ -226,75 +234,6 @@ Page({
     this.setData({ statusOptions: options })
   },
 
-  // 转换API返回的订单数据格式
-  convertOrderFromApi(apiOrder) {
-    return {
-      outTradeNo: apiOrder.OutTradeNo || apiOrder.outTradeNo,
-      userId: apiOrder.UserId || apiOrder.userId,
-      productId: apiOrder.ProductId || apiOrder.productId,
-      description: apiOrder.Description || apiOrder.description,
-      amount: apiOrder.Amount || apiOrder.amount || 0,
-      attach: apiOrder.Attach || apiOrder.attach,
-      transactionId: apiOrder.TransactionId || apiOrder.transactionId,
-      status: apiOrder.Status || apiOrder.status || '0',
-      createdDate: apiOrder.CreatedDate || apiOrder.createdDate,
-      successTime: apiOrder.SuccessTime || apiOrder.successTime
-    }
-  },
-
-  // 判断订单是否可退款（会员订单：7天内可退款）
-  isRefundable(order) {
-    // 订单状态必须是已支付（status === '1'）
-    const status = String(order.status)
-    if (status !== '1') {
-      return false
-    }
-
-    // 检查是否在7天内（使用创建时间或支付成功时间）
-    const now = new Date()
-    const timeToCheck = order.successTime || order.createdDate || order.createTime
-    if (!timeToCheck) {
-      return false
-    }
-
-    const checkTime = new Date(timeToCheck)
-    const daysDiff = Math.floor((now - checkTime) / (24 * 60 * 60 * 1000))
-
-    return daysDiff <= 7
-  },
-
-  // 获取订单状态文本
-  getStatusText(order) {
-    const status = String(order.status)
-    const statusMap = {
-      '0': '待支付',      // 未支付
-      '1': '已支付',      // 已支付
-      '2': '已关闭',      // 已关闭
-      '3': '已退款',      // 已退款
-      '4': '退款中',      // 退款中
-      '5': '支付失败'     // 其他/错误
-    }
-    return statusMap[status] || '未知状态'
-  },
-
-  // 格式化金额
-  formatAmount(amount) {
-    if (!amount && amount !== 0) return '0.00'
-    return (amount / 100).toFixed(2)
-  },
-
-  // 格式化时间（完整格式：年月日时分秒）
-  formatTime(timeStr) {
-    if (!timeStr) return ''
-    const date = new Date(timeStr)
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const day = String(date.getDate()).padStart(2, '0')
-    const hour = String(date.getHours()).padStart(2, '0')
-    const minute = String(date.getMinutes()).padStart(2, '0')
-    const second = String(date.getSeconds()).padStart(2, '0')
-    return `${year}-${month}-${day} ${hour}:${minute}:${second}`
-  },
 
   // 获取空状态文案
   getEmptyText(statusFilter = '') {

@@ -88,6 +88,7 @@
       "pages/android/order/list/list",
       "pages/android/order/detail/detail",
       "pages/android/refund/refund",
+      "pages/android/refund/agreement/agreement",
       "pages/search/index/index",
       "pages/search/search/search"
     ]

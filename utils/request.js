@@ -1,6 +1,6 @@
 // api URL
-// const apiUrl = "http://localhost:5213/api"
-const apiUrl = "https://test.zhuzixi.cn/api"
+const apiUrl = "http://localhost:5213/api"
+// const apiUrl = "https://test.zhuzixi.cn/api"
 // const apiUrl = "https://mp.zhuzixi.cn/api"
 // 封装微信请求方法
 const request = (params) => {
@@ -39,9 +39,16 @@ const request = (params) => {
             showCancel: false,
             success(res) {
               if (res.confirm) {
+                let path = ''
+                // #if IOS
                 wx.navigateTo({
-                  url: '/pages/ios/login/login',
+                  url: '/pages/ios/login/login'
                 })
+                // #elif ANDROID
+                wx.navigateTo({
+                  url: '/pages/android/login/login'
+                })
+                // #endif
               } else if (res.cancel) {
                 console.log('用户点击取消')
               }

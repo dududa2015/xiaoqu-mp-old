@@ -3,18 +3,20 @@
   <!-- 状态筛选 -->
   <view class="tabs-wrapper">
     <view class="tabs-header">
-      <t-tabs 
-        value="{{statusFilter}}" 
-        bind:change="onStatusFilter" 
-        theme="tag"
-      >
-        <t-tab-panel 
-          wx:for="{{statusOptions}}" 
-          wx:key="value"
-          value="{{item.value}}"
-          label="{{item.label}}"
-        />
-      </t-tabs>
+      <view class="tabs-container">
+        <t-tabs 
+          value="{{statusFilter}}" 
+          bind:change="onStatusFilter" 
+          theme="tag"
+        >
+          <t-tab-panel 
+            wx:for="{{statusOptions}}" 
+            wx:key="value"
+            value="{{item.value}}"
+            label="{{item.label}}"
+          />
+        </t-tabs>
+      </view>
       <view class="order-count" wx:if="{{totalCount > 0}}">
         <text class="count-text">共{{totalCount}}条</text>
       </view>

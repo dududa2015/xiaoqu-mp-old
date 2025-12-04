@@ -1,5 +1,14 @@
 // pages/android/order/detail/detail.js
 import { queryOrder } from '../../../../apis/order-api'
+import { 
+  isRefundable, 
+  formatAmount, 
+  formatTimeShort, 
+  formatTime,
+  getTradeStateText,
+  getProductNameFromAttach,
+  getProductName
+} from '../../../../utils/order-utils.js'
 
 Page({
   data: {
@@ -41,20 +50,38 @@ Page({
 
       // 检查响应数据
       if (response && response.outTradeNo) {
-        // 格式化订单信息，只保留必要字段
+        // 从 Attach 解析产品信息
+        const attach = response.Attach || response.attach
+        const productName = getProductNameFromAttach(attach)
+        const productId = this.getProductIdFromAttach(attach)
+        const memberType = this.getMemberTypeFromProductId(productId)
+        const memberDuration = this.getMemberDurationFromProductId(productId)
+        
+        // 计算到期时间
+        const expireTime = this.calculateExpireTime(response.successTime, memberDuration)
+        
+        // 格式化订单信息
         const formattedInfo = {
           outTradeNo: response.outTradeNo || this.data.orderNo,
           tradeState: (response.tradeState || 'NOTPAY').toUpperCase(),
           amount: response.amount || 0,
           successTime: response.successTime || '',
-          description: response.description || '',
+          description: response.description || productName,
           createdDate: response.createdDate || '',
+          attach: attach,
+          // 产品信息
+          productName: productName,
+          productId: productId,
+          memberType: memberType,
+          memberDuration: memberDuration,
+          expireTime: expireTime,
+          expireTimeText: expireTime ? formatTime(expireTime) : '',
           // 用于显示的格式化字段
-          amountText: this.formatAmount(response.amount || 0),
-          statusText: this.getStatusText({ status: (response.tradeState || 'NOTPAY').toUpperCase() }),
-          createTimeText: response.createdDate ? this.formatTime(response.createdDate) : '',
-          payTimeText: response.successTime ? this.formatTime(response.successTime) : '',
-          refundable: this.isRefundable({
+          amountText: formatAmount(response.amount || 0),
+          statusText: getTradeStateText({ status: (response.tradeState || 'NOTPAY').toUpperCase() }),
+          createTimeText: response.createdDate ? formatTimeShort(response.createdDate) : '',
+          payTimeText: response.successTime ? formatTimeShort(response.successTime) : '',
+          refundable: isRefundable({
             status: (response.tradeState || 'NOTPAY').toUpperCase(),
             successTime: response.successTime
           })
@@ -91,67 +118,6 @@ Page({
 
 
 
-  // 获取订单状态文本（直接使用 TradeState）
-  getStatusText(order) {
-    const status = String(order.status).toUpperCase()
-    const statusMap = {
-      'NOTPAY': '待支付',      // 未支付
-      'SUCCESS': '已支付',      // 已支付
-      'CLOSED': '已关闭',      // 已关闭
-      'REFUND': '已退款',       // 已退款
-      'REVOKED': '已撤销',      // 已撤销
-      'USERPAYING': '支付中',   // 用户支付中
-      'PAYERROR': '支付失败'    // 支付失败
-    }
-    return statusMap[status] || '未知状态'
-  },
-
-  // 判断订单是否可退款
-  isRefundable(order) {
-    // 订单状态必须是已支付（SUCCESS）
-    const status = String(order.status).toUpperCase()
-    if (status !== 'SUCCESS') {
-      return false
-    }
-
-    // 检查是否在7天内
-    if (!order.successTime) {
-      return false
-    }
-
-    const now = new Date()
-    const successTime = new Date(order.successTime)
-    const daysDiff = Math.floor((now - successTime) / (24 * 60 * 60 * 1000))
-
-    return daysDiff <= 7
-  },
-
-  // 格式化金额
-  formatAmount(amount) {
-    if (!amount && amount !== 0) return '0.00'
-    return (amount / 100).toFixed(2)
-  },
-
-  // 格式化时间（完整格式）
-  formatTime(timeStr) {
-    if (!timeStr) return ''
-    // 处理 createdDate 格式 "2025/12/03 21:45:54"，转换为标准格式
-    let normalizedTime = timeStr
-    if (timeStr.includes('/')) {
-      normalizedTime = timeStr.replace(/\//g, '-')
-    }
-    const date = new Date(normalizedTime)
-    // 检查日期是否有效
-    if (isNaN(date.getTime())) {
-      return timeStr // 如果解析失败，返回原始字符串
-    }
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const day = String(date.getDate()).padStart(2, '0')
-    const hour = String(date.getHours()).padStart(2, '0')
-    const minute = String(date.getMinutes()).padStart(2, '0')
-    return `${year}-${month}-${day} ${hour}:${minute}`
-  },
 
 
   // 申请退款
@@ -180,6 +146,47 @@ Page({
         })
       }
     })
+  },
+
+  // 从 Attach 获取产品ID
+  getProductIdFromAttach(attach) {
+    if (!attach) return ''
+    try {
+      const attachObj = typeof attach === 'string' ? JSON.parse(attach) : attach
+      return attachObj.productId || attachObj.ProductId || ''
+    } catch (e) {
+      return ''
+    }
+  },
+
+  // 根据产品ID获取会员类型
+  getMemberTypeFromProductId(productId) {
+    if (!productId) return '会员订单'
+    return getProductName(productId)
+  },
+
+  // 根据产品ID获取会员期限（天数）
+  getMemberDurationFromProductId(productId) {
+    if (!productId) return 0
+    const durationMap = {
+      'com.louhao.xiaoqu.month': 30,
+      'com.louhao.xiaoqu.season': 90,
+      'com.louhao.xiaoqu.year': 365,
+      'com.louhao.xiaoqu.vip': 365
+    }
+    return durationMap[productId] || 0
+  },
+
+  // 计算到期时间
+  calculateExpireTime(successTime, durationDays) {
+    if (!successTime || !durationDays) return ''
+    try {
+      const payTime = new Date(successTime)
+      const expireTime = new Date(payTime.getTime() + durationDays * 24 * 60 * 60 * 1000)
+      return expireTime.toISOString()
+    } catch (e) {
+      return ''
+    }
   }
 })
 

@@ -1,0 +1,6 @@
+<!--pages/android/refund/agreement/agreement.wxml-->
+<view class="agreement-container">
+  <view class="agreement-content">
+    <text class="agreement-text" user-select="text">{{agreementContent}}</text>
+  </view>
+</view>

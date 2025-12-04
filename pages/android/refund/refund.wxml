@@ -10,33 +10,54 @@
         <text class="order-amount">¥{{orderAmountText}}</text>
       </view>
     </view>
-    
+
     <!-- 退款计算摘要 -->
     <view class="refund-summary-card">
       <view class="summary-header">
-        <text class="summary-title">退款计算</text>
+        <view class="summary-title-wrapper">
+          <text class="summary-icon">💰</text>
+          <text class="summary-title">退款计算</text>
+        </view>
       </view>
       <view class="summary-content">
+        <!-- 订单金额 -->
         <view class="summary-row">
-          <text class="summary-label">订单金额</text>
-          <text class="summary-value">¥{{orderAmountText}}</text>
+          <view class="summary-label-wrapper">
+            <text class="summary-label">订单金额</text>
+          </view>
+          <text class="summary-value order-amount-value">¥{{orderAmountText}}</text>
         </view>
-        <view class="summary-row" wx:if="{{usedDays > 0}}">
-          <text class="summary-label">已使用天数</text>
-          <text class="summary-value">{{usedDays}}天</text>
+        
+        <!-- 扣除明细（如果有） -->
+        <view wx:if="{{usedDays > 0}}" class="deduction-section">
+          <view class="summary-row deduction-row">
+            <view class="summary-label-wrapper">
+              <text class="summary-label">已使用</text>
+              <text class="summary-label-desc">{{usedDays}}天</text>
+            </view>
+            <text class="summary-value deduction-value">-¥{{deductionAmountText}}</text>
+          </view>
+          <view class="deduction-note">
+            <text class="deduction-note-text">按每天0.3元扣除</text>
+          </view>
         </view>
-        <view class="summary-row" wx:if="{{usedDays > 0}}">
-          <text class="summary-label">扣除金额</text>
-          <text class="summary-value deduction">-¥{{deductionAmountText}}</text>
-        </view>
+        
+        <!-- 分隔线 -->
         <view class="summary-divider"></view>
-        <view class="summary-row total">
-          <text class="summary-label">可退金额</text>
-          <text class="summary-value refund">¥{{maxRefundAmountText}}</text>
+        
+        <!-- 可退金额（突出显示） -->
+        <view class="summary-row total-row">
+          <view class="summary-label-wrapper">
+            <text class="summary-label total-label">可退金额</text>
+            <text class="summary-label-hint" wx:if="{{usedDays === 0}}">全额退款</text>
+          </view>
+          <view class="refund-amount-wrapper">
+            <text class="summary-value refund-amount">¥{{maxRefundAmountText}}</text>
+          </view>
         </view>
       </view>
     </view>
-    
+
     <!-- 退款提示 -->
     <view class="refund-tip-card" wx:if="{{refundTip}}">
       <view class="tip-content" wx:class="{{canRefund ? 'tip-success' : 'tip-error'}}">
@@ -52,20 +73,8 @@
       <text class="input-title">查询订单</text>
     </view>
     <view class="input-content">
-      <t-input 
-        placeholder="请输入订单号" 
-        value="{{orderNo}}"
-        bind:change="onOrderNoInput"
-        class="order-input"
-      />
-      <t-button 
-        theme="primary"
-        size="medium"
-        bind:tap="onQueryOrder"
-        disabled="{{loading || !orderNo}}"
-        class="query-btn"
-        block
-      >
+      <t-input placeholder="请输入订单号" value="{{orderNo}}" bind:change="onOrderNoInput" class="order-input" />
+      <t-button theme="primary" size="medium" bind:tap="onQueryOrder" disabled="{{loading || !orderNo}}" class="query-btn" block>
         {{loading ? '查询中...' : '查询订单'}}
       </t-button>
     </view>
@@ -73,28 +82,37 @@
 
   <!-- 退款原因 -->
   <view wx:if="{{orderInfo && canRefund}}" class="reason-section">
-    <view class="section-title">退款原因</view>
+    <view class="section-title">
+      <text class="section-title-text">退款原因</text>
+      <text class="section-title-required">*</text>
+    </view>
     <view class="reason-card">
       <view class="reason-list">
-        <view 
-          wx:for="{{reasonList}}" 
-          wx:key="index"
-          class="reason-item {{selectedReasonIndex === index ? 'reason-item-active' : ''}}"
-          data-index="{{index}}"
-          bindtap="onReasonSelect"
-        >
+        <view wx:for="{{reasonList}}" wx:key="index" class="reason-item {{selectedReasonIndex === index ? 'reason-item-active' : ''}} {{reasonError && selectedReasonIndex !== index ? 'reason-item-error' : ''}}" data-index="{{index}}" bindtap="onReasonSelect">
           <text class="reason-text">{{item}}</text>
         </view>
       </view>
       
+      <!-- 错误提示 -->
+      <view wx:if="{{reasonError}}" class="reason-error-tip">
+        <text class="reason-error-text">{{reasonError}}</text>
+      </view>
+
       <view wx:if="{{showCustomReason}}" class="custom-reason-wrapper">
         <t-textarea 
           placeholder="请详细说明退款原因（选填）" 
-          value="{{customReason}}"
-          bind:change="onCustomReasonInput"
-          maxlength="100"
-          class="custom-reason-input"
+          value="{{customReason}}" 
+          bind:change="onCustomReasonInput" 
+          bind:blur="onCustomReasonBlur"
+          maxlength="100" 
+          class="custom-reason-input {{customReasonError ? 'custom-reason-input-error' : ''}}"
         />
+        <view wx:if="{{customReasonError}}" class="custom-reason-error-tip">
+          <text class="custom-reason-error-text">{{customReasonError}}</text>
+        </view>
+        <view class="custom-reason-count">
+          <text class="custom-reason-count-text">{{customReason.length}}/100</text>
+        </view>
       </view>
     </view>
   </view>
@@ -109,22 +127,33 @@
     </view>
   </view>
 
+  <!-- 退款协议 -->
+  <view wx:if="{{orderInfo && canRefund}}" class="agreement-section">
+    <view class="agreement-checkbox-wrapper">
+      <view class="agreement-checkbox {{agreedToAgreement ? 'agreement-checkbox-checked' : ''}}" bindtap="onToggleAgreement">
+        <text class="agreement-checkbox-icon">{{agreedToAgreement ? '✓' : ''}}</text>
+      </view>
+      <view class="agreement-text-wrapper">
+        <text class="agreement-text">我已阅读并同意</text>
+        <text class="agreement-link" bindtap="onViewAgreement">《退款协议》</text>
+      </view>
+    </view>
+    <view wx:if="{{agreementError}}" class="agreement-error-tip">
+      <text class="agreement-error-text">{{agreementError}}</text>
+    </view>
+  </view>
+
   <!-- 提交按钮 -->
   <view class="submit-section">
-    <t-button 
-      wx:if="{{canRefund && orderInfo}}"
-      theme="primary"
-      size="large"
-      block
-      bind:tap="onSubmit"
-      class="submit-btn"
-      disabled="{{selectedReasonIndex === -1 && !showCustomReason}}"
-    >
+    <t-button wx:if="{{canRefund && orderInfo && maxRefundAmount > 0}}" theme="primary" size="large" block bind:tap="onSubmit" class="submit-btn" disabled="{{selectedReasonIndex === -1 && !showCustomReason || !agreedToAgreement}}">
       提交退款申请
     </t-button>
     <view wx:else class="disabled-tip">
-      <text class="tip-text">{{orderInfo ? '已超过7天，无法退款' : '请先查询订单信息'}}</text>
+      <text class="tip-text">
+        <block wx:if="{{!orderInfo}}">请先查询订单信息</block>
+        <block wx:elif="{{!canRefund}}">已超过7天，无法退款</block>
+        <block wx:elif="{{maxRefundAmount === 0}}">可退金额为0，无法退款</block>
+      </text>
     </view>
   </view>
 </view>
-

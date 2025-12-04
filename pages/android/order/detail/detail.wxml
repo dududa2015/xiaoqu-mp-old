@@ -19,9 +19,10 @@
             <text class="order-product-name">{{orderInfo.description}}</text>
             <view class="order-status-tags">
               <t-tag 
-                theme="{{orderInfo.tradeState === 'SUCCESS' ? 'primary' : orderInfo.tradeState === 'REFUND' ? 'success' : orderInfo.tradeState === 'CLOSED' ? 'warning' : 'default'}}"
+                theme="{{orderInfo.tradeState === 'SUCCESS' ? 'primary' : orderInfo.tradeState === 'REFUND' ? 'success' : orderInfo.tradeState === 'REFUNDING' ? 'warning' : orderInfo.tradeState === 'CLOSED' ? 'default' : orderInfo.tradeState === 'REVOKED' ? 'danger' : 'default'}}"
                 size="small"
                 variant="light"
+                class="status-tag"
               >
                 {{orderInfo.statusText}}
               </t-tag>
@@ -30,6 +31,7 @@
                 theme="warning"
                 size="small"
                 variant="light"
+                class="refundable-tag"
               >
                 可退款
               </t-tag>
@@ -64,20 +66,43 @@
       </view>
     </view>
 
+    <!-- 产品信息 -->
+    <view class="detail-section" wx:if="{{orderInfo.memberDuration || orderInfo.expireTimeText}}">
+      <view class="section-title">产品信息</view>
+      <view class="info-card">
+        <view class="info-item" wx:if="{{orderInfo.memberDuration}}">
+          <text class="info-label">会员期限</text>
+          <text class="info-value">{{orderInfo.memberDuration}}天</text>
+        </view>
+        <view class="info-item" wx:if="{{orderInfo.expireTimeText}}">
+          <text class="info-label">到期时间</text>
+          <text class="info-value expire-time">{{orderInfo.expireTimeText}}</text>
+        </view>
+      </view>
+    </view>
+
     <!-- 操作按钮 -->
     <view class="action-section">
       <t-button 
-        wx:if="{{orderInfo.refundable}}"
+        wx:if="{{orderInfo.refundable && orderInfo.tradeState === 'SUCCESS'}}"
         theme="primary"
         size="large"
         block
         bind:tap="onRefund"
-        class="action-btn"
+        class="action-btn refund-btn"
       >
         申请退款
       </t-button>
       <view wx:else class="no-action-tip">
-        <text class="tip-text">该订单暂不支持退款</text>
+        <text class="tip-icon">ℹ</text>
+        <text class="tip-text">
+          <block wx:if="{{orderInfo.tradeState === 'REFUND'}}">该订单已退款</block>
+          <block wx:elif="{{orderInfo.tradeState === 'REFUNDING'}}">该订单正在退款中</block>
+          <block wx:elif="{{orderInfo.tradeState === 'CLOSED'}}">该订单已关闭，无法退款</block>
+          <block wx:elif="{{orderInfo.tradeState === 'REVOKED'}}">该订单已撤销，无法退款</block>
+          <block wx:elif="{{orderInfo.tradeState === 'NOTPAY'}}">该订单未支付，无法退款</block>
+          <block wx:else>该订单暂不支持退款</block>
+        </text>
       </view>
     </view>
   </view>
