@@ -20,7 +20,6 @@ Page({
     statusOptions: [
       { label: '全部', value: '' }
     ],
-    allOrders: [], // 所有订单数据
     totalCount: 0 // 当前筛选状态下的订单总数
   },
 
@@ -30,9 +29,6 @@ Page({
       emptyText: this.getEmptyText(statusFilter),
       emptyDesc: this.getEmptyDesc(statusFilter)
     })
-  },
-
-  onShow() {
     this.loadOrderList(true)
   },
 
@@ -46,7 +42,7 @@ Page({
     }
   },
 
-  // 加载订单列表（使用真实API）
+  // 加载订单列表（使用后端分页）
   async loadOrderList(refresh = false) {
     if (this.data.loading) {
       return
@@ -69,50 +65,91 @@ Page({
     this.setData({ loading: true })
 
     try {
-      // 如果是刷新，重新获取所有订单
-      if (refresh) {
-        const response = await getOrdersByUserId({ userId: userId })
-
-        if (response && Array.isArray(response)) {
-          // 转换后端数据格式为前端格式
-          const convertedOrders = response.map(order => convertOrderFromApi(order))
-          this.setData({ allOrders: convertedOrders })
-          
-          // 根据实际订单状态生成筛选选项
-          this.updateStatusOptions(convertedOrders)
-        } else {
-          this.setData({ allOrders: [] })
-          this.setData({ statusOptions: [{ label: '全部', value: '' }] })
-        }
+      // 构建请求参数
+      const requestParams = {
+        userId: userId,
+        page: page,
+        pageSize: this.data.pageSize
       }
 
-      // 筛选订单
-      let filteredOrders = this.data.allOrders.slice()
+      // 如果后端支持状态筛选，可以在这里添加状态参数
+      // 例如：if (this.data.statusFilter) { requestParams.status = this.data.statusFilter }
 
+      // 调用后端分页API
+      const response = await getOrdersByUserId(requestParams)
+
+      // 处理响应数据
+      let orders = []
+      let totalCount = 0
+
+      if (response && Array.isArray(response)) {
+        // 如果后端返回的是数组，说明是订单列表
+        orders = response
+      } else if (response && response.data && Array.isArray(response.data)) {
+        // 如果后端返回的是对象，包含data和totalCount
+        orders = response.data
+        totalCount = response.totalCount || response.total || 0
+      } else if (response && response.list && Array.isArray(response.list)) {
+        // 如果后端返回的是对象，包含list字段
+        orders = response.list
+        totalCount = response.totalCount || response.total || 0
+      }
+
+      // 转换后端数据格式为前端格式
+      let convertedOrders = orders.map(order => convertOrderFromApi(order))
+
+      // 前端筛选（如果后端不支持状态筛选）
       if (this.data.statusFilter) {
         if (this.data.statusFilter === 'refundable') {
           // 可退款：状态为1（已支付）且可退款
-          filteredOrders = filteredOrders.filter(order => {
+          convertedOrders = convertedOrders.filter(order => {
             const status = String(order.status)
             return status === '1' && isRefundable(order)
           })
         } else {
           // 根据状态码筛选
-          filteredOrders = filteredOrders.filter(order => {
+          convertedOrders = convertedOrders.filter(order => {
             const status = String(order.status)
             return status === this.data.statusFilter
           })
         }
       }
 
-      // 分页处理
-      const startIndex = (page - 1) * this.data.pageSize
-      const endIndex = startIndex + this.data.pageSize
-      const newList = filteredOrders.slice(startIndex, endIndex)
+      // 如果是刷新第一页，需要获取筛选选项（获取前100条数据用于生成筛选选项）
+      if (refresh && page === 1) {
+        const firstPageResponse = await getOrdersByUserId({
+          userId: userId,
+          page: 1,
+          pageSize: 100
+        })
+        
+        let allOrdersForFilter = []
+        if (firstPageResponse && Array.isArray(firstPageResponse)) {
+          allOrdersForFilter = firstPageResponse.map(order => convertOrderFromApi(order))
+        } else if (firstPageResponse && firstPageResponse.data && Array.isArray(firstPageResponse.data)) {
+          allOrdersForFilter = firstPageResponse.data.map(order => convertOrderFromApi(order))
+        } else if (firstPageResponse && firstPageResponse.list && Array.isArray(firstPageResponse.list)) {
+          allOrdersForFilter = firstPageResponse.list.map(order => convertOrderFromApi(order))
+        }
+        
+        this.updateStatusOptions(allOrdersForFilter)
+      }
 
       // 处理订单数据，添加格式化字段
-      const processedList = newList.map(order => {
+      const processedList = convertedOrders.map(order => {
         const status = String(order.status)
+        // 从 attach 中解析产品ID
+        let productId = ''
+        try {
+          const attach = order.attach
+          if (attach) {
+            const attachObj = typeof attach === 'string' ? JSON.parse(attach) : attach
+            productId = attachObj.productId || attachObj.ProductId || ''
+          }
+        } catch (e) {
+          console.error('解析attach失败:', e)
+        }
+        
         return {
           orderNo: order.outTradeNo,
           totalAmount: order.amount,
@@ -124,18 +161,24 @@ Page({
           statusText: getStatusText({ status: status }),
           amountText: formatAmount(order.amount),
           timeText: formatTime(order.createdDate || order.createTime),
-          canRefund: isRefundable(order)
+          canRefund: isRefundable(order),
+          // 保存用于支付的数据
+          productId: productId,
+          description: order.description || getProductNameFromAttach(order.attach) || '会员订单'
         }
       })
+
+      // 判断是否还有更多数据：如果返回的数据量小于pageSize，说明没有更多数据了
+      const hasMore = orders.length >= this.data.pageSize
 
       const statusFilter = this.data.statusFilter
       this.setData({
         orderList: refresh ? processedList : this.data.orderList.concat(processedList),
         page: page + 1,
-        hasMore: endIndex < filteredOrders.length,
-        totalCount: filteredOrders.length, // 更新总数
-        emptyText: this.getEmptyText(statusFilter), // 更新空状态文案
-        emptyDesc: this.getEmptyDesc(statusFilter) // 更新空状态描述
+        hasMore: hasMore,
+        totalCount: totalCount || (refresh ? processedList.length : this.data.totalCount + processedList.length),
+        emptyText: this.getEmptyText(statusFilter),
+        emptyDesc: this.getEmptyDesc(statusFilter)
       })
 
       this.setData({ loading: false })

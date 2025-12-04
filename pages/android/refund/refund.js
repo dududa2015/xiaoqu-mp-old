@@ -35,7 +35,10 @@ Page({
     deductionAmount: 0, // 扣除金额（单位：分）
     deductionAmountText: '0.00', // 扣除金额文本
     canRefund: true, // 是否可退款（7天内）
-    refundTip: '' // 退款提示
+    refundTip: '', // 退款提示
+    showSuccessDialog: false, // 显示成功弹窗
+    successDialogTitle: '', // 成功弹窗标题
+    successDialogContent: '' // 成功弹窗内容
   },
 
   onLoad(options) {
@@ -490,23 +493,11 @@ Page({
         content += `退款状态：${statusText}\n\n`
         content += statusMessage
 
-        // 提交成功
-        wx.showModal({
-          title: '提交成功',
-          content: content,
-          showCancel: false,
-          success: (res) => {
-            if (res.confirm) {
-              // 返回上一页或跳转到订单列表
-              const pages = getCurrentPages()
-              if (pages.length > 1) {
-                wx.navigateBack()
-              } else {
-                // 如果没有上一页，跳转到订单列表页
-                wx.reLaunch({ url: '/pages/android/order/list/list' })
-              }
-            }
-          }
+        // 显示成功弹窗
+        this.setData({
+          showSuccessDialog: true,
+          successDialogTitle: '提交成功',
+          successDialogContent: content
         })
       } else {
         wx.showToast({
@@ -532,6 +523,24 @@ Page({
         showCancel: false
       })
     }
+  },
+
+  // 成功弹窗确认
+  onSuccessDialogConfirm() {
+    this.setData({ showSuccessDialog: false })
+    // 返回上一页或跳转到订单列表
+    const pages = getCurrentPages()
+    if (pages.length > 1) {
+      wx.navigateBack()
+    } else {
+      // 如果没有上一页，跳转到订单列表页
+      wx.reLaunch({ url: '/pages/android/order/list/list' })
+    }
+  },
+
+  // 成功弹窗关闭
+  onSuccessDialogClose() {
+    this.setData({ showSuccessDialog: false })
   }
 })
 

@@ -31,10 +31,13 @@
       <t-cell title="缴费记录" hover arrow url="/pages/android/order/list/list">
         <image src="/images/my/pay.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
+      <!-- #endif -->
+    </t-cell-group>
+
+    <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
       <t-cell title="客户服务" hover arrow bind:tap="toCS">
         <image src="/images/my/customer-service.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
-      <!-- #endif -->
     </t-cell-group>
     <!-- #if MP -->
     <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">

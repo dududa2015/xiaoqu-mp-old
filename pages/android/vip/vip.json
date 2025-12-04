@@ -4,7 +4,10 @@
       "t-radio-group": "tdesign-miniprogram/radio-group/radio-group",
       "t-radio": "tdesign-miniprogram/radio/radio",
       "t-checkbox": "tdesign-miniprogram/checkbox/checkbox",
+      "t-skeleton": "tdesign-miniprogram/skeleton/skeleton",
       "navigation-bar": "/components/navigation-bar/navigation-bar"
   },
-  "navigationBarTitleText": "开通会员"
+  "navigationBarTitleText": "开通会员",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
 }

@@ -33,7 +33,7 @@ page {
 }
 
 .order-header-card.order-status-CLOSED {
-  border-left-color: #faad14; /* 已关闭 */
+  border-left-color: #bfbfbf; /* 已关闭 */
 }
 
 .order-header-card.order-status-REVOKED {
@@ -210,27 +210,123 @@ page {
   background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
 }
 
-.no-action-tip {
+/* 无法退款卡片 */
+.no-refund-card {
+  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  border: 2rpx solid #f0f0f0;
+  position: relative;
+}
+
+/* 不同状态的卡片样式 */
+.no-refund-card.no-refund-REFUND {
+  background: linear-gradient(135deg, #f6ffed 0%, #ffffff 100%);
+  border-color: #b7eb8f;
+}
+
+.no-refund-card.no-refund-REFUNDING {
+  background: linear-gradient(135deg, #fffbe6 0%, #ffffff 100%);
+  border-color: #ffe58f;
+}
+
+.no-refund-card.no-refund-CLOSED {
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+  border-color: #d9d9d9;
+}
+
+.no-refund-card.no-refund-REVOKED {
+  background: linear-gradient(135deg, #fff1f0 0%, #ffffff 100%);
+  border-color: #ffccc7;
+}
+
+.no-refund-card.no-refund-NOTPAY {
+  background: linear-gradient(135deg, #e6f7ff 0%, #ffffff 100%);
+  border-color: #91d5ff;
+}
+
+.no-refund-header {
   padding: 32rpx 24rpx;
-  background-color: #fafafa;
-  border-radius: 12rpx;
-  text-align: center;
+  display: flex;
+  align-items: flex-start;
+  gap: 20rpx;
+}
+
+.no-refund-icon-wrapper {
+  flex-shrink: 0;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.no-refund-card.no-refund-REFUND .no-refund-icon-wrapper {
+  background: linear-gradient(135deg, #b7eb8f 0%, #95de64 100%);
+}
+
+.no-refund-card.no-refund-REFUNDING .no-refund-icon-wrapper {
+  background: linear-gradient(135deg, #ffe58f 0%, #ffc53d 100%);
+}
+
+.no-refund-card.no-refund-CLOSED .no-refund-icon-wrapper {
+  background: linear-gradient(135deg, #d9d9d9 0%, #bfbfbf 100%);
+}
+
+.no-refund-card.no-refund-REVOKED .no-refund-icon-wrapper {
+  background: linear-gradient(135deg, #ffccc7 0%, #ff7875 100%);
+}
+
+.no-refund-card.no-refund-NOTPAY .no-refund-icon-wrapper {
+  background: linear-gradient(135deg, #91d5ff 0%, #40a9ff 100%);
+}
+
+.no-refund-icon {
+  font-size: 40rpx;
+  line-height: 1;
+  display: block;
+}
+
+.no-refund-content {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 12rpx;
-  border: 1rpx solid #f0f0f0;
 }
 
-.tip-icon {
-  font-size: 48rpx;
-  color: #999999;
-  opacity: 0.6;
+.no-refund-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+  line-height: 1.4;
+  letter-spacing: 0.5rpx;
 }
 
-.tip-text {
-  font-size: 28rpx;
+.no-refund-desc {
+  font-size: 26rpx;
   color: #666666;
+  line-height: 1.6;
+  letter-spacing: 0.3rpx;
+}
+
+.no-refund-divider {
+  height: 1rpx;
+  background: linear-gradient(90deg, transparent 0%, #e8e8e8 20%, #e8e8e8 80%, transparent 100%);
+  margin: 0 24rpx;
+}
+
+.no-refund-footer {
+  padding: 20rpx 24rpx 24rpx;
+  text-align: center;
+}
+
+.no-refund-hint {
+  font-size: 24rpx;
+  color: #999999;
   line-height: 1.5;
 }
 

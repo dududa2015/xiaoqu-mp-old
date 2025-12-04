@@ -156,4 +156,18 @@
       </text>
     </view>
   </view>
+
+  <!-- 退款成功弹窗 -->
+  <t-dialog
+    visible="{{showSuccessDialog}}"
+    title="{{successDialogTitle}}"
+    confirm-btn="确定"
+    bind:confirm="onSuccessDialogConfirm"
+    bind:close="onSuccessDialogClose"
+    class="refund-success-dialog"
+  >
+    <view slot="content" class="refund-success-content">
+      <text class="refund-success-text">{{successDialogContent}}</text>
+    </view>
+  </t-dialog>
 </view>

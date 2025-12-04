@@ -135,6 +135,7 @@ page {
   align-items: center;
   padding-top: 16rpx;
   border-top: 1rpx solid #f0f0f0;
+  margin-top: 16rpx;
 }
 
 .order-time {

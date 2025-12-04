@@ -10,3 +10,12 @@ export const getProductList = (params) => {
         method: 'GET',
     })
 }
+
+//获取安卓的付费产品列表
+export const getProductAndroidList = (params) => {
+    return request({
+        url: '/product/getProductAndroidList',
+        data: params,
+        method: 'GET',
+    })
+}

@@ -83,8 +83,22 @@
 
     <!-- 操作按钮 -->
     <view class="action-section">
+      <!-- 待支付订单 - 立即支付按钮 -->
       <t-button 
-        wx:if="{{orderInfo.refundable && orderInfo.tradeState === 'SUCCESS'}}"
+        wx:if="{{orderInfo.tradeState === 'NOTPAY'}}"
+        theme="primary"
+        size="large"
+        block
+        bind:tap="onPay"
+        class="action-btn pay-btn"
+        disabled="{{paying}}"
+        loading="{{paying}}"
+      >
+        {{paying ? '支付中...' : '立即支付'}}
+      </t-button>
+      <!-- 已支付订单 - 申请退款按钮 -->
+      <t-button 
+        wx:elif="{{orderInfo.refundable && orderInfo.tradeState === 'SUCCESS'}}"
         theme="primary"
         size="large"
         block
@@ -93,16 +107,42 @@
       >
         申请退款
       </t-button>
-      <view wx:else class="no-action-tip">
-        <text class="tip-icon">ℹ</text>
-        <text class="tip-text">
-          <block wx:if="{{orderInfo.tradeState === 'REFUND'}}">该订单已退款</block>
-          <block wx:elif="{{orderInfo.tradeState === 'REFUNDING'}}">该订单正在退款中</block>
-          <block wx:elif="{{orderInfo.tradeState === 'CLOSED'}}">该订单已关闭，无法退款</block>
-          <block wx:elif="{{orderInfo.tradeState === 'REVOKED'}}">该订单已撤销，无法退款</block>
-          <block wx:elif="{{orderInfo.tradeState === 'NOTPAY'}}">该订单未支付，无法退款</block>
-          <block wx:else>该订单暂不支持退款</block>
-        </text>
+      <!-- 其他状态 - 提示信息 -->
+      <view wx:else class="no-refund-card" wx:class="no-refund-{{orderInfo.tradeState}}">
+        <view class="no-refund-header">
+          <view class="no-refund-icon-wrapper">
+            <text class="no-refund-icon">
+              <block wx:if="{{orderInfo.tradeState === 'REFUND'}}">✓</block>
+              <block wx:elif="{{orderInfo.tradeState === 'REFUNDING'}}">⏳</block>
+              <block wx:elif="{{orderInfo.tradeState === 'CLOSED'}}">🔒</block>
+              <block wx:elif="{{orderInfo.tradeState === 'REVOKED'}}">✗</block>
+              <block wx:elif="{{orderInfo.tradeState === 'NOTPAY'}}">💳</block>
+              <block wx:else>ℹ</block>
+            </text>
+          </view>
+          <view class="no-refund-content">
+            <text class="no-refund-title">
+              <block wx:if="{{orderInfo.tradeState === 'REFUND'}}">订单已退款</block>
+              <block wx:elif="{{orderInfo.tradeState === 'REFUNDING'}}">退款处理中</block>
+              <block wx:elif="{{orderInfo.tradeState === 'CLOSED'}}">订单已关闭</block>
+              <block wx:elif="{{orderInfo.tradeState === 'REVOKED'}}">订单已撤销</block>
+              <block wx:elif="{{orderInfo.tradeState === 'NOTPAY'}}">订单未支付</block>
+              <block wx:else>暂不支持退款</block>
+            </text>
+            <text class="no-refund-desc">
+              <block wx:if="{{orderInfo.tradeState === 'REFUND'}}">该订单已完成退款，退款金额已原路退回</block>
+              <block wx:elif="{{orderInfo.tradeState === 'REFUNDING'}}">您的退款申请正在处理中，请耐心等待</block>
+              <block wx:elif="{{orderInfo.tradeState === 'CLOSED'}}">该订单未支付且已关闭，无法进行退款操作</block>
+              <block wx:elif="{{orderInfo.tradeState === 'REVOKED'}}">该订单已撤销，无法进行退款操作</block>
+              <block wx:elif="{{orderInfo.tradeState === 'NOTPAY'}}">请先完成支付后才能申请退款</block>
+              <block wx:else>该订单当前状态暂不支持退款，如有疑问请联系客服</block>
+            </text>
+          </view>
+        </view>
+        <view class="no-refund-divider"></view>
+        <view class="no-refund-footer">
+          <text class="no-refund-hint">💡 提示：如需帮助，请联系客服</text>
+        </view>
       </view>
     </view>
   </view>

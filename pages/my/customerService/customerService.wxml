@@ -1,5 +1,52 @@
-<view class="container">
-  <t-button theme="light" content="点我进入客服" size="large" style="width: 280rpx;">
-  </t-button>
-  <button class="share-btn" openType="contact">客服</button>
+<view class="customer-service-container">
+  <!-- 头部区域 -->
+  <view class="header-section">
+    <view class="header-icon">💬</view>
+    <text class="header-title">客户服务</text>
+    <text class="header-desc">我们随时为您服务</text>
+  </view>
+
+  <!-- 主要客服入口 -->
+  <view class="main-contact-section">
+    <button 
+      class="contact-button" 
+      openType="contact"
+      id="contact-btn"
+    >
+      <view class="contact-button-content">
+        <view class="contact-icon">💬</view>
+        <text class="contact-title">联系在线客服</text>
+        <text class="contact-desc">点击进入客服对话</text>
+      </view>
+    </button>
+  </view>
+
+  <!-- 服务分类 -->
+  <view class="service-section">
+    <view class="section-title">服务分类</view>
+    <view class="service-list">
+      <view 
+        class="service-item" 
+        wx:for="{{serviceItems}}" 
+        wx:key="type"
+        data-type="{{item.type}}"
+        bindtap="onServiceItemTap"
+      >
+        <view class="service-item-content">
+          <view class="service-icon">{{item.icon}}</view>
+          <view class="service-info">
+            <text class="service-title">{{item.title}}</text>
+            <text class="service-desc">{{item.desc}}</text>
+          </view>
+          <view class="service-arrow">›</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="footer-tip">
+    <text class="tip-text">服务时间：7×24小时</text>
+    <text class="tip-text">我们会在第一时间回复您</text>
+  </view>
 </view>

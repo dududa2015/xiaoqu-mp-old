@@ -1,5 +1,6 @@
 // pages/android/order/detail/detail.js
 import { queryOrder } from '../../../../apis/order-api'
+import { rePayOrder } from '../../../../apis/wechatpay-apis'
 import { 
   isRefundable, 
   formatAmount, 
@@ -14,7 +15,8 @@ Page({
   data: {
     orderNo: '',
     orderInfo: null,
-    loading: true
+    loading: true,
+    paying: false // 支付中状态
   },
 
   onLoad(options) {
@@ -22,6 +24,7 @@ Page({
       this.setData({
         orderNo: options.orderNo
       })
+      this.loadOrderDetail()
     } else {
       wx.showToast({
         title: '订单号不能为空',
@@ -30,12 +33,6 @@ Page({
       setTimeout(() => {
         wx.navigateBack()
       }, 1500)
-    }
-  },
-
-  onShow() {
-    if (this.data.orderNo) {
-      this.loadOrderDetail()
     }
   },
 
@@ -79,12 +76,16 @@ Page({
           // 用于显示的格式化字段
           amountText: formatAmount(response.amount || 0),
           statusText: getTradeStateText({ status: (response.tradeState || 'NOTPAY').toUpperCase() }),
-          createTimeText: response.createdDate ? formatTimeShort(response.createdDate) : '',
-          payTimeText: response.successTime ? formatTimeShort(response.successTime) : '',
+          createTimeText: response.createdDate ? formatTime(response.createdDate) : '',
+          payTimeText: response.successTime ? formatTime(response.successTime) : '',
           refundable: isRefundable({
             status: (response.tradeState || 'NOTPAY').toUpperCase(),
             successTime: response.successTime
-          })
+          }),
+          // 保存原始数据用于重新支付
+          rawAmount: response.amount || 0,
+          rawAttach: attach,
+          rawProductId: productId
         }
 
         this.setData({
@@ -132,6 +133,117 @@ Page({
         icon: 'none'
       })
     }
+  },
+
+  // 立即支付（待支付订单）
+  async onPay() {
+    if (!this.data.orderInfo) {
+      return
+    }
+
+    if (this.data.paying) {
+      return // 防止重复点击
+    }
+
+    this.setData({ paying: true })
+
+    try {
+      wx.showLoading({
+        title: '正在获取支付参数...',
+        mask: true
+      })
+
+      // 使用 RePayOrder 接口重新获取支付参数
+      const data = await rePayOrder(this.data.orderInfo.outTradeNo)
+      console.log('重新支付订单响应:', data)
+
+      wx.hideLoading()
+      this.requestPayment(data)
+    } catch (error) {
+      console.error('获取支付参数失败:', error)
+      wx.hideLoading()
+      this.setData({ paying: false })
+      
+      // 处理后端返回的错误信息
+      let errorMessage = '获取支付参数失败，请重试'
+      if (error && error.response) {
+        const errorData = error.response.data || error.response
+        if (errorData.code === 'ORDERPAID') {
+          errorMessage = '订单已支付，无需重复支付'
+          // 支付成功后刷新订单详情
+          setTimeout(() => {
+            this.loadOrderDetail()
+          }, 1500)
+        } else if (errorData.code === 'ORDERCLOSED') {
+          errorMessage = '订单已关闭，无法支付'
+        } else if (errorData.code === 'ORDERNOTFOUND') {
+          errorMessage = '订单不存在'
+        } else if (errorData.message) {
+          errorMessage = errorData.message
+        }
+      } else if (error && error.message) {
+        errorMessage = error.message
+      }
+
+      wx.showToast({
+        title: errorMessage,
+        icon: 'none',
+        duration: 2000
+      })
+    }
+  },
+
+  // 发起支付
+  requestPayment(data) {
+    if (!data || !data.prepayId) {
+      this.setData({ paying: false })
+      wx.showToast({
+        title: '订单创建失败',
+        icon: 'none'
+      })
+      return
+    }
+
+    wx.miniapp.requestPayment({
+      mchId: '1715931589', // 商户号
+      prepayId: data.prepayId,
+      nonceStr: data.nonceStr,
+      package: 'Sign=WXPay',
+      timeStamp: data.timeStamp,
+      sign: data.paySign,
+      success: (res) => {
+        console.log('支付成功:', res)
+        this.setData({ paying: false })
+        wx.showModal({
+          content: '支付成功',
+          showCancel: false,
+          confirmText: '好的',
+          success: (modalRes) => {
+            if (modalRes.confirm) {
+              // 重新加载订单详情
+              this.loadOrderDetail()
+            }
+          }
+        })
+      },
+      fail: (res) => {
+        console.error('支付失败:', res)
+        this.setData({ paying: false })
+        if (res.errMsg && res.errMsg.includes('cancel')) {
+          wx.showToast({
+            title: '已取消支付',
+            icon: 'none'
+          })
+        } else {
+          const errorMsg = res.errMsg || '支付失败'
+          wx.showToast({
+            title: errorMsg.includes('fail') ? '支付失败，请重试' : errorMsg,
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      }
+    })
   },
 
   // 复制订单号

@@ -23,24 +23,48 @@
             <view class="line"></view>
             <view class="title">会员选择</view>
         </view>
-        <view class="vip-wrap flex">
-            <view class="{{ item.checked ? 'box box-selected':'box'}}" wx:for="{{productList}}" wx:key="index" bind:tap="onVipChange" data-index="{{index}}">
+        
+        <!-- 加载状态 -->
+        <view wx:if="{{loading && productList.length === 0}}" class="loading-wrapper">
+            <view class="skeleton-card" wx:for="{{[1,2,3]}}" wx:key="index">
+                <t-skeleton theme="paragraph" row="4" />
+            </view>
+        </view>
+        
+        <!-- 空状态 -->
+        <view wx:elif="{{!loading && productList.length === 0}}" class="empty-state">
+            <view class="empty-icon">📦</view>
+            <text class="empty-text">暂无产品信息</text>
+            <text class="empty-desc">请稍后再试</text>
+        </view>
+        
+        <!-- 产品列表 -->
+        <view wx:else class="vip-wrap flex">
+            <view class="{{ item.checked ? 'box box-selected':'box'}}" wx:for="{{productList}}" wx:key="productId || index" bind:tap="onVipChange" data-index="{{index}}">
                 <view class="name">{{item.localizedTitle || item.name}}</view>
-                <view class="price"><text class="price-sign">￥</text>{{item.price}}元</view>
-                <view class="original-price">￥{{item.originalPrice}}元</view>
+                <view class="price"><text class="price-sign">￥</text>{{item.priceText || item.price}}</view>
+                <view class="original-price" wx:if="{{item.originalPrice && item.originalPrice > item.price}}">￥{{item.originalPriceText || item.originalPrice}}</view>
                 <view class="note">{{item.note}}</view>
                 <view class="recommend" wx:if="{{item.recommend}}"><text class="recommend-text">{{item.recommend}}</text></view>
             </view>
         </view>
     </view>
-    <view class="tips" >
+    <view class="tips" wx:if="{{currentProduct}}">
         <block wx:if="{{currentProduct.productIdentifier === 'com.louhao.xiaoqu.vip'}}">
         温馨提醒：2026年3月起将调整为88元
         </block>
         <block wx:else>温馨提醒：非订阅，到期手动续费</block>
     </view>
     <view class="footer">
-        <button type="primary" style="background-color: rgba(219, 179, 122, 1); " bind:tap="onPurchase">开通会员</button>
+        <button 
+            type="primary" 
+            style="background-color: rgba(219, 179, 122, 1);" 
+            bind:tap="onPurchase"
+            disabled="{{paying || !currentProduct || productList.length === 0}}"
+            loading="{{paying}}"
+        >
+            {{paying ? '支付中...' : '开通会员'}}
+        </button>
         <view class="agree-wrap flex f-x-center f-y-center">
             <span class="agree" bind:tap="toUseAgreement">会员服务协议</span>
                 <span style="margin-left: 4px;">·</span>

@@ -3,7 +3,8 @@ import {
   createAppOrder
 } from '../../../apis/wechatpay-apis'
 import {
-  getProductList
+  getProductList,
+  getProductAndroidList
 } from '../../../apis/product-api'
 Page({
 
@@ -29,41 +30,9 @@ Page({
     }],
     currentProductIdentifier: 'com.louhao.xiaoqu.vip', //当前
     currentProduct: null,
-    productList: [{
-      "productId": 1,
-      "productIdentifier": "com.louhao.xiaoqu.vip",
-      "name": "终身会员",
-      "description": "小区楼号终身会员",
-      "price": 68,
-      "originalPrice": 499.00,
-      "note": "一次付费，永久使用",
-      "recommend": "超值推荐",
-      "checked": true
-    }, {
-      "productId": 2,
-      "productIdentifier": "com.louhao.xiaoqu.month",
-      "name": "1个月",
-      "description": "月度会员",
-      "price": 6.00,
-      "originalPrice": 8.00,
-      "note": "0.20元/天，不会自动续费"
-    }, {
-      "productId": 3,
-      "productIdentifier": "com.louhao.xiaoqu.season",
-      "name": "3个月",
-      "description": "季度会员",
-      "price": 15.00,
-      "originalPrice": 24.00,
-      "note": "0.17元/天，不会自动续费"
-    }, {
-      "productId": 4,
-      "productIdentifier": "com.louhao.xiaoqu.year",
-      "name": "12个月",
-      "description": "年度会员",
-      "price": 49.00,
-      "originalPrice": 96.00,
-      "note": "0.11元/天，不会自动续费"
-    }], //付费产品列表
+    productList: [], //付费产品列表
+    loading: false,
+    paying: false // 支付中状态
   },
 
   /**
@@ -75,12 +44,9 @@ Page({
     // 初始化支付管理器（如果未全局挂载）
     this.applePayManager = new ApplePayManager(userId).init();
 
-    // this.getProductList()
-    // this.getProductListByApple()
-
     this.init()
   },
-  init() {
+  async init() {
     //控制显示是否显示温馨提醒
     let userInfo = wx.getStorageSync('userInfo')
     if (!userInfo || !userInfo.userId) {
@@ -89,32 +55,64 @@ Page({
       })
       return
     }
-    this.setData({
-      currentProduct: this.data.productList[0]
-    })
+    
+    // 从后端获取产品列表
+    await this.getProductAndroidList()
   },
-  //通过接口获取产品列表--优化用这个方法获取
-  getProductList() {
-    getProductList().then(res => {
-      let productList = res.map((product, index) => ({
-        ...product,
-        checked: index === 0 // 如果是第一项（索引为0），checked 为 true，否则为 false
-      }))
-      this.setData({
-        productList
+  //通过接口获取安卓产品列表
+  async getProductAndroidList() {
+    if (this.data.loading) {
+      return
+    }
+    
+    this.setData({ loading: true })
+    
+    try {
+      const res = await getProductAndroidList()
+      
+      if (res && Array.isArray(res) && res.length > 0) {
+        // 处理产品列表数据，添加 checked 字段
+        let productList = res.map((product, index) => {
+          const price = Number(product.price || product.Price || 0)
+          const originalPrice = Number(product.originalPrice || product.OriginalPrice || 0)
+          
+          return {
+            productId: product.productId || product.ProductId,
+            productIdentifier: product.productIdentifier || product.ProductIdentifier,
+            name: product.name || product.Name,
+            localizedTitle: product.localizedTitle || product.LocalizedTitle || product.name || product.Name,
+            description: product.description || product.Description,
+            price: price, // 保留原始数字用于计算
+            priceText: price.toFixed(2), // 格式化价格用于显示
+            originalPrice: originalPrice > 0 ? originalPrice : null,
+            originalPriceText: originalPrice > 0 ? originalPrice.toFixed(2) : null,
+            note: product.note || product.Note,
+            recommend: product.recommend || product.Recommend,
+            checked: index === 0 // 第一项默认选中
+          }
+        })
+        
+        this.setData({
+          productList,
+          currentProduct: productList[0]
+        })
+        
+        console.log('获取安卓产品列表成功', productList)
+      } else {
+        console.warn('产品列表为空')
+        wx.showToast({
+          title: '暂无产品信息',
+          icon: 'none'
+        })
+      }
+    } catch (error) {
+      console.error('获取产品列表失败:', error)
+      wx.showToast({
+        title: '加载产品列表失败',
+        icon: 'none'
       })
-      console.log('请求商品信息', productList)
-    })
-  },
-  getProductNote(index, price) {
-    if (index === 0) {
-      return `${(price / 30).toFixed(2)}元/天，可随时取消订阅`
-    } else if (index === 1) {
-      return `${(price / 90).toFixed(2)}元/天，可随时取消订阅`
-    } else if (index === 2) {
-      return `${(price / 365).toFixed(2)}元/天，可随时取消订阅`
-    } else {
-      return '可随时取消订阅'
+    } finally {
+      this.setData({ loading: false })
     }
   },
   onUnload() {
@@ -140,18 +138,60 @@ Page({
   },
   //支付 1715931589
   async onPurchase() {
-    const param = {
-      // AppId: "wx3490241c9a011b50",
-      userId: wx.getStorageSync('userId'),
-      Amount: this.data.currentProduct.price, //* 100,
-      ProductId: this.data.currentProduct.productIdentifier,
-      Description: this.data.currentProduct.description,
+    if (!this.data.currentProduct) {
+      wx.showToast({
+        title: '请先选择产品',
+        icon: 'none'
+      })
+      return
     }
-    const data = await createAppOrder(param)
-    console.log(data)
-    this.requestPayment(data)
+    
+    if (this.data.paying) {
+      return // 防止重复点击
+    }
+    
+    this.setData({ paying: true })
+    
+    try {
+      const param = {
+        // AppId: "wx3490241c9a011b50",
+        userId: wx.getStorageSync('userId'),
+        Amount: this.data.currentProduct.price, //* 100,
+        ProductId: this.data.currentProduct.productIdentifier,
+        Description: this.data.currentProduct.description,
+      }
+      
+      wx.showLoading({
+        title: '正在创建订单...',
+        mask: true
+      })
+      
+      const data = await createAppOrder(param)
+      console.log(data)
+      
+      wx.hideLoading()
+      this.requestPayment(data)
+    } catch (error) {
+      console.error('创建订单失败:', error)
+      wx.hideLoading()
+      this.setData({ paying: false })
+      wx.showToast({
+        title: error.message || '创建订单失败，请重试',
+        icon: 'none',
+        duration: 2000
+      })
+    }
   },
   requestPayment(data) {
+    if (!data || !data.prepayId) {
+      this.setData({ paying: false })
+      wx.showToast({
+        title: '订单创建失败',
+        icon: 'none'
+      })
+      return
+    }
+    
     // 假设从你的服务端接口收到了所有支付参数
     wx.miniapp.requestPayment({
       mchId: '1715931589', // 你的商户号
@@ -162,72 +202,47 @@ Page({
       sign: data.paySign, // 服务端计算好的V3签名
       success: (res) => {
         console.warn('wx.miniapp.requestPayment success:', res);
+        this.setData({ paying: false })
         wx.showModal({
           content: '支付成功',
           showCancel: false,
           confirmText: '好的',
-          success(res) {
-            if (res.confirm) {
+          success: (modalRes) => {
+            if (modalRes.confirm) {
+              // 支付成功后刷新用户信息
+              this.refreshUserInfo()
               wx.navigateBack()
             }
           }
         });
-        // 支付成功，跳转到成功页面或进行其他业务操作
       },
       fail: (res) => {
         console.error('wx.miniapp.requestPayment res:', res);
+        this.setData({ paying: false })
         // 处理失败情况
         if (res.errMsg && res.errMsg.includes('cancel')) {
           // 用户取消支付
           wx.showToast({
-            title: '用户取消支付',
+            title: '已取消支付',
             icon: 'none'
           });
         } else {
           // 处理其他错误
+          const errorMsg = res.errMsg || '支付失败'
           wx.showToast({
-            title: '支付失败',
-            icon: 'none'
+            title: errorMsg.includes('fail') ? '支付失败，请重试' : errorMsg,
+            icon: 'none',
+            duration: 2000
           });
         }
       }
     })
   },
-  getProductName(index) {
-    let productName = ''
-    switch (index) {
-      case 0:
-        productName = '小区楼号终身会员'
-        break;
-      case 1:
-        productName = '小区楼号1个月会员'
-        break;
-      case 2:
-        productName = '小区楼号3个月会员'
-        break;
-      case 3:
-        productName = '小区楼号12个月会员'
-        break;
-      default:
-        productName = '小区楼号1个月会员'
-        break;
-    }
-
-    return productName
-  },
-  //恢复购买
-  onRestore() {
-    wx.showLoading({
-      title: '恢复购买中...',
-      mask: true
-    })
-    this.applePayManager.restorePurchases().then(res => {
-      console.log('onRestore', res)
-      wx.showToast({
-        title: res.message,
-        icon: 'none'
-      })
-    })
+  
+  // 刷新用户信息
+  refreshUserInfo() {
+    // 可以在这里调用获取用户信息的接口
+    // 例如：getUserInfo()
   },
   toMP() {
     wx.miniapp.launchMiniProgram({
@@ -249,51 +264,13 @@ Page({
       url: '/pages/android/vip-renew/vip-renew',
     })
   },
-  getUserInfo() {
-    let userId = wx.getStorageSync('userId')
-    if (userId) {
-      getUserById({
-        code: '',
-        userId,
-        friendUserId: ''
-      }).then(res => {
-        if (res) {
-          wx.setStorageSync('userInfo', res)
-          wx.navigateBack()
-        }
-      })
-    }
-  },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-  onChange(e) {
-    this.setData({
-      value: e.detail.value
-    });
-  },
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh() {
-
+  async onPullDownRefresh() {
+    await this.getProductAndroidList()
+    wx.stopPullDownRefresh()
   },
 
   /**

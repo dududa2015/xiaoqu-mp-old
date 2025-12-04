@@ -189,12 +189,12 @@ Page({
           this.toVip('会员于' + userInfo.androidVipExpiredDate + '已过期，请续费')
         }
       } else {
-        const targetDate = new Date(userInfo.createdDate);
+        const targetDate = new Date(userInfo.createdDateApp);
         targetDate.setDate(targetDate.getDate() + 7);
         const currentDate = new Date();
         if (targetDate < currentDate) {
           //TODO: 去掉注释
-          // this.toVip('免费试用结束，请开启订阅')
+          this.toVip('免费试用结束，请开启订阅')
         }
       }
       // #endif

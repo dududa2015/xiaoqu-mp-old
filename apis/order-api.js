@@ -2,11 +2,15 @@ import {
   request
 } from "../utils/request"
 
-// 根据用户ID查询订单列表
+// 根据用户ID查询订单列表（支持分页）
 export const getOrdersByUserId = (params) => {
   return request({
     url: '/WechatPay/GetOrdersByUserId',
-    data: params,
+    data: {
+      ...params,
+      page: params.page || 1,
+      pageSize: params.pageSize || 10
+    },
     method: 'GET',
   })
 }
