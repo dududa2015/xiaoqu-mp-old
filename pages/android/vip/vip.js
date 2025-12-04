@@ -154,9 +154,8 @@ Page({
     
     try {
       const param = {
-        // AppId: "wx3490241c9a011b50",
         userId: wx.getStorageSync('userId'),
-        Amount: this.data.currentProduct.price, //* 100,
+        Amount: this.data.currentProduct.price * 100, //,
         ProductId: this.data.currentProduct.productIdentifier,
         Description: this.data.currentProduct.description,
       }
