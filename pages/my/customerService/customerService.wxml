@@ -1,52 +1,39 @@
 <view class="customer-service-container">
-  <!-- 头部区域 -->
-  <view class="header-section">
-    <view class="header-icon">💬</view>
-    <text class="header-title">客户服务</text>
-    <text class="header-desc">我们随时为您服务</text>
-  </view>
-
-  <!-- 主要客服入口 -->
-  <view class="main-contact-section">
+  <!-- 在线客服入口 -->
+  <view class="contact-section">
     <button 
-      class="contact-button" 
+      class="contact-button"
       openType="contact"
-      id="contact-btn"
     >
-      <view class="contact-button-content">
-        <view class="contact-icon">💬</view>
-        <text class="contact-title">联系在线客服</text>
-        <text class="contact-desc">点击进入客服对话</text>
+      <view class="contact-card">
+        <view class="card-header">
+          <view class="header-icon-wrapper">
+            <text class="header-icon">💬</text>
+          </view>
+          <view class="header-text">
+            <text class="main-title">联系在线客服</text>
+            <text class="sub-title">工作日 9:00-18:00 在线服务</text>
+          </view>
+        </view>
+        <view class="card-footer">
+          <text class="footer-text">我们会尽快回复您</text>
+          <view class="arrow-wrapper">
+            <text class="arrow-text">›</text>
+          </view>
+        </view>
       </view>
     </button>
   </view>
 
-  <!-- 服务分类 -->
-  <view class="service-section">
-    <view class="section-title">服务分类</view>
-    <view class="service-list">
-      <view 
-        class="service-item" 
-        wx:for="{{serviceItems}}" 
-        wx:key="type"
-        data-type="{{item.type}}"
-        bindtap="onServiceItemTap"
-      >
-        <view class="service-item-content">
-          <view class="service-icon">{{item.icon}}</view>
-          <view class="service-info">
-            <text class="service-title">{{item.title}}</text>
-            <text class="service-desc">{{item.desc}}</text>
-          </view>
-          <view class="service-arrow">›</view>
-        </view>
+  <!-- 服务说明 -->
+  <view class="info-section">
+    <view class="info-card">
+      <view class="info-title">💡 温馨提示</view>
+      <view class="info-list">
+        <view class="info-item">• 客服工作时间为工作日 9:00-18:00</view>
+        <view class="info-item">• 非工作时间请留言，我们会尽快回复</view>
+        <view class="info-item">• 如需查看常见问题，请前往个人中心</view>
       </view>
     </view>
-  </view>
-
-  <!-- 底部提示 -->
-  <view class="footer-tip">
-    <text class="tip-text">服务时间：7×24小时</text>
-    <text class="tip-text">我们会在第一时间回复您</text>
   </view>
 </view>

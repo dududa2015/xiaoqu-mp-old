@@ -8,12 +8,6 @@
   <view class="content">
     <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
       <!-- #if MP -->
-      <t-cell title="添加到我的小程序" hover arrow url="/pages/help/help2/help2">
-        <image src="/images/my/add-to-mp.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
-      <t-cell title="无法定位" hover arrow url="/pages/help/help3/help3">
-        <image src="/images/my/loc-help.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
       <!-- <t-cell title="无法添加到主屏幕" hover arrow url="/pages/help/help4/help4">
         <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell> -->
@@ -35,10 +29,23 @@
     </t-cell-group>
 
     <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
+      <!-- #if NATIVE -->
       <t-cell title="客户服务" hover arrow bind:tap="toCS">
         <image src="/images/my/customer-service.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
+      <!--#else-->
+      <t-cell title="使用帮助" hover arrow url="/pages/help/help/help">
+        <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
+      </t-cell>
+      <t-cell title="常见问题" hover arrow url="/pages/help/question/question">
+        <image src="/images/my/question.png" class="left-icon" mode="" slot="left-icon" />
+      </t-cell>
+      <t-cell title="客户服务" hover arrow url="/pages/my/customerService/customerService">
+        <image src="/images/my/customer-service.png" class="left-icon" mode="" slot="left-icon" />
+      </t-cell>
+      <!-- #endif -->
     </t-cell-group>
+
     <!-- #if MP -->
     <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
       <!-- <t-cell title="意见反馈" hover arrow>

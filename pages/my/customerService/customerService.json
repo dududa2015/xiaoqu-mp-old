@@ -1,6 +1,4 @@
 {
-  "usingComponents": {
-    "t-button": "tdesign-miniprogram/button/button"
-  },
+  "usingComponents": {},
   "navigationBarTitleText": "客户服务"
 }

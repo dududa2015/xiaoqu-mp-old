@@ -17,7 +17,9 @@
     "pages/admin/stats/stats",
     "pages/my/customerService/customerService",
     "pages/admin/auditNot/auditNot",
-    "pages/admin/auditApp/auditApp"
+    "pages/admin/auditApp/auditApp",
+    "pages/help/help/help",
+    "pages/help/question/question"
   ],
   "static": [
     {
