@@ -19,6 +19,7 @@ const request = (params) => {
   wx.showLoading({
     title: '正在加载',
   })
+
   return new Promise((resolve, reject) => {
     wx.request({
       url: apiUrl + url, // api url
@@ -56,13 +57,12 @@ const request = (params) => {
           })
           // #endif
           reject('')
-        } else if (res.statusCode === 500 || res.statusCode === 403) {
+        } else if (res.statusCode === 500 || res.statusCode === 403 || res.statusCode === 400) {
           wx.showModal({
-            title: res.data.title,
             content: res.data.message,
             showCancel: false
           })
-          reject('')
+          reject(res.data)
         } else {
           resolve(res.data)
         }

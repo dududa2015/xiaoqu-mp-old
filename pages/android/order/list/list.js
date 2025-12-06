@@ -4,31 +4,69 @@ import {
   isRefundable, 
   formatAmount, 
   formatTime, 
-  getStatusText, 
   getProductNameFromAttach,
-  convertOrderFromApi
+  convertOrderFromApi,
+  getStatusText
 } from '../../../../utils/order-utils.js'
 
 Page({
   data: {
+    // 展示数据（当前标签）
     orderList: [],
     loading: false,
     hasMore: true,
     page: 1,
+    currentScrollTop: 0,
     pageSize: 10,
     statusFilter: '', // 状态筛选：''-全部, '0'-待支付, '1'-已支付, '2'-已关闭, '3'-已退款, '4'-退款中, '5'-支付失败, 'refundable'-可退款
     statusOptions: [
       { label: '全部', value: '' }
     ],
-    totalCount: 0 // 当前筛选状态下的订单总数
+    totalCount: 0, // 当前筛选状态下的订单总数
+    emptyText: '',
+    emptyDesc: '',
+    // 按状态缓存
+    orderDataMap: {},
+    // 滚动位置缓存
+    scrollMap: {}
+  },
+
+  // 获取或初始化指定状态的数据
+  getOrderData(statusFilter = '') {
+    const key = statusFilter || ''
+    if (!this.data.orderDataMap[key]) {
+      this.data.orderDataMap[key] = {
+        orderList: [],
+        loading: false,
+        hasMore: true,
+        page: 1,
+        totalCount: 0,
+        emptyText: this.getEmptyText(statusFilter),
+        emptyDesc: this.getEmptyDesc(statusFilter)
+      }
+    }
+    return this.data.orderDataMap[key]
+  },
+
+  // 同步展示数据
+  updateDisplay(statusFilter = '') {
+    const data = this.getOrderData(statusFilter)
+    this.setData({
+      orderList: data.orderList,
+      loading: data.loading,
+      hasMore: data.hasMore,
+      page: data.page,
+      totalCount: data.totalCount,
+      emptyText: data.emptyText,
+      emptyDesc: data.emptyDesc,
+      currentScrollTop: this.data.scrollMap[statusFilter || ''] || 0
+    })
   },
 
   onLoad() {
     const statusFilter = this.data.statusFilter
-    this.setData({
-      emptyText: this.getEmptyText(statusFilter),
-      emptyDesc: this.getEmptyDesc(statusFilter)
-    })
+    this.getOrderData(statusFilter)
+    this.updateDisplay(statusFilter)
     this.loadOrderList(true)
   },
 
@@ -37,14 +75,25 @@ Page({
   },
 
   onReachBottom() {
-    if (this.data.hasMore && !this.data.loading) {
+    const current = this.getOrderData(this.data.statusFilter)
+    if (current.hasMore && !current.loading) {
       this.loadOrderList(false)
     }
   },
 
+  // 记录滚动位置
+  onScroll(e) {
+    const key = this.data.statusFilter || ''
+    const top = e.detail.scrollTop || 0
+    this.data.scrollMap[key] = top
+  },
+
   // 加载订单列表（使用后端分页）
   async loadOrderList(refresh = false) {
-    if (this.data.loading) {
+    const statusFilter = this.data.statusFilter
+    const currentData = this.getOrderData(statusFilter)
+
+    if (currentData.loading) {
       return
     }
 
@@ -54,15 +103,18 @@ Page({
         title: '请先登录',
         icon: 'none'
       })
-      this.setData({ loading: false })
+      this.setData({ [`orderDataMap.${statusFilter || ''}.loading`]: false })
+      this.updateDisplay(statusFilter)
       if (refresh) {
         wx.stopPullDownRefresh()
       }
       return
     }
 
-    const page = refresh ? 1 : this.data.page
-    this.setData({ loading: true })
+    const page = refresh ? 1 : currentData.page
+    this.setData({ 
+      [`orderDataMap.${statusFilter || ''}.loading`]: true 
+    })
 
     try {
       // 构建请求参数
@@ -72,8 +124,10 @@ Page({
         pageSize: this.data.pageSize
       }
 
-      // 如果后端支持状态筛选，可以在这里添加状态参数
-      // 例如：if (this.data.statusFilter) { requestParams.status = this.data.statusFilter }
+      // 后端支持状态筛选则透传（refundable 前端处理）
+      if (statusFilter && statusFilter !== 'refundable') {
+        requestParams.status = statusFilter
+      }
 
       // 调用后端分页API
       const response = await getOrdersByUserId(requestParams)
@@ -95,50 +149,13 @@ Page({
         totalCount = response.totalCount || response.total || 0
       }
 
-      // 转换后端数据格式为前端格式
-      let convertedOrders = orders.map(order => convertOrderFromApi(order))
+      // 转换后端数据格式为前端格式（完整列表用于构建筛选项）
+      const convertedOrdersAll = orders.map(order => convertOrderFromApi(order))
 
-      // 前端筛选（如果后端不支持状态筛选）
-      if (this.data.statusFilter) {
-        if (this.data.statusFilter === 'refundable') {
-          // 可退款：状态为1（已支付）且可退款
-          convertedOrders = convertedOrders.filter(order => {
-            const status = String(order.status)
-            return status === '1' && isRefundable(order)
-          })
-        } else {
-          // 根据状态码筛选
-          convertedOrders = convertedOrders.filter(order => {
-            const status = String(order.status)
-            return status === this.data.statusFilter
-          })
-        }
-      }
-
-      // 如果是刷新第一页，需要获取筛选选项（获取前100条数据用于生成筛选选项）
-      if (refresh && page === 1) {
-        const firstPageResponse = await getOrdersByUserId({
-          userId: userId,
-          page: 1,
-          pageSize: 100
-        })
-        
-        let allOrdersForFilter = []
-        if (firstPageResponse && Array.isArray(firstPageResponse)) {
-          allOrdersForFilter = firstPageResponse.map(order => convertOrderFromApi(order))
-        } else if (firstPageResponse && firstPageResponse.data && Array.isArray(firstPageResponse.data)) {
-          allOrdersForFilter = firstPageResponse.data.map(order => convertOrderFromApi(order))
-        } else if (firstPageResponse && firstPageResponse.list && Array.isArray(firstPageResponse.list)) {
-          allOrdersForFilter = firstPageResponse.list.map(order => convertOrderFromApi(order))
-        }
-        
-        this.updateStatusOptions(allOrdersForFilter)
-      }
-
-      // 处理订单数据，添加格式化字段
-      const processedList = convertedOrders.map(order => {
-        const status = String(order.status)
-        // 从 attach 中解析产品ID
+      // 基于完整列表生成处理结果（用于更新筛选项与展示）
+      const buildProcessedList = sourceOrders => sourceOrders.map(order => {
+        const status = String(order.status || '0')
+        const normalizedOrder = { ...order, status }
         let productId = ''
         try {
           const attach = order.attach
@@ -149,7 +166,6 @@ Page({
         } catch (e) {
           console.error('解析attach失败:', e)
         }
-        
         return {
           orderNo: order.outTradeNo,
           totalAmount: order.amount,
@@ -157,41 +173,98 @@ Page({
           status: status,
           createTime: order.createdDate || order.createTime,
           productName: order.description || getProductNameFromAttach(order.attach) || '会员订单',
-          refundable: isRefundable(order),
-          statusText: getStatusText({ status: status }),
+          refundable: isRefundable(normalizedOrder),
+          // 状态文案以列表状态码为准
+          statusText: getStatusText({ status }),
           amountText: formatAmount(order.amount),
           timeText: formatTime(order.createdDate || order.createTime),
-          canRefund: isRefundable(order),
-          // 保存用于支付的数据
+          canRefund: isRefundable(normalizedOrder),
           productId: productId,
           description: order.description || getProductNameFromAttach(order.attach) || '会员订单'
         }
       })
 
-      // 判断是否还有更多数据：如果返回的数据量小于pageSize，说明没有更多数据了
-      const hasMore = orders.length >= this.data.pageSize
+      // 处理订单数据（完整列表，用于筛选项和筛选操作）
+      const processedListAll = buildProcessedList(convertedOrdersAll)
 
-      const statusFilter = this.data.statusFilter
-      this.setData({
-        orderList: refresh ? processedList : this.data.orderList.concat(processedList),
+      // 根据当前筛选条件过滤（基于后端真实状态）
+      let processedSource = convertedOrdersAll
+      if (this.data.statusFilter) {
+        if (this.data.statusFilter === 'refundable') {
+          processedSource = convertedOrdersAll.filter(order => {
+            const status = String(order.status || '0')
+            return status === '1' && isRefundable(order)
+          })
+        } else {
+          processedSource = convertedOrdersAll.filter(order => {
+            const status = String(order.status || '0')
+            return status === this.data.statusFilter
+          })
+        }
+      }
+      const processedList = buildProcessedList(processedSource)
+
+      // 只有在「全部」标签下首屏刷新时，才根据完整数据更新筛选项，保证筛选数量稳定
+      if (refresh && page === 1 && !statusFilter) {
+        this.updateStatusOptions(convertedOrdersAll)
+      }
+
+      // 判断是否还有更多数据
+      // 普通状态：如果返回的数据量小于 pageSize，说明没有更多数据了
+      // 「可退款」：如果本页没有筛选出任何可退款订单，则认为当前筛选已经没有更多数据
+      let hasMore
+      if (statusFilter === 'refundable') {
+        if (processedList.length === 0) {
+          hasMore = false
+        } else {
+          hasMore = orders.length >= this.data.pageSize
+        }
+      } else {
+        hasMore = orders.length >= this.data.pageSize
+      }
+
+      const key = statusFilter || ''
+      const existing = refresh ? [] : currentData.orderList
+      const finalList = refresh ? processedList : existing.concat(processedList)
+
+      // 计算当前筛选下的总数
+      let finalTotalCount
+      if (statusFilter === 'refundable') {
+        // 可退款：只能根据前端筛选结果累加，不能用后端 totalCount（后端返回的是全部订单数）
+        finalTotalCount = refresh
+          ? processedList.length
+          : (currentData.totalCount || 0) + processedList.length
+      } else {
+        // 其他状态优先使用后端 totalCount（如果提供），否则按已加载数量累加
+        finalTotalCount = totalCount || (refresh
+          ? processedList.length
+          : (currentData.totalCount || 0) + processedList.length)
+      }
+
+      // 写回缓存
+      this.data.orderDataMap[key] = {
+        orderList: finalList,
+        loading: false,
+        hasMore,
         page: page + 1,
-        hasMore: hasMore,
-        totalCount: totalCount || (refresh ? processedList.length : this.data.totalCount + processedList.length),
+        totalCount: finalTotalCount,
         emptyText: this.getEmptyText(statusFilter),
         emptyDesc: this.getEmptyDesc(statusFilter)
-      })
+      }
 
-      this.setData({ loading: false })
+      // 同步到展示
+      this.updateDisplay(statusFilter)
+
       if (refresh) {
         wx.stopPullDownRefresh()
       }
     } catch (error) {
-      console.error('加载订单列表失败:', error)
       wx.showToast({
         title: '加载失败，请重试',
         icon: 'none'
       })
-      this.setData({ loading: false })
+      this.setData({ [`orderDataMap.${statusFilter || ''}.loading`]: false })
+      this.updateDisplay(statusFilter)
       if (refresh) {
         wx.stopPullDownRefresh()
       }
@@ -205,15 +278,18 @@ Page({
       return
     }
 
-    this.setData({
-      statusFilter: value,
-      page: 1,
-      orderList: [],
-      totalCount: 0,
-      emptyText: this.getEmptyText(value),
-      emptyDesc: this.getEmptyDesc(value)
-    })
-    this.loadOrderList(true)
+    // 确保缓存存在
+    this.getOrderData(value)
+
+    // 切换状态，先展示缓存
+    this.setData({ statusFilter: value })
+    this.updateDisplay(value)
+
+    // 未加载过则请求
+    const data = this.getOrderData(value)
+    if (data.orderList.length === 0 && !data.loading) {
+      this.loadOrderList(true)
+    }
   },
 
   // 阻止事件冒泡

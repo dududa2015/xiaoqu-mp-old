@@ -38,7 +38,8 @@ Page({
     refundTip: '', // 退款提示
     showSuccessDialog: false, // 显示成功弹窗
     successDialogTitle: '', // 成功弹窗标题
-    successDialogContent: '' // 成功弹窗内容
+    successDialogContent: '', // 成功弹窗内容
+    showDeductionHelp: false // 显示扣除费用说明弹窗
   },
 
   onLoad(options) {
@@ -54,7 +55,7 @@ Page({
 
   // 输入订单号
   onOrderNoInput(e) {
-    const value = e.detail.value || e.detail
+    const value = e.detail.value || ''
     this.setData({
       orderNo: value,
       orderInfo: null,
@@ -75,8 +76,6 @@ Page({
 
     try {
       const response = await queryOrder({ outTradeNo: orderNo })
-      
-      console.log('退款页面查询订单响应:', response)
       
       // 检查响应数据，支持多种可能的字段名
       if (response && (response.OutTradeNo || response.outTradeNo)) {
@@ -191,7 +190,6 @@ Page({
       
       this.setData({ loading: false })
     } catch (error) {
-      console.error('查询订单信息失败:', error)
       wx.showToast({
         title: '查询失败，请重试',
         icon: 'none',
@@ -255,7 +253,7 @@ Page({
 
   // 输入自定义原因
   onCustomReasonInput(e) {
-    const value = e.detail.value || e.detail
+    const value = e.detail.value || ''
     this.setData({
       customReason: value,
       refundReason: value,
@@ -507,7 +505,6 @@ Page({
         })
       }
     } catch (error) {
-      console.error('提交退款申请失败:', error)
       wx.hideLoading()
       
       let errorMessage = '提交失败，请重试'
@@ -517,11 +514,11 @@ Page({
         errorMessage = error
       }
 
-      wx.showModal({
-        title: '提交失败',
-        content: errorMessage,
-        showCancel: false
-      })
+      // wx.showModal({
+      //   title: '提交失败',
+      //   content: errorMessage,
+      //   showCancel: false
+      // })
     }
   },
 
@@ -541,6 +538,13 @@ Page({
   // 成功弹窗关闭
   onSuccessDialogClose() {
     this.setData({ showSuccessDialog: false })
+  },
+
+  // 显示/隐藏扣除费用说明提示
+  onShowDeductionHelp() {
+    this.setData({ 
+      showDeductionHelp: !this.data.showDeductionHelp 
+    })
   }
 })
 

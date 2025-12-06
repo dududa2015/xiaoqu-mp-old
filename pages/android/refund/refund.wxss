@@ -163,9 +163,40 @@ page {
   border-top: 1rpx solid #f0f0f0;
 }
 
+.deduction-note-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .deduction-note-text {
   font-size: 24rpx;
   color: #999999;
+  flex: 1;
+}
+
+.deduction-help-icon-wrapper {
+  position: relative;
+  margin-left: 12rpx;
+  flex-shrink: 0;
+}
+
+.deduction-help-icon {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  background-color: #e6f7ff;
+  border: 2rpx solid #91d5ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.help-icon-text {
+  font-size: 24rpx;
+  color: #1890ff;
+  font-weight: 600;
+  line-height: 1;
 }
 
 .summary-divider {
@@ -547,5 +578,61 @@ page {
   font-size: 28rpx;
   color: #333333;
   word-break: break-all;
+}
+
+/* 扣除费用说明提示（类似tooltip） */
+.deduction-tooltip {
+  position: absolute;
+  bottom: calc(100% + 12rpx);
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 8rpx;
+  padding: 12rpx 16rpx;
+  max-width: 500rpx;
+  min-width: 200rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+  animation: tooltip-fade-in 0.2s ease-out;
+  z-index: 1000;
+  white-space: nowrap;
+}
+
+.deduction-tooltip-text {
+  font-size: 24rpx;
+  color: #ffffff;
+  line-height: 1.5;
+  display: block;
+}
+
+.deduction-tooltip-arrow {
+  position: absolute;
+  right: 20rpx;
+  bottom: -8rpx;
+  width: 0;
+  height: 0;
+  border-left: 8rpx solid transparent;
+  border-right: 8rpx solid transparent;
+  border-top: 8rpx solid rgba(0, 0, 0, 0.85);
+}
+
+@keyframes tooltip-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* tooltip遮罩层 */
+.tooltip-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  background-color: transparent;
 }
 

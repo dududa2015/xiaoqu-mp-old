@@ -73,12 +73,34 @@ page {
   border-left: 4rpx solid #1890ff;
 }
 
+.qa-item-hot {
+  background-color: #fff7e6;
+  border-left: 4rpx solid #ff6b00;
+  box-shadow: 0 2rpx 8rpx rgba(255, 107, 0, 0.15);
+}
+
 .qa-question {
   font-size: 28rpx;
   font-weight: 600;
   color: #333333;
   margin-bottom: 12rpx;
   line-height: 1.5;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.hot-tag {
+  display: inline-block;
+  padding: 4rpx 12rpx;
+  background: linear-gradient(135deg, #ff6b00 0%, #ff8c42 100%);
+  color: #ffffff;
+  font-size: 20rpx;
+  font-weight: 600;
+  border-radius: 4rpx;
+  margin-right: 12rpx;
+  line-height: 1.2;
+  box-shadow: 0 2rpx 4rpx rgba(255, 107, 0, 0.3);
 }
 
 .qa-answer {

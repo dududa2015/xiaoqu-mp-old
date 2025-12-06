@@ -4,10 +4,9 @@
     <view class="section-title">一、注意事项</view>
     <view class="warning-list">
       <view class="warning-item">所有添加、编辑的标记需经过审核流程，审核通过后才会在地图上显示，审核期间标记状态将显示为 "审核中"；</view>
-      <view class="warning-item">公共地图中，禁止删除或修改其他用户添加的标记，仅可管理本人创建的内容；</view>
       <view class="warning-item">卫星地图、3D 楼块功能需网络支持，部分老旧设备可能无法正常显示；</view>
       <view class="warning-item">步行导航功能依赖定位服务，请确保小程序已获取手机定位权限，且定位开关已开启；</view>
-      <view class="warning-item">小程序提供 7 天免费试用期，试用期结束后需订阅方可继续使用全部功能；</view>
+      <view class="warning-item">APP提供 7 天免费试用期，试用期结束后需订阅方可继续使用全部功能；</view>
       <view class="warning-item">标记删除后无法恢复，请在删除前确认是否需要保留相关信息。</view>
     </view>
   </view>
@@ -16,13 +15,11 @@
   <view class="section">
     <view class="section-title">二、常见问题解答</view>
 
-    <view class="qa-item">
-      <view class="qa-question">1. 为什么添加的标记没有立即显示？</view>
-      <view class="qa-answer">答：添加的标记需提交审核，审核通过后才会同步至地图，审核时长根据实际情况而定，请耐心等待。</view>
-    </view>
-
-    <view class="qa-item">
-      <view class="qa-question">2. 无法定位当前位置怎么办？</view>
+    <view class="qa-item qa-item-hot">
+      <view class="qa-question">
+        <text class="hot-tag">热门</text>
+        <text>1. 小程序无法定位当前位置怎么办？</text>
+      </view>
       <view class="qa-answer">
         <view class="answer-text">答：首先检查手机定位功能是否开启，然后在手机设置中确认小程序已获取定位权限。若仍无法定位，请依次尝试以下三种解决办法：</view>
         <view class="solution-list">
@@ -40,6 +37,11 @@
           </view>
         </view>
       </view>
+    </view>
+
+    <view class="qa-item">
+      <view class="qa-question">2. 为什么添加的标记没有立即显示？</view>
+      <view class="qa-answer">答：添加的标记需提交审核，审核通过后才会同步至地图，审核时长根据实际情况而定，请耐心等待。</view>
     </view>
 
     <view class="qa-item">
@@ -61,7 +63,6 @@
   <!-- 三、反馈与支持 -->
   <view class="section">
     <view class="section-title">三、反馈与支持</view>
-    <view class="content">若在使用过程中遇到问题、有功能建议或需要技术支持，请通过小程序内 "联系我们" 入口反馈，我们将及时为您处理。</view>
-    <view class="footer-text">祝您使用愉快！</view>
+    <view class="content">若在使用过程中遇到问题、有功能建议或需要技术支持，请通过小程序内 "客户服务" 入口反馈，我们将及时为您处理。</view>
   </view>
 </view>

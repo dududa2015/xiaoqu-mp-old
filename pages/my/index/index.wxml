@@ -30,16 +30,16 @@
 
     <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
       <!-- #if NATIVE -->
-      <t-cell title="客户服务" hover arrow bind:tap="toCS">
-        <image src="/images/my/customer-service.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
-      <!--#else-->
       <t-cell title="使用帮助" hover arrow url="/pages/help/help/help">
         <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
       <t-cell title="常见问题" hover arrow url="/pages/help/question/question">
         <image src="/images/my/question.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
+      <t-cell title="客户服务" hover arrow bind:tap="toCS">
+        <image src="/images/my/customer-service.png" class="left-icon" mode="" slot="left-icon" />
+      </t-cell>      
+      <!--#else-->
       <t-cell title="客户服务" hover arrow url="/pages/my/customerService/customerService">
         <image src="/images/my/customer-service.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>

@@ -79,6 +79,8 @@
       "pages/admin/auditNot/auditNot",
       "pages/admin/auditApp/auditApp",
       "pages/my/app/ios/ios",
+      "pages/help/help/help",
+      "pages/help/question/question",
       "pages/admin/apple/apple",
       "pages/admin/stats/stats",
       "pages/android/vip/vip",

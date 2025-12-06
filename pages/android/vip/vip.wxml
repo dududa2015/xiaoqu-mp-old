@@ -12,7 +12,7 @@
         <view class="rights-wrap flex f-x-fs f-y-center">
             <view class="rights" wx:for="{{rightsList}}" wx:key="index">
                 <view class="rights-img-wrap flex f-x-center f-y-center">
-                    <image src="{{item.imgUrl}}" class="rights-img"></image>
+                    <text class="rights-icon">{{item.icon}}</text>
                 </view>
                 <view class="rights-text">{{item.name}}</view>
             </view>
@@ -51,10 +51,30 @@
     </view>
     <view class="tips" wx:if="{{currentProduct}}">
         <block wx:if="{{currentProduct.productIdentifier === 'com.louhao.xiaoqu.vip'}}">
-        温馨提醒：2026年3月起将调整为88元
+        温馨提醒：2026年3月起将调整为108元
         </block>
         <block wx:else>温馨提醒：非订阅，到期手动续费</block>
     </view>
+    
+    <!-- 退款说明 -->
+    <view class="refund-notice">
+        <view class="refund-notice-row">
+            <text class="refund-notice-text">会员订单支持7天无理由退款，按已使用天数扣除费用（每天0.3元），每个月最多退款一次</text>
+            <view class="refund-help-icon-wrapper">
+                <view class="refund-help-icon" bind:tap="onShowRefundHelp">
+                    <text class="refund-help-icon-text">?</text>
+                </view>
+                <view class="refund-tooltip" wx:if="{{showRefundHelp}}">
+                    <text class="refund-tooltip-text">按原价9元/30天计算，折合每天0.3元</text>
+                    <view class="refund-tooltip-arrow"></view>
+                </view>
+            </view>
+        </view>
+    </view>
+    
+    <!-- 遮罩层，点击关闭tooltip -->
+    <view class="tooltip-overlay" wx:if="{{showRefundHelp}}" bind:tap="onShowRefundHelp"></view>
+    
     <view class="footer">
         <button 
             type="primary" 

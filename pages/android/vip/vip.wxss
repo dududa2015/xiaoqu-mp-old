@@ -68,11 +68,14 @@ page {
   width: 54px;
   height: 54px;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.rights-img {
-  width: 36px;
-  height: 36px;
+.rights-icon {
+  font-size: 32px;
+  line-height: 1;
 }
 
 .rights-text {
@@ -270,4 +273,106 @@ page {
 .empty-desc {
   font-size: 24rpx;
   color: #999999;
+}
+
+/* 退款说明 */
+.refund-notice {
+  margin-top: 32rpx;
+  padding: 20rpx 24rpx;
+  background-color: #f8f9fa;
+  border-radius: 8rpx;
+  border-left: 4rpx solid #1890ff;
+}
+
+.refund-notice-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+}
+
+.refund-notice-text {
+  font-size: 24rpx;
+  color: #666666;
+  line-height: 1.6;
+  flex: 1;
+}
+
+.refund-help-icon-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  margin-top: 2rpx;
+}
+
+.refund-help-icon {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  background-color: #e6f7ff;
+  border: 2rpx solid #91d5ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.refund-help-icon-text {
+  font-size: 24rpx;
+  color: #1890ff;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* 退款说明提示（类似tooltip） */
+.refund-tooltip {
+  position: absolute;
+  bottom: calc(100% + 12rpx);
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 8rpx;
+  padding: 12rpx 16rpx;
+  max-width: 500rpx;
+  min-width: 200rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+  animation: tooltip-fade-in 0.2s ease-out;
+  z-index: 1000;
+  white-space: nowrap;
+}
+
+.refund-tooltip-text {
+  font-size: 24rpx;
+  color: #ffffff;
+  line-height: 1.5;
+  display: block;
+}
+
+.refund-tooltip-arrow {
+  position: absolute;
+  right: 20rpx;
+  bottom: -8rpx;
+  width: 0;
+  height: 0;
+  border-left: 8rpx solid transparent;
+  border-right: 8rpx solid transparent;
+  border-top: 8rpx solid rgba(0, 0, 0, 0.85);
+}
+
+@keyframes tooltip-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* tooltip遮罩层 */
+.tooltip-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  background-color: transparent;
 }

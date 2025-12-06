@@ -38,7 +38,18 @@
             <text class="summary-value deduction-value">-¥{{deductionAmountText}}</text>
           </view>
           <view class="deduction-note">
-            <text class="deduction-note-text">按每天0.3元扣除</text>
+            <view class="deduction-note-row">
+              <text class="deduction-note-text">按每天0.3元扣除</text>
+              <view class="deduction-help-icon-wrapper">
+                <view class="deduction-help-icon" bind:tap="onShowDeductionHelp">
+                  <text class="help-icon-text">?</text>
+                </view>
+                <view class="deduction-tooltip" wx:if="{{showDeductionHelp}}">
+                  <text class="deduction-tooltip-text">按原价9元/30天计算，折合每天0.3元</text>
+                  <view class="deduction-tooltip-arrow"></view>
+                </view>
+              </view>
+            </view>
           </view>
         </view>
         
@@ -100,7 +111,7 @@
 
       <view wx:if="{{showCustomReason}}" class="custom-reason-wrapper">
         <t-textarea 
-          placeholder="请详细说明退款原因（选填）" 
+          placeholder="请详细说明退款原因" 
           value="{{customReason}}" 
           bind:change="onCustomReasonInput" 
           bind:blur="onCustomReasonBlur"
@@ -123,6 +134,7 @@
     <view class="rule-content">
       <text class="rule-text">• 会员订单支持7天无理由退款</text>
       <text class="rule-text">• 退款将按已使用天数扣除费用（每天0.3元）</text>
+      <text class="rule-text">• 每个月最多退款一次</text>
       <text class="rule-text">• 退款将在1-3个工作日内原路退回</text>
     </view>
   </view>
@@ -170,4 +182,7 @@
       <text class="refund-success-text">{{successDialogContent}}</text>
     </view>
   </t-dialog>
+
+  <!-- 遮罩层，点击关闭tooltip -->
+  <view class="tooltip-overlay" wx:if="{{showDeductionHelp}}" bind:tap="onShowDeductionHelp"></view>
 </view>

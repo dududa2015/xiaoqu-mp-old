@@ -160,7 +160,7 @@ page {
 
 .no-more-text {
   font-size: 24rpx;
-  color: #cccccc;
+  color: #c0c0c0;
 }
 
 /* 空状态 */

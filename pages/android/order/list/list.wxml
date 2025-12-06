@@ -27,10 +27,12 @@
   <scroll-view 
     class="order-scroll" 
     scroll-y 
+    scroll-top="{{currentScrollTop}}"
     refresher-enabled="{{true}}"
     refresher-triggered="{{loading}}"
     bindrefresherrefresh="onPullDownRefresh"
     bindscrolltolower="onReachBottom"
+    bindscroll="onScroll"
   >
     <view class="order-list-content">
       <!-- 骨架屏加载 -->
@@ -89,7 +91,7 @@
       </view>
       
       <view wx:if="{{!hasMore && orderList.length > 0}}" class="no-more">
-        <t-divider>没有更多了</t-divider>
+        <t-divider content="没有更多了"></t-divider>
       </view>
     </view>
   </scroll-view>

@@ -14,25 +14,26 @@ Page({
   data: {
     rightsList: [{
       name: '免广告',
-      imgUrl: '/images/my/rights-noad.png'
+      icon: '🚫'
     }, {
       name: '个人地图',
-      imgUrl: '/images/my/rights-map.png'
+      icon: '🗺️'
     }, {
       name: '跟随导航',
-      imgUrl: '/images/my/rights-nav.png'
+      icon: '🧭'
     }, {
       name: '3D地图',
-      imgUrl: '/images/my/rights-3d.png'
+      icon: '🌐'
     }, {
       name: '定位图标',
-      imgUrl: '/images/my/rights-loc.png'
+      icon: '📍'
     }],
     currentProductIdentifier: 'com.louhao.xiaoqu.vip', //当前
     currentProduct: null,
     productList: [], //付费产品列表
     loading: false,
-    paying: false // 支付中状态
+    paying: false, // 支付中状态
+    showRefundHelp: false // 显示退款说明提示
   },
 
   /**
@@ -284,5 +285,12 @@ Page({
    */
   onShareAppMessage() {
 
+  },
+
+  // 显示/隐藏退款说明提示
+  onShowRefundHelp() {
+    this.setData({ 
+      showRefundHelp: !this.data.showRefundHelp 
+    })
   }
 })
