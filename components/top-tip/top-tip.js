@@ -22,6 +22,7 @@ Component({
     },
     ready() {
       this.showNotices()
+      this.initMpNotice()
     },
     moved() {
       // console.log('组件被移动');
@@ -35,7 +36,7 @@ Component({
    */
   data: {
     show: true, //默认显示
-    noticeList: ['苹果app已上线，欢迎下载 → '], //
+    noticeList: ['苹果App已上线，欢迎下载 → '], //
     // noticeListAppWithoutVIP: ['免费试用7天，结束后需要订阅 →'], //不是app会员时显示
     noticeListApp: [],
     content: [
@@ -63,11 +64,7 @@ Component({
       if (userInfo.isIOSVip || userInfo.isAndroidVip) {
         noticeListApp = ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
       } else {
-        // #if ANDROID
-        noticeListApp = ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
-        // #else
         noticeListApp = ['免费试用7天，结束后需要订阅 →']
-        // #endif        
       }
 
       // 2. 会员即将到期提示（7 天内，仅 Android 展示）
@@ -97,6 +94,23 @@ Component({
         noticeListApp
       })
     },
+    // 初始化小程序端（MP）顶部提示，区分 iOS / 安卓
+    initMpNotice() {
+      // #if MP
+      try {
+        const systemInfo = wx.getSystemInfoSync()
+        const model = systemInfo.model || ''
+        const platform = systemInfo.platform || ''
+        const isIphone = platform === 'ios' || model.indexOf('iPhone') > -1
+        const noticeList = isIphone
+          ? ['苹果App已上线，欢迎下载 → ']
+          : ['安卓App已上线，欢迎下载 → ']
+        this.setData({ noticeList })
+      } catch (e) {
+        // 获取系统信息失败时，保持默认文案
+      }
+      // #endif
+    },
     showNotices() {
       let currentDate = new Date();
       //当提示语被关闭时写入缓存，有效期一天
@@ -121,9 +135,21 @@ Component({
     },
     //小程序点击
     onMPNoticeClick() {
-      wx.navigateTo({
-        url: '/pages/my/app/ios/ios',
-      })
+      // #if MP
+      try {
+        const systemInfo = wx.getSystemInfoSync()
+        const model = systemInfo.model || ''
+        const platform = systemInfo.platform || ''
+        const isIphone = platform === 'ios' || model.indexOf('iPhone') > -1
+        const url = isIphone ? '/pages/my/app/ios/ios' : '/pages/my/app/android/android'
+        wx.navigateTo({ url })
+      } catch (e) {
+        // 兜底跳转到 iOS 下载页
+        wx.navigateTo({
+          url: '/pages/my/app/ios/ios',
+        })
+      }
+      // #endif
     },
     onAppNoticeClick() {
       const userInfo = wx.getStorageSync('userInfo') || {}
@@ -145,8 +171,18 @@ Component({
         return
       }
 
-      // 2. 已登录：只有“会员即将到期”（7 天内）时才跳转到会员页
-      //    其它提示点击不再跳转到会员页
+      // #if ANDROID
+      // 2.a 安卓原生：如果还不是安卓会员，直接跳转到开通会员页面
+      if (!userInfo.isAndroidVip) {
+        wx.navigateTo({
+          url: vipUrl,
+        })
+        return
+      }
+      // #endif
+
+      // 2.b 已登录：只有“会员即将到期”（7 天内）时才跳转到会员页
+      //     其它提示点击不再跳转到会员页
       // #if ANDROID
       const vipExpiredRaw = userInfo.androidVipExpiredDate
       // #else

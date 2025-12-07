@@ -21,6 +21,19 @@ Component({
         iosForceUpdate:{
           type: Boolean,
           value: false
+        },
+        androidContent: {
+            type: String,
+            value: '',
+            observer(newVal, oldVal) {
+                this.setData({
+                    contentList: newVal.replace(/;/g, '\n').replace(/；/g, '\n')
+                })
+            }
+        },
+        androidForceUpdate:{
+          type: Boolean,
+          value: false
         }
     },
 

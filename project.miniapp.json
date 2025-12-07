@@ -2,7 +2,7 @@
   "miniVersion": "v2",
   "name": "小区楼号",
   "version": "2.0.0",
-  "versionCode": 20251205,
+  "versionCode": 20251207,
   "i18nFilePath": "i18n",
   "mini-android": {
     "resourcePath": "miniapp/android/nativeResources",

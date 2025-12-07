@@ -189,9 +189,10 @@ Page({
           this.toVip('会员于' + userInfo.androidVipExpiredDate + '已过期，请续费')
         }
       } else {
-        const targetDate = new Date(userInfo.createdDateApp);
+        const targetDate = new Date(userInfo.createdDateApp || '2025-10-01');
         targetDate.setDate(targetDate.getDate() + 7);
         const currentDate = new Date();
+        console.log(targetDate, currentDate)
         if (targetDate < currentDate) {
           //TODO: 去掉注释
           this.toVip('免费试用结束，请开启订阅')
@@ -1945,11 +1946,19 @@ Page({
       that.setData({
         showVersionUpdate: needUpdate,
         iosContent: res.iosContent,
-        iosForceUpdate: res.iosForceUpdate
+        iosForceUpdate: res.iosForceUpdate,
       })
       // #elif ANDROID
       let androidVersion = res.androidVersion
-      console.log('androidandroidandroidandroid', androidVersion)
+      const appBaseInfo = wx.getAppBaseInfo();
+      let appVersion = appBaseInfo.host.appVersion //api获取到的app当前版本
+      console.log('版本号：', appVersion, androidVersion)
+      let needUpdate = this.compareVersions(appVersion, androidVersion)
+      that.setData({
+        showVersionUpdate: needUpdate,
+        androidContent: res.androidContent,
+        androidForceUpdate: res.androidForceUpdate,
+      })
 
       // #endif
     })

@@ -1,7 +1,0 @@
-{
-    "usingComponents": {
-        "t-input": "tdesign-miniprogram/input/input",
-        "t-button": "tdesign-miniprogram/button/button"
-    },
-    "navigationBarTitleText": "编辑公告通知"
-}

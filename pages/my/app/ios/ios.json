@@ -1,8 +1,6 @@
 {
     "usingComponents": {
-        "t-icon": "tdesign-miniprogram/icon/icon",
-        "t-swiper": "tdesign-miniprogram/swiper/swiper",
-        "t-swiper-nav": "tdesign-miniprogram/swiper-nav/swiper-nav"
+        "t-icon": "tdesign-miniprogram/icon/icon"
     },
     "navigationBarTitleText": "苹果 App 下载",
     "disableScroll": true

@@ -7,9 +7,9 @@
       <text class="text">
         {{contentList}}
       </text>
-      <view class="tip-text" wx:if="{{iosForceUpdate}}">请更新至最新版本继续使用</view>
+      <view class="tip-text" wx:if="{{iosForceUpdate || androidForceUpdate}}">请更新至最新版本继续使用</view>
     </view>
-    <view class="footer" wx:if="{{!iosForceUpdate}}">
+    <view class="footer" wx:if="{{!iosForceUpdate || androidForceUpdate}}">
       <view class="btn1" bind:tap="onCancel">暂不更新</view>
       <view class="btn2 magin" bind:tap="onUpdate">前往更新</view>
     </view>

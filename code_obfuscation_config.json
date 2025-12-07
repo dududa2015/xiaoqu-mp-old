@@ -79,10 +79,6 @@
 			"sub_switch": true
 		},
 		{
-			"path": "pages/my/audit/audit.js",
-			"sub_switch": true
-		},
-		{
 			"path": "pages/my/index/index.js",
 			"sub_switch": true
 		},
@@ -92,10 +88,6 @@
 		},
 		{
 			"path": "pages/my/newUser/newUser.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/my/notice/notice.js",
 			"sub_switch": true
 		},
 		{
