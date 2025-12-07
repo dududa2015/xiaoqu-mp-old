@@ -11,8 +11,7 @@ Page({
 
   loadAgreementContent() {
     // 退款协议模板内容
-    const content = `
-一、退款条件
+    const content = `一、退款条件
 1. 会员订单支持7天无理由退款
 2. 订单状态必须为"已支付"
 3. 退款申请需在订单支付成功后的7天内提交
@@ -53,4 +52,3 @@ Page({
     })
   }
 })
-

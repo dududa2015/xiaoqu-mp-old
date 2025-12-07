@@ -396,11 +396,11 @@ Page({
       interstitialAd = wx.createInterstitialAd({
         adUnitId: 'adunit-6449f8b32a1844a8'
       })
-      interstitialAd.onLoad(() => { })
+      interstitialAd.onLoad(() => {})
       interstitialAd.onError((err) => {
         console.error('插屏广告加载失败', err)
       })
-      interstitialAd.onClose(() => { })
+      interstitialAd.onClose(() => {})
     }
   },
   //显示插屏广告
@@ -796,6 +796,22 @@ Page({
       latitude,
       longitude
     } = e.detail.centerLocation;
+
+    // x.
+    if (latitude > 39.909188 - 0.01 && latitude < 39.909188 + 0.01 &&
+      longitude > 116.397478 - 0.01 && longitude < 116.397478 + 0.01) {
+      wx.showModal({
+        title: '定位失败',
+        content: '无法定位当前位置？建议前往「常见问题解答」页面查看解决方案',
+        success(res) {
+          if (res.confirm) {
+            wx.navigateTo({
+              url: '/pages/help/question/question'
+            })
+          }
+        }
+      });
+    }
 
     const {
       northeast,
