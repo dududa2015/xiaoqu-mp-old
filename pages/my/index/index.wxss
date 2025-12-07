@@ -56,6 +56,16 @@
   height: 40rpx;
 }
 
+.download-title-ios {
+  font-weight: 600;
+  color: #007AFF;
+}
+
+.download-title-android {
+  font-weight: 600;
+  color: #E85827;
+}
+
 .ad-wrap {
   margin-top: 32rpx;
   background-color: #fff;

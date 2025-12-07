@@ -16,8 +16,35 @@
                 </view>
             </view>
             <view class="desc" wx:if="{{vipExpiredDate}}">
-                <t-tag wx:if="{{showVip}}" size="small" variant="light" theme="primary">会员到期日期 {{vipExpiredDate}}</t-tag>
-                <t-tag wx:else="{{vipExpiredDate}}" size="small" variant="light" theme="warning">您的会员于{{vipExpiredDate}}过期 </t-tag>
+                <!-- 会员正常：仅展示到期日期 -->
+                <t-tag 
+                    wx:if="{{showVip && !isVipExpiringSoon}}" 
+                    size="small" 
+                    variant="light" 
+                    theme="primary"
+                >
+                    会员到期日期 {{vipExpiredDate}}
+                </t-tag>
+
+                <!-- 会员即将到期（7 天内）：黄色提示 + 剩余天数（方案 A 文案） -->
+                <t-tag 
+                    wx:elif="{{showVip && isVipExpiringSoon}}" 
+                    size="small" 
+                    variant="light" 
+                    theme="warning"
+                >
+                    会员将于 {{vipExpiredDate}} 到期（剩 {{vipDaysLeft}} 天）
+                </t-tag>
+
+                <!-- 已过期：保持原有红色提示 -->
+                <t-tag 
+                    wx:else="{{vipExpiredDate}}" 
+                    size="small" 
+                    variant="light" 
+                    theme="warning"
+                >
+                    您的会员于{{vipExpiredDate}}过期
+                </t-tag>
             </view>
         </view>
     </view>

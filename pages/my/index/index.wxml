@@ -15,12 +15,19 @@
       <t-cell title="升级会员" hover arrow url="/pages/ios/vip/vip">
         <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
-      <t-cell title="客户服务" hover arrow bind:tap="toCS">
-        <image src="/images/my/customer-service.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
       <!-- #elif ANDROID -->
       <t-cell title="升级会员" hover arrow url="/pages/android/vip/vip">
         <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
+        <!-- 会员即将到期：在说明区域增加黄色小标签（与箭头共存） -->
+        <view slot="note" wx:if="{{vipExpiringSoon}}">
+          <t-tag 
+            size="small" 
+            variant="light" 
+            theme="warning"
+          >
+            剩 {{vipDaysLeft}} 天
+          </t-tag>
+        </view>
       </t-cell>
       <t-cell title="缴费记录" hover arrow url="/pages/android/order/list/list">
         <image src="/images/my/pay.png" class="left-icon" mode="" slot="left-icon" />
@@ -55,9 +62,13 @@
       <!-- <t-cell title="去评价" hover arrow bind:tap="onEvaluate" note="五星好评激励作者">
                 <image src="/images/my/star.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell> logo-apple-->
-      <t-cell hover arrow bind:tap="onIOS" note="去下载" url="/pages/my/app/ios/ios">
-        <text slot="title" style="color: #E85827; font-weight: 600;">苹果App下载</text>
-        <image src="/images/my/download.png" class="left-icon" mode="" slot="left-icon" />
+      <t-cell hover arrow note="去下载" url="/pages/my/app/ios/ios">
+        <text slot="title" class="download-title-ios">苹果App下载</text>
+        <t-icon name="download" size="40rpx" color="#007AFF" class="left-icon" slot="left-icon" />
+      </t-cell>
+      <t-cell hover arrow note="去下载" url="/pages/my/app/android/android">
+        <text slot="title" class="download-title-android">安卓App下载</text>
+        <t-icon name="download" size="40rpx" color="#E85827" class="left-icon" slot="left-icon" />
       </t-cell>
     </t-cell-group>
     <!-- #endif -->

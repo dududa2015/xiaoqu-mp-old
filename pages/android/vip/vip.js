@@ -1,9 +1,7 @@
-import ApplePayManager from '../../../utils/apple-iap-manager2';
 import {
   createAppOrder
 } from '../../../apis/wechatpay-apis'
 import {
-  getProductList,
   getProductAndroidList
 } from '../../../apis/product-api'
 Page({
@@ -28,7 +26,6 @@ Page({
       name: '定位图标',
       icon: '📍'
     }],
-    currentProductIdentifier: 'com.louhao.xiaoqu.vip', //当前
     currentProduct: null,
     productList: [], //付费产品列表
     loading: false,
@@ -40,11 +37,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
-    //获取userId
-    const userId = wx.getStorageSync('userId')
-    // 初始化支付管理器（如果未全局挂载）
-    this.applePayManager = new ApplePayManager(userId).init();
-
     this.init()
   },
   async init() {
@@ -114,13 +106,6 @@ Page({
       })
     } finally {
       this.setData({ loading: false })
-    }
-  },
-  onUnload() {
-    // 清理资源
-    if (this.applePayManager) {
-      console.log('清理资源')
-      this.applePayManager.destroy();
     }
   },
   onVipChange(event) {

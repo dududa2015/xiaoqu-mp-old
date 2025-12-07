@@ -17,7 +17,10 @@ Page({
     friends: 0,
     isAdministator: false,
     showRank: false,
-    rankInfo: null
+    rankInfo: null,
+    // 会员到期提示相关
+    vipDaysLeft: 0,
+    vipExpiringSoon: false
   },
 
   onShow() {
@@ -35,9 +38,32 @@ Page({
         if (res) {
           wx.setStorageSync('userId', res.userId)
           wx.setStorageSync('userInfo', res)
+
+          // 计算会员到期相关信息（与 user-info-app 保持一致）
+          // #if IOS
+          const vipExpiredRaw = res.iosVipExpiredDate
+          // #else
+          const vipExpiredRaw = res.androidVipExpiredDate
+          // #endif
+
+          const now = new Date()
+          const expiredDateObj = vipExpiredRaw ? new Date(vipExpiredRaw) : null
+          let vipDaysLeft = 0
+          let vipExpiringSoon = false
+
+          if (expiredDateObj && expiredDateObj > now) {
+            const diffMs = expiredDateObj.getTime() - now.getTime()
+            vipDaysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
+            if (vipDaysLeft > 0 && vipDaysLeft <= 7) {
+              vipExpiringSoon = true
+            }
+          }
+
           this.setData({
             userInfo: res,
-            isAdministator: res.userId === '92918a62b30c' || res.userId === 'f55b972720be'
+            isAdministator: res.userId === '92918a62b30c' || res.userId === 'f55b972720be',
+            vipDaysLeft,
+            vipExpiringSoon
           })
         }
       })

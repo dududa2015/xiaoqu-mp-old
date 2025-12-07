@@ -20,12 +20,34 @@ Component({
           newVal = {}
           nickName = '点击登录'
         }        
+        // 会员到期相关
         let vipExpiredDate = ''
         // #if IOS
-        vipExpiredDate = this.formatDate(newVal.iosVipExpiredDate)
+        const vipExpiredRaw = newVal.iosVipExpiredDate
         // #else
-        vipExpiredDate = this.formatDate(newVal.androidVipExpiredDate)
+        const vipExpiredRaw = newVal.androidVipExpiredDate
         // #endif
+
+        vipExpiredDate = this.formatDate(vipExpiredRaw)
+
+        // 是否当前仍在会员有效期内
+        const now = new Date()
+        const expiredDateObj = vipExpiredRaw ? new Date(vipExpiredRaw) : null
+        const showVip = expiredDateObj && expiredDateObj > now
+
+        // 计算剩余天数（只对未过期的会员算）
+        let vipDaysLeft = 0
+        let isVipExpiringSoon = false
+        if (showVip && expiredDateObj) {
+          const diffMs = expiredDateObj.getTime() - now.getTime()
+          // 使用 Math.ceil，保证还有一点点时间也显示为 1 天
+          vipDaysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
+          // 阈值：7 天内视为“即将到期”
+          if (vipDaysLeft > 0 && vipDaysLeft <= 7) {
+            isVipExpiringSoon = true
+          }
+        }
+
         this.setData({
           nickName,
           userId,
@@ -33,8 +55,10 @@ Component({
           markers: this.convertToWan(newVal ? newVal.markers : 0),
           friends: this.convertToWan(newVal ? newVal.friends : 0),
           deleted: this.convertToWan(newVal ? newVal.deleted : 0),
-          showVip: new Date(newVal.iosVipExpiredDate) > new Date() || new Date(newVal.androidVipExpiredDate) > new Date(),
-          vipExpiredDate
+          showVip,
+          vipExpiredDate,
+          vipDaysLeft,
+          isVipExpiringSoon
         })
       }
     }

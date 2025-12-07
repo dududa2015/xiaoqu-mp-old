@@ -56,22 +56,46 @@ Component({
    */
   methods: {
     initNotice(){
-      const userInfo = wx.getStorageSync('userInfo')
+      const userInfo = wx.getStorageSync('userInfo') || {}
+
+      // 1. 基础提示内容（沿用原有逻辑）
+      let noticeListApp = []
       if (userInfo.isIOSVip || userInfo.isAndroidVip) {
-        this.setData({
-          noticeListApp: ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
-        })
+        noticeListApp = ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
       } else {
         // #if ANDROID
-        this.setData({
-          noticeListApp: ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
-        })
+        noticeListApp = ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
         // #else
-        this.setData({
-          noticeListApp: ['免费试用7天，结束后需要订阅 →']
-        })
+        noticeListApp = ['免费试用7天，结束后需要订阅 →']
         // #endif        
       }
+
+      // 2. 会员即将到期提示（7 天内，仅 Android 展示）
+      // #if ANDROID
+      const vipExpiredRaw = userInfo.androidVipExpiredDate
+      // #else
+      const vipExpiredRaw = null
+      // #endif
+
+      if (vipExpiredRaw) {
+        const now = new Date()
+        const expiredDateObj = new Date(vipExpiredRaw)
+        if (expiredDateObj > now) {
+          const diffMs = expiredDateObj.getTime() - now.getTime()
+          const vipDaysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
+          if (vipDaysLeft > 0 && vipDaysLeft <= 7) {
+            // 取日期部分（假设为 YYYY-MM-DD HH:mm:ss 或 ISO 格式）
+            const dateStr = vipExpiredRaw.toString().slice(0, 10)
+            const vipTip = `会员将于 ${dateStr} 到期（剩 ${vipDaysLeft} 天）→`
+            // 需求：如果会员快到期，只显示到期提示
+            noticeListApp = [vipTip]
+          }
+        }
+      }
+
+      this.setData({
+        noticeListApp
+      })
     },
     showNotices() {
       let currentDate = new Date();
@@ -102,16 +126,53 @@ Component({
       })
     },
     onAppNoticeClick() {
-      const userInfo = wx.getStorageSync('userInfo')
+      const userInfo = wx.getStorageSync('userInfo') || {}
+
+      // 根据平台生成登录 / 会员页面路径
+      // #if IOS
+      const loginUrl = '/pages/ios/login/login'
+      const vipUrl = '/pages/ios/vip/vip'
+      // #elif ANDROID
+      const loginUrl = '/pages/android/login/login'
+      const vipUrl = '/pages/android/vip/vip'
+      // #endif
+
+      // 1. 未登录：仍然可以引导去登录
       if (!userInfo.openId && !userInfo.appleId) {
         wx.navigateTo({
-          url: '/pages/ios/login/login',
+          url: loginUrl,
         })
-      } else if (!userInfo.isIOSVip && !userInfo.isAndroidVip) {
-        wx.navigateTo({
-          url: '/pages/ios/vip/vip',
-        })
+        return
       }
+
+      // 2. 已登录：只有“会员即将到期”（7 天内）时才跳转到会员页
+      //    其它提示点击不再跳转到会员页
+      // #if ANDROID
+      const vipExpiredRaw = userInfo.androidVipExpiredDate
+      // #else
+      const vipExpiredRaw = null
+      // #endif
+
+      let needGoVip = false
+      if (vipExpiredRaw) {
+        const now = new Date()
+        const expiredDateObj = new Date(vipExpiredRaw)
+        if (expiredDateObj > now) {
+          const diffMs = expiredDateObj.getTime() - now.getTime()
+          const vipDaysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
+          if (vipDaysLeft > 0 && vipDaysLeft <= 7) {
+            needGoVip = true
+          }
+        }
+      }
+
+      if (!needGoVip) {
+        return
+      }
+
+        wx.navigateTo({
+        url: vipUrl,
+        })
     },
     onClose() {
       this.setData({

@@ -206,7 +206,7 @@ page {
 }
 
 .agree-wrap {
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .restore {
@@ -285,16 +285,26 @@ page {
 }
 
 .refund-notice-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 12rpx;
+  /* 外层仅用于整体内边距控制，实际布局由内部行控制 */
 }
 
-.refund-notice-text {
+.refund-notice-text-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.refund-text{
   font-size: 24rpx;
   color: #666666;
-  line-height: 1.6;
-  flex: 1;
+  line-height: 1.4;
+}
+
+.refund-main-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
 }
 
 .refund-help-icon-wrapper {

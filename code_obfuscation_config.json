@@ -233,6 +233,42 @@
 		{
 			"path": "pages/android/vip/vip.js",
 			"sub_switch": true
+		},
+		{
+			"path": "pages/android/order/detail/detail.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/android/order/list/list.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/android/refund/refund.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/order-utils.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/marker-feedback-apis.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/marker-update-api.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/order-api.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/refund-api.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/wechatpay-apis.js",
+			"sub_switch": true
 		}
 	]
 }
