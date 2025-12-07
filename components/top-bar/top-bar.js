@@ -41,6 +41,11 @@ Component({
             // });
             this.triggerEvent('onShowChooseLocation')
         },
+        onCS(){
+          wx.navigateTo({
+            url: '/pages/my/customerService/customerService',
+          })
+        },
         onSetting() {
             this.triggerEvent('onSetting');
         },

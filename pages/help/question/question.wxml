@@ -56,13 +56,18 @@
 
     <view class="qa-item">
       <view class="qa-question">5. 试用期结束后，之前添加的标记会消失吗？</view>
-      <view class="qa-answer">答：不会，试用期结束后，已审核通过的标记将保留，订阅后可继续查看和管理。</view>
+      <view class="qa-answer">答：不会，APP试用期结束后，已审核通过的标记将保留，订阅后可继续查看和管理。</view>
+    </view>
+
+    <view class="qa-item">
+      <view class="qa-question">6. 怎样删除错误的标记？</view>
+      <view class="qa-answer">选中需要纠错的楼栋位置，点击弹窗里的「纠错」按钮，在弹出的表单中选择错误类型（如错误标记、重复标记等审核通过后地图即可生效。</view>
     </view>
   </view>
 
   <!-- 三、反馈与支持 -->
   <view class="section">
     <view class="section-title">三、反馈与支持</view>
-    <view class="content">若在使用过程中遇到问题、有功能建议或需要技术支持，请通过小程序内 "客户服务" 入口反馈，我们将及时为您处理。</view>
+    <view class="content">若在使用过程中遇到问题、有功能建议或需要技术支持，请通过小程序或APP内 "客户服务" 入口反馈，我们将及时为您处理。</view>
   </view>
 </view>

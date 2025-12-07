@@ -31,8 +31,6 @@ page {
   font-weight: 600;
   color: #1890ff;
   margin-bottom: 24rpx;
-  padding-left: 12rpx;
-  border-left: 6rpx solid #1890ff;
   line-height: 1.5;
 }
 
