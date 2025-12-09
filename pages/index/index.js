@@ -101,10 +101,10 @@ Page({
     this.amapSearch()
     // #if NATIVE
     this.initLocMarkerIcon()
-
     setTimeout(() => {
       this.checkVip()
-    }, 1000);
+    }, 300);
+    
     const childComp = this.selectComponent('#topTip');
     if (childComp) {
       childComp.initNotice()
@@ -155,85 +155,35 @@ Page({
     }
   },
   checkVip() {
-    //如果获取到了用户信息，用createdDate和当前时间相比，如果超过了7天，就自动跳转到vip开通页面
-    //如果没有取到用户信息，用缓存中的installDate和当前时间比较，如果超过2小时，则跳转到登录页面
-    let userInfo = wx.getStorageSync('userInfo')
+    const userInfo = wx.getStorageSync('userInfo')
     console.log('checkVip', userInfo)
-    if (userInfo) {
-      //如果ios过期时间不为空，则用过期时间和当前时间比较，
-      //如果ios过期时间为空，则用当前时间比较和用户创建时间比较，创建时间+7天小于当前时间，
-      //以上两个条件满足其一就跳转到vip开通页面
-      // #if IOS
-      if (userInfo.iosVipExpiredDate) {
-        const targetDate = new Date(userInfo.iosVipExpiredDate)
-        const currentDate = new Date();
-        if (targetDate < currentDate) {
-          this.toVip('会员在' + userInfo.iosVipExpiredDate + '已过期，请续费')
-        }
-      } else {
-        const targetDate = new Date(userInfo.createdDateApp);
-        targetDate.setDate(targetDate.getDate() + 7);
-        const currentDate = new Date();
-        if (targetDate < currentDate) {
-          this.toVip('免费试用结束，请开启订阅')
-        }
+
+    // 公共：设备是否还有有效试用期（由 app.js 写入）
+    const isDeviceTrialActive = !!wx.getStorageSync('deviceTrialIsActive')
+
+    // 设备还在试用期内，直接返回，不弹任何会员/试用提示
+    if (isDeviceTrialActive) {
+      return
+    }
+
+    // 统一取出当前平台的会员到期时间
+    let vipExpiredDate = null
+    // #if IOS
+    vipExpiredDate = userInfo && userInfo.iosVipExpiredDate
+    // #elif ANDROID
+    vipExpiredDate = userInfo && userInfo.androidVipExpiredDate
+    // #endif
+
+    if (vipExpiredDate) {
+      const targetDate = new Date(vipExpiredDate)
+      const currentDate = new Date()
+      if (targetDate < currentDate) {
+        // 已有会员但已过期
+        this.toVip('会员在' + vipExpiredDate + '已过期，请续费')
       }
-      //如果android过期时间不为空，则用过期时间和当前时间比较，
-      //如果android过期时间为空，则用当前时间比较和用户创建时间比较，创建时间+7天小于当前时间，
-      //以上两个条件满足其一就跳转到vip开通页面
-      // #elif ANDROID
-      if (userInfo.androidVipExpiredDate) {
-        const targetDate = new Date(userInfo.androidVipExpiredDate)
-        const currentDate = new Date();
-        if (targetDate < currentDate) {
-          this.toVip('会员于' + userInfo.androidVipExpiredDate + '已过期，请续费')
-        }
-      } else {
-        const targetDate = new Date(userInfo.createdDateApp || '2025-10-01');
-        targetDate.setDate(targetDate.getDate() + 7);
-        const currentDate = new Date();
-        console.log(targetDate, currentDate)
-        if (targetDate < currentDate) {
-          //TODO: 去掉注释
-          this.toVip('免费试用结束，请开启订阅')
-        }
-      }
-      // #endif
     } else {
-      // 1. 获取存储的安装日期（若未存储则为首次安装）
-      let installDate = wx.getStorageSync('installDate');
-      const now = new Date().getTime(); // 当前时间戳（毫秒）
-      const sevenDays = 7 * 24 * 60 * 60 * 1000; // 7天的毫秒数（604800000）
-
-      // 2. 首次安装时存储当前日期
-      if (!installDate) {
-        installDate = now;
-        wx.setStorageSync('installDate', installDate); // 存储安装时间戳
-      }
-
-      // 3. 判断是否超过7天
-      if (now - installDate > sevenDays) {
-        // 超过7天，提示登录
-        wx.showModal({
-          content: '请登录后继续使用',
-          confirmText: '去登录',
-          showCancel: false,
-          success: (res) => {
-            if (res.confirm) {
-              // 点击"去登录"，跳转到登录页面（根据你的项目路径修改）
-              // #if IOS
-              wx.navigateTo({
-                url: '/pages/ios/login/login',
-              })
-              // #else
-              wx.navigateTo({
-                url: '/pages/android/login/login',
-              })
-              // #endif
-            }
-          }
-        });
-      }
+      // 没有会员到期时间（未登录或从未开通过），且设备也没有有效试用 → 认为试用已结束
+      this.toVip('免费试用结束，请开启订阅')
     }
   },
   toVip(content) {
@@ -241,20 +191,19 @@ Page({
       title: '',
       content,
       showCancel: false,
-      complete: (res) => {
-        if (res.confirm) {
-          // #if IOS
-          wx.navigateTo({
-            url: '/pages/ios/vip/vip',
-          })
-          // #else
-          wx.navigateTo({
-            url: '/pages/android/vip/vip',
-          })
-          // #endif
-        }
-      }
     })
+    setTimeout(() => {
+        // #if IOS
+        wx.navigateTo({
+          url: '/pages/ios/vip/vip',
+        })
+        // #else
+        wx.navigateTo({
+          url: '/pages/android/vip/vip',
+        })
+        // #endif
+      },
+      1000);
   },
   //设置
   initStorage() {

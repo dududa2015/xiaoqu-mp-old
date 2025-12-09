@@ -43,12 +43,11 @@ Page({
     //控制显示是否显示温馨提醒
     let userInfo = wx.getStorageSync('userInfo')
     if (!userInfo || !userInfo.userId) {
-      wx.navigateTo({
+      wx.redirectTo({
         url: '/pages/android/login/login',
       })
       return
     }
-    
     // 从后端获取产品列表
     await this.getProductAndroidList()
   },
@@ -57,18 +56,20 @@ Page({
     if (this.data.loading) {
       return
     }
-    
-    this.setData({ loading: true })
-    
+
+    this.setData({
+      loading: true
+    })
+
     try {
       const res = await getProductAndroidList()
-      
+
       if (res && Array.isArray(res) && res.length > 0) {
         // 处理产品列表数据，添加 checked 字段
         let productList = res.map((product, index) => {
           const price = Number(product.price || product.Price || 0)
           const originalPrice = Number(product.originalPrice || product.OriginalPrice || 0)
-          
+
           return {
             productId: product.productId || product.ProductId,
             productIdentifier: product.productIdentifier || product.ProductIdentifier,
@@ -84,12 +85,12 @@ Page({
             checked: index === 0 // 第一项默认选中
           }
         })
-        
+
         this.setData({
           productList,
           currentProduct: productList[0]
         })
-        
+
         console.log('获取安卓产品列表成功', productList)
       } else {
         console.warn('产品列表为空')
@@ -105,7 +106,9 @@ Page({
         icon: 'none'
       })
     } finally {
-      this.setData({ loading: false })
+      this.setData({
+        loading: false
+      })
     }
   },
   onVipChange(event) {
@@ -131,13 +134,15 @@ Page({
       })
       return
     }
-    
+
     if (this.data.paying) {
       return // 防止重复点击
     }
-    
-    this.setData({ paying: true })
-    
+
+    this.setData({
+      paying: true
+    })
+
     try {
       const param = {
         userId: wx.getStorageSync('userId'),
@@ -145,21 +150,23 @@ Page({
         ProductId: this.data.currentProduct.productIdentifier,
         Description: this.data.currentProduct.description,
       }
-      
+
       wx.showLoading({
         title: '正在创建订单...',
         mask: true
       })
-      
+
       const data = await createAppOrder(param)
       console.log(data)
-      
+
       wx.hideLoading()
       this.requestPayment(data)
     } catch (error) {
       console.error('创建订单失败:', error)
       wx.hideLoading()
-      this.setData({ paying: false })
+      this.setData({
+        paying: false
+      })
       wx.showToast({
         title: error.message || '创建订单失败，请重试',
         icon: 'none',
@@ -169,14 +176,16 @@ Page({
   },
   requestPayment(data) {
     if (!data || !data.prepayId) {
-      this.setData({ paying: false })
+      this.setData({
+        paying: false
+      })
       wx.showToast({
         title: '订单创建失败',
         icon: 'none'
       })
       return
     }
-    
+
     // 假设从你的服务端接口收到了所有支付参数
     wx.miniapp.requestPayment({
       mchId: '1715931589', // 你的商户号
@@ -187,23 +196,27 @@ Page({
       sign: data.paySign, // 服务端计算好的V3签名
       success: (res) => {
         console.warn('wx.miniapp.requestPayment success:', res);
-        this.setData({ paying: false })
+        this.setData({
+          paying: false
+        })
         wx.showModal({
           content: '支付成功',
           showCancel: false,
           confirmText: '好的',
           success: (modalRes) => {
             if (modalRes.confirm) {
-              // 支付成功后刷新用户信息
-              this.refreshUserInfo()
-              wx.navigateBack()
+              wx.reLaunch({
+                url: '/pages/index/index',
+              })
             }
           }
         });
       },
       fail: (res) => {
         console.error('wx.miniapp.requestPayment res:', res);
-        this.setData({ paying: false })
+        this.setData({
+          paying: false
+        })
         // 处理失败情况
         if (res.errMsg && res.errMsg.includes('cancel')) {
           // 用户取消支付
@@ -223,7 +236,7 @@ Page({
       }
     })
   },
-  
+
   // 刷新用户信息
   refreshUserInfo() {
     // 可以在这里调用获取用户信息的接口
@@ -274,8 +287,8 @@ Page({
 
   // 显示/隐藏退款说明提示
   onShowRefundHelp() {
-    this.setData({ 
-      showRefundHelp: !this.data.showRefundHelp 
+    this.setData({
+      showRefundHelp: !this.data.showRefundHelp
     })
   }
 })

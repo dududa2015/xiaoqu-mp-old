@@ -68,7 +68,7 @@
                             <text class="refund-help-icon-text">?</text>
                         </view>
                         <view class="refund-tooltip" wx:if="{{showRefundHelp}}">
-                            <text class="refund-tooltip-text">按原价9元/30天计算，折合每天0.3元</text>
+                            <text class="refund-tooltip-text">按月度会员原价9元/30天计算，折合每天0.3元</text>
                             <view class="refund-tooltip-arrow"></view>
                         </view>
                     </view>

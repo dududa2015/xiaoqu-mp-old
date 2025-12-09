@@ -64,7 +64,7 @@ Component({
       if (userInfo.isIOSVip || userInfo.isAndroidVip) {
         noticeListApp = ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
       } else {
-        noticeListApp = ['免费试用7天，结束后需要订阅 →']
+        noticeListApp = ['免费试用3天，结束后需要订阅 →']
       }
 
       // 2. 会员即将到期提示（7 天内，仅 Android 展示）

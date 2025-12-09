@@ -219,7 +219,9 @@ Page({
         showCancel: false,
         complete: (res) => {
           if (res.confirm) {
-            wx.navigateBack()
+            wx.reLaunch({
+              url: '/pages/index/index',
+            })
           }
         }
       })

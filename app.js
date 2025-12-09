@@ -1,12 +1,14 @@
 import {
   getUserInfo,
   getAppleUserInfo,
-  addUserDeviceLog
+  addUserDeviceLog,
+  getDeviceTrial,
+  setDeviceTrial
 } from './apis/user-api'
 
 // 常量定义
 const MAX_RETRY_TIMES = 3
-const TRIAL_PERIOD_DAYS = 7
+const TRIAL_PERIOD_DAYS = 3
 
 App({
   // 全局数据
@@ -30,7 +32,6 @@ App({
     this.autoUpdate()
     this.login(options.query?.userId)
     // #else
-    this.appInit()
     this.appleLogin()
     this.getDeviceId()
     // #endif
@@ -118,6 +119,7 @@ App({
           console.log(`getDeviceId 耗时：${end - start}ms`);
           // ios plugin 20C13C69-B33C-4641-8074-C2F438A28430
           that.addUserDeviceLog()
+          that.initDeviceTrial(deviceId)
         },
         fail(err) {
           console.log('启动getDeviceId插件失败')
@@ -128,6 +130,7 @@ App({
       })
     } else {
       this.addUserDeviceLog(deviceId)
+      this.initDeviceTrial(deviceId)
     }
   },
   //添加deviceId日志
@@ -145,12 +148,46 @@ App({
     }
   },
 
-  // 应用初始化
-  appInit() {
-    if (!wx.getStorageSync('installDate')) {
-      wx.setStorageSync('installDate', Date.now())
+  // 初始化设备试用期：仅针对 Android，一机一次 7 天试用
+  async initDeviceTrial(deviceId) {
+    if (!deviceId) return
+
+    try {
+      // 1. 查询当前设备是否已有试用记录
+      const res = await getDeviceTrial({ deviceId })
+      if (res) {
+        // 把试用信息和是否在有效期内写入缓存，供前端判断
+        wx.setStorageSync('deviceTrial', res.data || null)
+        wx.setStorageSync('deviceTrialIsActive', !!res.isActive)
+        if (res.hasRecord) {
+          // 已经创建过试用记录（无论是否过期），不再自动创建新的
+          console.log('device trial exists:', res)
+          return
+        }
+      }
+
+      // 2. 没有记录时，为该设备自动创建一次 7 天试用
+      const now = new Date()
+      const trialStart = now.toISOString()
+      const trialEnd = new Date(now.getTime() + TRIAL_PERIOD_DAYS * 24 * 60 * 60 * 1000).toISOString()
+
+      await setDeviceTrial({
+        deviceId,
+        trialStart,
+        trialEnd
+      })
+      console.log('device trial created:', deviceId, trialStart, trialEnd)
+
+      // 再查一次，更新本地缓存
+      const saved = await getDeviceTrial({ deviceId })
+      if (saved) {
+        wx.setStorageSync('deviceTrial', saved.data || null)
+        wx.setStorageSync('deviceTrialIsActive', !!saved.isActive)
+      }
+    } catch (error) {
+      console.error('initDeviceTrial error:', error)
+      // 出错时不影响正常使用，只是不再自动开试用
     }
-    console.log('安装日期:', new Date(wx.getStorageSync('installDate')))
   },
 
   // 自动更新
