@@ -1,8 +1,0 @@
-{
-    "usingComponents": {
-        "t-col": "tdesign-miniprogram/col/col",
-        "t-row": "tdesign-miniprogram/row/row"
-    },
-    "navigationBarTitleText": "app统计",
-    "enablePullDownRefresh": true
-}
