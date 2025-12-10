@@ -47,16 +47,11 @@ Component({
       // '管理员免看广告删除违规和错误的标记',
     ],
   },
-  lifetimes: {
-    attached() {
-      
-    }
-  },
   /**
    * 组件的方法列表
    */
   methods: {
-    initNotice(){
+    initNotice() {
       const userInfo = wx.getStorageSync('userInfo') || {}
 
       // 1. 基础提示内容（沿用原有逻辑）
@@ -104,7 +99,7 @@ Component({
         const isIphone = platform === 'ios' || model.indexOf('iPhone') > -1
         const noticeList = isIphone
           ? ['苹果App已上线，欢迎下载 → ']
-          : ['安卓App已上线，欢迎下载 → ']
+          : ['安卓🤖App已上线，欢迎下载 → ']
         this.setData({ noticeList })
       } catch (e) {
         // 获取系统信息失败时，保持默认文案
@@ -206,9 +201,9 @@ Component({
         return
       }
 
-        wx.navigateTo({
+      wx.navigateTo({
         url: vipUrl,
-        })
+      })
     },
     onClose() {
       this.setData({

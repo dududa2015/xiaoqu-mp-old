@@ -104,7 +104,7 @@ Page({
     setTimeout(() => {
       this.checkVip()
     }, 300);
-    
+
     const childComp = this.selectComponent('#topTip');
     if (childComp) {
       childComp.initNotice()
@@ -133,26 +133,41 @@ Page({
   },
   //显示app下载提示框
   showAppNotice() {
-    const systemInfo = wx.getSystemInfoSync();
-    console.log(systemInfo)
-    const isIphone = systemInfo.platform === 'ios' || systemInfo.model.includes('iPhone');
-    if (isIphone && !wx.getStorageSync('showAppNotice') && new Date() > new Date(2025, 5, 9)) {
-      wx.showModal({
-        title: '苹果App下载',
-        content: '同款App已在App Store上架，立即下载体验更佳？',
-        confirmText: '立即下载',
-        cancelText: '暂不需要',
-        cancelColor: '#808080',
-        complete: (res) => {
-          wx.setStorageSync('showAppNotice', true)
-          if (res.confirm) {
-            wx.navigateTo({
-              url: '/pages/my/app/ios/ios',
-            })
-          }
-        }
-      })
+    // 如果已经显示过，不再显示
+    if (wx.getStorageSync('showAppNotice')) {
+      return
     }
+
+    const systemInfo = wx.getSystemInfoSync()
+    const isIOS = systemInfo.platform === 'ios' || (systemInfo.model && systemInfo.model.includes('iPhone'))
+
+    const config = isIOS ? {
+      title: '苹果App下载',
+      content: '苹果App已在App Store上架，欢迎下载体验',
+      url: '/pages/my/app/ios/ios'
+    } : {
+        title: '安卓App下载',
+        content: '安卓🤖App已在腾讯应用宝上架，欢迎下载体验',
+        url: '/pages/my/app/android/android'
+      }
+
+    wx.showModal({
+      title: config.title,
+      content: config.content,
+      confirmText: '立即下载',
+      cancelText: '不再提示',
+      cancelColor: '#808080',
+      success: (res) => {
+        // 无论用户选择什么，都标记为已显示，避免重复打扰
+        wx.setStorageSync('showAppNotice', true)
+
+        if (res.confirm) {
+          wx.navigateTo({
+            url: config.url,
+          })
+        }
+      }
+    })
   },
   checkVip() {
     const userInfo = wx.getStorageSync('userInfo')
@@ -193,16 +208,16 @@ Page({
       showCancel: false,
     })
     setTimeout(() => {
-        // #if IOS
-        wx.navigateTo({
-          url: '/pages/ios/vip/vip',
-        })
-        // #else
-        wx.navigateTo({
-          url: '/pages/android/vip/vip',
-        })
-        // #endif
-      },
+      // #if IOS
+      wx.navigateTo({
+        url: '/pages/ios/vip/vip',
+      })
+      // #else
+      wx.navigateTo({
+        url: '/pages/android/vip/vip',
+      })
+      // #endif
+    },
       1000);
   },
   //设置
@@ -346,11 +361,11 @@ Page({
       interstitialAd = wx.createInterstitialAd({
         adUnitId: 'adunit-6449f8b32a1844a8'
       })
-      interstitialAd.onLoad(() => {})
+      interstitialAd.onLoad(() => { })
       interstitialAd.onError((err) => {
         console.error('插屏广告加载失败', err)
       })
-      interstitialAd.onClose(() => {})
+      interstitialAd.onClose(() => { })
     }
   },
   //显示插屏广告
