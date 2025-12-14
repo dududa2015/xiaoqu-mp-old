@@ -39,16 +39,20 @@ let interstitialAd = null
 Page({
   data: {
     mapName: '', //地图名称
+    currentCommunityId: '',
     // isSetLocMarkerIcon: false, //是否设置了定位点图标
     rect: {},
     tips: '', //顶部的提示语
     position: 'right', //地图控件的展示位置，左和右
+    showSettingRedDot: true, //设置入口红点
     enableRotate: false, //是否开启旋转
     isVip: false, //是否vip
     scale: 17,
     rotate: 0,
     skew: 0, //倾斜角度，范围 0 ~ 40 , 关于 z 轴的倾角
     enable3D: false,
+    showCommunityDetail: false, //是否显示小区边界和出入口
+    showCommunityDetailRedDot: true,
     topAddress: '搜索附近小区',
     showAddress: false,
     latitude: 39.909188, //当前位置116.397478,39.909188
@@ -86,6 +90,8 @@ Page({
     setTimeout(() => {
       //初始化激励视频广告
       this.initAd()
+    }, 1000);
+    setTimeout(() => {      
       //显示插屏广告
       this.showCPAd()
     }, 15000);
@@ -229,6 +235,9 @@ Page({
     const enableSatellite = wx.getStorageSync('enableSatellite')
     const enable3D = wx.getStorageSync('enable3D')
     const enableScreenOn = wx.getStorageSync('enableScreenOn')
+    const showCommunityDetail = wx.getStorageSync('showCommunityDetail')
+    const showSettingRedDot = wx.getStorageSync('showSettingRedDot')
+    const showCommunityDetailRedDot = wx.getStorageSync('showCommunityDetailRedDot')
 
     if (position) {
       this.setData({
@@ -251,6 +260,21 @@ Page({
         skew: enable3D ? 20 : 0
       })
     }
+    if (typeof showCommunityDetail === 'boolean') {
+      this.setData({
+        showCommunityDetail
+      })
+    } else {
+      this.setData({
+        showCommunityDetail: false
+      })
+    }
+    this.setData({
+      showSettingRedDot: typeof showSettingRedDot === 'boolean' ? showSettingRedDot : true
+    })
+    this.setData({
+      showCommunityDetailRedDot: typeof showCommunityDetailRedDot === 'boolean' ? showCommunityDetailRedDot : true
+    })
 
     wx.setKeepScreenOn({
       keepScreenOn: !!enableScreenOn
@@ -349,8 +373,28 @@ Page({
         console.error('激励视频光告加载失败', err)
       })
       videoAd.onClose((res) => {
-        if (res && res.isEnded || res === undefined) {
-          this.onDelete()
+        const finished = (res && res.isEnded) || res === undefined
+        wx.hideLoading()
+        if (finished) {
+          const expireAt = Date.now() + 24 * 60 * 60 * 1000
+          wx.setStorageSync('communityDetailExpireAt', expireAt)
+          this.enableCommunityDetail()
+        } else {
+          // 放弃观看时，强制重置开关状态
+          this.setData({
+            showCommunityDetail: false
+          })
+          const mapSetting = this.selectComponent('#mapSetting')
+          if (mapSetting) {
+            mapSetting.setData({
+              showCommunityDetail: false
+            })
+          }
+          wx.showToast({
+            title: '需完成观看才能开启',
+            icon: 'none'
+          })
+          this.disableCommunityDetail()
         }
       })
     }
@@ -590,7 +634,16 @@ Page({
     }
     //如果为888开头，说明是小区的标记
     if (markerId.toString().startsWith('888')) {
-      this.getCommunityFullDetail(markerId.toString())
+      const communityId = markerId.toString()
+      this.setData({
+        currentCommunityId: communityId
+      })
+      if (!this.data.showCommunityDetail) {
+        this.clearCommunityDetail()
+        return
+      }
+      this.clearCommunityDetail()
+      this.getCommunityFullDetail(communityId)
       return
     }
     //如果为999开头，说明是小区门的标记，不查询详情
@@ -619,6 +672,13 @@ Page({
   },
   //根据id获取小区详情
   getCommunityFullDetail(id) {
+    this.setData({
+      currentCommunityId: id
+    })
+    if (!this.data.showCommunityDetail) {
+      return
+    }
+    this.clearCommunityDetail()
     getCommunityFullDetail({
       id
     }).then(res => {
@@ -825,6 +885,14 @@ Page({
       showGrid: true
     })
   },
+  // 清理小区边界和出入口
+  clearCommunityDetail() {
+    const markers = (this.data.markers || []).filter(item => !String(item.id).startsWith('999'))
+    this.setData({
+      polygons: [],
+      markers
+    })
+  },
   //关闭所有
   resetMap() {
     this.resetMarker()
@@ -888,55 +956,7 @@ Page({
     wx.setStorageSync('videoType', 1)
     this.selectedMarker = event.detail
     const that = this
-    let userInfo = wx.getStorageSync('userInfo')
-    //如果可以编辑，说明是自己的标记，那么就能删除
-    //vip也可以直接删除
     // #if MP
-    if (this.selectedMarker.userId === userInfo.userId || userInfo.isAdmin) {
-      wx.showModal({
-        title: '温馨提示',
-        content: '确认要删除吗？',
-        success(res) {
-          if (res.confirm) {
-            that.onDelete()
-          }
-        }
-      })
-    } else {
-      wx.showModal({
-        title: '温馨提示',
-        content: '删除他人的标记需看视频',
-        success(res) {
-          if (res.confirm) {
-            // 用户触发广告后，显示激励视频广告
-            if (videoAd) {
-              videoAd.show().catch(() => {
-                // 失败重试
-                videoAd.load()
-                  .then(() => videoAd.show())
-                  .catch(err => {
-                    console.error('激励视频 广告显示失败', err)
-                  })
-              })
-            }
-          }
-        }
-      })
-    }
-    // #else
-    // // 个人地图才能删除
-    // let mapType = wx.getStorageSync('mapType')
-    // if (mapType === 2) {
-    //     wx.showModal({
-    //         title: '温馨提示',
-    //         content: '确认要删除吗？',
-    //         success(res) {
-    //             if (res.confirm) {
-    //                 that.onDelete()
-    //             }
-    //         }
-    //     })
-    // }
     wx.showModal({
       title: '温馨提示',
       content: '确认要删除吗？',
@@ -1030,6 +1050,9 @@ Page({
   },
   //获取周围的小区
   getAroundCommunityList(lat, lng) {
+    if (!this.data.showCommunityDetail) {
+      return
+    }
     getAroundCommunityList({
       lng,
       lat
@@ -1051,12 +1074,19 @@ Page({
         //每次只显示一个小区的边界和出入口
         let markers = this.data.markers
         if (Array.isArray(markers) && markers.length > 0) {
-          markers = markers.filter(item => !String(item.id).startsWith('888'))
-          this.setData({
-            markers
-          })
+          markers = markers.filter(item => !String(item.id).startsWith('888') && !String(item.id).startsWith('999'))
+        } else {
+          markers = []
         }
-        this.getCommunityFullDetail(poiList[0].xId.toString())
+        const communityId = poiList[0].xId.toString()
+        this.setData({
+          markers,
+          polygons: [],
+          currentCommunityId: communityId
+        })
+        if (this.data.showCommunityDetail) {
+          this.getCommunityFullDetail(communityId)
+        }
         this.addAroundList2Map(poiList)
       }, 1);
     })
@@ -1742,6 +1772,10 @@ Page({
   onSetting() {
     this.disableMapTap()
     this.setData({
+      showSettingRedDot: false
+    })
+    wx.setStorageSync('showSettingRedDot', false)
+    this.setData({
       showSetting: true,
       showNoAd: false,
       showMap: false,
@@ -1807,6 +1841,135 @@ Page({
     this.setData({
       enable3D: event.detail,
       skew: event.detail ? 20 : 0
+    })
+  },
+  // 公共：更新小区边界红点状态，并同步组件
+  updateCommunityDetailRedDot(show) {
+    this.setData({
+      showCommunityDetailRedDot: show
+    })
+    wx.setStorageSync('showCommunityDetailRedDot', show)
+    const mapSetting = this.selectComponent('#mapSetting')
+    if (mapSetting) {
+      mapSetting.setData({
+        showCommunityDetailRedDot: show
+      })
+    }
+  },
+  // 公共：开启显示小区边界
+  enableCommunityDetail() {
+    this.setData({
+      showCommunityDetail: true
+    })
+    wx.setStorageSync('showCommunityDetail', true)
+    const mapSetting = this.selectComponent('#mapSetting')
+    if (mapSetting) {
+      mapSetting.setData({
+        showCommunityDetail: true
+      })
+    }
+    if (this.data.currentCommunityId) {
+      this.getCommunityFullDetail(this.data.currentCommunityId)
+    }
+  },
+  // 公共：关闭显示小区边界
+  disableCommunityDetail() {
+    this.setData({
+      showCommunityDetail: false
+    })
+    wx.setStorageSync('showCommunityDetail', false)
+    const mapSetting = this.selectComponent('#mapSetting')
+    if (mapSetting) {
+      mapSetting.setData({
+        showCommunityDetail: false
+      })
+    }
+    this.clearCommunityDetail()
+  },
+  // 激励视频：显示小区边界
+  showCommunityDetailAd() {
+    if (!wx.createRewardedVideoAd || !videoAd) {
+      wx.showToast({
+        title: '广告未就绪，请稍后再试',
+        icon: 'none'
+      })
+      this.disableCommunityDetail()
+      return
+    }
+    wx.showLoading({
+      title: '加载广告，请稍候',
+      mask: true
+    })
+    videoAd.show().then(() => {
+      wx.hideLoading()
+    }).catch(() => {
+      videoAd.load().then(() => {
+        return videoAd.show().then(() => {
+          wx.hideLoading()
+        })
+      }).catch(err => {
+        wx.hideLoading()
+        console.error('小区边界广告展示失败', err)
+        wx.showToast({
+          title: '广告暂不可用，请稍后再试',
+          icon: 'none'
+        })
+        this.disableCommunityDetail()
+      })
+    })
+  },
+  //显示小区边界和出入口，事件来自设置页面
+  onCommunityDetailChange(event) {
+    const targetChecked = event.detail
+    if (!targetChecked) {
+      this.disableCommunityDetail()
+      return
+    }
+    // 有效期内直接开启，不弹广告
+    const expireAt = wx.getStorageSync('communityDetailExpireAt') || 0
+    if (Date.now() < expireAt) {
+      this.updateCommunityDetailRedDot(false)
+      this.enableCommunityDetail()
+      wx.showToast({
+        title: '已开启，24小时内无需重复观看',
+        icon: 'none'
+      })
+      return
+    }
+    wx.showModal({
+      title: '提示',
+      content: '观看广告后可显示小区边界和出入口，24小时内无需重复观看',
+      success: (res) => {
+        if (!res.confirm) {
+          // 恢复开关为关闭，不动红点
+          this.setData({
+            showCommunityDetail: false
+          })
+          const mapSetting = this.selectComponent('#mapSetting')
+          if (mapSetting) {
+            mapSetting.setData({
+              showCommunityDetail: false
+            })
+          }
+          this.disableCommunityDetail()
+          return
+        }
+        // 确认后清红点
+        this.updateCommunityDetailRedDot(false)
+        this.showCommunityDetailAd()
+      },
+      fail: () => {
+        this.setData({
+          showCommunityDetail: false
+        })
+        const mapSetting = this.selectComponent('#mapSetting')
+        if (mapSetting) {
+          mapSetting.setData({
+            showCommunityDetail: false
+          })
+        }
+        this.disableCommunityDetail()
+      }
     })
   },
   //添加，从marker-add-grid组件的点击事件

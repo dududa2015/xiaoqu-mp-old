@@ -13,6 +13,10 @@ Component({
         position: {
             type: String,
             value: 'right'
+        },
+        showSettingRedDot: {
+            type: Boolean,
+            value: false
         }
     },
 

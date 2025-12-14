@@ -42,6 +42,16 @@
     height: 44rpx;
     z-index: 0;
 }
+.red-dot {
+    position: absolute;
+    top: 6rpx;
+    right: 10rpx;
+    width: 14rpx;
+    height: 14rpx;
+    border-radius: 50%;
+    background: #ff2d55;
+    z-index: 2;
+}
 
 .text {
     font-size: 20rpx;

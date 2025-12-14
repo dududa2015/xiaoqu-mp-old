@@ -25,6 +25,8 @@ Component({
         checkedIndex: 0,
         isShowBorder: false,
         count: 0,
+        showCommunityDetail: false,
+        showCommunityDetailRedDot: true,
         locIconList: [{
             url: '/images/loc-marker/0.png',
         }, {
@@ -53,6 +55,10 @@ Component({
             const enableSatellite = wx.getStorageSync('enableSatellite')
             //开启3d楼块
             const enable3D = wx.getStorageSync('enable3D')
+            //显示小区边界和出入口
+            const showCommunityDetail = wx.getStorageSync('showCommunityDetail')
+            //显示小区边界和出入口红点
+            const showCommunityDetailRedDot = wx.getStorageSync('showCommunityDetailRedDot')
             this.setData({
                 position: position ? position : 'right',
                 markerShape: markerShape ? markerShape : 'label'
@@ -73,6 +79,18 @@ Component({
                     enable3D
                 })
             }
+            if (typeof showCommunityDetail === 'boolean') {
+                this.setData({
+                    showCommunityDetail
+                })
+            } else {
+                this.setData({
+                    showCommunityDetail: false
+                })
+            }
+            this.setData({
+                showCommunityDetailRedDot: typeof showCommunityDetailRedDot === 'boolean' ? showCommunityDetailRedDot : true
+            })
         },
         onClose() {
             this.triggerEvent('onSettingClose')
@@ -165,6 +183,15 @@ Component({
                     markerShape: 'label'
                 });
             }
+        },
+        //显示小区边界和出入口
+        onCommunityDetailChange(e) {
+            const value = e.detail.value
+            this.setData({
+                showCommunityDetail: value,
+                showCommunityDetailRedDot: false
+            })
+            this.triggerEvent('onCommunityDetailChange', value)
         },
         showDialog(e) {
             const {

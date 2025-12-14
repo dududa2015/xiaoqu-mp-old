@@ -41,6 +41,16 @@
                 </t-radio-group>
             </view>
         </view>
+        <!-- #if MP -->
+        <view class="row flex f-x-sb">
+            <view class="row-title">显示小区边界和出入口
+                <view class="red-dot" wx:if="{{showCommunityDetailRedDot}}"></view>
+            </view>
+            <view class="row-title">
+                <t-switch value="{{showCommunityDetail}}" slot="note" size="small" bind:change="onCommunityDetailChange" />
+            </view>
+        </view>
+        <!-- #endif -->
         <view class="row flex f-x-sb">
             <view class="row-title">开启旋转</view>
             <view class="row-title">

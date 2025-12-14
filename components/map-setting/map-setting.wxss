@@ -89,6 +89,7 @@
     color: #333;
     font-size: 28rpx;
     font-weight: 400;
+    position: relative;
 }
 
 .row-icon {
@@ -149,4 +150,13 @@
 
 .border-hidden {
     border: 1px solid transparent;
+}
+.red-dot {
+    position: absolute;
+    top: -4rpx;
+    right: -18rpx;
+    width: 14rpx;
+    height: 14rpx;
+    border-radius: 50%;
+    background: #ff2d55;
 }

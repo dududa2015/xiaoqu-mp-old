@@ -98,6 +98,7 @@
           <view class="feature-item">标记形状：选择标记显示形式，"气泡"（圆形 / 椭圆形气泡）或 "标签"（文本直接贴合地图）；</view>
           <view class="feature-item">地图旋转：开启后，可通过双指旋转或手机陀螺仪调整地图视角（适合 3D 查看）；</view>
           <view class="feature-item">3D 楼块：开启后将展示建筑物三维立体模型（需卫星地图或高精度地图支持）。</view>
+          <view class="feature-item">显示小区边界和出入口：首次开启需观看一次广告，24 小时内再次开启无需重复观看。</view>
         </view>
       </view>
 
