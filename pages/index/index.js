@@ -85,10 +85,11 @@ Page({
     this.initStorage()
     //插屏广告
     // #if MP
-    this.initCPAd()
+    
     this.showAppNotice()
     setTimeout(() => {
-      //初始化激励视频广告
+      //初始化插屏和激励视频广告
+      this.initCPAd()
       this.initAd()
     }, 1000);
     setTimeout(() => {      
@@ -102,6 +103,9 @@ Page({
     this.setLocMarkerIcon()
     this.getMarkerListUpdate()
     // #endif
+    
+    // 检查小区边界功能是否过期
+    this.checkCommunityDetailExpired()
   },
   onShow() {
     this.amapSearch()
@@ -116,6 +120,9 @@ Page({
       childComp.initNotice()
     }
     // #endif
+    
+    // 检查小区边界功能是否过期
+    this.checkCommunityDetailExpired()
   },
   //用于处理搜索结果
   amapSearch() {
@@ -174,6 +181,18 @@ Page({
         }
       }
     })
+  },
+  //检查小区边界功能是否过期
+  checkCommunityDetailExpired() {
+    const expireAt = wx.getStorageSync('communityDetailExpireAt') || 0
+    const showCommunityDetail = wx.getStorageSync('showCommunityDetail') || false
+    
+    // 如果功能已开启且已过期，则关闭功能
+    if (showCommunityDetail && Date.now() >= expireAt) {
+      this.disableCommunityDetail()
+      // 更新红点状态，提示用户需要重新观看广告
+      this.updateCommunityDetailRedDot(true)
+    }
   },
   checkVip() {
     const userInfo = wx.getStorageSync('userInfo')
@@ -269,9 +288,15 @@ Page({
         showCommunityDetail: false
       })
     }
+    // #if MP
     this.setData({
       showSettingRedDot: typeof showSettingRedDot === 'boolean' ? showSettingRedDot : true
     })
+    // #else
+    this.setData({
+      showSettingRedDot: false
+    })
+    // #endif
     this.setData({
       showCommunityDetailRedDot: typeof showCommunityDetailRedDot === 'boolean' ? showCommunityDetailRedDot : true
     })
@@ -376,7 +401,7 @@ Page({
         const finished = (res && res.isEnded) || res === undefined
         wx.hideLoading()
         if (finished) {
-          const expireAt = Date.now() + 24 * 60 * 60 * 1000
+          const expireAt = Date.now() + 24 * 3 * 60 * 60 * 1000
           wx.setStorageSync('communityDetailExpireAt', expireAt)
           this.enableCommunityDetail()
         } else {
@@ -405,7 +430,9 @@ Page({
       interstitialAd = wx.createInterstitialAd({
         adUnitId: 'adunit-6449f8b32a1844a8'
       })
-      interstitialAd.onLoad(() => { })
+      interstitialAd.onLoad(() => { 
+        console.log('插屏广告加载成功')
+      })
       interstitialAd.onError((err) => {
         console.error('插屏广告加载失败', err)
       })
@@ -1931,14 +1958,14 @@ Page({
       this.updateCommunityDetailRedDot(false)
       this.enableCommunityDetail()
       wx.showToast({
-        title: '已开启，24小时内无需重复观看',
+        title: '已开启，72小时内无需重复观看',
         icon: 'none'
       })
       return
     }
     wx.showModal({
       title: '提示',
-      content: '观看广告后可显示小区边界和出入口，24小时内无需重复观看',
+      content: '观看广告后可显示小区边界和出入口72小时内无需重复观看',
       success: (res) => {
         if (!res.confirm) {
           // 恢复开关为关闭，不动红点

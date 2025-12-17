@@ -6,7 +6,7 @@
   <!-- #endif -->
 
   <view class="content">
-    <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
+    <t-cell-group style="border-radius: 24rpx; overflow: hidden;">
       <!-- #if MP -->
       <!-- <t-cell title="无法添加到主屏幕" hover arrow url="/pages/help/help4/help4">
         <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
@@ -62,11 +62,11 @@
       <!-- <t-cell title="去评价" hover arrow bind:tap="onEvaluate" note="五星好评激励作者">
                 <image src="/images/my/star.png" class="left-icon" mode="" slot="left-icon" />
             </t-cell> logo-apple-->
-      <t-cell hover arrow note="去下载" url="/pages/my/app/ios/ios">
+      <t-cell hover arrow url="/pages/my/app/ios/ios">
         <text slot="title" class="download-title-ios">苹果App下载</text>
         <t-icon name="download" size="40rpx" color="#007AFF" class="left-icon" slot="left-icon" />
       </t-cell>
-      <t-cell hover arrow note="去下载" url="/pages/my/app/android/android">
+      <t-cell hover arrow url="/pages/my/app/android/android">
         <text slot="title" class="download-title-android">安卓App下载</text>
         <t-icon name="download" size="40rpx" color="#E85827" class="left-icon" slot="left-icon" />
       </t-cell>
