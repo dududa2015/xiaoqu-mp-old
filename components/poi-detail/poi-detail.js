@@ -315,6 +315,12 @@ Component({
     },
     onFeedback(){
       this.triggerEvent('onFeedback', this.poiInfo)
+    },
+    onClose() {
+      this.setData({
+        showPOI: false
+      })
+      this.triggerEvent('onClose')
     }
   }
 })

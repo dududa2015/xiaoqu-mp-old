@@ -1584,6 +1584,14 @@ Page({
       polyline
     })
   },
+  onClosePoi() {
+    this.showTabBar()
+    this.setData({
+      showPOI: false,
+      showAdd: true,
+      showLocation: true
+    })
+  },
   moveToCenter(event) {
     const {
       latitude,

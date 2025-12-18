@@ -5,6 +5,29 @@
   background-color: #fff;
 }
 
+.poi-close {
+  position: absolute;
+  top: 12rpx;
+  right: 0;
+  padding: 12rpx;
+  width: 48rpx;
+  height: 48rpx;
+  background: transparent;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  transition: transform 0.1s ease;
+}
+
+.poi-close:active {
+  transform: scale(0.95);
+  box-shadow: none;
+  background: transparent;
+}
+
 .poi-title-text {
   line-height: 60rpx;
   height: 60rpx;
