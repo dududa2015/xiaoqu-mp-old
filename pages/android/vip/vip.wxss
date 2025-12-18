@@ -278,7 +278,7 @@ page {
 /* 退款说明 */
 .refund-notice {
   margin-top: 32rpx;
-  padding: 20rpx 24rpx;
+  padding: 16rpx 20rpx;
   background-color: #f8f9fa;
   border-radius: 8rpx;
   border-left: 4rpx solid #1890ff;
@@ -296,9 +296,10 @@ page {
 }
 
 .refund-text{
-  font-size: 24rpx;
+  font-size: 22rpx;
   color: #666666;
-  line-height: 1.4;
+  line-height: 1.2;
+  display: block;
 }
 
 .refund-main-row {

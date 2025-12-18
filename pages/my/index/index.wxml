@@ -6,25 +6,19 @@
   <!-- #endif -->
 
   <view class="content">
-    <t-cell-group style="border-radius: 24rpx; overflow: hidden;">
-      <!-- #if MP -->
-      <!-- <t-cell title="无法添加到主屏幕" hover arrow url="/pages/help/help4/help4">
-        <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell> -->
-      <!-- #elif IOS -->
+    <!-- #if IOS -->
+    <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
       <t-cell title="升级会员" hover arrow url="/pages/ios/vip/vip">
         <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
-      <!-- #elif ANDROID -->
+    </t-cell-group>
+    <!-- #elif ANDROID -->
+    <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
       <t-cell title="升级会员" hover arrow url="/pages/android/vip/vip">
         <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
         <!-- 会员即将到期：在说明区域增加黄色小标签（与箭头共存） -->
         <view slot="note" wx:if="{{vipExpiringSoon}}">
-          <t-tag 
-            size="small" 
-            variant="light" 
-            theme="warning"
-          >
+          <t-tag size="small" variant="light" theme="warning">
             剩 {{vipDaysLeft}} 天
           </t-tag>
         </view>
@@ -32,8 +26,8 @@
       <t-cell title="缴费记录" hover arrow url="/pages/android/order/list/list">
         <image src="/images/my/pay.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
-      <!-- #endif -->
     </t-cell-group>
+    <!-- #endif -->
 
     <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
       <t-cell title="使用帮助" hover arrow url="/pages/help/help/help">
@@ -45,7 +39,7 @@
       <!-- #if NATIVE -->
       <t-cell title="客户服务" hover arrow bind:tap="toCS">
         <image src="/images/my/customer-service.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>      
+      </t-cell>
       <!--#else-->
       <t-cell title="客户服务" hover arrow url="/pages/my/customerService/customerService">
         <image src="/images/my/customer-service.png" class="left-icon" mode="" slot="left-icon" />
