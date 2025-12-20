@@ -88,31 +88,27 @@ Page({
       // 后端返回格式：直接是数组，或者包装在 Items 中
       const items = Array.isArray(res) ? res : (res.Items || res.items || [])
       let dailyList = this.buildDailyList(items)
-      const totalAmount = dailyList.reduce((sum, item) => sum + item.amount, 0);
-      const totalVip = dailyList.reduce((sum, item) => sum + item.vip, 0);
-      //月订阅
-      const totalMonthSubscribe = dailyList.reduce((sum, item) => sum + item.monthSubscribe, 0);
-      //月续订
-      const totalMonthRenew = dailyList.reduce((sum, item) => sum + item.monthRenew, 0);
-      //季订阅
-      const totalSeasonSubscribe = dailyList.reduce((sum, item) => sum + item.seasonSubscribe, 0);
-      //季续订
-      const totalSeasonRenew = dailyList.reduce((sum, item) => sum + item.seasonRenew, 0);
-      //年订阅
-      const totalYearSubscribe = dailyList.reduce((sum, item) => sum + item.yearSubscribe, 0);
-      //年续订
-      const totalYearRenew = dailyList.reduce((sum, item) => sum + item.yearRenew, 0);
+      const totalVipCount = dailyList.reduce((sum, item) => sum + (item.vipCount || 0), 0);
+      const totalMonthCount = dailyList.reduce((sum, item) => sum + (item.monthCount || 0), 0);
+      const totalSeasonCount = dailyList.reduce((sum, item) => sum + (item.seasonCount || 0), 0);
+      const totalYearCount = dailyList.reduce((sum, item) => sum + (item.yearCount || 0), 0);
+      //退款统计
+      const totalRefundVipCount = dailyList.reduce((sum, item) => sum + (item.refundVipCount || 0), 0);
+      const totalRefundMonthCount = dailyList.reduce((sum, item) => sum + (item.refundMonthCount || 0), 0);
+      const totalRefundSeasonCount = dailyList.reduce((sum, item) => sum + (item.refundSeasonCount || 0), 0);
+      const totalRefundYearCount = dailyList.reduce((sum, item) => sum + (item.refundYearCount || 0), 0);
+      const totalNetAmount = dailyList.reduce((sum, item) => sum + (item.netAmount || 0), 0); // 总净金额
       this.setData({
         dailyList,
-        totalVip,
-        totalMonthSubscribe,
-        totalMonthRenew,
-        totalSeasonSubscribe,
-        totalSeasonRenew,
-        totalYearSubscribe,
-        totalYearRenew,
-        totalAmount: totalAmount.toFixed(2),
-        totalAmount85: (totalAmount * 1).toFixed(2)
+        totalVipCount,
+        totalMonthCount,
+        totalSeasonCount,
+        totalYearCount,
+        totalRefundVipCount,
+        totalRefundMonthCount,
+        totalRefundSeasonCount,
+        totalRefundYearCount,
+        totalNetAmount: totalNetAmount.toFixed(2) // 总净金额
       })
     })
   },
@@ -190,23 +186,24 @@ Page({
         }
       }
 
-      // 直接使用返回的数量和金额
-      const vip = item.vipCount || item.VipCount || 0;
-      const monthSubscribe = item.monthCount || item.MonthCount || 0;
-      const seasonSubscribe = item.seasonCount || item.SeasonCount || 0;
-      const yearSubscribe = item.yearCount || item.YearCount || 0;
-      const amount = item.amount || item.Amount || 0;
-
+      // 直接使用返回的字段，不自定义
+      const amount = parseFloat((item.amount || item.Amount || 0).toFixed(2));
+      const refundTotalAmount = parseFloat((item.refundTotalAmount || item.RefundTotalAmount || 0).toFixed(2));
+      const netAmount = parseFloat((amount - refundTotalAmount).toFixed(2)); // 净金额
+      
       return {
         date: dateStr,
-        monthSubscribe: monthSubscribe,
-        monthRenew: 0, // 安卓没有续订
-        seasonSubscribe: seasonSubscribe,
-        seasonRenew: 0, // 安卓没有续订
-        yearSubscribe: yearSubscribe,
-        yearRenew: 0, // 安卓没有续订
-        vip: vip,
-        amount: parseFloat(amount.toFixed(2)) // 保留两位小数
+        monthCount: item.monthCount || item.MonthCount || 0,
+        seasonCount: item.seasonCount || item.SeasonCount || 0,
+        yearCount: item.yearCount || item.YearCount || 0,
+        vipCount: item.vipCount || item.VipCount || 0,
+        amount: amount,
+        refundVipCount: item.refundVipCount || item.RefundVipCount || 0,
+        refundMonthCount: item.refundMonthCount || item.RefundMonthCount || 0,
+        refundSeasonCount: item.refundSeasonCount || item.RefundSeasonCount || 0,
+        refundYearCount: item.refundYearCount || item.RefundYearCount || 0,
+        refundTotalAmount: refundTotalAmount,
+        netAmount: netAmount // 净金额
       };
     });
 

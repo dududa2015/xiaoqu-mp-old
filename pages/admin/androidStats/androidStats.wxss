@@ -77,3 +77,7 @@
   box-shadow: inset 0rpx -1rpx 0rpx 0rpx #DCDCDC;
 }
 
+.refund-text {
+  color: #ff4d4f;
+}
+

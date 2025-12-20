@@ -16,10 +16,10 @@
   </t-cell-group>
 
   <t-cell-group style="margin-top: 24rpx;">
-    <t-cell title="apple统计" hover arrow url="/pages/admin/stats/stats">
+    <t-cell title="苹果统计" hover arrow url="/pages/admin/stats/stats">
       <t-icon name="logo-apple-filled" slot="left-icon" size="48rpx" color="#aaaaaa"></t-icon>
     </t-cell>
-    <t-cell title="android统计" hover arrow url="/pages/admin/androidStats/androidStats">
+    <t-cell title="安卓统计" hover arrow url="/pages/admin/androidStats/androidStats">
       <t-icon name="logo-android" slot="left-icon" size="48rpx" color="#A4C639"></t-icon>
     </t-cell>
   </t-cell-group>
