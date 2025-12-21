@@ -4,6 +4,9 @@ import {
 import {
   getProductAndroidList
 } from '../../../apis/product-api'
+import {
+  getUserById
+} from '../../../apis/user-api'
 Page({
 
   /**
@@ -199,18 +202,8 @@ Page({
         this.setData({
           paying: false
         })
-        wx.showModal({
-          content: '支付成功',
-          showCancel: false,
-          confirmText: '好的',
-          success: (modalRes) => {
-            if (modalRes.confirm) {
-              wx.reLaunch({
-                url: '/pages/index/index',
-              })
-            }
-          }
-        });
+        // 支付成功后，轮询检查用户信息是否已更新，然后直接跳转
+        this.checkUserInfoAfterPayment()
       },
       fail: (res) => {
         console.error('wx.miniapp.requestPayment res:', res);
@@ -237,10 +230,92 @@ Page({
     })
   },
 
-  // 刷新用户信息
-  refreshUserInfo() {
-    // 可以在这里调用获取用户信息的接口
-    // 例如：getUserInfo()
+  // 支付成功后轮询检查用户信息是否已更新，然后直接跳转
+  checkUserInfoAfterPayment() {
+    const maxAttempts = 10 // 最多尝试10次
+    const interval = 2000 // 每2秒检查一次
+    let attempts = 0
+    let userInfoUpdated = false // 标记用户信息是否已更新
+    
+    wx.showLoading({
+      title: '支付成功，正在确认...',
+      mask: true
+    })
+    
+    const jumpToHome = (message) => {
+      wx.hideLoading()
+      wx.showToast({
+        title: message,
+        icon: 'success',
+        duration: 2000
+      })
+      setTimeout(() => {
+        wx.reLaunch({
+          url: '/pages/index/index',
+        })
+      }, 2000)
+    }
+    
+    const checkUserInfo = () => {
+      attempts++
+      const userId = wx.getStorageSync('userId')
+      if (!userId) {
+        if (attempts >= maxAttempts) {
+          console.warn('检查用户信息超时，用户ID不存在')
+          jumpToHome('支付成功，会员权益可能稍后到账')
+          return
+        }
+        setTimeout(checkUserInfo, interval)
+        return
+      }
+      
+      getUserById({
+        code: '',
+        userId,
+        friendUserId: ''
+      }).then(res => {
+        if (res) {
+          const oldUserInfo = wx.getStorageSync('userInfo')
+          const oldVipDate = oldUserInfo ? oldUserInfo.androidVipExpiredDate : null
+          const newVipDate = res.androidVipExpiredDate
+          
+          // 检查会员信息是否已更新
+          if (newVipDate && newVipDate !== oldVipDate) {
+            console.log('用户信息已更新，会员到期时间:', newVipDate)
+            wx.setStorageSync('userInfo', res)
+            userInfoUpdated = true
+            jumpToHome('支付成功')
+          } else if (attempts >= maxAttempts) {
+            // 达到最大尝试次数，即使没更新也继续
+            console.warn('检查用户信息达到最大次数，会员信息可能尚未更新')
+            if (res) {
+              wx.setStorageSync('userInfo', res)
+            }
+            jumpToHome('支付成功，会员权益可能稍后到账')
+          } else {
+            // 继续轮询
+            setTimeout(checkUserInfo, interval)
+          }
+        } else {
+          if (attempts >= maxAttempts) {
+            console.warn('检查用户信息达到最大次数，未获取到用户信息')
+            jumpToHome('支付成功，会员权益可能稍后到账')
+          } else {
+            setTimeout(checkUserInfo, interval)
+          }
+        }
+      }).catch(err => {
+        console.error('获取用户信息失败:', err)
+        if (attempts >= maxAttempts) {
+          jumpToHome('支付成功，会员权益可能稍后到账')
+        } else {
+          setTimeout(checkUserInfo, interval)
+        }
+      })
+    }
+    
+    // 延迟1秒后开始第一次检查，给服务器一些处理时间
+    setTimeout(checkUserInfo, 1000)
   },
   toMP() {
     wx.miniapp.launchMiniProgram({
