@@ -5,6 +5,8 @@ import {
   getDeviceTrial,
   setDeviceTrial
 } from './apis/user-api'
+import { getDeviceInfo } from './utils/device'
+import { saveDeviceInfo } from './apis/device-apis'
 
 // 常量定义
 const MAX_RETRY_TIMES = 3
@@ -49,6 +51,11 @@ App({
       } else {
         await this.getMPUserInfo('', userId, friendUserId)
       }
+      
+      // 仅在微信小程序环境下保存设备信息
+      // #if MP
+      await this.saveDeviceInfo()
+      // #endif
     } catch (error) {
       console.error('登录失败:', error)
       this.handleLoginError(error)
@@ -225,6 +232,41 @@ App({
       content: typeof content === 'string' ? content : JSON.stringify(content),
       showCancel: false
     })
+  },
+
+  // 保存设备信息
+  async saveDeviceInfo() {
+    try {
+      const userId = wx.getStorageSync('userId')
+      if (!userId) {
+        console.log('用户未登录，跳过设备信息保存')
+        return
+      }
+      
+      // 检查是否已经保存过设备信息
+      const hasSaved = wx.getStorageSync('deviceInfoSaved')
+      if (hasSaved) {
+        console.log('设备信息已保存，跳过')
+        return
+      }
+      
+      // 获取设备信息（仅包含后端需要的字段）
+      const deviceInfo = getDeviceInfo()
+      deviceInfo.userId = userId
+      
+      // 发送到后端
+      const res = await saveDeviceInfo(deviceInfo)
+      
+      if (res && res.success) {
+        // 标记设备信息已保存
+        wx.setStorageSync('deviceInfoSaved', true)
+        console.log('设备信息保存成功')
+      } else {
+        console.error('设备信息保存失败:', res ? res.message : '未知错误')
+      }
+    } catch (error) {
+      console.error('保存设备信息出错:', error)
+    }
   },
 
   handleLoginError(error) {

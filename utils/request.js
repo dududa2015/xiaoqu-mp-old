@@ -1,6 +1,6 @@
 // api URL
-const apiUrl = "http://localhost:5213/api"
-// const apiUrl = "https://test.zhuzixi.cn/api"
+// const apiUrl = "http://localhost:5213/api"
+const apiUrl = "https://test.zhuzixi.cn/api"
 // const apiUrl = "https://mp.zhuzixi.cn/api"
 // 封装微信请求方法
 const request = (params) => {
@@ -26,6 +26,7 @@ const request = (params) => {
       method: method, // get/post
       data: data, // 请求参数
       header: header, // 头部
+      timeout: 15000, // 设置15秒超时
       success(res) {
         if (res.statusCode === 401) {
           // #if MP
@@ -68,7 +69,21 @@ const request = (params) => {
         }
       },
       fail(err) {
-        console.log('request', err)
+        console.log('request error:', err)
+        // 更详细的错误处理
+        let errorMsg = '网络请求失败'
+        if (err.errMsg) {
+          if (err.errMsg.includes('timeout')) {
+            errorMsg = '请求超时，请检查网络连接'
+          } else if (err.errMsg.includes('fail')) {
+            errorMsg = '网络连接失败，请检查网络设置'
+          }
+        }
+        wx.showToast({
+          title: errorMsg,
+          icon: 'none',
+          duration: 3000
+        })
         reject(err);
       },
       complete() {

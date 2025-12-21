@@ -436,19 +436,29 @@ Page({
       interstitialAd.onError((err) => {
         console.error('插屏广告加载失败', err)
       })
-      interstitialAd.onClose(() => { })
+      interstitialAd.onClose(() => { 
+        console.log('插屏广告关闭')
+      })
     }
   },
   //显示插屏广告
   showCPAd() {
     //如果不是vip展示插屏广告
     let userInfo = wx.getStorageSync('userInfo')
+    console.log('showCPAd调用 - userInfo:', userInfo, 'interstitialAd:', !!interstitialAd)
+    
     if (!(userInfo && userInfo.isVip)) {
       if (interstitialAd) {
-        interstitialAd.show().catch((err) => {
+        interstitialAd.show().then(() => {
+          console.log('插屏广告显示成功')
+        }).catch((err) => {
           console.error('插屏广告显示失败', err)
         })
+      } else {
+        console.log('插屏广告未初始化')
       }
+    } else {
+      console.log('用户是VIP，不显示插屏广告')
     }
   },
   //获取当前位置
