@@ -44,7 +44,7 @@ Page({
     rect: {},
     tips: '', //顶部的提示语
     position: 'right', //地图控件的展示位置，左和右
-    showSettingRedDot: true, //设置入口红点
+    showRedDot: true, //红点（统一控制设置入口和小区边界红点）
     enableRotate: false, //是否开启旋转
     isVip: false, //是否vip
     scale: 17,
@@ -52,7 +52,6 @@ Page({
     skew: 0, //倾斜角度，范围 0 ~ 40 , 关于 z 轴的倾角
     enable3D: false,
     showCommunityDetail: false, //是否显示小区边界和出入口
-    showCommunityDetailRedDot: true,
     topAddress: '搜索附近小区',
     showAddress: false,
     latitude: 39.909188, //当前位置116.397478,39.909188
@@ -255,8 +254,7 @@ Page({
     const enable3D = wx.getStorageSync('enable3D')
     const enableScreenOn = wx.getStorageSync('enableScreenOn')
     const showCommunityDetail = wx.getStorageSync('showCommunityDetail')
-    const showSettingRedDot = wx.getStorageSync('showSettingRedDot')
-    const showCommunityDetailRedDot = wx.getStorageSync('showCommunityDetailRedDot')
+    const showRedDot = wx.getStorageSync('showRedDot')
 
     if (position) {
       this.setData({
@@ -279,6 +277,7 @@ Page({
         skew: enable3D ? 20 : 0
       })
     }
+    // #if MP
     if (typeof showCommunityDetail === 'boolean') {
       this.setData({
         showCommunityDetail
@@ -288,17 +287,23 @@ Page({
         showCommunityDetail: false
       })
     }
-    // #if MP
-    this.setData({
-      showSettingRedDot: typeof showSettingRedDot === 'boolean' ? showSettingRedDot : true
-    })
     // #else
-    this.setData({
-      showSettingRedDot: false
-    })
+    // NATIVE 环境下也需要初始化 showCommunityDetail
+    if (typeof showCommunityDetail === 'boolean') {
+      this.setData({
+        showCommunityDetail
+      })
+    } else {
+      this.setData({
+        showCommunityDetail: false
+      })
+    }
     // #endif
+    
+    // 初始化红点（统一控制设置入口和小区边界红点）
+    const finalShowRedDot = typeof showRedDot === 'boolean' ? showRedDot : true
     this.setData({
-      showCommunityDetailRedDot: typeof showCommunityDetailRedDot === 'boolean' ? showCommunityDetailRedDot : true
+      showRedDot: finalShowRedDot
     })
 
     wx.setKeepScreenOn({
@@ -712,9 +717,11 @@ Page({
     this.setData({
       currentCommunityId: id
     })
+    // #if MP
     if (!this.data.showCommunityDetail) {
       return
     }
+    // #endif
     this.clearCommunityDetail()
     getCommunityFullDetail({
       id
@@ -1087,9 +1094,11 @@ Page({
   },
   //获取周围的小区
   getAroundCommunityList(lat, lng) {
+    // #if MP
     if (!this.data.showCommunityDetail) {
       return
     }
+    // #endif
     getAroundCommunityList({
       lng,
       lat
@@ -1121,9 +1130,14 @@ Page({
           polygons: [],
           currentCommunityId: communityId
         })
+        // #if MP
         if (this.data.showCommunityDetail) {
           this.getCommunityFullDetail(communityId)
         }
+        // #else
+        // NATIVE 环境下直接调用，不判断 showCommunityDetail
+        this.getCommunityFullDetail(communityId)
+        // #endif
         this.addAroundList2Map(poiList)
       }, 1);
     })
@@ -1817,10 +1831,6 @@ Page({
   onSetting() {
     this.disableMapTap()
     this.setData({
-      showSettingRedDot: false
-    })
-    wx.setStorageSync('showSettingRedDot', false)
-    this.setData({
       showSetting: true,
       showNoAd: false,
       showMap: false,
@@ -1888,16 +1898,16 @@ Page({
       skew: event.detail ? 20 : 0
     })
   },
-  // 公共：更新小区边界红点状态，并同步组件
+  // 公共：更新红点状态，并同步组件（统一控制设置入口和小区边界红点）
   updateCommunityDetailRedDot(show) {
     this.setData({
-      showCommunityDetailRedDot: show
+      showRedDot: show
     })
-    wx.setStorageSync('showCommunityDetailRedDot', show)
+    wx.setStorageSync('showRedDot', show)
     const mapSetting = this.selectComponent('#mapSetting')
     if (mapSetting) {
       mapSetting.setData({
-        showCommunityDetailRedDot: show
+        showRedDot: show
       })
     }
   },

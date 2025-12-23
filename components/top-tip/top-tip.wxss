@@ -1,10 +1,6 @@
 .top-tip {
     position: absolute;
-    /* #if MP */
-    top: 120px;
-    /* #else */
     top: 100px;
-    /* #endif */
     left: 125rpx;
     width: 500rpx;
     height: 25px;

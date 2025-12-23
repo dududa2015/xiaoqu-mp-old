@@ -1,13 +1,5 @@
-<!-- #if MP -->
-<view class="top-search" style="width: calc({{rect.left}}px - 32rpx);top:{{rect.top}}px;height: {{rect.height}}px;" bind:tap="onChooseLocation">
-    <image src="/images/controls/search.png" class="img" mode="" />
-    {{topAddress}}
-</view>
-<!-- #else -->
+<!-- #if NATIVE -->
 <view class="top-search-wrap" style="top:{{rect.top}}px;">
-    <!-- <view class="icon-wrap" bind:tap="onChooseLocation">
-        <t-icon name="search" size="44rpx" color="#000"></t-icon>
-    </view> -->
     <view class="top-wrap">
         <view class="map-name-wrap" bind:tap="toMap">
             <text class="name">{{ mapName || '公共地图'}}</text>

@@ -9,12 +9,12 @@
     </view>
     <view class="text">分享</view>
     <!-- 客服 -->
-    <view class="img-wrap" bind:tap="onCS">
-        <image src="/images/controls/service2.png" class="img" mode="">
-        </image>
-        <!-- <button class="share-btn" openType="contact">客服</button> -->
+    <view bind:tap="onChooseLocation">
+        <view class="img-wrap">
+            <t-icon name="search" size="42rpx" color="#000" />
+        </view>
+        <view class="text">搜索</view>
     </view>
-    <view class="text" bind:tap="onCS">客服</view>
     <!-- <view class="img-wrap" bind:tap="onNoAd">
         <image src="/images/my/noad.png" class="img" mode="">
         </image>
@@ -24,7 +24,7 @@
     <view class="img-wrap" bind:tap="onSetting">
         <image src="/images/controls/setting.png" class="img" mode="">
         </image>
-        <view class="red-dot" wx:if="{{showSettingRedDot}}"></view>
+        <view class="red-dot" wx:if="{{showRedDot}}"></view>
     </view>
     <view class="text" bind:tap="onSetting">设置</view>
 </view>
@@ -39,7 +39,7 @@
         <view class="text">分享</view>
     </view>
     <!-- 搜索 -->
-    <view bind:tap="onChooseLocation">
+    <view bind:tap="onShowChooseLocation">
         <view class="img-wrap">
             <t-icon name="search" size="42rpx" color="#000" />
         </view>
@@ -49,7 +49,7 @@
     <view bind:tap="onSetting">
         <view class="img-wrap">
             <image src="/images/controls/setting.png" class="img" mode="" />
-            <view class="red-dot" wx:if="{{showSettingRedDot}}"></view>
+            <view class="red-dot" wx:if="{{showRedDot}}"></view>
         </view>
         <view class="text">设置</view>
     </view>

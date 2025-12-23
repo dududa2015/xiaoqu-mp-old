@@ -11,7 +11,7 @@
   <!-- enable-rotate rotate="{{rotate}}"  -->
   <top-search rect="{{rect}}" showUp="{{showUp}}" showMapName="{{showMapName}}" mapName="{{mapName}}" bind:toMap="toMap" bind:onChooseLocation="onChooseLocation"></top-search>
   <top-tip noticeList="{{noticeList}}" id="topTip"></top-tip>
-  <top-bar rect="{{rect}}" position="{{position}}" showSettingRedDot="{{showSettingRedDot}}" bind:onChooseLocation="onChooseLocation" bind:onSetting="onSetting" bind:onShowChooseLocation="onShowChooseLocation"></top-bar>
+  <top-bar rect="{{rect}}" position="{{position}}" showRedDot="{{showRedDot}}" bind:onChooseLocation="onChooseLocation" bind:onSetting="onSetting" bind:onShowChooseLocation="onShowChooseLocation"></top-bar>
   <!-- #if NATIVE -->
   <middle-bar position="{{position}}" bind:onFoot="onFoot"></middle-bar>
   <!-- #endif -->

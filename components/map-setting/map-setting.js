@@ -26,7 +26,7 @@ Component({
         isShowBorder: false,
         count: 0,
         showCommunityDetail: false,
-        showCommunityDetailRedDot: true,
+        showRedDot: true,
         locIconList: [{
             url: '/images/loc-marker/0.png',
         }, {
@@ -57,8 +57,8 @@ Component({
             const enable3D = wx.getStorageSync('enable3D')
             //显示小区边界和出入口
             const showCommunityDetail = wx.getStorageSync('showCommunityDetail')
-            //显示小区边界和出入口红点
-            const showCommunityDetailRedDot = wx.getStorageSync('showCommunityDetailRedDot')
+            //红点（统一控制设置入口和小区边界红点）
+            const showRedDot = wx.getStorageSync('showRedDot')
             this.setData({
                 position: position ? position : 'right',
                 markerShape: markerShape ? markerShape : 'label'
@@ -89,7 +89,7 @@ Component({
                 })
             }
             this.setData({
-                showCommunityDetailRedDot: typeof showCommunityDetailRedDot === 'boolean' ? showCommunityDetailRedDot : true
+                showRedDot: typeof showRedDot === 'boolean' ? showRedDot : true
             })
         },
         onClose() {
@@ -189,7 +189,7 @@ Component({
             const value = e.detail.value
             this.setData({
                 showCommunityDetail: value,
-                showCommunityDetailRedDot: false
+                showRedDot: false
             })
             this.triggerEvent('onCommunityDetailChange', value)
         },
