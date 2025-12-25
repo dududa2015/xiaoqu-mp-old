@@ -161,3 +161,86 @@
     border-radius: 50%;
     background: #ff2d55;
 }
+
+/* 定位图标帮助提示 */
+.loc-icon-help-icon-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-left: 8rpx;
+    vertical-align: middle;
+}
+
+.loc-icon-help-icon {
+    width: 32rpx;
+    height: 32rpx;
+    border-radius: 50%;
+    background-color: #e6f7ff;
+    border: 2rpx solid #91d5ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loc-icon-help-icon-text {
+    font-size: 20rpx;
+    color: #1890ff;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.loc-icon-tooltip {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 8rpx);
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.85);
+    border-radius: 8rpx;
+    padding: 12rpx 16rpx;
+    /* max-width: 400rpx;
+    min-width: 200rpx; */
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+    animation: tooltip-fade-in 0.2s ease-out;
+    z-index: 1000;
+    white-space: nowrap;
+}
+
+.loc-icon-tooltip-text {
+    font-size: 22rpx;
+    color: #ffffff;
+    line-height: 1.5;
+    display: block;
+}
+
+.loc-icon-tooltip-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -8rpx;
+    width: 0;
+    height: 0;
+    border-top: 8rpx solid transparent;
+    border-bottom: 8rpx solid transparent;
+    border-right: 8rpx solid rgba(0, 0, 0, 0.85);
+}
+
+@keyframes tooltip-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) translateX(-4rpx);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+}
+
+/* tooltip遮罩层 */
+.tooltip-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color: transparent;
+}

@@ -27,6 +27,7 @@ Component({
     count: 0,
     showCommunityDetail: false,
     showRedDot: true,
+    showLocIconHelp: false, // 显示定位图标帮助提示
     locIconList: [{
       url: '/images/loc-marker/0.png',
     }, {
@@ -247,7 +248,13 @@ Component({
       })
       wx.setStorageSync('enableScreenOn', e.detail.value)
     },
-    startAnimation() {
+    // 显示/隐藏定位图标帮助提示
+  onShowLocIconHelp() {
+    this.setData({
+      showLocIconHelp: !this.data.showLocIconHelp
+    })
+  },
+  startAnimation() {
       // 定时器，控制边框显示隐藏
       const interval = setInterval(() => {
         if (this.data.count < 3) {

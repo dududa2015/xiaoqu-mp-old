@@ -17,7 +17,17 @@
     <view class="setting">
         <!-- #if NATIVE-->
         <view class="row flex f-x-sb" style="padding: 16rpx 24rpx">
-            <view class="row-title" style="padding-top: 8rpx;">定位图标</view>
+            <view class="row-title" style="padding-top: 8rpx;">定位图标
+                <view class="loc-icon-help-icon-wrapper">
+                    <view class="loc-icon-help-icon" bind:tap="onShowLocIconHelp">
+                        <text class="loc-icon-help-icon-text">?</text>
+                    </view>
+                    <view class="loc-icon-tooltip" wx:if="{{showLocIconHelp}}">
+                        <text class="loc-icon-tooltip-text">使用默认图标需要双击其中一个图标并重启应用</text>
+                        <view class="loc-icon-tooltip-arrow"></view>
+                    </view>
+                </view>
+            </view>
             <view class="row-title flex f-y-center">
                 <image wx:for="{{locIconList}}" wx:key="index" src="{{item.url}}" class="{{ locIconIndex===index ? 'row-icon row-icon-selected' : 'row-icon' }}" mode="" bind:tap="onLocIcon" data-index="{{index}}" />
             </view>
@@ -75,5 +85,8 @@
 
     <t-dialog visible="{{showMapConfirm}}" content="创建专属于您的楼号地图，他人将无法查看、修改和删除您的个人地图" confirm-btn="确定" bind:confirm="closeDialog" />
     <t-dialog visible="{{showImportPersonalDataConfirm}}" content="把您过去的标记导入到个人地图" confirm-btn="确定" bind:confirm="closeDialog" />
+
+    <!-- 遮罩层，点击关闭tooltip -->
+    <view class="tooltip-overlay" wx:if="{{showLocIconHelp}}" bind:tap="onShowLocIconHelp"></view>
 
 </t-popup>
