@@ -107,10 +107,6 @@
       "sub_switch": true
     },
     {
-      "path": "pages/setting/setting.js",
-      "sub_switch": true
-    },
-    {
       "path": "utils/apple-iap-manager2.js",
       "sub_switch": true
     },

@@ -101,7 +101,8 @@
 }
 
 .row-icon-selected {
-    background-color: rgba(0, 116, 254, 0.2);
+    background-color: rgba(0, 116, 254, 0.3);
+    border-color: #0074FE;
 }
 
 .help-icon {

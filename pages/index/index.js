@@ -332,7 +332,7 @@ Page({
   },
   setLocMarkerIcon() {
     this.getMapContext().setLocMarkerIcon({
-      iconPath: '/images/loc-marker/1.png',
+      iconPath: '/images/loc-marker/-1.png',
       success(res) {
         console.log(res)
       },

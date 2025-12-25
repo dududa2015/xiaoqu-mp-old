@@ -42,7 +42,7 @@
       </t-cell>
       <!--#else-->
       <t-cell title="客户服务" hover arrow url="/pages/my/customerService/customerService">
-        <image src="/images/my/customer-service.png" class="left-icon" mode="" slot="left-icon" />
+        <image src="/images/my/cs.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
       <!-- #endif -->
     </t-cell-group>
