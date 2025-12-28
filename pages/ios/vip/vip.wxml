@@ -33,6 +33,21 @@
             </view>
         </view>
     </view>
+    <!-- 退款说明 -->
+    <view class="refund-notice">
+        <view class="refund-notice-row">
+            <view class="refund-notice-text-wrap">
+                <view wx:if="{{ currentProductIdentifier === 'com.louhao.xiaoqu.vip' }}"
+                    class="refund-text" style="color:red"
+                >
+                    · 2026年4月起将调整为108元
+                </view>
+                <view class="refund-text">
+                    · 苹果和安卓用户的会员权益共享
+                </view>
+            </view>
+        </view>
+    </view>
     <view class="tips" wx:if="{{showTips}}">
         <!-- 温馨提醒：终身会员从7月起，每月涨价5元 -->
         <!-- <text class="mp-name" bind:tap="toMP">【小区楼号分布图】</text> -->

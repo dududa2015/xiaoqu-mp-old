@@ -28,6 +28,7 @@ Page({
       imgUrl: '/images/my/rights-loc.png'
     }],
     productList: [], //苹果的付费产品列表
+    currentProductIdentifier: 'com.louhao.xiaoqu.vip', //当前选中的产品标识符
     //6 18	72
     //5 14.9  39.9
     // productList: [{
@@ -182,7 +183,8 @@ Page({
     });
     console.log(productList)
     this.setData({
-      productList
+      productList,
+      currentProductIdentifier: productIdentifier
     });
   },
   //支付

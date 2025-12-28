@@ -232,15 +232,9 @@ Page({
       showCancel: false,
     })
     setTimeout(() => {
-      // #if IOS
-      wx.navigateTo({
-        url: '/pages/ios/vip/vip',
+      wx.switchTab({
+        url: '/pages/my/index/index',
       })
-      // #else
-      wx.navigateTo({
-        url: '/pages/android/vip/vip',
-      })
-      // #endif
     },
       1000);
   },
