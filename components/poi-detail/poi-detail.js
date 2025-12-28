@@ -149,7 +149,7 @@ Component({
         // #if MP
         let canEditUserMarker = wx.getStorageSync('userId') === result.userId
         //小程序能删除但要看广告
-        let canDeleteUserMarker = true
+        let canDeleteUserMarker = wx.getStorageSync('userId') === result.userId
         // #else
         let canEditUserMarker = wx.getStorageSync('userId') === result.userId || wx.getStorageSync('mapType') === 2
         //app的权限和编辑一样

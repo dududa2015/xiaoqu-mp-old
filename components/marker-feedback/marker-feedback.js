@@ -17,7 +17,7 @@ Component({
       observer(newVal, oldVal) {
         if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
           this.setData({
-            selectedReason: '0'
+            selectedReason: '-1'
           })
         }
       }
@@ -37,6 +37,13 @@ Component({
   methods: {
     async onSave() {
       console.log(this.data.selectedReason)
+      if(this.data.selectedReason === '-1') {
+        wx.showToast({
+          title: '请选择纠错原因',
+          icon: 'none'
+        })
+        return
+      }
       const res =  await addMarkerFB({
         xId: this.data.markerDetail.xId,
         reason: this.data.selectedReason
