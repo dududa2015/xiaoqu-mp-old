@@ -37,3 +37,20 @@ export const auditNotPassedList = (params) => {
       method: 'POST',
   })
 }
+
+//修改标记的deleted状态
+export const updateMarkerFeedbackStatus = (params) => {
+  return request({
+      url: '/marker/updateMarkerFeedbackStatus',
+      data: params,
+      method: 'POST',
+  })
+}
+//获取被报错标记列表（deleted=-2）
+export const getCorrectedList = (params) => {
+  return request({
+      url: '/marker/getCorrectedList',
+      data: params,
+      method: 'GET',
+  })
+}

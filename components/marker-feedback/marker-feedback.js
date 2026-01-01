@@ -1,6 +1,10 @@
 import {
   addMarkerFB
 } from '../../apis/marker-feedback-apis'
+import {
+  updateMarkerFeedbackStatus
+} from '../../apis/marker-apis'
+
 Component({
 
   /**
@@ -36,32 +40,35 @@ Component({
    */
   methods: {
     async onSave() {
-      console.log(this.data.selectedReason)
+      console.log(this.data.markerDetail)
       if(this.data.selectedReason === '-1') {
         wx.showToast({
-          title: '请选择纠错原因',
+          title: '请选择报错原因',
           icon: 'none'
         })
         return
       }
-      const res =  await addMarkerFB({
+      const res =  await updateMarkerFeedbackStatus({
         xId: this.data.markerDetail.xId,
-        reason: this.data.selectedReason
+        feedbackType: this.data.selectedReason,
+        feedbackDate: new Date(),
+        feedbackUserId: wx.getStorageSync('userId')
       })
       if(res){
         wx.showToast({
           title: '反馈成功',
         })
+        this.triggerEvent('onCloseFeedback', this.data.markerDetail)
       } else {
         wx.showToast({
           title: '反馈失败',
           icon: 'none'
         })
+        this.triggerEvent('onCloseFeedback')
       }
       this.setData({
         showFeedback: false
-      })
-      this.triggerEvent('onCloseFeedback')
+      })      
     },
     onClose() {
       this.setData({

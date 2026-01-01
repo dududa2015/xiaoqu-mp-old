@@ -21,7 +21,7 @@
   </view>
 
   <view class="form-wrap">
-    <view class="form-title">纠错</view>
+    <view class="form-title">报错</view>
     <view class="input-wrap">
       <t-radio-group t-class="theme-card" value="{{selectedReason}}" borderless bind:change="onChange">
         <t-radio label="错误标记" value="0" />

@@ -250,8 +250,8 @@ Page({
         duration: 2000
       })
       setTimeout(() => {
-        wx.reLaunch({
-          url: '/pages/index/index',
+        wx.switchTab({
+          url: '/pages/my/index/index',
         })
       }, 2000)
     }

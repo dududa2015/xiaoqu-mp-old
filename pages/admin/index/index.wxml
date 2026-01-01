@@ -7,7 +7,10 @@
     <t-cell title="审核个人地图" hover arrow url="/pages/admin/auditApp/auditApp">
       <t-icon name="check" slot="left-icon" size="48rpx" color="#ee88ff"></t-icon>
     </t-cell>
-    <t-cell title="纠错" hover arrow url="/pages/admin/auditNot/auditNot">
+    <t-cell title="报错" hover arrow url="/pages/admin/auditNot/auditNot">
+      <t-icon name="close" slot="left-icon" size="48rpx" color="#ff0000"></t-icon>
+    </t-cell>
+    <t-cell title="报错（新）" hover arrow url="/pages/admin/auditNotNew/auditNotNew">
       <t-icon name="close" slot="left-icon" size="48rpx" color="#ff0000"></t-icon>
     </t-cell>
     <t-cell title="通知公告" hover arrow hover arrow url="/pages/admin/notice/notice">

@@ -61,7 +61,7 @@
 
     <view class="qa-item">
       <view class="qa-question">6. 怎样删除错误的标记？</view>
-      <view class="qa-answer">选中需要纠错的楼栋位置，点击弹窗里的「纠错」按钮，在弹出的表单中选择错误类型（如错误标记、重复标记等审核通过后地图即可生效。</view>
+      <view class="qa-answer">选中需要报错的楼栋位置，点击弹窗里的「报错」按钮，在弹出的表单中选择错误类型（如错误标记、重复标记等审核通过后地图即可生效。</view>
     </view>
   </view>
 

@@ -19,7 +19,8 @@
     "pages/admin/auditNot/auditNot",
     "pages/admin/auditApp/auditApp",
     "pages/help/help/help",
-    "pages/help/question/question"
+    "pages/help/question/question",
+    "pages/admin/auditNotNew/auditNotNew"
   ],
   "static": [
     {
@@ -65,7 +66,8 @@
       "pages/ios/vip-agreement/vip-agreement",
       "pages/ios/vip-renew/vip-renew",
       "pages/search/index/index",
-      "pages/search/search/search"
+      "pages/search/search/search",
+      "pages/admin/auditNotNew/auditNotNew"
     ]
   },
   "mini-android": {
@@ -96,7 +98,8 @@
       "pages/android/refund/refund",
       "pages/android/refund/agreement/agreement",
       "pages/search/index/index",
-      "pages/search/search/search"
+      "pages/search/search/search",
+      "pages/admin/auditNotNew/auditNotNew"
     ]
   },
   "window": {

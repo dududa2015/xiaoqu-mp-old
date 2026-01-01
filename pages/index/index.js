@@ -84,14 +84,14 @@ Page({
     this.initStorage()
     //插屏广告
     // #if MP
-    
+
     this.showAppNotice()
     setTimeout(() => {
       //初始化插屏和激励视频广告
       this.initCPAd()
       this.initAd()
     }, 1000);
-    setTimeout(() => {      
+    setTimeout(() => {
       //显示插屏广告
       this.showCPAd()
     }, 15000);
@@ -102,7 +102,7 @@ Page({
     this.setLocMarkerIcon()
     this.getMarkerListUpdate()
     // #endif
-    
+
     // 检查小区边界功能是否过期
     this.checkCommunityDetailExpired()
   },
@@ -119,7 +119,7 @@ Page({
       childComp.initNotice()
     }
     // #endif
-    
+
     // 检查小区边界功能是否过期
     this.checkCommunityDetailExpired()
   },
@@ -158,10 +158,10 @@ Page({
       content: '苹果App已在App Store上架，欢迎下载体验',
       url: '/pages/my/app/ios/ios'
     } : {
-        title: '安卓App下载',
-        content: '安卓🤖App已在腾讯应用宝上架，欢迎下载体验',
-        url: '/pages/my/app/android/android'
-      }
+      title: '安卓App下载',
+      content: '安卓🤖App已在腾讯应用宝上架，欢迎下载体验',
+      url: '/pages/my/app/android/android'
+    }
 
     wx.showModal({
       title: config.title,
@@ -185,7 +185,7 @@ Page({
   checkCommunityDetailExpired() {
     const expireAt = wx.getStorageSync('communityDetailExpireAt') || 0
     const showCommunityDetail = wx.getStorageSync('showCommunityDetail') || false
-    
+
     // 如果功能已开启且已过期，则关闭功能
     if (showCommunityDetail && Date.now() >= expireAt) {
       this.disableCommunityDetail()
@@ -232,10 +232,10 @@ Page({
       showCancel: false,
     })
     setTimeout(() => {
-      wx.switchTab({
-        url: '/pages/my/index/index',
-      })
-    },
+        wx.switchTab({
+          url: '/pages/my/index/index',
+        })
+      },
       1000);
   },
   //设置
@@ -293,7 +293,7 @@ Page({
       })
     }
     // #endif
-    
+
     // 初始化红点（统一控制设置入口和小区边界红点）
     const finalShowRedDot = typeof showRedDot === 'boolean' ? showRedDot : true
     this.setData({
@@ -429,13 +429,13 @@ Page({
       interstitialAd = wx.createInterstitialAd({
         adUnitId: 'adunit-6449f8b32a1844a8'
       })
-      interstitialAd.onLoad(() => { 
+      interstitialAd.onLoad(() => {
         console.log('插屏广告加载成功')
       })
       interstitialAd.onError((err) => {
         console.error('插屏广告加载失败', err)
       })
-      interstitialAd.onClose(() => { 
+      interstitialAd.onClose(() => {
         console.log('插屏广告关闭')
       })
     }
@@ -445,7 +445,7 @@ Page({
     //如果不是vip展示插屏广告
     let userInfo = wx.getStorageSync('userInfo')
     console.log('showCPAd调用 - userInfo:', userInfo, 'interstitialAd:', !!interstitialAd)
-    
+
     if (!(userInfo && userInfo.isVip)) {
       if (interstitialAd) {
         interstitialAd.show().then(() => {
@@ -1022,20 +1022,7 @@ Page({
         wx.showToast({
           title: '删除成功',
         })
-        let markers = that.data.markers.filter(item => item.id !== parseInt(that.selectedMarker.xId))
-        let polyline = that.data.polyline
-        for (let i = 0; i < that.data.polyline.length; i++) {
-          const element = that.data.polyline[i];
-          let findIndex = element.points.findIndex(item => parseFloat(item.latitude) === that.selectedMarker.lat && parseFloat(item.longitude) === that.selectedMarker.lng)
-          if (findIndex > -1) {
-            polyline.splice(i, 1)
-          }
-        }
-        // let polyline = that.data.polyline.filter(item => item.latitude !== that.selectedMarker.lat && item.longitude !== that.selectedMarker.lng)
-        that.setData({
-          markers,
-          polyline
-        })
+        that.deleteOneMarker(that.selectedMarker)
         // #if NATIVE
         that.getMarkerListUpdate()
         // #endif
@@ -1047,6 +1034,22 @@ Page({
           icon: 'error'
         })
       }
+    })
+  },
+  //在删除时或者报错时调用，从地图中删除当前的点或线
+  deleteOneMarker(poi) {
+    let markers = this.data.markers.filter(item => item.id !== parseInt(poi.xId))
+    let polyline = this.data.polyline
+    for (let i = 0; i < this.data.polyline.length; i++) {
+      const element = this.data.polyline[i];
+      let findIndex = element.points.findIndex(item => parseFloat(item.latitude) === poi.lat && parseFloat(item.longitude) === poi.lng)
+      if (findIndex > -1) {
+        polyline.splice(i, 1)
+      }
+    }
+    this.setData({
+      markers,
+      polyline
     })
   },
   getAroundList(lat, lng) {
@@ -1642,8 +1645,13 @@ Page({
       markerDetail: event.detail
     })
   },
-  onCloseFeedback() {
+  onCloseFeedback(e) {
+    console.log(e.detail)
+    const markerDetail = e.detail
     this.disableMapTap()
+    if(markerDetail){
+      this.deleteOneMarker(markerDetail)
+    }
     this.setData({
       showFeedback: false
     })
