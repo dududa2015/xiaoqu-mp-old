@@ -89,9 +89,6 @@
                 <text class="refund-text">
                     · 支付成功后会员即时生效，网络波动时可能延迟1~2分钟
                 </text>
-                <text class="refund-text">
-                    · 安卓和苹果用户的会员权益无法共享
-                </text>
             </view>
         </view>
     </view>

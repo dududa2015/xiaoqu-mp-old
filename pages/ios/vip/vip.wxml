@@ -36,14 +36,11 @@
     <!-- 退款说明 -->
     <view class="refund-notice">
         <view class="refund-notice-row">
-            <view class="refund-notice-text-wrap">
-                <view wx:if="{{ currentProductIdentifier === 'com.louhao.xiaoqu.vip' }}"
+            <view class="refund-notice-text-wrap" wx:if="{{ currentProductIdentifier === 'com.louhao.xiaoqu.vip' }}">
+                <view 
                     class="refund-text" style="color:red"
                 >
                     · 2026年4月起将调整为108元
-                </view>
-                <view class="refund-text">
-                    · 苹果和安卓用户的会员权益共享
                 </view>
             </view>
         </view>

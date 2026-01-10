@@ -994,7 +994,6 @@ Page({
     wx.setStorageSync('videoType', 1)
     this.selectedMarker = event.detail
     const that = this
-    // #if MP
     wx.showModal({
       title: '温馨提示',
       content: '确认要删除吗？',
@@ -1004,7 +1003,6 @@ Page({
         }
       }
     })
-    // #endif
   },
   //删除标记点
   onDelete(event) {
