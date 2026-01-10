@@ -20,12 +20,34 @@ Page({
     rankInfo: null,
     // 会员到期提示相关
     vipDaysLeft: 0,
-    vipExpiringSoon: false
+    vipExpiringSoon: false,
+    // 是否显示安卓下载链接（在2026年1月20日前显示，之后隐藏）
+    showAndroidDownload: true
   },
 
   onShow() {
+    this.checkAndroidDownloadDate()
     this.getUserInfo()
     this.getRankByUserId()
+  },
+  
+  /**
+   * 检查是否显示安卓下载链接
+   * 在2026年1月20日前（包括1月20日）显示，之后隐藏
+   */
+  checkAndroidDownloadDate() {
+    const now = new Date()
+    // 设置目标日期为2026年1月20日的开始时间（00:00:00）
+    const targetDate = new Date(2026, 0, 20) // 月份从0开始，0表示1月
+    // 设置当前日期为当天的开始时间（00:00:00）
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    
+    // 如果当前日期小于等于2026年1月20日，则显示
+    const showAndroidDownload = today.getTime() <= targetDate.getTime()
+    
+    this.setData({
+      showAndroidDownload
+    })
   },
   getUserInfo() {
     let userId = wx.getStorageSync('userId')

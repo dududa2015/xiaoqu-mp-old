@@ -56,12 +56,12 @@ Component({
       })
       if(res){
         wx.showToast({
-          title: '反馈成功',
+          title: '报错成功',
         })
         this.triggerEvent('onCloseFeedback', this.data.markerDetail)
       } else {
         wx.showToast({
-          title: '反馈失败',
+          title: '报错失败',
           icon: 'none'
         })
         this.triggerEvent('onCloseFeedback')

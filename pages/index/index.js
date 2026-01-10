@@ -150,7 +150,7 @@ Page({
       return
     }
 
-    const systemInfo = wx.getSystemInfoSync()
+    const systemInfo = wx.getDeviceInfo()
     const isIOS = systemInfo.platform === 'ios' || (systemInfo.model && systemInfo.model.includes('iPhone'))
 
     const config = isIOS ? {
@@ -162,7 +162,7 @@ Page({
       content: '安卓🤖App已在腾讯应用宝上架，欢迎下载体验',
       url: '/pages/my/app/android/android'
     }
-
+    if(!isIOS) return //安卓恢复下载的时候去掉
     wx.showModal({
       title: config.title,
       content: config.content,
@@ -1650,6 +1650,7 @@ Page({
     if(markerDetail){
       this.deleteOneMarker(markerDetail)
     }
+    this.onClosePoi()
     this.setData({
       showFeedback: false
     })

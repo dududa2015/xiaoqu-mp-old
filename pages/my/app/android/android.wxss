@@ -35,7 +35,13 @@
   color: #52c41a;
 }
 
+.badge-offline {
+  background-color: rgba(255, 77, 79, 0.1);
+  color: #ff4d4f;
+}
+
 .app-row {
+  margin-top: 12px;
   display: flex;
   align-items: center;
 }
@@ -98,6 +104,58 @@
 
 .primary-btn::after {
   border: none;
+}
+
+.primary-btn.disabled-btn {
+  background-color: #d9d9d9;
+  color: #999999;
+  opacity: 0.6;
+}
+
+.offline-notice {
+  margin-top: 24rpx;
+  padding: 24rpx;
+  background-color: #fff7e6;
+  border: 1rpx solid #ffe58f;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: flex-start;
+}
+
+.offline-icon {
+  font-size: 40rpx;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.offline-content {
+  flex: 1;
+}
+
+.offline-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #d46b08;
+  margin-bottom: 8rpx;
+}
+
+.offline-desc {
+  font-size: 24rpx;
+  color: #8c8c8c;
+  line-height: 1.6;
+  margin-bottom: 12rpx;
+}
+
+.offline-time {
+  font-size: 24rpx;
+  color: #1890ff;
+  font-weight: 500;
+  margin-top: 8rpx;
+}
+
+.offline-tip {
+  color: #ff4d4f;
+  font-weight: 500;
 }
 
 .tip {
