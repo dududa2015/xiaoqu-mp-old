@@ -32,6 +32,23 @@ Page({
         className: 'btn delete-btn',
       },
     ],
+    typeMap: {
+      0: '楼号',
+      1: '出入口',
+      2: '公厕',
+      3: '维修点',
+      4: '换电站',
+      5: '外卖柜',
+      6: '生活类',
+      7: '道路',
+      8: '围墙'
+    },
+    feedbackTypeMap: {
+      0: '错误标记',
+      1: '重复标记',
+      2: '涉嫌侵犯他人隐私',
+      3: '其他原因'
+    }
   },
   /**
    * 生命周期函数--监听页面显示
@@ -101,8 +118,20 @@ Page({
     const that = this
     getCorrectedList().then(res => {
       if (res && res.length > 0) {
+        // 格式化时间并添加类型文本
+        const formattedList = res.map(item => ({
+          ...item,
+          typeText: that.data.typeMap[item.type] || '未知',
+          feedbackTypeText: that.data.feedbackTypeMap[item.feedbackType] || '未知',
+          formattedCreatedDate: item.createdDate,
+          formattedFeedbackDate: item.feedbackDate
+        }))
         that.setData({
-          auditList: res
+          auditList: formattedList
+        })
+      } else {
+        that.setData({
+          auditList: []
         })
       }
     })
