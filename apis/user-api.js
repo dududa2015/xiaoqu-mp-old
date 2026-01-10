@@ -27,6 +27,16 @@ export const getUserById = (params) => {
         method: 'GET',
     })
 }
+//用户个人中心更新标记和删除数量
+export const updateUserMarkersAndDeleted = (params) => {
+  // [FromQuery] 表示参数通过查询字符串传递，即使方法是 POST
+  const queryString = Object.keys(params).map(key => `${key}=${encodeURIComponent(params[key])}`).join('&')
+  return request({
+      url: `/users/updateUserMarkersAndDeleted?${queryString}`,
+      data: {},
+      method: 'POST',
+  })
+}
 //更改用户昵称
 export const updateNickName = (params) => {
     return request({

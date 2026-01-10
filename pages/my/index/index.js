@@ -1,6 +1,6 @@
 import {
   getUserById,
-  getRankByUserId
+  updateUserMarkersAndDeleted
 } from '../../../apis/user-api'
 Page({
 
@@ -28,7 +28,6 @@ Page({
   onShow() {
     this.checkAndroidDownloadDate()
     this.getUserInfo()
-    this.getRankByUserId()
   },
   
   /**
@@ -49,23 +48,25 @@ Page({
       showAndroidDownload
     })
   },
-  getUserInfo() {
+  async getUserInfo() {
     let userId = wx.getStorageSync('userId')
     if (userId) {
-      getUserById({
-        code: '',
-        userId,
-        friendUserId: ''
-      }).then(res => {
+      try {
+        const res = await getUserById({
+          code: '',
+          userId,
+          friendUserId: ''
+        })
         if (res) {
           wx.setStorageSync('userId', res.userId)
           wx.setStorageSync('userInfo', res)
 
           // 计算会员到期相关信息（与 user-info-app 保持一致）
+          let vipExpiredRaw
           // #if IOS
-          const vipExpiredRaw = res.iosVipExpiredDate
+          vipExpiredRaw = res.iosVipExpiredDate
           // #else
-          const vipExpiredRaw = res.androidVipExpiredDate
+          vipExpiredRaw = res.androidVipExpiredDate
           // #endif
 
           const now = new Date()
@@ -87,27 +88,29 @@ Page({
             vipDaysLeft,
             vipExpiringSoon
           })
+
+          // 更新用户标记和删除数量
+          this.updateUserMarkersAndDeleted(userId)
         }
-      })
+      } catch (error) {
+        console.error('获取用户信息失败:', error)
+      }
     } else {
       this.setData({
         userInfo: null
       })
     }
   },
-  getRankByUserId() {
-    const that = this
-    getRankByUserId({
-      userId: wx.getStorageSync('userId'),
-    }).then(res => {
-      if (res) {
-        that.setData({
-          rankInfo: res
-        })
-      }
-    })
+  
+  // 更新用户标记和删除数量
+  async updateUserMarkersAndDeleted(userId) {
+    if (!userId) return
+    try {
+      await updateUserMarkersAndDeleted({ userId })
+    } catch (error) {
+      console.error('更新用户标记和删除数量失败:', error)
+    }
   },
-
   onReady() {
     // #if MP
     this.getStatusBar()
