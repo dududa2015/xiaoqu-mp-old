@@ -102,13 +102,28 @@ Page({
     }
   },
   
-  // 更新用户标记和删除数量
+  // 更新用户标记和删除数量（每隔一周执行一次）
   async updateUserMarkersAndDeleted(userId) {
     if (!userId) return
-    try {
-      await updateUserMarkersAndDeleted({ userId })
-    } catch (error) {
-      console.error('更新用户标记和删除数量失败:', error)
+    
+    // 获取上次执行时间
+    const lastUpdateTime = wx.getStorageSync('lastUpdateMarkersTime')
+    const now = Date.now()
+    const oneWeek = 7 * 24 * 60 * 60 * 1000 // 一周的毫秒数
+    
+    // 如果没有记录或已经过了一周，则执行更新
+    if (!lastUpdateTime || (now - lastUpdateTime >= oneWeek)) {
+      try {
+        await updateUserMarkersAndDeleted({ userId })
+        // 更新执行时间
+        wx.setStorageSync('lastUpdateMarkersTime', now)
+        console.log('用户标记和删除数量已更新')
+      } catch (error) {
+        console.error('更新用户标记和删除数量失败:', error)
+      }
+    } else {
+      const daysLeft = Math.ceil((oneWeek - (now - lastUpdateTime)) / (24 * 60 * 60 * 1000))
+      console.log(`距离下次更新还有 ${daysLeft} 天`)
     }
   },
   onReady() {

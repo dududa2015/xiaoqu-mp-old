@@ -1,108 +1,316 @@
-
-.header {
-    position: relative;
-    padding: 32rpx;
-    background-color: #fff;
-    border-radius: 32rpx;
+/* 容器 */
+.user-container {
+    background: #ffffff;
+    border-radius: 24rpx;
     overflow: hidden;
-  }
-  
-  .avatar-wrapper {
-    padding: 0;
-    width: 100rpx !important;
-    border-radius: 8px;
-  }
-  
-  .header-img {
-    display: block;
-    width: 100rpx;
-    height: 100rpx;
-    border-radius: 50%;
-  }
-  
-  .name-wrap {
-    flex: 1;
-    margin-left: 32rpx;
-  }
-  
-  .name {
-    font-size: 40rpx;
-    font-weight: 600;
-    letter-spacing: 0rpx;
-    line-height: 66.61rpx;
-    color: rgba(43, 43, 43, 1);
-  }
-  
-  .name-icon-wrap {
+    box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
+}
+
+/* 用户信息区域 */
+.user-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 32rpx 28rpx 20rpx;
     position: relative;
-  }
-  
-  .v-img {
-    margin-left: 8rpx;
-    margin-top: -16rpx;
-    width: 28rpx;
-    height: 28rpx;
-  }
-  .id-tag{
-    margin-left: 16rpx;
-  }
-  
-  .t-tag {
-    font-size: 16rpx;
-    padding: 8rpx;
-    height: 36rpx;
-    line-height: 36rpx
-  }
-  
-  .desc {
-    margin-top: 8rpx;
-    font-size: 24rpx;
-    font-weight: 500;
-    letter-spacing: 0rpx;
-    line-height: 34.75rpx;
-    color: rgba(126, 126, 126, 1);
-  }
-  
-  .main {
-    padding-top: 32rpx;
-  }
-  
-  .main-item {
-    width: 25%;
-    text-align: center;
-  }
-  
-  .number {
-    font-size: 36rpx;
+    overflow: hidden;
+}
+
+.user-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255,255, 0.1) 0%, transparent 60%);
+    animation: shimmer 8s infinite linear;
+}
+
+@keyframes shimmer {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.user-content {
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.avatar-wrapper {
+    flex-shrink: 0;
+    width: 108rpx;
+    height: 108rpx;
+    border-radius: 50%;
+    position: relative;
+    overflow: visible;
+}
+
+.avatar-glow {
+    position: absolute;
+    top: -4rpx;
+    left: -4rpx;
+    right: -4rpx;
+    bottom: -4rpx;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+    opacity: 0.3;
+    filter: blur(8rpx);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.05); }
+}
+
+.user-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 4rpx solid rgba(255, 255, 255, 0.3);
+    background: #ffffff;
+    position: relative;
+    z-index: 1;
+}
+
+.user-details {
+    flex: 1;
+    margin-left: 24rpx;
+    min-width: 0;
+}
+
+.name-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12rpx;
+    margin-bottom: 8rpx;
+}
+
+.user-name {
+    font-size: 40rpx;
     font-weight: 700;
-    letter-spacing: 0rpx;
-    height: 56rpx;
-    line-height: 42.19rpx;
-    color: rgba(51, 51, 51, 1);
-  }
-  
-  .text {
-    font-size: 26rpx;
+    color: #ffffff;
+    line-height: 56rpx;
+    letter-spacing: 0.5rpx;
+    text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+}
+
+.badge-group {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+}
+
+.badge-item {
+    padding: 4rpx 12rpx;
+    border-radius: 20rpx;
+    font-size: 18rpx;
+    font-weight: 600;
+    letter-spacing: 0.3rpx;
+    backdrop-filter: blur(10rpx);
+}
+
+.badge-vip {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.9) 0%, rgba(255, 165, 0, 0.9) 100%);
+    color: #ffffff;
+    box-shadow: 0 2rpx 8rpx rgba(255, 215, 0, 0.3);
+}
+
+.badge-admin {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+    color: #ffffff;
+    box-shadow: 0 2rpx 8rpx rgba(102, 126, 234, 0.3);
+}
+
+.user-meta {
+    display: flex;
+    align-items: center;
+}
+
+.user-id {
+    font-size: 22rpx;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 400;
+    letter-spacing: 0.5rpx;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 4rpx 16rpx;
+    border-radius: 20rpx;
+    backdrop-filter: blur(10rpx);
+}
+
+.action-btn {
+    flex-shrink: 0;
+    width: 64rpx;
+    height: 64rpx;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10rpx);
+    transition: all 0.3s ease;
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.action-btn:active {
+    transform: scale(0.9);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 会员信息 */
+.vip-info {
+    margin-top: 20rpx;
+    position: relative;
+    z-index: 1;
+}
+
+.vip-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 10rpx;
+    padding: 10rpx 16rpx;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20rpx);
+    border-radius: 20rpx;
+    border: 1rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.vip-label-badge {
+    flex-shrink: 0;
+    padding: 4rpx 14rpx;
+    border-radius: 12rpx;
+    font-size: 20rpx;
+    font-weight: 700;
+    letter-spacing: 1rpx;
+    background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+    color: #ffffff;
+    box-shadow: 0 2rpx 8rpx rgba(255, 170, 0, 0.3);
+    text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.15);
+}
+
+.vip-date-text {
+    flex: 1;
+    font-size: 22rpx;
     font-weight: 500;
-    letter-spacing: 0rpx;
-    height: 40rpx;
-    line-height: 40rpx;
-    color: rgba(126, 126, 126, 1);
-  }
-  
-  .main-item-line {
-    width: 1rpx;
-    height: 35rpx;
-    opacity: 1;
-    background-color: rgba(199, 199, 199, 1);
-  }
-  .vip-date {
-      position: absolute;
-      top: 0;
-      right: 0;
-      background-color: #0077F9;
-      color: #fff;
-      padding: 2rpx 16rpx;
-      font-size: 24rpx;
-      border-radius: 0 16rpx  0;
-  }
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: 0.3rpx;
+    text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.1);
+}
+
+.vip-days-tag {
+    flex-shrink: 0;
+    padding: 4rpx 12rpx;
+    border-radius: 12rpx;
+    font-size: 20rpx;
+    font-weight: 600;
+    letter-spacing: 0.3rpx;
+    background: rgba(16, 185, 129, 0.3);
+    color: #ffffff;
+    border: 1rpx solid rgba(16, 185, 129, 0.5);
+}
+
+.vip-warning {
+    background: rgba(245, 158, 11, 0.3);
+    border-color: rgba(245, 158, 11, 0.5);
+    animation: pulse-warning 2s ease-in-out infinite;
+}
+
+@keyframes pulse-warning {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.75; }
+}
+
+/* 统计数据区域 */
+.stats-section {
+    background: #ffffff;
+    padding: 20rpx 16rpx 20rpx;
+}
+
+.stats-grid {
+    display: flex;
+    gap: 12rpx;
+}
+
+.stat-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    background: #f8f9fa;
+    border-radius: 16rpx;
+    padding: 16rpx 14rpx;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    border: 1rpx solid rgba(0, 0, 0, 0.04);
+}
+
+.stat-item:active {
+    transform: translateY(-2rpx);
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon {
+    flex-shrink: 0;
+    width: 56rpx;
+    height: 56rpx;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.06);
+}
+
+.stat-markers .stat-icon {
+    color: #667eea;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(102, 126, 234, 0.05) 100%);
+}
+
+.stat-friends .stat-icon {
+    color: #10b981;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+}
+
+.stat-deleted .stat-icon {
+    color: #f59e0b;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+}
+
+.stat-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.stat-value {
+    font-size: 32rpx;
+    font-weight: 800;
+    line-height: 44rpx;
+    color: #1a1a1a;
+    letter-spacing: -0.5rpx;
+    white-space: nowrap;
+}
+
+.stat-markers .stat-value {
+    color: #667eea;
+}
+
+.stat-friends .stat-value {
+    color: #10b981;
+}
+
+.stat-deleted .stat-value {
+    color: #f59e0b;
+}
+
+.stat-title {
+    font-size: 20rpx;
+    font-weight: 500;
+    color: #666;
+    line-height: 28rpx;
+    letter-spacing: 0.3rpx;
+    white-space: nowrap;
+}

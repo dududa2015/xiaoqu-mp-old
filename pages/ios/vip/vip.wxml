@@ -34,9 +34,9 @@
         </view>
     </view>
     <!-- 退款说明 -->
-    <view class="refund-notice">
+    <view class="refund-notice" wx:if="{{ currentProductIdentifier === 'com.louhao.xiaoqu.vip' }}">
         <view class="refund-notice-row">
-            <view class="refund-notice-text-wrap" wx:if="{{ currentProductIdentifier === 'com.louhao.xiaoqu.vip' }}">
+            <view class="refund-notice-text-wrap">
                 <view 
                     class="refund-text" style="color:red"
                 >

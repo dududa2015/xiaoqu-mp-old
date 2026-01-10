@@ -26,7 +26,7 @@ const request = (params) => {
       method: method, // get/post
       data: data, // 请求参数
       header: header, // 头部
-      timeout: 15000, // 设置15秒超时
+      timeout: 60000, // 设置15秒超时
       success(res) {
         if (res.statusCode === 401) {
           // #if MP

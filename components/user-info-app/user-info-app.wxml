@@ -1,95 +1,69 @@
-<view class="header">
-    <view class="flex f-y-center">
-        <view class="avatar-wrap">
-            <image src="/images/my/avatar.png" class="header-img" mode="" />
-        </view>
-        <view class="name-wrap">
-            <view class="name flex f-x-sb f-y-center" bind:tap="toLogin">
-                <!-- 小区楼号 -->
-                <view class="name-icon-wrap">
-                    {{nickName}}
-                    <image src="/images/my/v.png" mode="" class="v-img" wx:if="{{showVip}}" />
-                    <t-tag size="small" variant="light" class="id-tag" theme="primary">id: {{userId}}</t-tag>
+<view class="user-container">
+    <!-- 用户信息区域 -->
+    <view class="user-section" bind:tap="toLogin">
+        <view class="user-content">
+            <view class="avatar-wrapper">
+                <image src="/images/my/avatar.png" class="user-avatar" mode="aspectFill" />
+                <view class="avatar-glow"></view>
+            </view>
+            <view class="user-details">
+                <view class="name-group">
+                    <text class="user-name">{{nickName}}</text>
+                    <view class="badge-group">
+                        <view class="badge-item badge-vip" wx:if="{{showVip}}">VIP</view>
+                    </view>
                 </view>
-                <view>
-                    <t-icon name="chevron-right" size="48rpx" />
+                <view class="user-meta">
+                    <text class="user-id">ID: {{userId}}</text>
                 </view>
             </view>
-            <view class="desc" wx:if="{{vipExpiredDate}}">
-                <!-- 会员正常：仅展示到期日期 -->
-                <t-tag 
-                    wx:if="{{showVip && !isVipExpiringSoon}}" 
-                    size="small" 
-                    variant="light" 
-                    theme="primary"
-                >
-                    会员到期日期 {{vipExpiredDate}}
-                </t-tag>
-
-                <!-- 会员即将到期（7 天内）：黄色提示 + 剩余天数（方案 A 文案） -->
-                <t-tag 
-                    wx:elif="{{showVip && isVipExpiringSoon}}" 
-                    size="small" 
-                    variant="light" 
-                    theme="warning"
-                >
-                    会员将于 {{vipExpiredDate}} 到期（剩 {{vipDaysLeft}} 天）
-                </t-tag>
-
-                <!-- 已过期：保持原有红色提示 -->
-                <t-tag 
-                    wx:else="{{vipExpiredDate}}" 
-                    size="small" 
-                    variant="light" 
-                    theme="warning"
-                >
-                    您的会员于{{vipExpiredDate}}过期
-                </t-tag>
+            <view class="action-btn">
+                <t-icon name="edit" size="28rpx" color="#ffffff" />
+            </view>
+        </view>
+        <!-- 会员到期信息 -->
+        <view class="vip-info" wx:if="{{vipExpiredDate}}">
+            <view class="vip-badge-row">
+                <view class="vip-label-badge">{{showVip ? 'VIP' : '过期'}}</view>
+                <text class="vip-date-text">{{vipExpiredDate}}</text>
+                <view class="vip-days-tag" wx:if="{{showVip && !isVipExpiringSoon}}">会员有效</view>
+                <view class="vip-days-tag vip-warning" wx:elif="{{showVip && isVipExpiringSoon}}">剩{{vipDaysLeft}}天</view>
             </view>
         </view>
     </view>
-    <!-- 第二行 -->
-    <view class="main flex f-x-sr f-y-center">
-        <view class="main-item" bind:tap="showToast" data-number="{{points ||0}}" data-type="score">
-            <view class="number">
-                {{points ||0}}
-            </view>
-            <view class="text">
-                积分
-            </view>
-        </view>
-        <view class="main-item-line"></view>
 
-        <view class="main-item" bind:tap="toMarkers" data-deleted="{{0}}">
-            <view class="number">
-                {{markers ||0}}
+    <!-- 统计数据区域 -->
+    <view class="stats-section">
+        <view class="stats-grid">
+            <view class="stat-item stat-markers" bind:tap="toMarkers" data-deleted="{{0}}">
+                <view class="stat-icon">
+                    <t-icon name="location" size="40rpx" />
+                </view>
+                <view class="stat-info">
+                    <view class="stat-value">{{markers || 0}}</view>
+                    <view class="stat-title">标记</view>
+                </view>
             </view>
-            <view class="text">
-                标记
+            
+            <view class="stat-item stat-friends" bind:tap="showToast" data-number="{{friends || 0}}" data-type="friend">
+                <view class="stat-icon">
+                    <t-icon name="usergroup" size="40rpx" />
+                </view>
+                <view class="stat-info">
+                    <view class="stat-value">{{friends || 0}}</view>
+                    <view class="stat-title">好友</view>
+                </view>
             </view>
-        </view>
-        <view class="main-item-line"></view>
 
-        <view class="main-item" bind:tap="showToast" data-number="{{friends ||0}}" data-type="friend">
-            <view class="number">
-                {{ friends || 0 }}
-            </view>
-            <view class="text">
-                好友
-            </view>
-        </view>
-        <view class="main-item-line"></view>
-
-        <view class="main-item" bind:tap="toMarkers" data-deleted="{{1}}">
-            <view class="number">
-                {{deleted || 0}}
-            </view>
-            <view class="text">
-                被删除
+            <view class="stat-item stat-deleted" bind:tap="toMarkers" data-deleted="{{1}}">
+                <view class="stat-icon">
+                    <t-icon name="delete" size="40rpx" />
+                </view>
+                <view class="stat-info">
+                    <view class="stat-value">{{deleted || 0}}</view>
+                    <view class="stat-title">被删除</view>
+                </view>
             </view>
         </view>
     </view>
-    <!-- <view class="vip-date"> 
-        试用三天，2025-03-30结束
-    </view> -->
 </view>
