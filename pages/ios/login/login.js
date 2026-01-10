@@ -1,7 +1,4 @@
-//1、通过apple登录时，如果之前登录过，会通过appleId关联x_users中之前的账号，如果未登录过，则根据appleId创建一个新的账号
-//
 import {
-  getUserInfoByAppLogin,
   getUserInfoByWxLogin,
   getAppleUserInfo
 } from '../../../apis/user-api.js'
@@ -12,13 +9,8 @@ Page({
    */
   data: {
     hasWechatInstall: false, //微信是否安装
-    userId: '',
-    pwd: '',
-    phoneMask: '号码未知',
-    agreeText: '',
-    agreeUrl: '',
-    showGuide: false,
-    agreed: false //同意用户协议或隐私
+    agreed: false, //同意用户协议或隐私
+    loading: false //登录加载状态
   },
 
   /**
@@ -76,53 +68,6 @@ Page({
   onShow() {
 
   },
-  onUserIdInput(e) {
-    console.log(e.detail.value)
-    this.setData({
-      userId: e.detail.value
-    })
-  },
-  onPwdInput(e) {
-    this.setData({
-      pwd: e.detail.value
-    })
-  },
-  //通过小程序用户编号和用户密码登录
-  onLogin() {
-    console.log(this.data.userId, this.data.pwd)
-    if (this.data.userId.length === 0) {
-      wx.showToast({
-        title: '请输入小程序用户编号',
-        icon: 'none'
-      })
-      return
-    }
-    if (this.data.pwd.length === 0) {
-      wx.showToast({
-        title: '请输入小程序用户密码',
-        icon: 'none'
-      })
-      return
-    }
-    if (!this.checkAgreed()) return
-    wx.clearStorage()
-    getUserInfoByAppLogin({
-      userId: this.data.userId,
-      pwd: this.data.pwd
-    }).then(res => {
-      this.setUserInfo(res)
-    })
-  },
-  //本机一键登录
-  phoneLogin() {
-    wx.getPhoneMask({
-      success(res) {
-        if (res.phoneMask) {
-          console.log(res)
-        }
-      }
-    })
-  },
   //判断微信是否有安装
   hasWechatInstall() {
     wx.miniapp.hasWechatInstall({
@@ -140,6 +85,14 @@ Page({
   //微信登录,个人主体无法使用
   wxLogin() {
     if (!this.checkAgreed()) return
+    if (this.data.loading) return
+
+    this.setData({ loading: true })
+    wx.showLoading({
+      title: '登录中...',
+      mask: true
+    })
+
     const that = this
     wx.miniapp.login({
       success: (res) => {
@@ -148,20 +101,49 @@ Page({
           getUserInfoByWxLogin({
             code: res.code
           }).then(res => {
+            wx.hideLoading()
+            that.setData({ loading: false })
             that.setUserInfo(res)
+          }).catch(err => {
+            wx.hideLoading()
+            that.setData({ loading: false })
+            wx.showToast({
+              title: '登录失败，请稍后重试',
+              icon: 'none'
+            })
+            console.error('微信登录失败:', err)
           })
         } else {
+          wx.hideLoading()
+          that.setData({ loading: false })
           wx.showToast({
             title: '您取消了授权请求',
             icon: 'none'
           })
         }
+      },
+      fail(err) {
+        wx.hideLoading()
+        that.setData({ loading: false })
+        wx.showToast({
+          title: '登录失败，请稍后重试',
+          icon: 'none'
+        })
+        console.error('微信登录失败:', err)
       }
     })
   },
   //苹果登录
   appleLogin() {
     if (!this.checkAgreed()) return
+    if (this.data.loading) return
+
+    this.setData({ loading: true })
+    wx.showLoading({
+      title: '登录中...',
+      mask: true
+    })
+
     const that = this
     wx.appleLogin({
       success(res) {
@@ -171,9 +153,21 @@ Page({
             code: res.code
           }).then(res => {
             console.log(res)
+            wx.hideLoading()
+            that.setData({ loading: false })
             that.setUserInfo(res)
+          }).catch(err => {
+            wx.hideLoading()
+            that.setData({ loading: false })
+            wx.showToast({
+              title: '登录失败，请稍后重试',
+              icon: 'none'
+            })
+            console.error('获取用户信息失败:', err)
           })
         } else {
+          wx.hideLoading()
+          that.setData({ loading: false })
           wx.showToast({
             title: '登录失败，请稍后重试',
             icon: 'none'
@@ -182,6 +176,8 @@ Page({
         }
       },
       fail(err) {
+        wx.hideLoading()
+        that.setData({ loading: false })
         if (err.errCode === -700000) {
           wx.showToast({
             title: '您取消了授权请求',
@@ -213,7 +209,18 @@ Page({
       wx.setStorageSync('token', res.token)
       wx.setStorageSync('appleId', res.appleId)
       wx.setStorageSync('userInfo', res)
-      wx.navigateBack()
+
+      // 获取当前页面栈
+      const pages = getCurrentPages()
+      const currentPage = pages[pages.length - 2] // 上一个页面
+
+      if (currentPage && currentPage.route === 'pages/my/edit/edit') {
+        wx.reLaunch({
+          url: '/pages/my/index/index'
+        })
+      } else {
+        wx.navigateBack()
+      }
     } else {
       wx.showToast({
         title: '登录失败，请使用其他方式登录',
@@ -222,19 +229,6 @@ Page({
         mask: true
       })
     }
-  },
-  toGuide() {
-    this.setData({
-      showGuide: true
-    })
-    // wx.navigateTo({
-    //     url: '/pages/ios/login-guide/login-guide',
-    // })
-  },
-  closeGuide() {
-    this.setData({
-      showGuide: false
-    })
   },
   agreedChange(event) {
     this.setData({
