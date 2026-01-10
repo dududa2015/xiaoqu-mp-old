@@ -4,15 +4,13 @@
       <view class="audit-item" wx:for="{{auditList}}" wx:key="xId">
         <t-swipe-cell>
           <view class="audit-card" bind:tap="onMarkerTap" data-item="{{item}}">
-            <view class="card-top">
+            <view class="card-header">
               <view class="name-section">
                 <text class="name">{{item.name}}</text>
                 <view class="tag type-tag">{{item.typeText}}</view>
+                <view class="tag building-tag" wx:if="{{item.userId === '92918a62b30c'}}">小区楼号</view>
               </view>
-              <view class="feedback-tag feedback-type">{{item.feedbackTypeText}}</view>
-            </view>
-            <view class="card-middle">
-              <view class="user-info">用户: {{item.userId}}</view>
+              <view class="feedback-badge">{{item.feedbackTypeText}}</view>
             </view>
           </view>
           <view slot="right" class="btn-wrapper">

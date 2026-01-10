@@ -1,6 +1,6 @@
 .container {
   padding: 24rpx;
-  background-color: #f7f8fa;
+  background-color: #f5f7fa;
   min-height: 100vh;
 }
 
@@ -17,20 +17,22 @@
 
 .audit-item {
   background-color: #fff;
-  border-radius: 12rpx;
+  border-radius: 16rpx;
   overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
 }
 
 .audit-card {
   background-color: #fff;
-  padding: 28rpx 24rpx;
+  padding: 24rpx;
 }
 
-.card-top {
+.card-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16rpx;
+  align-items: center;
+  margin-bottom: 20rpx;
 }
 
 .name-section {
@@ -38,39 +40,72 @@
   display: flex;
   align-items: center;
   gap: 12rpx;
+  min-width: 0;
 }
 
 .name {
   font-size: 32rpx;
   font-weight: 600;
   color: #1a1a1a;
+  flex-shrink: 0;
 }
 
 .type-tag {
-  padding: 6rpx 16rpx;
-  background: linear-gradient(135deg, #e8f4fd 0%, #d0e8fc 100%);
+  padding: 4rpx 12rpx;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
   color: #1976d2;
-  border-radius: 8rpx;
+  border-radius: 20rpx;
   font-size: 22rpx;
-  font-weight: 500;
-}
-
-.feedback-tag {
-  padding: 8rpx 20rpx;
-  border-radius: 8rpx;
-  font-size: 24rpx;
   font-weight: 500;
   white-space: nowrap;
 }
 
-.feedback-tag.feedback-type {
-  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-  color: #e65100;
+.building-tag {
+  padding: 4rpx 12rpx;
+  background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+  color: #7b1fa2;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
-.card-middle {
+.feedback-badge {
+  padding: 8rpx 20rpx;
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  color: #e65100;
+  border-radius: 24rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 12rpx;
+}
+
+.card-content {
   padding-top: 16rpx;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1rpx dashed #e8e8e8;
+}
+
+.info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.info-icon {
+  font-size: 28rpx;
+}
+
+.info-text {
+  font-size: 26rpx;
+  color: #5a5a5a;
 }
 
 .remark {
@@ -78,11 +113,6 @@
   color: #666;
   line-height: 1.6;
   margin-bottom: 12rpx;
-}
-
-.user-info {
-  font-size: 24rpx;
-  color: #999;
 }
 
 .btn-wrapper {
@@ -97,10 +127,11 @@
   height: 100%;
   color: white;
   font-size: 28rpx;
+  font-weight: 500;
 }
 
 .recover-btn {
-  background: linear-gradient(180deg, #00c853 0%, #009624 100%);
+  background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
 }
 
 .empty-container {
@@ -114,12 +145,12 @@
 .img {
   width: 320rpx;
   height: 320rpx;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .empty-text {
   font-size: 28rpx;
-  color: #999;
+  color: #b0b0b0;
   margin-top: 32rpx;
 }
 
