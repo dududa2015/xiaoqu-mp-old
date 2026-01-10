@@ -1,21 +1,56 @@
 <view class="container">
-  <view class="content">
-    <t-input value="{{nickName}}" type="text" readonly maxlength="10" placeholder="请输入昵称" suffixIcon="chevron-right" bind:nicknamereview="onNickNameReview" bind:change="onNickNameChange" bind:tap="showNickNameDialog">
-      <text slot="label">昵称<text style="color: #e34d59"> *</text> </text>
-    </t-input>
+  <!-- 昵称编辑 -->
+  <view class="info-card">
+    <!-- 显示模式 -->
+    <view class="info-item" wx:if="{{!isEditing}}" bind:tap="startEditNickName">
+      <view class="item-label">
+        <text class="label-text">昵称</text>
+        <text class="label-required">*</text>
+      </view>
+      <view class="item-content">
+        <text class="item-value" wx:if="{{nickName}}">{{nickName}}</text>
+        <text class="item-placeholder" wx:else>请输入昵称</text>
+        <view class="item-arrow">›</view>
+      </view>
+    </view>
+    
+    <!-- 编辑模式 -->
+    <view class="info-item edit-mode" wx:else>
+      <view class="item-label">
+        <text class="label-text">昵称</text>
+        <text class="label-required">*</text>
+      </view>
+      <view class="edit-content">
+        <input 
+          class="edit-input" 
+          value="{{editingName}}" 
+          maxlength="10" 
+          placeholder="请输入昵称"
+          focus="{{focusInput}}"
+          bindinput="onNickNameInput"
+          bindconfirm="saveNickName"
+        />
+        <view class="edit-actions">
+          <view class="edit-btn cancel-btn" bind:tap="cancelEdit">取消</view>
+          <view class="edit-btn save-btn" bind:tap="saveNickName">保存</view>
+        </view>
+      </view>
+    </view>
   </view>
-  <!-- #if MP -->
-  <!-- <view class="tips">温馨提示：用户编号和用户密码由小程序随机生成</view> -->
-  <!-- #endif -->
+
   <!-- #if NATIVE -->
-  <view class="btn-wrap">
-    <t-button theme="primary" size="large" block bind:tap="toLogin">切换账号</t-button>
-  </view>
-  <view class="footer">
-    <text class="footer-text" bind:tap="onLogout">注销账号</text>
+  <!-- 按钮区域 -->
+  <view class="button-section">
+    <!-- 切换账号 -->
+    <view class="switch-btn" bind:tap="toLogin">
+      <text class="switch-text">切换账号</text>
+    </view>
+
+    <!-- 注销账号 -->
+    <view class="logout-btn" bind:tap="onLogout">
+      <text class="logout-text">注销账号</text>
+    </view>
   </view>
   <!-- #endif -->
-  <t-dialog visible="{{showDialog}}" title="修改昵称" confirm-btn="确定" cancel-btn="取消" bind:confirm="closeDialog" bind:cancel="closeDialog">
-    <t-input value="{{name}}" borderless maxlength="10" class="dialog-input" slot="content" placeholder="请输入昵称(最多10个字)" bind:change="onNameChange" />
-  </t-dialog>
+
 </view>
