@@ -49,7 +49,6 @@
     <view bind:tap="onSetting">
         <view class="img-wrap">
             <image src="/images/controls/setting.png" class="img" mode="" />
-            <view class="red-dot" wx:if="{{showRedDot}}"></view>
         </view>
         <view class="text">设置</view>
     </view>

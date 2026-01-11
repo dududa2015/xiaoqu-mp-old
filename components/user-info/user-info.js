@@ -82,16 +82,23 @@ Component({
         avatarUrl,
       })
     },
-    onAvatarTap() {
-      wx.showToast({
-        title: '当前版本：v5.0',
-        icon: 'none'
-      })
-    },
     toEdit() {
-      wx.navigateTo({
-        url: '/pages/my/edit/edit',
-      })
+      let userInfo = wx.getStorageSync('userInfo')
+      if (!userInfo || !userInfo.userId) {
+        // #if IOS
+        wx.navigateTo({
+          url: '/pages/ios/login/login',
+        })
+        // #else
+        wx.navigateTo({
+          url: '/pages/android/login/login',
+        })
+        // #endif
+      } else {
+        wx.navigateTo({
+          url: '/pages/my/edit/edit',
+        })
+      }
     },
     showToast(event) {
       const {
@@ -122,12 +129,35 @@ Component({
       })
     },
     toMarkers(event) {
-      const {
-        deleted
-      } = event.currentTarget.dataset
-      wx.navigateTo({
-        url: '/pages/my/markers/markers?deleted=' + deleted,
-      })
+      let userInfo = wx.getStorageSync('userInfo')
+      if (userInfo) {
+        const {
+          deleted
+        } = event.currentTarget.dataset
+        wx.navigateTo({
+          url: '/pages/my/markers/markers?deleted=' + deleted,
+        })
+      } else {
+        wx.showModal({
+          title: '登录提示',
+          content: '需要先登录才能进行操作',
+          success(res) {
+            if (res.confirm) {
+              // #if IOS
+              wx.navigateTo({
+                url: '/pages/ios/login/login',
+              })
+              // #else
+              wx.navigateTo({
+                url: '/pages/android/login/login',
+              })
+              // #endif
+            } else if (res.cancel) {
+              console.log('用户点击取消')
+            }
+          }
+        })
+      }
     },
     convertToWan(num) {
       if (num > 1000000) {

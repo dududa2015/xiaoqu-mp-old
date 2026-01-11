@@ -1674,9 +1674,15 @@ Page({
       }
 
     } else {
+      // #if IOS
       wx.navigateTo({
         url: '/pages/ios/login/login',
       })
+      // #else
+      wx.navigateTo({
+        url: '/pages/android/login/login',
+      })
+      // #endif
     }
   },
   // #if NATIVE

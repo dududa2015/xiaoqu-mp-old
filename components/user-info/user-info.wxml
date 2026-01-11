@@ -2,7 +2,7 @@
     <!-- 用户信息区域 -->
     <view class="user-section" bind:tap="toEdit">
         <view class="user-content">
-            <view class="avatar-wrapper" catch:tap="onAvatarTap">
+            <view class="avatar-wrapper">
                 <image src="/images/my/avatar.png" class="user-avatar" mode="aspectFill" />
                 <view class="avatar-glow"></view>
             </view>
