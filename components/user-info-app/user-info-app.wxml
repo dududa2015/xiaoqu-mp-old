@@ -10,7 +10,8 @@
                 <view class="name-group">
                     <text class="user-name">{{nickName}}</text>
                     <view class="badge-group">
-                        <view class="badge-item badge-vip" wx:if="{{showVip}}">VIP</view>
+                        <view class="badge-item badge-lifetime" wx:if="{{isLifetimeVip}}">终身会员</view>
+                        <view class="badge-item badge-vip" wx:elif="{{showVip}}">VIP</view>
                     </view>
                 </view>
                 <view class="user-meta">
@@ -18,18 +19,20 @@
                 </view>
             </view>
             <view class="action-btn">
-                <t-icon name="edit" size="28rpx" color="#ffffff" />
+                <t-icon name="edit" size="32rpx" color="#4b5563" />
             </view>
         </view>
+        <!-- #if NATIVE -->
         <!-- 会员到期信息 -->
-        <view class="vip-info" wx:if="{{vipExpiredDate}}">
+        <view class="vip-info" wx:if="{{vipExpiredDate && !isLifetimeVip}}">
             <view class="vip-badge-row">
                 <view class="vip-label-badge">{{showVip ? 'VIP' : '过期'}}</view>
-                <text class="vip-date-text">{{vipExpiredDate}}</text>
+                <text class="vip-date-text">到期时间：{{vipExpiredDate}}</text>
                 <view class="vip-days-tag" wx:if="{{showVip && !isVipExpiringSoon}}">会员有效</view>
                 <view class="vip-days-tag vip-warning" wx:elif="{{showVip && isVipExpiringSoon}}">剩{{vipDaysLeft}}天</view>
             </view>
         </view>
+        <!-- #endif -->
     </view>
 
     <!-- 统计数据区域 -->
@@ -37,7 +40,7 @@
         <view class="stats-grid">
             <view class="stat-item stat-markers" bind:tap="toMarkers" data-deleted="{{0}}">
                 <view class="stat-icon">
-                    <t-icon name="location" size="40rpx" />
+                    <t-icon name="location" size="32rpx" />
                 </view>
                 <view class="stat-info">
                     <view class="stat-value">{{markers || 0}}</view>
@@ -47,7 +50,7 @@
             
             <view class="stat-item stat-friends" bind:tap="showToast" data-number="{{friends || 0}}" data-type="friend">
                 <view class="stat-icon">
-                    <t-icon name="usergroup" size="40rpx" />
+                    <t-icon name="usergroup" size="32rpx" />
                 </view>
                 <view class="stat-info">
                     <view class="stat-value">{{friends || 0}}</view>
@@ -57,7 +60,7 @@
 
             <view class="stat-item stat-deleted" bind:tap="toMarkers" data-deleted="{{1}}">
                 <view class="stat-icon">
-                    <t-icon name="delete" size="40rpx" />
+                    <t-icon name="delete" size="32rpx" />
                 </view>
                 <view class="stat-info">
                     <view class="stat-value">{{deleted || 0}}</view>

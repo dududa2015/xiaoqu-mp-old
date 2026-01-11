@@ -1,9 +1,5 @@
 <view class="container" style="margin-top:{{top}}px;">
-  <!-- #if MP -->
   <user-info userInfo="{{userInfo}}"></user-info>
-  <!-- #else -->
-  <user-info-app userInfo="{{userInfo}}"></user-info-app>
-  <!-- #endif -->
 
   <view class="content">
     <!-- #if IOS -->

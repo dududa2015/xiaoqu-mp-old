@@ -26,10 +26,14 @@ Component({
           const expiredDateObj = vipExpiredRaw ? new Date(vipExpiredRaw) : null
           const showVip = expiredDateObj && expiredDateObj > now
 
-          // 计算剩余天数（只对未过期的会员算）
+          // 检查是否是终身会员（2099/12/31 00:00:00）
+          const lifetimeDate = new Date('2099-12-31 00:00:00')
+          const isLifetimeVip = expiredDateObj && expiredDateObj.getTime() === lifetimeDate.getTime()
+
+          // 计算剩余天数（只对未过期的会员算，终身会员不计算）
           let vipDaysLeft = 0
           let isVipExpiringSoon = false
-          if (showVip && expiredDateObj) {
+          if (showVip && expiredDateObj && !isLifetimeVip) {
             const diffMs = expiredDateObj.getTime() - now.getTime()
             // 使用 Math.ceil，保证还有一点点时间也显示为 1 天
             vipDaysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
@@ -51,7 +55,8 @@ Component({
             showVip,
             vipExpiredDate,
             vipDaysLeft,
-            isVipExpiringSoon
+            isVipExpiringSoon,
+            isLifetimeVip
           })
         }
       }
@@ -135,10 +140,18 @@ Component({
     formatDate(datetimeStr) {
       if (datetimeStr) {
         const dateObj = new Date(datetimeStr); // 解析为 Date 对象
+        // 检查是否是终身会员（2099/12/31 00:00:00）
+        const lifetimeDate = new Date('2099-12-31 00:00:00');
+        if (dateObj.getTime() === lifetimeDate.getTime()) {
+          return '终身会员';
+        }
         const year = dateObj.getFullYear();
         const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始，补零
         const day = String(dateObj.getDate()).padStart(2, "0"); // 补零
-        return `${year}-${month}-${day}`;
+        const hours = String(dateObj.getHours()).padStart(2, "0"); // 小时，补零
+        const minutes = String(dateObj.getMinutes()).padStart(2, "0"); // 分钟，补零
+        const seconds = String(dateObj.getSeconds()).padStart(2, "0"); // 秒，补零
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
       } else {
         return ''
       }

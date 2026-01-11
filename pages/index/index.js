@@ -236,7 +236,7 @@ Page({
           url: '/pages/my/index/index',
         })
       },
-      1000);
+      1500);
   },
   //设置
   initStorage() {

@@ -1,33 +1,16 @@
 /* 容器 */
 .user-container {
     background: #ffffff;
-    border-radius: 24rpx;
+    border-radius: 28rpx;
     overflow: hidden;
-    box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2rpx 16rpx rgba(0, 0, 0, 0.04);
 }
 
 /* 用户信息区域 */
 .user-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 32rpx 28rpx 20rpx;
+    padding: 36rpx 28rpx 20rpx;
     position: relative;
     overflow: hidden;
-}
-
-.user-section::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 100%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 255,255, 0.1) 0%, transparent 60%);
-    animation: shimmer 8s infinite linear;
-}
-
-@keyframes shimmer {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
 }
 
 .user-content {
@@ -39,36 +22,24 @@
 
 .avatar-wrapper {
     flex-shrink: 0;
-    width: 108rpx;
-    height: 108rpx;
+    width: 112rpx;
+    height: 112rpx;
     border-radius: 50%;
     position: relative;
-    overflow: visible;
+    overflow: hidden;
+    background: linear-gradient(135deg, #e8ecf1 0%, #f5f7fa 100%);
+    border: 3rpx solid #ffffff;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
 }
 
 .avatar-glow {
-    position: absolute;
-    top: -4rpx;
-    left: -4rpx;
-    right: -4rpx;
-    bottom: -4rpx;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
-    opacity: 0.3;
-    filter: blur(8rpx);
-    animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.05); }
+    display: none;
 }
 
 .user-avatar {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: 4rpx solid rgba(255, 255, 255, 0.3);
     background: #ffffff;
     position: relative;
     z-index: 1;
@@ -84,17 +55,15 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 12rpx;
-    margin-bottom: 8rpx;
+    gap: 10rpx;
+    margin-bottom: 10rpx;
 }
 
 .user-name {
     font-size: 40rpx;
-    font-weight: 700;
-    color: #ffffff;
+    font-weight: 600;
+    color: #1f2937;
     line-height: 56rpx;
-    letter-spacing: 0.5rpx;
-    text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
 }
 
 .badge-group {
@@ -104,24 +73,47 @@
 }
 
 .badge-item {
-    padding: 4rpx 12rpx;
-    border-radius: 20rpx;
-    font-size: 18rpx;
+    padding: 4rpx 14rpx;
+    border-radius: 12rpx;
+    font-size: 20rpx;
     font-weight: 600;
-    letter-spacing: 0.3rpx;
-    backdrop-filter: blur(10rpx);
 }
 
 .badge-vip {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.9) 0%, rgba(255, 165, 0, 0.9) 100%);
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
     color: #ffffff;
-    box-shadow: 0 2rpx 8rpx rgba(255, 215, 0, 0.3);
+    box-shadow: 0 2rpx 6rpx rgba(245, 158, 11, 0.25);
 }
 
 .badge-admin {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
     color: #ffffff;
-    box-shadow: 0 2rpx 8rpx rgba(102, 126, 234, 0.3);
+    box-shadow: 0 2rpx 6rpx rgba(99, 102, 241, 0.25);
+}
+
+.badge-lifetime {
+    background: linear-gradient(135deg, #ffd700 0%, #ffb347 50%, #ff8c00 100%);
+    color: #ffffff;
+    box-shadow: 0 2rpx 8rpx rgba(255, 215, 0, 0.4), 0 0 0 1rpx rgba(255, 255, 255, 0.3) inset;
+    text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.badge-lifetime::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
+    animation: shimmer-badge 2s infinite;
+}
+
+@keyframes shimmer-badge {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
 }
 
 .user-meta {
@@ -131,13 +123,11 @@
 
 .user-id {
     font-size: 22rpx;
-    color: rgba(255, 255, 255, 0.85);
+    color: #6b7280;
     font-weight: 400;
-    letter-spacing: 0.5rpx;
-    background: rgba(255, 255, 255, 0.15);
+    background: #f3f4f6;
     padding: 4rpx 16rpx;
-    border-radius: 20rpx;
-    backdrop-filter: blur(10rpx);
+    border-radius: 16rpx;
 }
 
 .action-btn {
@@ -145,18 +135,21 @@
     width: 64rpx;
     height: 64rpx;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.25);
+    background: #f3f4f6;
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(10rpx);
-    transition: all 0.3s ease;
-    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    box-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.04);
 }
 
 .action-btn:active {
-    transform: scale(0.9);
-    background: rgba(255, 255, 255, 0.3);
+    transform: scale(0.92);
+    background: #e5e7eb;
+}
+
+.action-btn t-icon {
+    color: #4b5563;
 }
 
 /* 会员信息 */
@@ -170,11 +163,10 @@
     display: flex;
     align-items: center;
     gap: 10rpx;
-    padding: 10rpx 16rpx;
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(20rpx);
+    padding: 14rpx 18rpx;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
     border-radius: 20rpx;
-    border: 1rpx solid rgba(255, 255, 255, 0.2);
+    border: 1rpx solid rgba(245, 158, 11, 0.15);
 }
 
 .vip-label-badge {
@@ -183,37 +175,32 @@
     border-radius: 12rpx;
     font-size: 20rpx;
     font-weight: 700;
-    letter-spacing: 1rpx;
-    background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
     color: #ffffff;
-    box-shadow: 0 2rpx 8rpx rgba(255, 170, 0, 0.3);
-    text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2rpx 6rpx rgba(245, 158, 11, 0.25);
 }
 
 .vip-date-text {
     flex: 1;
     font-size: 22rpx;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.95);
-    letter-spacing: 0.3rpx;
-    text-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.1);
+    color: #92400e;
 }
 
 .vip-days-tag {
     flex-shrink: 0;
-    padding: 4rpx 12rpx;
+    padding: 6rpx 14rpx;
     border-radius: 12rpx;
     font-size: 20rpx;
     font-weight: 600;
-    letter-spacing: 0.3rpx;
-    background: rgba(16, 185, 129, 0.3);
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: #ffffff;
-    border: 1rpx solid rgba(16, 185, 129, 0.5);
+    border: none;
+    box-shadow: 0 2rpx 6rpx rgba(16, 185, 129, 0.25);
 }
 
 .vip-warning {
-    background: rgba(245, 158, 11, 0.3);
-    border-color: rgba(245, 158, 11, 0.5);
+    background: #f59e0b;
     animation: pulse-warning 2s ease-in-out infinite;
 }
 
@@ -225,77 +212,84 @@
 /* 统计数据区域 */
 .stats-section {
     background: #ffffff;
-    padding: 20rpx 16rpx 20rpx;
+    padding: 16rpx 24rpx 24rpx;
 }
 
 .stats-grid {
     display: flex;
-    gap: 12rpx;
+    gap: 10rpx;
 }
 
 .stat-item {
     flex: 1;
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 12rpx;
-    background: #f8f9fa;
-    border-radius: 16rpx;
-    padding: 16rpx 14rpx;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 14rpx;
+    background: #f9fafb;
+    border-radius: 20rpx;
+    padding: 16rpx 18rpx;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
-    border: 1rpx solid rgba(0, 0, 0, 0.04);
+    border: 1rpx solid #f3f4f6;
 }
 
 .stat-item:active {
-    transform: translateY(-2rpx);
-    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+    transform: translateY(-1rpx);
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+    background: #f3f4f6;
+    border-color: #e5e7eb;
 }
 
 .stat-icon {
     flex-shrink: 0;
-    width: 56rpx;
-    height: 56rpx;
+    width: 52rpx;
+    height: 52rpx;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.06);
+    background: #ffffff;
+    box-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.04);
 }
 
 .stat-markers .stat-icon {
-    color: #667eea;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(102, 126, 234, 0.05) 100%);
+    color: #3b82f6;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.06) 100%);
 }
 
 .stat-friends .stat-icon {
     color: #10b981;
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0.06) 100%);
 }
 
 .stat-deleted .stat-icon {
     color: #f59e0b;
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(245, 158, 11, 0.06) 100%);
 }
 
 .stat-info {
     flex: 1;
     min-width: 0;
     overflow: hidden;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .stat-value {
-    font-size: 32rpx;
-    font-weight: 800;
-    line-height: 44rpx;
-    color: #1a1a1a;
-    letter-spacing: -0.5rpx;
+    font-size: 30rpx;
+    font-weight: 700;
+    line-height: 42rpx;
+    color: #111827;
     white-space: nowrap;
+    margin-bottom: 2rpx;
 }
 
 .stat-markers .stat-value {
-    color: #667eea;
+    color: #3b82f6;
 }
 
 .stat-friends .stat-value {
@@ -309,8 +303,7 @@
 .stat-title {
     font-size: 20rpx;
     font-weight: 500;
-    color: #666;
+    color: #6b7280;
     line-height: 28rpx;
-    letter-spacing: 0.3rpx;
     white-space: nowrap;
 }

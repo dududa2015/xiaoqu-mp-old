@@ -155,7 +155,7 @@ App({
     }
   },
 
-  // 初始化设备试用期：仅针对 Android，一机一次 7 天试用
+  // 初始化设备试用期：仅针对 Android，一机一次 3 天试用
   async initDeviceTrial(deviceId) {
     if (!deviceId) return
 
@@ -173,7 +173,7 @@ App({
         }
       }
 
-      // 2. 没有记录时，为该设备自动创建一次 7 天试用
+      // 2. 没有记录时，为该设备自动创建一次 3 天试用
       const now = new Date()
       const trialStart = now.toISOString()
       const trialEnd = new Date(now.getTime() + TRIAL_PERIOD_DAYS * 24 * 60 * 60 * 1000).toISOString()
