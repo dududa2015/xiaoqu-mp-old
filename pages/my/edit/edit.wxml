@@ -39,7 +39,7 @@
   </view>
 
   <!-- #if NATIVE -->
-  <!-- 按钮区域 -->
+  <!-- 底部按钮区域 -->
   <view class="button-section">
     <!-- 切换账号 -->
     <view class="switch-btn" bind:tap="toLogin">

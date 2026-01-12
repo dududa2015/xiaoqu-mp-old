@@ -33,6 +33,7 @@
                 <view class="vip-label-badge">{{showVip ? 'VIP' : '过期'}}</view>
                 <text class="vip-date-text">到期时间：{{vipExpiredDate}}</text>
                 <view class="vip-days-tag" wx:if="{{showVip && !isVipExpiringSoon}}">会员有效</view>
+                <view class="vip-days-tag vip-warning" wx:elif="{{showVip && isVipExpiringSoon && showHours}}">剩{{vipHoursLeft}}小时</view>
                 <view class="vip-days-tag vip-warning" wx:elif="{{showVip && isVipExpiringSoon}}">剩{{vipDaysLeft}}天</view>
             </view>
         </view>

@@ -6,6 +6,8 @@ page {
     padding: 32rpx;
     min-height: 100vh;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
 /* 信息卡片 */
@@ -167,7 +169,9 @@ page {
     display: flex;
     flex-direction: column;
     gap: 20rpx;
-    padding-bottom: env(safe-area-inset-bottom);
+    margin-top: auto;
+    padding-top: 20rpx;
+    padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
 }
 
 /* 切换账号按钮 - 主要按钮 */

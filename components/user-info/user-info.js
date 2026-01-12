@@ -32,11 +32,18 @@ Component({
 
           // 计算剩余天数（只对未过期的会员算，终身会员不计算）
           let vipDaysLeft = 0
+          let vipHoursLeft = 0
+          let showHours = false
           let isVipExpiringSoon = false
           if (showVip && expiredDateObj && !isLifetimeVip) {
             const diffMs = expiredDateObj.getTime() - now.getTime()
             // 使用 Math.ceil，保证还有一点点时间也显示为 1 天
             vipDaysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
+            // 如果剩余时间在1天以内，计算小时数
+            if (vipDaysLeft <= 1) {
+              vipHoursLeft = Math.ceil(diffMs / (1000 * 60 * 60))
+              showHours = true
+            }
             // 阈值：7 天内视为"即将到期"
             if (vipDaysLeft > 0 && vipDaysLeft <= 7) {
               isVipExpiringSoon = true
@@ -55,6 +62,8 @@ Component({
             showVip,
             vipExpiredDate,
             vipDaysLeft,
+            vipHoursLeft,
+            showHours,
             isVipExpiringSoon,
             isLifetimeVip
           })
