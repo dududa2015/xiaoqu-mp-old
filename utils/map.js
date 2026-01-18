@@ -19,7 +19,7 @@ const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted) => 
     markers.label = {
       content: name,
       borderWidth: 0.4,
-      borderColor: "#f7f7f7",
+      borderColor: "#f5f5f5",
       borderRadius: 8,
       bgColor,
       color: "#fff",

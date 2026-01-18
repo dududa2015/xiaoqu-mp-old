@@ -1,23 +1,22 @@
 <view class="container">
   <!-- 昵称编辑 -->
-  <view class="info-card">
+  <t-cell-group style="border-radius: 24rpx; overflow: hidden;">
     <!-- 显示模式 -->
-    <view class="info-item" wx:if="{{!isEditing}}" bind:tap="startEditNickName">
-      <view class="item-label">
-        <text class="label-text">昵称</text>
-        <text class="label-required">*</text>
-      </view>
-      <view class="item-content">
-        <text class="item-value" wx:if="{{nickName}}">{{nickName}}</text>
-        <text class="item-placeholder" wx:else>请输入昵称</text>
-      </view>
-    </view>
+    <t-cell 
+      wx:if="{{!isEditing}}" 
+      title="昵称" 
+      note="{{nickName || '请输入昵称'}}" 
+      bordered="{{false}}"
+      hover 
+      arrow 
+      bind:tap="startEditNickName"
+    />
     
     <!-- 编辑模式 -->
-    <view class="info-item edit-mode" wx:else>
-      <view class="item-label">
-        <text class="label-text">昵称</text>
-        <text class="label-required">*</text>
+    <view class="edit-mode" wx:else>
+      <view class="edit-header">
+        <text class="edit-label">昵称</text>
+        <text class="edit-required">*</text>
       </view>
       <view class="edit-content">
         <input 
@@ -35,7 +34,7 @@
         </view>
       </view>
     </view>
-  </view>
+  </t-cell-group>
 
   <!-- #if NATIVE -->
   <!-- 底部按钮区域 -->

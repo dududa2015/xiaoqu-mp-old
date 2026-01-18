@@ -21,7 +21,7 @@
   <t-button theme="primary" size="extra-small" icon="check" shape="circle" aria-label="搜索" style="width: 80rpx; height: 80rpx;  "> </t-button> -->
 </view>
 
-<t-popup visible="{{showForm}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#f7f7f7;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx);">
+<t-popup visible="{{showForm}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#f5f5f5;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx);">
   <view class="close-btn" bind:tap="onFormClose">
     <image src="/images/controls/cross.png" mode="" style="width: 40rpx; height: 40rpx;" />
   </view>

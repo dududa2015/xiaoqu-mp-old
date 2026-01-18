@@ -54,7 +54,7 @@
   line-height: 80rpx;
   height: 80rpx;
   box-shadow: inset 0rpx -1rpx 0rpx 0rpx #DCDCDC;
-  /* background: #f7f7f7; */
+  /* background: #f5f5f5; */
 }
 
 .body {

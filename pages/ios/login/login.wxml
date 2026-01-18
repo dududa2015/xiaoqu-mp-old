@@ -17,7 +17,7 @@
   </view>
 
   <view class="agree-wrap">
-    <t-checkbox block="{{false}}" borderless="{{true}}" value="{{agreed}}" custom-style="background:#f7f7f7" bind:change="agreedChange">
+    <t-checkbox block="{{false}}" borderless="{{true}}" value="{{agreed}}" custom-style="background:#f5f5f5" bind:change="agreedChange">
     </t-checkbox>
     <view class="agree">已阅读并同意
       <span class="agree-blue" bind:tap="toUseAgreement">《用户协议》</span>

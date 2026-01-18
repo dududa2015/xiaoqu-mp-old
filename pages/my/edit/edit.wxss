@@ -1,66 +1,51 @@
 page {
-    background-color: #f5f7fa;
+    background-color: #f5f5f5;
 }
 
 .container {
-    padding: 32rpx;
+    padding: 24rpx;
     min-height: 100vh;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
 }
 
-/* 信息卡片 */
-.info-card {
+/* 编辑模式 */
+.edit-mode {
     background: #ffffff;
+    padding: 32rpx;
     border-radius: 24rpx;
-    overflow: hidden;
-    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
-    margin-bottom: 32rpx;
 }
 
-/* 信息项 */
-.info-item {
+.edit-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 36rpx 32rpx;
-    transition: background-color 0.2s;
-    position: relative;
+    margin-bottom: 24rpx;
 }
 
-.info-item::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1rpx;
-    background: #f0f0f0;
-    transform: scaleY(0.5);
+.edit-label {
+    font-size: 32rpx;
+    color: #1a1a1a;
+    font-weight: 500;
+    letter-spacing: 0.5rpx;
 }
 
-.info-item:active {
-    background-color: #fafafa;
-}
-
-/* 编辑模式 */
-.info-item.edit-mode {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 32rpx;
+.edit-required {
+    color: #ff4d4f;
+    font-size: 28rpx;
+    margin-left: 6rpx;
+    font-weight: 500;
 }
 
 .edit-content {
     width: 100%;
-    margin-top: 24rpx;
 }
 
 .edit-input {
     width: 100%;
     height: 80rpx;
     padding: 0 24rpx;
-    background: #f5f7fa;
+    background: #f5f5f5;
     border-radius: 16rpx;
     font-size: 30rpx;
     color: #1a1a1a;
@@ -87,7 +72,7 @@ page {
 }
 
 .cancel-btn {
-    background: #f5f7fa;
+    background: #f5f5f5;
     color: #666666;
 }
 
@@ -104,64 +89,6 @@ page {
 .save-btn:active {
     opacity: 0.8;
     transform: scale(0.98);
-}
-
-.item-label {
-    display: flex;
-    align-items: center;
-    min-width: 120rpx;
-}
-
-.label-text {
-    font-size: 32rpx;
-    color: #1a1a1a;
-    font-weight: 500;
-    letter-spacing: 0.5rpx;
-}
-
-.label-required {
-    color: #ff4d4f;
-    font-size: 28rpx;
-    margin-left: 6rpx;
-    font-weight: 500;
-}
-
-.item-content {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-left: 32rpx;
-}
-
-.item-value {
-    font-size: 32rpx;
-    color: #1a1a1a;
-    font-weight: 400;
-    margin-right: 20rpx;
-    max-width: 400rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.item-placeholder {
-    font-size: 32rpx;
-    color: #bfbfbf;
-    margin-right: 20rpx;
-    font-weight: 400;
-}
-
-.item-arrow {
-    font-size: 36rpx;
-    color: #d9d9d9;
-    font-weight: 300;
-    line-height: 1;
-    transition: transform 0.2s;
-}
-
-.info-item:active .item-arrow {
-    transform: translateX(4rpx);
 }
 
 /* 按钮区域 */
@@ -279,7 +206,7 @@ page {
     padding: 24rpx;
     text-align: left;
     border-radius: 16rpx;
-    background-color: #f5f7fa !important;
+    background-color: #f5f5f5 !important;
     box-sizing: border-box;
     margin-bottom: 16rpx;
     font-size: 30rpx;
