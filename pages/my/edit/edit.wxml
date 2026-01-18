@@ -10,7 +10,6 @@
       <view class="item-content">
         <text class="item-value" wx:if="{{nickName}}">{{nickName}}</text>
         <text class="item-placeholder" wx:else>请输入昵称</text>
-        <view class="item-arrow">›</view>
       </view>
     </view>
     

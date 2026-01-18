@@ -1,14 +1,14 @@
 <view class="user-container">
     <!-- 用户信息区域 -->
-    <view class="user-section" bind:tap="toEdit">
-        <view class="user-content">
+    <view class="user-section">
+        <view class="user-content" bind:tap="toEdit">
             <view class="avatar-wrapper">
                 <image src="/images/my/avatar.png" class="user-avatar" mode="aspectFill" />
                 <view class="avatar-glow"></view>
             </view>
             <view class="user-details">
                 <view class="name-group">
-                    <text class="user-name">{{userInfo.nickName || '请登录'}}</text>
+                    <text class="user-name">{{userInfo ? (userInfo.nickName || '小区楼号') : '请登录'}}</text>
                     <!-- #if MP-->
                     <view class="badge-group">                        
                         <view class="badge-item badge-vip" wx:if="{{isVip}}">VIP</view>

@@ -237,7 +237,7 @@
   margin: 12rpx 0 24rpx;
   width: 100%;
   height: 1rpx;
-  background-color: #ededed;
+  background-color: #f7f7f7;
 }
 
 .btn-edit {
