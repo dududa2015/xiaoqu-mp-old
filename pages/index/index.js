@@ -208,9 +208,9 @@ Page({
     // 统一取出当前平台的会员到期时间
     let vipExpiredDate = null
     // #if IOS
-    vipExpiredDate = userInfo && userInfo.iosVipExpiredDate
+    vipExpiredDate = userInfo.iosVipExpiredDate || null
     // #elif ANDROID
-    vipExpiredDate = userInfo && userInfo.androidVipExpiredDate
+    vipExpiredDate = userInfo.androidVipExpiredDate || null
     // #endif
 
     if (vipExpiredDate) {
