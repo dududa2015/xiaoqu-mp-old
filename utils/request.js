@@ -1,6 +1,6 @@
 // api URL
-const apiUrl = "http://localhost:5213/api"
-// const apiUrl = "https://test.zhuzixi.cn/api"
+// const apiUrl = "http://localhost:5213/api"
+const apiUrl = "https://test.zhuzixi.cn/api"
 // const apiUrl = "https://mp.zhuzixi.cn/api"
 
 // 导入安全工具模块

@@ -67,6 +67,24 @@ Component({
             isVipExpiringSoon,
             isLifetimeVip
           })
+        } else {
+          this.setData({
+            userId: '',
+            isVip: false,
+            isAdmin: false,
+            points: 0,
+            markers: 0,
+            friends: 0,
+            deleted: 0,
+            showRank: false,
+            showVip: false,
+            vipExpiredDate: '',
+            vipDaysLeft: 0,
+            vipHoursLeft: 0,
+            showHours: false,
+            isVipExpiringSoon: false,
+            isLifetimeVip: false
+          })
         }
       }
     }

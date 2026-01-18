@@ -29,7 +29,7 @@ Page({
     this.checkAndroidDownloadDate()
     this.getUserInfo()
   },
-  
+
   /**
    * 检查是否显示安卓下载链接
    * 在2026年1月20日前（包括1月20日）显示，之后隐藏
@@ -40,10 +40,10 @@ Page({
     const targetDate = new Date(2026, 0, 20) // 月份从0开始，0表示1月
     // 设置当前日期为当天的开始时间（00:00:00）
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    
+
     // 如果当前日期小于等于2026年1月20日，则显示
     const showAndroidDownload = today.getTime() <= targetDate.getTime()
-    
+
     this.setData({
       showAndroidDownload
     })
@@ -101,16 +101,16 @@ Page({
       })
     }
   },
-  
+
   // 更新用户标记和删除数量（每隔一周执行一次）
   async updateUserMarkersAndDeleted(userId) {
     if (!userId) return
-    
+
     // 获取上次执行时间
     const lastUpdateTime = wx.getStorageSync('lastUpdateMarkersTime')
     const now = Date.now()
     const oneWeek = 7 * 24 * 60 * 60 * 1000 // 一周的毫秒数
-    
+
     // 如果没有记录或已经过了一周，则执行更新
     if (!lastUpdateTime || (now - lastUpdateTime >= oneWeek)) {
       try {
@@ -138,9 +138,27 @@ Page({
     })
   },
   toVip() {
-    wx.navigateTo({
-      url: '/pages/ios/vip/vip',
-    })
+    if (!this.data.userInfo) {
+      // #if IOS
+      wx.navigateTo({
+        url: '/pages/ios/login/login',
+      })
+      // #else
+      wx.navigateTo({
+        url: '/pages/android/login/login',
+      })
+      // #endif
+    } else {
+      // #if IOS
+      wx.navigateTo({
+        url: '/pages/ios/vip/vip',
+      })
+      // #else
+      wx.navigateTo({
+        url: '/pages/android/vip/vip',
+      })
+      // #endif
+    }
   },
   getStatusBar() {
     // 获取菜单按钮（右上角胶囊按钮）的布局位置信息。坐标信息以屏幕左上角为原点。
@@ -174,7 +192,7 @@ Page({
     }
   },
   //客服
-  toCS(){
+  toCS() {
     wx.miniapp.launchMiniProgram({
       userName: 'gh_37d525095f5a', //小程序原始ID
       path: 'pages/my/customerService/customerService',

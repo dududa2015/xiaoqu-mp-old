@@ -41,20 +41,43 @@ Component({
   methods: {
     async onSave() {
       console.log(this.data.markerDetail)
-      if(this.data.selectedReason === '-1') {
+      if (this.data.selectedReason === '-1') {
         wx.showToast({
           title: '请选择报错原因',
           icon: 'none'
         })
         return
       }
-      const res =  await updateMarkerFeedbackStatus({
+
+      const today = new Date().toDateString()
+      const feedbackCountKey = 'feedbackCount'
+      const feedbackDateKey = 'feedbackDate'
+
+      const savedDate = wx.getStorageSync(feedbackDateKey)
+      let count = wx.getStorageSync(feedbackCountKey) || 0
+
+      if (savedDate !== today) {
+        count = 0
+        wx.setStorageSync(feedbackDateKey, today)
+        wx.setStorageSync(feedbackCountKey, 0)
+      }
+
+      if (count >= 10) {
+        wx.showToast({
+          title: '今日报错次数已达上限',
+          icon: 'none'
+        })
+        return
+      }
+
+      const res = await updateMarkerFeedbackStatus({
         xId: this.data.markerDetail.xId,
         feedbackType: this.data.selectedReason,
         feedbackDate: new Date(),
         feedbackUserId: wx.getStorageSync('userId')
       })
-      if(res){
+      if (res) {
+        wx.setStorageSync(feedbackCountKey, count + 1)
         wx.showToast({
           title: '报错成功',
         })
@@ -68,7 +91,7 @@ Component({
       }
       this.setData({
         showFeedback: false
-      })      
+      })
     },
     onClose() {
       this.setData({

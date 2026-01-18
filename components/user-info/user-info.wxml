@@ -8,7 +8,7 @@
             </view>
             <view class="user-details">
                 <view class="name-group">
-                    <text class="user-name">{{userInfo.nickName || '小区楼号'}}</text>
+                    <text class="user-name">{{userInfo.nickName || '请登录'}}</text>
                     <!-- #if MP-->
                     <view class="badge-group">                        
                         <view class="badge-item badge-vip" wx:if="{{isVip}}">VIP</view>
