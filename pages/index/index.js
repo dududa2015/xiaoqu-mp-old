@@ -72,7 +72,9 @@ Page({
     compassChangeHandler: null, //罗盘change
     showVersionUpdate: false,
     showChooseLocation: false,
-    showNoAd: false //显示广告弹窗
+    showNoAd: false, //显示广告弹窗
+    showVipExpired: false, //显示会员过期弹窗
+    vipExpiredContent: '' //会员过期提示内容
   },
   onLoad() {
     this.getWindowInfo()
@@ -162,7 +164,7 @@ Page({
       content: '安卓🤖App已在腾讯应用宝上架，欢迎下载体验',
       url: '/pages/my/app/android/android'
     }
-    if(!isIOS) return //安卓恢复下载的时候去掉
+    if (!isIOS) return //安卓恢复下载的时候去掉
     wx.showModal({
       title: config.title,
       content: config.content,
@@ -226,17 +228,10 @@ Page({
     }
   },
   toVip(content) {
-    wx.showModal({
-      title: '',
-      content,
-      showCancel: false,
+    this.setData({
+      showVipExpired: true,
+      vipExpiredContent: content
     })
-    setTimeout(() => {
-        wx.switchTab({
-          url: '/pages/my/index/index',
-        })
-      },
-      1500);
   },
   //设置
   initStorage() {
@@ -1647,7 +1642,7 @@ Page({
     console.log(e.detail)
     const markerDetail = e.detail
     this.disableMapTap()
-    if(markerDetail){
+    if (markerDetail) {
       this.deleteOneMarker(markerDetail)
     }
     this.onClosePoi()

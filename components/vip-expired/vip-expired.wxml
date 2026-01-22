@@ -1,0 +1,39 @@
+<t-popup visible="{{showVipExpired}}" placement="center" style="width: 640rpx;">
+  <view class="container">
+    <view class="main-content">
+      <view class="top-section">
+        <view class="badge">
+          <text class="badge-text">VIP</text>
+        </view>
+        <text class="main-title">会员已过期</text>
+        <text class="sub-title">{{content}}</text>
+      </view>
+      
+      <view class="rights-grid">
+        <view class="rights-card" wx:for="{{rightsList}}" wx:key="title">
+          <view class="card-icon">
+            <image src="{{item.icon}}" class="icon-img" wx:if="{{item.icon.indexOf('.svg') !== -1}}"></image>
+            <t-icon name="{{item.icon}}" size="48rpx" color="#fff" wx:else></t-icon>
+          </view>
+          <text class="card-title">{{item.title}}</text>
+          <text class="card-desc">{{item.desc}}</text>
+        </view>
+      </view>
+      
+      <view class="countdown-box">
+        <view class="countdown-item">
+          <text class="countdown-number">{{countdown}}</text>
+          <text class="countdown-label">秒</text>
+        </view>
+        <text class="countdown-tip">自动跳转</text>
+      </view>
+    </view>
+    
+    <view class="bottom-section">
+      <view class="btn-renew" bind:tap="onRenewNow">
+        <text class="btn-text">立即续费</text>
+        <t-icon name="chevron-right" size="32rpx" color="#fff" class="btn-arrow"></t-icon>
+      </view>
+    </view>
+  </view>
+</t-popup>

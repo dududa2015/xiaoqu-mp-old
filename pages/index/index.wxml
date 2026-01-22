@@ -31,4 +31,6 @@
   <version-update showVersionUpdate="{{showVersionUpdate}}" iosContent="{{iosContent}}" iosForceUpdate="{{iosForceUpdate}}" androidContent="{{androidContent}}" androidForceUpdate="{{androidForceUpdate}}"></version-update>
   <choose-location showChooseLocation="{{showChooseLocation}}"></choose-location>
   <!-- #endif -->
+  <!-- 会员过期提示 -->
+  <vip-expired showVipExpired="{{showVipExpired}}" content="{{vipExpiredContent}}"></vip-expired>
 </view>
