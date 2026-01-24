@@ -1,4 +1,36 @@
 <view class="container">
+  <!-- 搜索框 -->
+  <view class="search-section">
+    <view class="search-box">
+      <input 
+        class="search-input" 
+        placeholder="搜索问题..." 
+        value="{{searchKeyword}}" 
+        bindinput="onSearchInput"
+        confirm-type="search"
+      />
+      <text class="search-icon">🔍</text>
+    </view>
+  </view>
+
+  <!-- 分类导航 -->
+  <view class="category-section">
+    <scroll-view class="category-scroll" scroll-x="true" show-scrollbar="false">
+      <view class="category-list">
+        <view 
+          class="category-item {{currentCategory === item.id ? 'active' : ''}}"
+          wx:for="{{categories}}" 
+          wx:key="id"
+          data-category="{{item.id}}"
+          bindtap="switchCategory"
+        >
+          <text class="category-icon">{{item.icon}}</text>
+          <text class="category-name">{{item.name}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
   <!-- 一、注意事项 -->
   <view class="section">
     <view class="section-title">一、注意事项</view>
@@ -14,54 +46,32 @@
   <!-- 二、常见问题解答 -->
   <view class="section">
     <view class="section-title">二、常见问题解答</view>
+    <view class="question-count" wx:if="{{filteredQuestions.length > 0}}">
+      共找到 {{filteredQuestions.length}} 个问题
+    </view>
+    <view class="no-result" wx:if="{{filteredQuestions.length === 0}}">
+      <text class="no-result-icon">😕</text>
+      <text class="no-result-text">未找到相关问题，请尝试其他关键词或分类</text>
+    </view>
 
-    <view class="qa-item qa-item-hot">
+    <view 
+      class="qa-item {{item.category === 'hot' ? 'qa-item-hot' : ''}}"
+      wx:for="{{filteredQuestions}}" 
+      wx:key="id"
+    >
       <view class="qa-question">
-        <text class="hot-tag">热门</text>
-        <text>1. 小程序无法定位当前位置怎么办？</text>
+        <text class="hot-tag" wx:if="{{item.category === 'hot'}}">热门</text>
+        <text>{{item.question}}</text>
       </view>
       <view class="qa-answer">
-        <view class="answer-text">答：首先检查手机定位功能是否开启，然后在手机设置中确认小程序已获取定位权限。若仍无法定位，请依次尝试以下三种解决办法：</view>
-        <view class="solution-list">
-          <view class="solution-item">
-            <text class="solution-number">1、</text>
-            <text class="solution-text">轻触右上角···或者箭头，再轻触重新进入小程序</text>
-          </view>
-          <view class="solution-item">
-            <text class="solution-number">2、</text>
-            <text class="solution-text">在最近使用的小程序里删除访问记录，重新搜索【小区楼号分布图】并打开</text>
-          </view>
-          <view class="solution-item">
-            <text class="solution-number">3、</text>
-            <text class="solution-text">重启手机，解决问题！</text>
+        <view class="answer-text" wx:if="{{item.answer}}">答：{{item.answer}}</view>
+        <view class="solution-list" wx:if="{{item.solutions && item.solutions.length > 0}}">
+          <view class="solution-item {{solution === '' ? 'solution-item-empty' : ''}}" wx:for="{{item.solutions}}" wx:key="index" wx:for-item="solution">
+            <text class="solution-number" wx:if="{{solution !== '' && solution.indexOf(')') > 0 && solution.indexOf(')') < 3}}">{{solution.split(')')[0]}})</text>
+            <text class="solution-text" wx:if="{{solution !== ''}}">{{solution.indexOf(')') > 0 && solution.indexOf(')') < 3 ? solution.split(')')[1] : solution}}</text>
           </view>
         </view>
       </view>
-    </view>
-
-    <view class="qa-item">
-      <view class="qa-question">2. 为什么添加的标记没有立即显示？</view>
-      <view class="qa-answer">答：添加的标记需提交审核，审核通过后才会同步至地图，审核时长根据实际情况而定，请耐心等待。</view>
-    </view>
-
-    <view class="qa-item">
-      <view class="qa-question">3. 如何切换卫星地图？</view>
-      <view class="qa-answer">答：点击右侧 "设置" 按钮，在设置面板中选择 "卫星地图" 选项，即可完成切换。</view>
-    </view>
-
-    <view class="qa-item">
-      <view class="qa-question">4. 公共地图和个人地图的区别是什么？</view>
-      <view class="qa-answer">答：公共地图为所有用户共享，支持多人协作添加标记，但仅能管理本人创建的内容；个人地图为私人专属空间，可自由编辑所有标记，且内容仅本人可见。</view>
-    </view>
-
-    <view class="qa-item">
-      <view class="qa-question">5. 试用期结束后，之前添加的标记会消失吗？</view>
-      <view class="qa-answer">答：不会，APP试用期结束后，已审核通过的标记将保留，订阅后可继续查看和管理。</view>
-    </view>
-
-    <view class="qa-item">
-      <view class="qa-question">6. 怎样删除错误的标记？</view>
-      <view class="qa-answer">选中需要报错的楼栋位置，点击弹窗里的「报错」按钮，在弹出的表单中选择错误类型（如错误标记、重复标记等审核通过后地图即可生效。</view>
     </view>
   </view>
 

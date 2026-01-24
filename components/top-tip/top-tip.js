@@ -37,7 +37,7 @@ Component({
   data: {
     show: true, //默认显示
     noticeList: ['苹果App已上线，欢迎下载 → '], //
-    // noticeListAppWithoutVIP: ['免费试用7天，结束后需要订阅 →'], //不是app会员时显示
+    // noticeListAppWithoutVIP: ['免费试用3天，结束后需要订阅 →'], //不是app会员时显示
     noticeListApp: [],
     content: [
       // '请勿标记门禁密码，违者停用账号',

@@ -1,6 +1,34 @@
 <view class="container">
+  <!-- 快速导航按钮 -->
+  <view class="nav-button" bindtap="toggleNavMenu">
+    <text class="nav-button-icon">📑</text>
+    <text class="nav-button-text">快速导航</text>
+  </view>
+
+  <!-- 导航菜单 -->
+  <view class="nav-menu {{showNavMenu ? 'show' : ''}}" catchtap="toggleNavMenu">
+    <view class="nav-menu-content" catchtap="">
+      <view class="nav-menu-header">
+        <text class="nav-menu-title">快速导航</text>
+        <text class="nav-menu-close" bindtap="toggleNavMenu">✕</text>
+      </view>
+      <view class="nav-menu-list">
+        <view 
+          class="nav-menu-item"
+          wx:for="{{navItems}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="scrollToSection"
+        >
+          <text class="nav-menu-icon">{{item.icon}}</text>
+          <text class="nav-menu-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
   <!-- 一、文档说明 -->
-  <view class="section">
+  <view class="section" id="intro">
     <view class="section-title">一、文档说明</view>
 
     <view class="subsection">
@@ -15,7 +43,7 @@
   </view>
 
   <!-- 二、核心功能概述 -->
-  <view class="section">
+  <view class="section" id="overview">
     <view class="section-title">二、核心功能概述</view>
     <view class="content">小区楼号地图小程序是一款专注于小区内导航与信息查询的工具类应用，整合了楼号标注、设施定位、路线导航等核心功能，具体包括：</view>
     <view class="feature-list">
@@ -32,7 +60,7 @@
   <view class="section">
     <view class="section-title">三、详细操作指南</view>
 
-    <view class="subsection">
+    <view class="subsection" id="basic">
       <view class="subsection-title">1. 基础操作</view>
 
       <view class="sub-subsection">
@@ -68,7 +96,7 @@
     <view class="subsection">
       <view class="subsection-title">2. 核心功能使用</view>
 
-      <view class="sub-subsection">
+      <view class="sub-subsection" id="search">
         <view class="sub-subsection-title">2.1 搜索功能</view>
         <view class="content">小程序提供两种搜索方式，满足不同查找需求：</view>
         <view class="feature-list">
@@ -77,7 +105,7 @@
         </view>
       </view>
 
-      <view class="sub-subsection">
+      <view class="sub-subsection" id="share">
         <view class="sub-subsection-title">2.2 分享功能</view>
         <view class="content">如需向他人共享地图信息，操作步骤如下：</view>
         <view class="step-list">
@@ -88,7 +116,7 @@
         </view>
       </view>
 
-      <view class="sub-subsection">
+      <view class="sub-subsection" id="settings">
         <view class="sub-subsection-title">2.3 设置功能</view>
         <view class="content">点击右侧 "设置" 按钮（图标为 "⚙️"），可自定义小程序显示与操作模式，具体设置项如下：</view>
         <view class="feature-list">
@@ -102,7 +130,7 @@
         </view>
       </view>
 
-      <view class="sub-subsection">
+      <view class="sub-subsection" id="marker">
         <view class="sub-subsection-title">2.4 标记管理（添加 / 编辑 / 删除）</view>
         <view class="content">小程序支持用户自主添加、编辑和删除各类标记，所有操作提交后需经审核，审核通过后实时同步至地图。</view>
 
@@ -183,7 +211,7 @@
         </view>
       </view>
 
-      <view class="sub-subsection">
+      <view class="sub-subsection" id="navigation">
         <view class="sub-subsection-title">2.5 步行导航功能</view>
         <view class="content">小程序可规划从当前位置到目标地点的最优步行路线，操作步骤如下：</view>
         <view class="step-list">
@@ -196,9 +224,9 @@
         </view>
       </view>
 
-      <view class="sub-subsection">
+      <view class="sub-subsection" id="map-type">
         <view class="sub-subsection-title">2.6 公共地图与个人地图切换</view>
-        <view class="content">小程序支持两种地图模式，满足不同使用场景，可通过界面底部切换按钮切换：</view>
+        <view class="content">App支持两种地图模式，满足不同使用场景，可通过界面底部切换按钮切换：</view>
         <view class="table-wrapper">
           <view class="table-row table-header">
             <view class="table-cell">地图类型</view>
