@@ -31,6 +31,22 @@
   height: 48px;
   width: 48px;
 }
+
+.cross.bounce {
+  animation: bounceUpDown 0.6s ease-out;
+}
+
+@keyframes bounceUpDown {
+  0% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-20px);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+}
 .search-wrap {
     position: absolute;
     bottom: -1px;

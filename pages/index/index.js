@@ -60,6 +60,7 @@ Page({
     showCenterMarker: false, //是否显示中心标记点
     showChooseMarker: false, //是否显示选点按钮
     showFeedback: false, //是否显示反馈按钮
+    markerBounce: false, //标记点弹跳动画状态
     showLocation: true,
     bottom: 0,
     showAdd: true,
@@ -903,6 +904,20 @@ Page({
   onRegionChange(e) {
     // 1. 添加调试日志，方便问题排查
     console.log('地图区域变化事件:', e);
+
+    // 处理标记点弹跳动画：当添加楼号且拖动地图结束时显示动画
+    if (this.data.showCenterMarker && e.causedBy === 'drag' && e.type === 'end') {
+      // 触发弹跳动画
+      this.setData({
+        markerBounce: true
+      });
+      // 动画结束后重置状态
+      setTimeout(() => {
+        this.setData({
+          markerBounce: false
+        });
+      }, 600); // 动画持续时间
+    }
 
     // 2. 提前返回条件判断
     if (!e.detail?.centerLocation || e.type !== 'end' || e.causedBy !== 'drag') {

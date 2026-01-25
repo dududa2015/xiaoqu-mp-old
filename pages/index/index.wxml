@@ -2,11 +2,11 @@
 
 <view class="container">
   <map id="myMap" style="width: 100%; height: {{ mapHeight || 730}}px;" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" polygons="{{polygons}}" scale="{{scale}}" enable-rotate="{{enableRotate}}" rotate="{{rotate}}" show-location=" true" show-scale="{{true}}" show-compass="{{rotate}}" enable-satellite="{{enableSatellite}}" enable-3D="{{enable3D}}" skew="{{20}}" bindpoitap="onPoiTap" bindtap="onMapTap" bindlabeltap="onLabelTap" bindcallouttap="onLabelTap" bindpolylinetap="onPolylineTap" bindregionchange="onRegionChange">
-    <image src="/images/marker0.png" class="cross" wx:if="{{showCenterMarker && markerTypeIndex === 0}}"></image>
-    <image src="/images/marker1.png" class="cross" wx:if="{{showCenterMarker && (markerTypeIndex === 1 ) }}"></image>
-    <image src="/images/marker2.png" class="cross" wx:if="{{showCenterMarker && (markerTypeIndex >=2 && markerTypeIndex <= 6)}}"></image>
-    <image src="/images/marker3.png" class="cross" wx:if="{{showCenterMarker && markerTypeIndex === 7}}"></image>
-    <image src="/images/marker4.png" class="cross" wx:if="{{showCenterMarker && markerTypeIndex === 8}}"></image>
+    <image src="/images/marker0.png" class="cross {{markerBounce ? 'bounce' : ''}}" wx:if="{{showCenterMarker && markerTypeIndex === 0}}"></image>
+    <image src="/images/marker1.png" class="cross {{markerBounce ? 'bounce' : ''}}" wx:if="{{showCenterMarker && (markerTypeIndex === 1 ) }}"></image>
+    <image src="/images/marker2.png" class="cross {{markerBounce ? 'bounce' : ''}}" wx:if="{{showCenterMarker && (markerTypeIndex >=2 && markerTypeIndex <= 6)}}"></image>
+    <image src="/images/marker3.png" class="cross {{markerBounce ? 'bounce' : ''}}" wx:if="{{showCenterMarker && markerTypeIndex === 7}}"></image>
+    <image src="/images/marker4.png" class="cross {{markerBounce ? 'bounce' : ''}}" wx:if="{{showCenterMarker && markerTypeIndex === 8}}"></image>
   </map>
   <!-- enable-rotate rotate="{{rotate}}"  -->
   <top-search rect="{{rect}}" showUp="{{showUp}}" showMapName="{{showMapName}}" mapName="{{mapName}}" bind:toMap="toMap" bind:onChooseLocation="onChooseLocation"></top-search>

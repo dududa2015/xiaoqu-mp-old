@@ -9,7 +9,7 @@
         <view class="nav-title">地图选点</view>
     </view>
     <map id="searchMap" style="width: 100%;height:60vh" latitude="{{latitude}}" longitude="{{longitude}}" show-location="true" bindregionchange="onRegionChange">
-      <image src="/images/marker0.png" class="cross"></image>
+      <image src="/images/marker0.png" class="cross {{markerBounce ? 'bounce' : ''}}"></image>
         <bottom-location position="{{position}}" bottom="{{bottom}}" bind:onLocation="onLocation"></bottom-location>
         <view class="search-wrap">
             <view class="search-bar" bind:tap="openSearchPOI">

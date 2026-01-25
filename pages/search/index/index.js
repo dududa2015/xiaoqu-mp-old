@@ -11,6 +11,7 @@ Page({
     position: 'right',
     bottom: 120,
     index: 0,
+    markerBounce: false, //标记点弹跳动画状态
   },
   onShow() {
     let poi = wx.getStorageSync('poi')
@@ -121,6 +122,20 @@ Page({
     })
   },
   onRegionChange(e) {
+    // 处理标记点弹跳动画：拖动地图结束时显示动画
+    if (e.causedBy === 'drag' && e.type === 'end') {
+      // 触发弹跳动画
+      this.setData({
+        markerBounce: true
+      });
+      // 动画结束后重置状态
+      setTimeout(() => {
+        this.setData({
+          markerBounce: false
+        });
+      }, 600); // 动画持续时间
+    }
+
     if (e.detail.centerLocation) {
       if (e.type === 'end' && e.causedBy === 'drag') {
         let latitude = e.detail.centerLocation.latitude
