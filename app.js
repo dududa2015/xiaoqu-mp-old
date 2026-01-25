@@ -20,7 +20,9 @@ App({
     currentPolylineIndex: 0,
     isAndroid: false,
     padding: 3,
-    mapType: 'amap'
+    mapType: 'amap',
+    // userInfo 就绪 Promise
+    userInfoReady: null
   },
 
   onLaunch(options) {
@@ -29,6 +31,9 @@ App({
 
   // 初始化
   init(options) {
+    // 初始化 userInfo 就绪 Promise
+    this.initUserInfoReady()
+    
     // #if MP
     this.tryTimes = MAX_RETRY_TIMES
     this.autoUpdate()
@@ -37,6 +42,24 @@ App({
     this.appleLogin()
     this.getDeviceId()
     // #endif
+  },
+
+  // 初始化 userInfo 就绪 Promise
+  initUserInfoReady() {
+    // 如果已有 userInfo，直接 resolve
+    const existingUserInfo = wx.getStorageSync('userInfo')
+    if (existingUserInfo) {
+      this.globalData.userInfoReady = Promise.resolve(existingUserInfo)
+      return
+    }
+    
+    // 否则创建一个新的 Promise
+    let resolveUserInfo = null
+    this.globalData.userInfoReady = new Promise((resolve) => {
+      resolveUserInfo = resolve
+    })
+    // 保存 resolve 函数供 cacheUserData 使用
+    this._resolveUserInfo = resolveUserInfo
   },
 
   // 登录逻辑
@@ -224,6 +247,12 @@ App({
     wx.setStorageSync('token', data.token)
     wx.setStorageSync('userInfo', data)
     this.globalData.userInfo = data
+    
+    // 触发 userInfo 就绪事件
+    if (this._resolveUserInfo) {
+      this._resolveUserInfo(data)
+      this._resolveUserInfo = null
+    }
   },
 
   showErrorModal(title, content) {

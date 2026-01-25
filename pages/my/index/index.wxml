@@ -56,7 +56,7 @@
         <text slot="title" class="download-title-ios">苹果App下载</text>
         <t-icon name="download" size="40rpx" color="#007AFF" class="left-icon" slot="left-icon" />
       </t-cell>
-      <t-cell hover arrow url="/pages/my/app/android/android" wx:if="{{showAndroidDownload}}">
+      <t-cell hover arrow url="/pages/my/app/android/android">
         <text slot="title" class="download-title-android">安卓App下载</text>
         <t-icon name="download" size="40rpx" color="#E85827" class="left-icon" slot="left-icon" />
       </t-cell>

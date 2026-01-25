@@ -7,9 +7,6 @@
     >
       <view class="main-contact-card">
         <view class="main-card-content">
-          <view class="main-icon-wrapper">
-            <text class="main-icon">💬</text>
-          </view>
           <view class="main-text-wrapper">
             <text class="main-title">在线客服</text>
             <text class="main-subtitle">工作日 9:00-18:00 在线服务</text>
@@ -29,29 +26,17 @@
   <view class="quick-service-section">
     <view class="section-title">快捷服务</view>
     <view class="quick-service-grid">
-      <view class="service-item" bindtap="handleServiceClick" data-type="faq">
-        <view class="service-icon-wrapper service-icon-faq">
-          <text class="service-icon">❓</text>
-        </view>
-        <text class="service-label">常见问题</text>
-      </view>
-      <view class="service-item" bindtap="handleServiceClick" data-type="feedback">
-        <view class="service-icon-wrapper service-icon-feedback">
-          <text class="service-icon">📝</text>
-        </view>
-        <text class="service-label">意见反馈</text>
-      </view>
-      <view class="service-item" bindtap="handleServiceClick" data-type="time">
-        <view class="service-icon-wrapper service-icon-time">
-          <text class="service-icon">🕐</text>
-        </view>
-        <text class="service-label">服务时间</text>
-      </view>
       <view class="service-item" bindtap="handleServiceClick" data-type="help">
         <view class="service-icon-wrapper service-icon-help">
-          <text class="service-icon">ℹ️</text>
+          <image src="/images/my/help.png" class="service-icon" mode="aspectFit" />
         </view>
         <text class="service-label">使用帮助</text>
+      </view>
+      <view class="service-item" bindtap="handleServiceClick" data-type="faq">
+        <view class="service-icon-wrapper service-icon-help">
+          <image src="/images/my/question.png" class="service-icon" mode="aspectFit" />
+        </view>
+        <text class="service-label">常见问题</text>
       </view>
     </view>
   </view>
@@ -77,25 +62,6 @@
         <view class="info-item">
           <view class="info-dot"></view>
           <text class="info-text">如需查看常见问题，请前往个人中心</text>
-        </view>
-      </view>
-    </view>
-  </view>
-
-  <!-- 联系方式 -->
-  <view class="contact-info-section">
-    <view class="contact-info-card">
-      <view class="contact-info-header">
-        <text class="contact-info-title">其他联系方式</text>
-      </view>
-      <view class="contact-info-content">
-        <view class="contact-info-item">
-          <text class="contact-info-label">服务热线：</text>
-          <text class="contact-info-value" bindtap="handlePhoneCall">400-XXX-XXXX</text>
-        </view>
-        <view class="contact-info-item">
-          <text class="contact-info-label">邮箱：</text>
-          <text class="contact-info-value">service@example.com</text>
         </view>
       </view>
     </view>

@@ -36,9 +36,7 @@
     <view class="section-title">一、注意事项</view>
     <view class="warning-list">
       <view class="warning-item">所有添加、编辑的标记需经过审核流程，审核通过后才会在地图上显示，审核期间标记状态将显示为 "审核中"；</view>
-      <view class="warning-item">卫星地图、3D 楼块功能需网络支持，部分老旧设备可能无法正常显示；</view>
-      <view class="warning-item">步行导航功能依赖定位服务，请确保小程序已获取手机定位权限，且定位开关已开启；</view>
-      <view class="warning-item">APP提供 7 天免费试用期，试用期结束后需订阅方可继续使用全部功能；</view>
+      <view class="warning-item">APP提供 3 天免费试用期，试用期结束后需订阅方可继续使用全部功能；</view>
       <view class="warning-item">标记删除后无法恢复，请在删除前确认是否需要保留相关信息。</view>
     </view>
   </view>
@@ -47,28 +45,74 @@
   <view class="section">
     <view class="section-title">二、常见问题解答</view>
     <view class="question-count" wx:if="{{filteredQuestions.length > 0}}">
-      共找到 {{filteredQuestions.length}} 个问题
+      共找到 {{filteredQuestions.length}} 个问题（点击问题可展开答案）
     </view>
     <view class="no-result" wx:if="{{filteredQuestions.length === 0}}">
       <text class="no-result-icon">😕</text>
       <text class="no-result-text">未找到相关问题，请尝试其他关键词或分类</text>
     </view>
 
-    <view 
-      class="qa-item {{item.category === 'hot' ? 'qa-item-hot' : ''}}"
-      wx:for="{{filteredQuestions}}" 
-      wx:key="id"
-    >
-      <view class="qa-question">
-        <text class="hot-tag" wx:if="{{item.category === 'hot'}}">热门</text>
-        <text>{{item.question}}</text>
+    <!-- 全部分组（未搜索时） -->
+    <view wx:if="{{showGrouped}}">
+      <view
+        class="group-card"
+        wx:for="{{groupedCategories}}"
+        wx:key="id"
+      >
+        <view class="group-header" data-id="{{item.id}}" bindtap="toggleCategoryGroup">
+          <view class="group-left">
+            <text class="group-icon">{{item.icon}}</text>
+            <text class="group-name">{{item.name}}</text>
+            <text class="group-count">({{item.count}})</text>
+          </view>
+          <text class="group-arrow {{expandedCategoryMap[item.id] ? 'open' : ''}}">▾</text>
+        </view>
+
+        <view wx:if="{{expandedCategoryMap[item.id]}}">
+          <view
+            class="qa-item {{q.category === 'hot' ? 'qa-item-hot' : ''}} qa-item-collapsible"
+            wx:for="{{item.questions}}"
+            wx:key="id"
+            wx:for-item="q"
+          >
+            <view class="qa-question qa-question-click" data-qid="{{q.id}}" bindtap="toggleQuestion">
+              <text class="hot-tag" wx:if="{{q.category === 'hot'}}">热门</text>
+              <text class="qa-question-text">{{q.question}}</text>
+              <text class="qa-toggle {{expandedQuestionMap[q.id] ? 'open' : ''}}">▾</text>
+            </view>
+            <view class="qa-answer" wx:if="{{expandedQuestionMap[q.id]}}">
+              <view class="answer-text" wx:if="{{q.answer}}">答：{{q.answer}}</view>
+              <view class="solution-list" wx:if="{{q.solutions && q.solutions.length > 0}}">
+                <view class="solution-item {{solution === '' ? 'solution-item-empty' : ''}}" wx:for="{{q.solutions}}" wx:key="index" wx:for-item="solution">
+                  <text class="solution-number" wx:if="{{solution !== '' && solution.indexOf(')') > 0 && solution.indexOf(')') < 3}}">{{solution.split(')')[0]}})</text>
+                  <text class="solution-text" wx:if="{{solution !== ''}}">{{solution.indexOf(')') > 0 && solution.indexOf(')') < 3 ? solution.split(')')[1] : solution}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
       </view>
-      <view class="qa-answer">
-        <view class="answer-text" wx:if="{{item.answer}}">答：{{item.answer}}</view>
-        <view class="solution-list" wx:if="{{item.solutions && item.solutions.length > 0}}">
-          <view class="solution-item {{solution === '' ? 'solution-item-empty' : ''}}" wx:for="{{item.solutions}}" wx:key="index" wx:for-item="solution">
-            <text class="solution-number" wx:if="{{solution !== '' && solution.indexOf(')') > 0 && solution.indexOf(')') < 3}}">{{solution.split(')')[0]}})</text>
-            <text class="solution-text" wx:if="{{solution !== ''}}">{{solution.indexOf(')') > 0 && solution.indexOf(')') < 3 ? solution.split(')')[1] : solution}}</text>
+    </view>
+
+    <!-- 非分组模式（搜索/单分类） -->
+    <view wx:else>
+      <view
+        class="qa-item {{item.category === 'hot' ? 'qa-item-hot' : ''}} qa-item-collapsible"
+        wx:for="{{filteredQuestions}}"
+        wx:key="id"
+      >
+        <view class="qa-question qa-question-click" data-qid="{{item.id}}" bindtap="toggleQuestion">
+          <text class="hot-tag" wx:if="{{item.category === 'hot'}}">热门</text>
+          <text class="qa-question-text">{{item.question}}</text>
+          <text class="qa-toggle {{expandedQuestionMap[item.id] ? 'open' : ''}}">▾</text>
+        </view>
+        <view class="qa-answer" wx:if="{{expandedQuestionMap[item.id]}}">
+          <view class="answer-text" wx:if="{{item.answer}}">答：{{item.answer}}</view>
+          <view class="solution-list" wx:if="{{item.solutions && item.solutions.length > 0}}">
+            <view class="solution-item {{solution === '' ? 'solution-item-empty' : ''}}" wx:for="{{item.solutions}}" wx:key="index" wx:for-item="solution">
+              <text class="solution-number" wx:if="{{solution !== '' && solution.indexOf(')') > 0 && solution.indexOf(')') < 3}}">{{solution.split(')')[0]}})</text>
+              <text class="solution-text" wx:if="{{solution !== ''}}">{{solution.indexOf(')') > 0 && solution.indexOf(')') < 3 ? solution.split(')')[1] : solution}}</text>
+            </view>
           </view>
         </view>
       </view>

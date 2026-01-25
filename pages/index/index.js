@@ -112,9 +112,13 @@ Page({
     this.amapSearch()
     // #if NATIVE
     this.initLocMarkerIcon()
-    setTimeout(() => {
+    // 使用 waitForUserInfo 替代 setTimeout，确保 userInfo 就绪后再检查 VIP
+    this.waitForUserInfo().then(() => {
       this.checkVip()
-    }, 300);
+    }).catch(() => {
+      // 超时后仍尝试检查
+      this.checkVip()
+    })
 
     const childComp = this.selectComponent('#topTip');
     if (childComp) {
@@ -194,6 +198,50 @@ Page({
       // 更新红点状态，提示用户需要重新观看广告
       this.updateCommunityDetailRedDot(true)
     }
+  },
+  // 等待 userInfo 就绪（事件驱动 + 超时兜底）
+  waitForUserInfo(timeout = 5000) {
+    return new Promise((resolve, reject) => {
+      // 1. 先检查是否已有 userInfo
+      const existingUserInfo = wx.getStorageSync('userInfo')
+      if (existingUserInfo) {
+        resolve(existingUserInfo)
+        return
+      }
+
+      // 2. 尝试使用 app.js 的 Promise
+      const app = getApp()
+      if (app.globalData.userInfoReady) {
+        // 设置超时
+        const timeoutId = setTimeout(() => {
+          reject(new Error('等待 userInfo 超时'))
+        }, timeout)
+
+        app.globalData.userInfoReady
+          .then((userInfo) => {
+            clearTimeout(timeoutId)
+            resolve(userInfo)
+          })
+          .catch((err) => {
+            clearTimeout(timeoutId)
+            reject(err)
+          })
+      } else {
+        // 如果 Promise 不存在，使用轮询兜底（但间隔更长）
+        let pollCount = 0
+        const maxPolls = Math.ceil(timeout / 200) // 每 200ms 检查一次
+        const pollInterval = setInterval(() => {
+          const userInfo = wx.getStorageSync('userInfo')
+          if (userInfo) {
+            clearInterval(pollInterval)
+            resolve(userInfo)
+          } else if (++pollCount >= maxPolls) {
+            clearInterval(pollInterval)
+            reject(new Error('等待 userInfo 超时'))
+          }
+        }, 200)
+      }
+    })
   },
   checkVip() {
     const userInfo = wx.getStorageSync('userInfo')
@@ -490,8 +538,7 @@ Page({
         wx.setStorageSync('lastLongitude', longitude)
         //确保获取到用户信息后再请求
         // #if MP
-        let intervalId = setInterval(function () {
-          let userInfo = wx.getStorageSync('userInfo')
+        that.waitForUserInfo().then((userInfo) => {
           if (userInfo) {
             that.getAroundList(latitude, longitude)
             that.getAroundCommunityList(latitude, longitude)
@@ -501,9 +548,22 @@ Page({
               isVip: userInfo.isVip,
               points: userInfo.points
             })
-            clearInterval(intervalId)
           }
-        }, 50);
+        }).catch((err) => {
+          console.error('等待 userInfo 超时或失败:', err)
+          // 超时后仍尝试使用 storage 中的数据
+          const userInfo = wx.getStorageSync('userInfo')
+          if (userInfo) {
+            that.getAroundList(latitude, longitude)
+            that.getAroundCommunityList(latitude, longitude)
+            that.getNotice()
+            that.setData({
+              tips: userInfo.remark,
+              isVip: userInfo.isVip,
+              points: userInfo.points
+            })
+          }
+        })
         // #else
         that.getAroundList(latitude, longitude)
         that.getAroundCommunityList(latitude, longitude)
@@ -604,7 +664,7 @@ Page({
   },
   onPoiTap(e) {
     console.log(e)
-    if (this.data.showForm || this.disableTap || this.data.showChooseMarker || this.data.showFeedback) {
+    if (this.data.showForm || this.disableTap || this.data.showChooseMarker || this.data.showFeedback || this.data.showVipExpired) {
       return
     }
     //如果grid显示，点击poi关闭grid
@@ -655,7 +715,7 @@ Page({
   onLabelTap(e) {
     console.log(e)
     let markerId = e.detail.markerId
-    if (this.data.showForm || this.disableTap || this.data.showChooseMarker || this.data.showFeedback) {
+    if (this.data.showForm || this.disableTap || this.data.showChooseMarker || this.data.showFeedback || this.data.showVipExpired) {
       return
     }
     //如果grid显示，点击label关闭grid

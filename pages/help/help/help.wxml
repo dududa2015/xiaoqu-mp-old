@@ -180,12 +180,12 @@
             </view>
             <view class="table-row">
               <view class="table-cell">道路</view>
-              <view class="table-cell">无需填写文字信息，通过 "定点" 标记道路关键节点</view>
+              <view class="table-cell">通过 "定点" 标记道路关键节点</view>
               <view class="table-cell">无</view>
             </view>
             <view class="table-row">
               <view class="table-cell">围墙</view>
-              <view class="table-cell">无需填写文字信息，通过 "定点" 标记围墙关键节点</view>
+              <view class="table-cell">通过 "定点" 标记围墙关键节点</view>
               <view class="table-cell">无</view>
             </view>
           </view>

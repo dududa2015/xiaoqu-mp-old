@@ -20,7 +20,13 @@ Page({
       { id: 'subscription', name: '订阅付费', icon: '💳' }
     ],
     allQuestions: [],
-    filteredQuestions: []
+    filteredQuestions: [],
+    // 分组折叠（仅在“全部 + 未搜索”时启用）
+    showGrouped: true,
+    groupedCategories: [],
+    // 折叠状态
+    expandedCategoryMap: {}, // { [categoryId]: boolean }
+    expandedQuestionMap: {} // { [questionId]: boolean }
   },
 
   /**
@@ -63,7 +69,7 @@ Page({
         id: 4,
         category: 'hot',
         question: '公共地图和个人地图的区别是什么？',
-        answer: '公共地图为所有用户共享，支持多人协作添加标记，但仅能管理本人创建的内容；个人地图为私人专属空间，可自由编辑所有标记，且内容仅本人可见。'
+        answer: '公共地图为所有用户共享，支持多人协作添加标记，但仅能管理本人创建的内容；个人地图为私人专属空间，可自由编辑所有标记，添加的标记仅本人可见。'
       },
       {
         id: 5,
@@ -94,13 +100,13 @@ Page({
         id: 9,
         category: 'basic',
         question: '如何调整控件位置？',
-        answer: '点击右侧 "设置" 按钮，选择 "控件位置" 选项，可拖动调整缩放按钮、定位按钮等控件的位置（如顶部、底部、右侧）。'
+        answer: '点击右侧 "设置" 按钮，选择 "控件位置" 选项，可拖动调整缩放按钮、定位按钮等控件的位置（如左侧、右侧）。'
       },
       {
         id: 10,
         category: 'basic',
         question: '如何更换定位图标样式？',
-        answer: '点击右侧 "设置" 按钮，选择 "定位图标" 选项，可更换图标样式（如箭头、圆点等）。'
+        answer: '点击右侧 "设置" 按钮，选择 "定位图标" 选项，可更换箭头图标样式。'
       },
       {
         id: 11,
@@ -248,7 +254,7 @@ Page({
         id: 34,
         category: 'map',
         question: '如何切换公共地图和个人地图？',
-        answer: '通过界面底部的切换按钮可以在公共地图和个人地图之间切换。公共地图显示所有用户共享的标记，个人地图仅显示您自己的标记。'
+        answer: '通过界面底部的切换按钮可在公共地图与个人地图之间切换：公共地图展示所有用户共同维护的标记；个人地图默认仅展示您自己的标记。同时，您也可以将公共地图的数据导入到个人地图中，便于个人整理与管理。'
       },
       {
         id: 35,
@@ -396,10 +402,19 @@ Page({
       }
     ];
 
-    this.setData({
-      allQuestions: questions,
-      filteredQuestions: questions
-    });
+    this.setData(
+      {
+        allQuestions: questions,
+      },
+      () => {
+        // 默认：全部分类时展开“热门”，其他折叠；问题默认全部折叠
+        this.setData({
+          expandedCategoryMap: { hot: true },
+          expandedQuestionMap: {},
+        });
+        this.filterQuestions();
+      }
+    );
   },
 
   /**
@@ -408,7 +423,10 @@ Page({
   switchCategory(e) {
     const category = e.currentTarget.dataset.category;
     this.setData({
-      currentCategory: category
+      currentCategory: category,
+      // 切换分类时，折叠状态重置，避免“太长”
+      expandedQuestionMap: {},
+      expandedCategoryMap: category === 'all' && !this.data.searchKeyword.trim() ? { hot: true } : {},
     });
     this.filterQuestions();
   },
@@ -417,10 +435,67 @@ Page({
    * 搜索问题
    */
   onSearchInput(e) {
+    const searchKeyword = e.detail.value;
     this.setData({
-      searchKeyword: e.detail.value
+      searchKeyword,
+      // 搜索时不展开任何答案，避免一次性铺开太长
+      expandedQuestionMap: {},
+      expandedCategoryMap: this.data.currentCategory === 'all' && !searchKeyword.trim() ? { hot: true } : {},
     });
     this.filterQuestions();
+  },
+
+  /**
+   * 切换分类分组的展开/收起（仅“全部 + 未搜索”场景）
+   */
+  toggleCategoryGroup(e) {
+    const categoryId = e.currentTarget.dataset.id;
+    const { expandedCategoryMap } = this.data;
+    this.setData({
+      expandedCategoryMap: {
+        ...expandedCategoryMap,
+        [categoryId]: !expandedCategoryMap[categoryId],
+      },
+    });
+  },
+
+  /**
+   * 切换单个问题的展开/收起（手风琴条目）
+   */
+  toggleQuestion(e) {
+    const questionId = Number(e.currentTarget.dataset.qid);
+    const { expandedQuestionMap } = this.data;
+    this.setData({
+      expandedQuestionMap: {
+        ...expandedQuestionMap,
+        [questionId]: !expandedQuestionMap[questionId],
+      },
+    });
+  },
+
+  /**
+   * 构建分组数据（按 categories 顺序）
+   */
+  buildGroupedCategories(questions) {
+    const { categories } = this.data;
+    const order = categories
+      .filter((c) => c.id !== 'all')
+      .map((c) => c.id);
+
+    return order
+      .map((categoryId) => {
+        const meta = categories.find((c) => c.id === categoryId);
+        const list = questions.filter((q) => q.category === categoryId);
+        if (!list.length) return null;
+        return {
+          id: categoryId,
+          name: meta ? meta.name : categoryId,
+          icon: meta ? meta.icon : '',
+          count: list.length,
+          questions: list,
+        };
+      })
+      .filter(Boolean);
   },
 
   /**
@@ -444,8 +519,11 @@ Page({
       );
     }
 
+    const showGrouped = currentCategory === 'all' && !searchKeyword.trim();
     this.setData({
-      filteredQuestions: filtered
+      filteredQuestions: filtered,
+      showGrouped,
+      groupedCategories: showGrouped ? this.buildGroupedCategories(allQuestions) : [],
     });
   },
 

@@ -188,6 +188,10 @@ page {
   word-break: break-word;
 }
 
+.table-cell:first-child {
+  flex: 0.5;
+}
+
 .table-cell:last-child {
   border-right: none;
 }
