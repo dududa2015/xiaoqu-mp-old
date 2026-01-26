@@ -1,4 +1,6 @@
 // components/user-info/user-info.js
+const { checkLoginAndNavigate } = require('../../utils/util.js')
+
 Component({
 
   /**
@@ -110,18 +112,7 @@ Component({
       })
     },
     toEdit() {
-      let userInfo = wx.getStorageSync('userInfo')
-      if (!userInfo || !userInfo.userId) {
-        // #if IOS
-        wx.navigateTo({
-          url: '/pages/ios/login/login',
-        })
-        // #else
-        wx.navigateTo({
-          url: '/pages/android/login/login',
-        })
-        // #endif
-      } else {
+      if (checkLoginAndNavigate()) {
         wx.navigateTo({
           url: '/pages/my/edit/edit',
         })

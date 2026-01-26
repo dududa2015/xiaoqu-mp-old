@@ -1,4 +1,4 @@
-// components/top-bar/top-bar.js
+const { checkLoginAndNavigate } = require('../../utils/util.js')
 Component({
 
   /**
@@ -47,7 +47,9 @@ Component({
     },
     //自定义的搜索
     onShowChooseLocation() {
-      this.triggerEvent('onShowChooseLocation')
+      if (checkLoginAndNavigate()) {
+        this.triggerEvent('onShowChooseLocation')
+      }
     },
     onCS() {
       wx.navigateTo({
@@ -55,7 +57,9 @@ Component({
       })
     },
     onSetting() {
-      this.triggerEvent('onSetting');
+      if (checkLoginAndNavigate()) {
+        this.triggerEvent('onSetting')
+      }
     },
     toShare() {
       console.log('onShare')

@@ -7,6 +7,8 @@ import {
 import {
   getUserById
 } from '../../../apis/user-api'
+const { checkLoginAndNavigate } = require('../../../utils/util.js')
+
 Page({
 
   /**
@@ -44,11 +46,7 @@ Page({
   },
   async init() {
     //控制显示是否显示温馨提醒
-    let userInfo = wx.getStorageSync('userInfo')
-    if (!userInfo || !userInfo.userId) {
-      wx.redirectTo({
-        url: '/pages/android/login/login',
-      })
+    if (!checkLoginAndNavigate('redirectTo')) {
       return
     }
     // 从后端获取产品列表

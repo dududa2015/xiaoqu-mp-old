@@ -263,6 +263,33 @@ const getStorageWithExpire=(key)=> {
   return cacheData.data
 }
 
+// 检查登录状态，如果未登录则跳转到登录页
+// @param {string} navigateType - 跳转方式：'navigateTo'（默认）或 'redirectTo'
+// 返回 true 表示已登录，false 表示未登录（已跳转）
+const checkLoginAndNavigate = (navigateType = 'navigateTo') => {
+  const userInfo = wx.getStorageSync('userInfo')
+  if (!userInfo || !userInfo.userId) {
+    const loginUrl = 
+      // #if IOS
+      '/pages/ios/login/login'
+      // #else
+      '/pages/android/login/login'
+      // #endif
+    
+    if (navigateType === 'redirectTo') {
+      wx.redirectTo({
+        url: loginUrl,
+      })
+    } else {
+      wx.navigateTo({
+        url: loginUrl,
+      })
+    }
+    return false
+  }
+  return true
+}
+
 module.exports = {
   formatTime,
   formatDate,
@@ -281,5 +308,6 @@ module.exports = {
   isPointOnPolyline,
   checkString,
   setStorageWithExpire,
-  getStorageWithExpire
+  getStorageWithExpire,
+  checkLoginAndNavigate
 }

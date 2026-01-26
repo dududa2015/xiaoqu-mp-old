@@ -206,10 +206,7 @@ Component({
       var that = this;
       let latitude = wx.getStorageSync('latitude')
       let longitude = wx.getStorageSync('longitude')
-      //调用距离计算接口
-      wx.showLoading({
-        title: '正在加载',
-      })
+
       getBicycleRoute({
         origin: longitude + ',' + latitude,
         destination: lng + ',' + lat
