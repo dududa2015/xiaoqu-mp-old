@@ -4,14 +4,14 @@ import {
   getBdAround,
   formatDate,
   isPointOnPolyline,
-  setStorageWithExpire,
-  getStorageWithExpire
+  checkLoginAndNavigate
 } from '../../utils/util'
 import {
   buildMarkers,
   buildPolyline,
   buildPolygon
 } from '../../utils/map'
+
 import {
   addMarker,
   getAroundList,
@@ -117,8 +117,11 @@ Page({
     this.waitForUserInfo().then(() => {
       this.checkVip()
     }).catch(() => {
-      // 超时后仍尝试检查
-      this.checkVip()
+      // 超时后跳转到登录页面
+      //如果没有获取到用户信息，且试用无效就跳转到登录页面--一般不会出现这种情况，先注释
+      // if(!wx.getStorageSync('deviceTrialIsActive')) {
+      //   checkLoginAndNavigate()
+      // }
     })
 
     const childComp = this.selectComponent('#topTip');
@@ -215,6 +218,7 @@ Page({
       if (app.globalData.userInfoReady) {
         // 设置超时
         const timeoutId = setTimeout(() => {
+          console.log('等待 userInfo 超时')
           reject(new Error('等待 userInfo 超时'))
         }, timeout)
 
@@ -277,6 +281,7 @@ Page({
     }
   },
   toVip(content) {
+    debugger
     this.setData({
       showVipExpired: true,
       vipExpiredContent: content

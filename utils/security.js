@@ -124,36 +124,15 @@ function generateSignature(params) {
   // 格式：|timestamp|nonce|METHOD|path|queryParams
   const signString = `|${timestamp}|${nonce}|${method.toUpperCase()}|${sortedPath}|${sortedQueryParams}`;
 
-  // 开发环境输出调试信息
-  const isDev = true // 开发环境设置为 true
-  if (isDev) {
-    console.log('===== 小程序端签名生成调试信息 =====')
-    console.log('HMAC Secret Key (前20字符):', HMAC_SECRET_KEY.substring(0, 20))
-    console.log('Sign String:', signString)
-    console.log('Secret Key Length:', HMAC_SECRET_KEY.length)
-    console.log('Sign String Length:', signString.length)
-    console.log('=====================================')
-  }
-
   // 使用 HMAC-SHA256 加密
   const signature = CryptoJS.HmacSHA256(signString, HMAC_SECRET_KEY)
     .toString(CryptoJS.enc.Hex)
-
-  // 开发环境输出签名
-  if (isDev) {
-    console.log('Computed Signature:', signature)
-  }
 
   const response = {
     timestamp,
     nonce,
     signature // 加密后的签名
   };
-
-  // 开发环境下返回签名字符串用于调试
-  if (isDev) {
-    response.signString = signString;
-  }
 
   return response;
 }

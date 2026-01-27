@@ -1,6 +1,7 @@
 import {
   convertToKilometers,
-  convertSecondsToHMS
+  convertSecondsToHMS,
+  checkLoginAndNavigate
 } from '../../utils/util'
 import {
   getMarkerById,
@@ -199,6 +200,9 @@ Component({
     },
 
     showPolyline() {
+      if (!checkLoginAndNavigate()) {
+        return
+      }
       const {
         lat,
         lng
@@ -311,6 +315,9 @@ Component({
       this.triggerEvent('onDelete', this.poiInfo)
     },
     onFeedback(){
+      if (!checkLoginAndNavigate()) {
+        return
+      }
       this.triggerEvent('onFeedback', this.poiInfo)
     },
     onClose() {

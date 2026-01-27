@@ -54,7 +54,7 @@
       "WeAppOthers": false,
       "WeAppIdaas": true
     },
-    "enableVConsole": "close",
+    "enableVConsole": "open",
     "icons": {
       "mainIcon120": "/Users/zhujian/Desktop/miniprogram/icons/ios/AppIcon.appiconset/icon-40@3x.png",
       "mainIcon180": "/Users/zhujian/Desktop/miniprogram/icons/ios/AppIcon.appiconset/icon-60@3x.png",
