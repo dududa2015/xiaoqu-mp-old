@@ -109,20 +109,22 @@ Page({
     // 获取上次执行时间
     const lastUpdateTime = wx.getStorageSync('lastUpdateMarkersTime')
     const now = Date.now()
-    const oneWeek = 7 * 24 * 60 * 60 * 1000 // 一周的毫秒数
+    const oneMonth = 30 * 24 * 60 * 60 * 1000 // 30天的毫秒数
 
     // 如果没有记录或已经过了一周，则执行更新
-    if (!lastUpdateTime || (now - lastUpdateTime >= oneWeek)) {
+    if (!lastUpdateTime || (now - lastUpdateTime >= oneMonth)) {
       try {
         await updateUserMarkersAndDeleted({ userId })
         // 更新执行时间
         wx.setStorageSync('lastUpdateMarkersTime', now)
         console.log('用户标记和删除数量已更新')
       } catch (error) {
+        // 失败了也缓存
+        wx.setStorageSync('lastUpdateMarkersTime', now)
         console.error('更新用户标记和删除数量失败:', error)
       }
     } else {
-      const daysLeft = Math.ceil((oneWeek - (now - lastUpdateTime)) / (24 * 60 * 60 * 1000))
+      const daysLeft = Math.ceil((oneMonth - (now - lastUpdateTime)) / (24 * 60 * 60 * 1000))
       console.log(`距离下次更新还有 ${daysLeft} 天`)
     }
   },

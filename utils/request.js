@@ -57,7 +57,7 @@ const request = (params) => {
       method: method, // get/post
       data: data, // 请求参数
       header: header, // 头部
-      timeout: 20000, // 设置10秒超时
+      timeout: 20000, // 设置20秒超时
       success(res) {
         // 处理安全相关错误
         if (res.statusCode === 401) {
