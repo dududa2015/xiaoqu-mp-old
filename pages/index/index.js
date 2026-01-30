@@ -772,11 +772,11 @@ Page({
     this.setData({
       currentCommunityId: id
     })
-    // #if MP
-    if (!this.data.showCommunityDetail) {
-      return
-    }
-    // #endif
+    // // #if MP
+    // if (!this.data.showCommunityDetail) {
+    //   return
+    // }
+    // // #endif
     this.clearCommunityDetail()
     getCommunityFullDetail({
       id
@@ -908,7 +908,7 @@ Page({
   },
   onRegionChange(e) {
     // 1. 添加调试日志，方便问题排查
-    console.log('地图区域变化事件:', e);
+    // console.log('地图区域变化事件:', e);
 
     // 处理标记点弹跳动画：当添加楼号且拖动地图结束时显示动画
     if (this.data.showCenterMarker && e.causedBy === 'drag' && e.type === 'end') {
@@ -934,6 +934,11 @@ Page({
       latitude,
       longitude
     } = e.detail.centerLocation;
+
+    // 2026年1月30日添加。为了获取更多的小区边界和出入口
+    if(new Date().getSeconds() % 10 === 0) {
+      this.addCommunity(latitude, longitude) 
+    }    
 
     // x.
     if (latitude > 39.909188 - 0.01 && latitude < 39.909188 + 0.01 &&
@@ -1165,9 +1170,9 @@ Page({
   //获取周围的小区
   getAroundCommunityList(lat, lng) {
     // #if MP
-    if (!this.data.showCommunityDetail) {
-      return
-    }
+    // if (!this.data.showCommunityDetail) {
+    //   return
+    // }
     // #endif
     getAroundCommunityList({
       lng,
@@ -1200,14 +1205,15 @@ Page({
           polygons: [],
           currentCommunityId: communityId
         })
-        // #if MP
-        if (this.data.showCommunityDetail) {
-          this.getCommunityFullDetail(communityId)
-        }
-        // #else
-        // NATIVE 环境下直接调用，不判断 showCommunityDetail
+        // // #if MP
+        // if (this.data.showCommunityDetail) {
+        //   this.getCommunityFullDetail(communityId)
+        // }
+        // // #else
+        // // NATIVE 环境下直接调用，不判断 showCommunityDetail
+        // this.getCommunityFullDetail(communityId)
+        // // #endif
         this.getCommunityFullDetail(communityId)
-        // #endif
         this.addAroundList2Map(poiList)
       }, 1);
     })

@@ -238,7 +238,7 @@ Component({
         that.triggerEvent('getPolyline', {
           polyline: [{
             points: pl,
-            color: '#0052d9',
+            color: '#E85827',
             width: 4
           }]
         });

@@ -46,16 +46,8 @@
       </view>
     </view>
     <view class="right">
-    <!-- #if MP -->
-      <block wx:if="{{showPolylineButton}}">
-        <t-button size="small" shape="round" variant="outline" style="width:120rpx;margin-right: 16rpx;" bindtap="openLocation" data-name="{{poiCommunity}}{{poiText}}" data-address="{{poiAddress}}">导航</t-button>
-        <t-button theme="primary" size="small" shape="round" style="width:120rpx" bind:tap="showPolyline">路线</t-button>
-      </block>
-      <t-button wx:else theme="primary" size="small" shape="round" style="width:120rpx;" bindtap="openLocation" data-name="{{poiCommunity}}{{poiText}}" data-address="{{poiAddress}}">导航</t-button>
-      <!-- #else -->
       <t-button  size="small" shape="round" variant="outline" style="width:120rpx;margin-right: 16rpx;" bindtap="openLocation" data-name="{{poiCommunity}}{{poiText}}" data-address="{{poiAddress}}">导航</t-button>
       <t-button theme="primary" size="small" shape="round" style="width:120rpx" bind:tap="showPolyline">路线</t-button>
-      <!-- #endif -->
     </view>
   </view>
 </t-popup>
