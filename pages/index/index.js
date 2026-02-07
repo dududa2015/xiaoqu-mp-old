@@ -281,7 +281,6 @@ Page({
     }
   },
   toVip(content) {
-    debugger
     this.setData({
       showVipExpired: true,
       vipExpiredContent: content
