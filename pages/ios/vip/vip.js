@@ -71,20 +71,17 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad(options) {
-    //获取userId
-    const userId = wx.getStorageSync('userId')
-    // 初始化支付管理器（如果未全局挂载）
-    this.applePayManager = new ApplePayManager(userId).init();
-
-    this.getProductList()
-    this.getProductListByApple()
-
     this.init()
   },
   init() {
     //控制显示是否显示温馨提醒
     let userInfo = wx.getStorageSync('userInfo')
-    if(!userInfo || !userInfo.userId){
+    if (userInfo && userInfo.userId) {
+      this.applePayManager = new ApplePayManager().init();
+
+      this.getProductList()
+      this.getProductListByApple()      
+    } else {
       wx.navigateTo({
         url: '/pages/ios/login/login',
       })

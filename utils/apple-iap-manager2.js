@@ -1,13 +1,11 @@
 class ApplePayManager {
-    constructor(userId) {
+    constructor() {
         this.transactionObserver = null;
         this.paymentSuccessCallback = null;
         this.paymentFailCallback = null;
         this.currentRequest = null;
         this.restoreSuccessCallback = null;
         this.restoreFailCallback = null;
-        this.userId = userId;
-        console.log('用户id:' + this.userId)
     }
 
     /**
@@ -125,7 +123,13 @@ class ApplePayManager {
      */
     _verifyReceipt(receiptData) {
         console.log('_verifyReceipt')
-        // console.log(receiptData)
+        // 验证时从缓存取 userId
+        const userId = wx.getStorageSync('userId') || (wx.getStorageSync('userInfo') && wx.getStorageSync('userInfo').userId) || null;
+        if (userId == null || userId === '') {
+            console.warn('_verifyReceipt: userId 为空，跳转登录页')
+            wx.navigateTo({ url: '/pages/ios/login/login' });
+            return Promise.reject(new Error('请先登录'));
+        }
         return new Promise((resolve, reject) => {
             // 这里应该将收据发送到你的服务器进行验证
             // 示例代码，实际应该调用你的后端API
@@ -135,7 +139,7 @@ class ApplePayManager {
                 method: 'POST',
                 data: {
                     receipt: receiptData,
-                    userId: this.userId
+                    userId: userId
                 },
                 success: (res) => {
                     console.log('_verifyReceipt', res)
