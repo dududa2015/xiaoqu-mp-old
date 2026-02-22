@@ -15,10 +15,11 @@ Component({
           let userId = newVal.userId.slice(-8)
           // 会员到期相关
           let vipExpiredDate = ''
+          let vipExpiredRaw
           // #if IOS
-          const vipExpiredRaw = newVal.iosVipExpiredDate
+          vipExpiredRaw = newVal.iosVipExpiredDate
           // #else
-          const vipExpiredRaw = newVal.androidVipExpiredDate
+          vipExpiredRaw = newVal.androidVipExpiredDate
           // #endif
 
           vipExpiredDate = this.formatDate(vipExpiredRaw)
@@ -88,6 +89,27 @@ Component({
             isLifetimeVip: false
           })
         }
+      }
+    },
+    validCount: {
+      type: Number,
+      value: 0,
+      observer(newVal) {
+        console.log('validCount 变化:', newVal)
+      }
+    },
+    pendingAuditCount: {
+      type: Number,
+      value: 0,
+      observer(newVal) {
+        console.log('pendingAuditCount 变化:', newVal)
+      }
+    },
+    deletedCount: {
+      type: Number,
+      value: 0,
+      observer(newVal) {
+        console.log('deletedCount 变化:', newVal)
       }
     }
   },

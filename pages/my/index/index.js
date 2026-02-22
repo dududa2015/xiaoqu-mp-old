@@ -2,6 +2,9 @@ import {
   getUserById,
   updateUserMarkersAndDeleted
 } from '../../../apis/user-api'
+import {
+  getUserMarkerStatistics
+} from '../../../apis/marker-apis'
 Page({
 
   /**
@@ -22,7 +25,13 @@ Page({
     vipDaysLeft: 0,
     vipExpiringSoon: false,
     // 是否显示安卓下载链接（在2026年1月20日前显示，之后隐藏）
-    showAndroidDownload: true
+    showAndroidDownload: true,
+    // 标记统计数据
+    markerStats: {
+      validCount: 0,
+      pendingAuditCount: 0,
+      deletedCount: 0
+    }
   },
 
   onShow() {
@@ -89,6 +98,9 @@ Page({
             vipExpiringSoon
           })
 
+          // 获取标记统计数据
+          this.getMarkerStatistics(userId)
+
           // 更新用户标记和删除数量
           this.updateUserMarkersAndDeleted(userId)
         }
@@ -126,6 +138,28 @@ Page({
     } else {
       const daysLeft = Math.ceil((oneMonth - (now - lastUpdateTime)) / (24 * 60 * 60 * 1000))
       console.log(`距离下次更新还有 ${daysLeft} 天`)
+    }
+  },
+
+  // 获取标记统计数据
+  async getMarkerStatistics(userId) {
+    if (!userId) return
+
+    try {
+      const res = await getUserMarkerStatistics({ userId })
+      console.log('标记统计数据返回:', res)
+      if (res) {
+        this.setData({
+          markerStats: {
+            validCount: res.validCount || 0,
+            pendingAuditCount: res.pendingAuditCount || 0,
+            deletedCount: res.deletedCount || 0
+          }
+        })
+        console.log('设置后的 markerStats:', this.data.markerStats)
+      }
+    } catch (error) {
+      console.error('获取标记统计数据失败:', error)
     }
   },
   onReady() {

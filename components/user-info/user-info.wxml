@@ -47,18 +47,18 @@
                     <t-icon name="location" size="32rpx" />
                 </view>
                 <view class="stat-info">
-                    <view class="stat-value">{{markers || 0}}</view>
-                    <view class="stat-title">标记</view>
+                    <view class="stat-value">{{validCount || 0}}</view>
+                    <view class="stat-title">有效标记</view>
                 </view>
             </view>
             
-            <view class="stat-item stat-friends" bind:tap="showToast" data-number="{{friends || 0}}" data-type="friend">
+            <view class="stat-item stat-pending" bind:tap="toMarkers" data-deleted="{{-1}}">
                 <view class="stat-icon">
-                    <t-icon name="usergroup" size="32rpx" />
+                    <t-icon name="time" size="32rpx" />
                 </view>
                 <view class="stat-info">
-                    <view class="stat-value">{{friends || 0}}</view>
-                    <view class="stat-title">好友</view>
+                    <view class="stat-value">{{pendingAuditCount || 0}}</view>
+                    <view class="stat-title">待审核</view>
                 </view>
             </view>
             
@@ -67,7 +67,7 @@
                     <t-icon name="delete" size="32rpx" />
                 </view>
                 <view class="stat-info">
-                    <view class="stat-value">{{deleted || 0}}</view>
+                    <view class="stat-value">{{deletedCount || 0}}</view>
                     <view class="stat-title">被删除</view>
                 </view>
             </view>

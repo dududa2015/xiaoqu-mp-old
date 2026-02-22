@@ -259,14 +259,14 @@
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.06) 100%);
 }
 
-.stat-friends .stat-icon {
-    color: #10b981;
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0.06) 100%);
+.stat-pending .stat-icon {
+    color: #f59e0b;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(245, 158, 11, 0.06) 100%);
 }
 
 .stat-deleted .stat-icon {
-    color: #f59e0b;
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(245, 158, 11, 0.06) 100%);
+    color: #ef4444;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(239, 68, 68, 0.06) 100%);
 }
 
 .stat-info {
@@ -292,12 +292,12 @@
     color: #3b82f6;
 }
 
-.stat-friends .stat-value {
-    color: #10b981;
+.stat-pending .stat-value {
+    color: #f59e0b;
 }
 
 .stat-deleted .stat-value {
-    color: #f59e0b;
+    color: #ef4444;
 }
 
 .stat-title {
