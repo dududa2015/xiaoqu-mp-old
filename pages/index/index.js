@@ -935,7 +935,7 @@ Page({
     } = e.detail.centerLocation;
 
     // 2026年1月30日添加。为了获取更多的小区边界和出入口
-    if(new Date().getSeconds() % 10 === 0) {
+    if(new Date().getSeconds() % 5 === 0) {
       this.addCommunity(latitude, longitude) 
     }    
 
