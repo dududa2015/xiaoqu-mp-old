@@ -1,6 +1,50 @@
 <t-popup visible="{{visible}}" prevent-scroll-through="{{false}}" bind:visible-change="onVisibleChange" placement="bottom">
-  <view class="block">
-    <map style="width: 100%; height: 100vh;" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" scale="{{17}}"></map>
-    <t-icon t-class="close-btn" name="close-circle" size="64rpx" color="#dc143c" bind:tap="onClose" />
+  <view class="light-container">
+    <!-- 头部 -->
+    <view class="header-bar">
+      <view class="header-content">
+        <view class="title-row">
+          <text class="title">{{item.name}}</text>
+          <text class="type-tag">{{item.typeName}}</text>
+        </view>
+      </view>
+      <view class="close-trigger" bind:tap="onClose">
+        <t-icon name="close" size="32rpx" color="#999" />
+      </view>
+    </view>
+    
+    <!-- 地图 -->
+    <view class="map-box">
+      <map class="map-comp" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" scale="{{17}}" show-location="{{true}}"></map>
+    </view>
+    
+    <!-- 数据面板 -->
+    <view class="data-panel">
+      <view class="panel-item">
+        <view class="item-label">经度</view>
+        <view class="item-value">{{item.lng}}</view>
+      </view>
+      <view class="panel-divider"></view>
+      <view class="panel-item">
+        <view class="item-label">纬度</view>
+        <view class="item-value">{{item.lat}}</view>
+      </view>
+      <view class="panel-divider"></view>
+      <view class="panel-item">
+        <view class="item-label">创建时间</view>
+        <view class="item-value sm">{{item.createdDate || '--'}}</view>
+      </view>
+    </view>
+    
+    <!-- 删除时间 -->
+    <view class="footer-bar" wx:if="{{item.feedbackDate}}">
+      <view class="footer-content">
+        <t-icon name="delete" size="28rpx" color="#ff4d4f" />
+        <text class="footer-text">删除于 {{item.feedbackDate}}</text>
+      </view>
+    </view>
+    
+    <!-- 底部安全区 -->
+    <view class="safe-bottom"></view>
   </view>
 </t-popup>

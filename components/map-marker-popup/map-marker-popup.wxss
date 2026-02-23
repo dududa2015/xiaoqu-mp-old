@@ -1,9 +1,152 @@
-.block {
-  position: relative;
+/* 白色容器 */
+.light-container {
+  background: #fff;
+  border-radius: 36rpx 36rpx 0 0;
+  /* min-height: 72vh; */
 }
 
-.close-btn {
-  position: absolute;
-  right: 32rpx;
-  top: 32rpx;
+/* 头部栏 */
+.header-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 36rpx 28rpx 28rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.header-content {
+  flex: 1;
+  overflow: hidden;
+  padding-right: 16rpx;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  word-break: break-all;
+}
+
+.type-tag {
+  padding: 6rpx 16rpx;
+  background: #f0f0f0;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.status-badge {
+  display: inline-block;
+  margin-top: 12rpx;
+  padding: 6rpx 14rpx;
+  border-radius: 8rpx;
+  font-size: 20rpx;
+  font-weight: 500;
+}
+
+.status-badge.pending {
+  background: #fffbe6;
+  color: #d48806;
+}
+
+.status-badge.removed {
+  background: #fff1f0;
+  color: #ff4d4f;
+}
+
+.close-trigger {
+  width: 56rpx;
+  height: 56rpx;
+  background: #f5f5f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* 地图 */
+.map-box {
+  margin: 20rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
+}
+
+.map-comp {
+  width: 100%;
+  height: 45vh;
+}
+
+/* 数据面板 */
+.data-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 0 20rpx;
+  padding: 28rpx 16rpx;
+  background: #f5f5f5;
+  border-radius: 20rpx;
+}
+
+.panel-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.item-label {
+  font-size: 20rpx;
+  color: #bbb;
+  font-weight: 500;
+}
+
+.item-value {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 600;
+  font-family: 'SF Mono', monospace;
+}
+
+.item-value.sm {
+  font-size: 22rpx;
+}
+
+.panel-divider {
+  width: 1rpx;
+  height: 50rpx;
+  background: #e8e8e8;
+}
+
+/* 底部栏 */
+.footer-bar {
+  margin: 20rpx;
+  padding: 20rpx 24rpx;
+  background: #fff1f0;
+  border-radius: 16rpx;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.footer-text {
+  font-size: 24rpx;
+  color: #ff4d4f;
+}
+
+/* 安全区 */
+.safe-bottom {
+  height: env(safe-area-inset-bottom);
 }

@@ -23,7 +23,11 @@ Component({
    * 组件的初始数据
    */
   data: {
-
+    visible: false,
+    latitude: 0,
+    longitude: 0,
+    markers: [],
+    polyline: []
   },
 
   /**
@@ -33,6 +37,11 @@ Component({
     onClose() {
       this.setData({
         visible: false
+      })
+    },
+    onVisibleChange(e) {
+      this.setData({
+        visible: e.detail.visible
       })
     },
     initMarkerPolyline(item) {

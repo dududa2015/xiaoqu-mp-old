@@ -11,6 +11,7 @@ Page({
      */
     data: {
         auditList: [],
+        typeList: ['楼号', '出入口', '公厕', '维修点', '换电站', '外卖柜', '生活类', '道路', '围墙'],
         right: [
             {
                 text: '编辑',
@@ -89,7 +90,12 @@ Page({
         getAuditList({ userId }).then(res => {
             if (res && res.length > 0) {
                 that.setData({
-                    auditList: res
+                    auditList: res.map(item => {
+                      return {
+                        ...item,
+                        typeName: that.data.typeList[item.type]
+                      };
+                    })
                 })
             }
         })
