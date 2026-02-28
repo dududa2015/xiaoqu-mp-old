@@ -177,6 +177,9 @@ function generateSecurityHeaders(options) {
     data
   });
 
+  // 获取设备ID（从小程序存储中读取）
+  const deviceId = wx.getStorageSync('deviceId') || '';
+
   // 构建安全请求头
   const headers = {
     'Content-Type': 'application/json',
@@ -188,6 +191,11 @@ function generateSecurityHeaders(options) {
   // 如果有token，添加到Authorization头
   if (token) {
     headers.Authorization = `Bearer ${token}`;
+  }
+
+  // 如果有设备ID，添加到X-Device-Id头
+  if (deviceId) {
+    headers['X-Device-Id'] = deviceId;
   }
 
   // 将 HMAC-SHA256 加密后的签名添加到请求头

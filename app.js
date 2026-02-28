@@ -33,7 +33,7 @@ App({
   init(options) {
     // 初始化 userInfo 就绪 Promise
     this.initUserInfoReady()
-    
+
     // #if MP
     this.tryTimes = MAX_RETRY_TIMES
     this.autoUpdate()
