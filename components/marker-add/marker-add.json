@@ -10,5 +10,6 @@
     "t-radio": "tdesign-miniprogram/radio/radio",
     "t-check-tag": "tdesign-miniprogram/check-tag/check-tag",
     "suggestions-input": "/components/suggestions-input/suggestions-input"
-  }
+  },
+  "styleIsolation": "shared"
 }

@@ -17,8 +17,6 @@
     <t-icon name='close' size="48rpx" color="#333"></t-icon>
     <text class="choose-text">退出</text>
   </view>
-  <!-- <t-button theme="primary" size="large" shape="circle" aria-label="搜索" style="width: 150rpx; height: 150rpx; border-radius: 40%;">定点</t-button>
-  <t-button theme="primary" size="extra-small" icon="check" shape="circle" aria-label="搜索" style="width: 80rpx; height: 80rpx;  "> </t-button> -->
 </view>
 
 <t-popup visible="{{showForm}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#f5f5f5;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx);">
@@ -29,49 +27,37 @@
   <view class="form-wrap">
     <view class="form-title">{{action}}{{title}}</view>
     <view class="input-wrap">
-      <t-input placeholder="{{place}}" model:value="{{name}}" borderless="{{false}}" maxlength="10" placeholder-class="t-input__placeholder" type="text" cursor-spacing="20" always-embed="{{true}}" clearable>
+      <t-input placeholder="{{place}}" model:value="{{name}}" borderless="{{false}}" maxlength="10" placeholder-class="t-input__placeholder" type="text" cursor-spacing="72" always-embed="{{true}}" clearable>
         <text slot="label" wx:if="{{markerTypeIndex === 0}}">楼号<text style="color: #e34d59"> *</text> </text>
         <text slot="label" wx:if="{{markerTypeIndex === 6}}">名称<text style="color: #e34d59"> *</text> </text>
         <text slot="label" wx:if="{{markerTypeIndex !== 0 && markerTypeIndex !== 6}}">名称 </text>
       </t-input>
-      <t-cell title="猜你想输入" wx:if="{{markerTypeIndex === 0}}">
-        <suggestions-input style="margin-left: 16rpx;" slot="note" markerTypeIndex="{{markerTypeIndex}}" suggestionsName="{{suggestionsName}}" bind:getSuggestions="getSuggestions"></suggestions-input>
+      <t-cell title="" wx:if="{{markerTypeIndex === 0}}">
+        <view slot="title" style="height: 48rpx;display: flex; align-items: center;">
+          <text>猜你想输入</text>
+        </view>
+        <suggestions-input id="suggestions" style="margin-left: 16rpx;height: 48rpx;" slot="note" markerTypeIndex="{{markerTypeIndex}}" name="{{name}}" bind:getSuggestions="getSuggestions"></suggestions-input>
       </t-cell>
-      <t-cell title="门的朝向" wx:if="{{markerTypeIndex === 0}}">
+      <t-cell wx:if="{{markerTypeIndex === 0}}">
+        <view slot="title" style="height: 48rpx;display: flex; align-items: center;">
+          <text>门的朝向</text>
+        </view>
         <view style="margin-left: 16rpx;" slot="note">
           <t-check-tag wx:for="{{tagDirection}}" wx:key="index" theme="default" checked="{{item.checked}}" bindchange="onTagDirectionChange" data-item="{{item}}" variant="dark" size="medium" content="" style="margin:0 4rpx 0 0">{{item.name}}</t-check-tag>
         </view>
       </t-cell>
-      <t-cell title="标签" bordered="{{false}}">
+      <t-cell bordered="{{false}}">
+        <view slot="title" style="height: 48rpx;display: flex; align-items: center;">
+          <text>标签</text>
+        </view>
         <view style="margin-left: 16rpx;" slot="note">
           <!--楼号-->
           <t-check-tag wx:for="{{currentTagList}}" wx:key="index" theme="default" checked="{{item.checked}}" bindchange="onTagChange" data-item="{{item}}" variant="dark" size="medium" content="" style="margin:0 8rpx 0;background-color:{{item.checked?bgColor:''}};border-color:{{item.checked?bgColor:''}};">{{item.name}}</t-check-tag>
         </view>
       </t-cell>
     </view>
-    <!-- <view class="input-wrap" wx:if="{{markerTypeIndex === 0}}"> -->
-    <view class="tag-list">
-      <!-- 猜你输入 -->
-      <!-- <suggestions-input markerTypeIndex="{{markerTypeIndex}}" suggestionsName="{{suggestionsName}}" bind:getSuggestions="getSuggestions"></suggestions-input> -->
-      <!-- 方位 -->
-      <!-- <view wx:if="{{markerTypeIndex === 0}}">
-        <text class="suggestions">方位：</text>
-        <t-check-tag wx:for="{{tagDirection}}" wx:key="index" theme="default" checked="{{item.checked}}" bindchange="onTagDirectionChange" data-item="{{item}}" variant="dark" size="large" content="" style="margin:0 8rpx 16rpx 0">{{item.name}}</t-check-tag>
-      </view> -->
-      <!-- 楼号 -->
-      <!-- <view>
-        <t-check-tag wx:for="{{tagList0}}" wx:key="index" theme="default" checked="{{item.checked}}" wx:if="{{markerTypeIndex === 0}}" bindchange="onTagChange" data-item="{{item}}" variant="dark" size="large" content="" style="margin:0 16rpx 16rpx 0">{{item.name}}</t-check-tag>
-      </view> -->
-
-
-
-    </view>
-    <!-- <view class="footer">
-      <t-button theme="primary" size="large" block style="width: 100%;" bind:tap="onSaveMarker">保存</t-button>
-    </view> -->
   </view>
   <view class="footer">
-    <!-- <t-button theme="primary" size="large" block style="width: 100%;background-color:red;border-color:red" bind:tap="onSaveMarker">保存</t-button> -->
     <button type="primary" style="background-color:{{bgColor}};" bind:tap="onSaveMarker">保存</button>
   </view>
 </t-popup>

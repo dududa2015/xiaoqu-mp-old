@@ -279,3 +279,7 @@
   width: 100%;
   text-align: center;
 }
+
+.t-cell__title {
+  margin-right: 16rpx !important;
+}
