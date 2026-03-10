@@ -1,8 +1,8 @@
 function generateNeighborBuildings(input) {
-  if (!input || typeof input !== 'string') return [];
+  if (!input || typeof input !== 'string') return ['1号楼', '2号楼'];
   
   const building = input.trim();
-  if (building === '') return [];
+  if (building === '') return ['1号楼', '2号楼'];
   
   const neighbors = [];
   
