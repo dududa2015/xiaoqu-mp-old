@@ -3,7 +3,7 @@ import {
   generateRandom10DigitNumber,
   getBdAround,
   formatDate,
-  isPointOnPolyline,
+  isPointOnSegment,
   checkLoginAndNavigate
 } from '../../utils/util'
 import {
@@ -529,8 +529,8 @@ Page({
         } = res
         console.log(longitude, latitude)
 
-        // longitude = 113.471588
-        // latitude = 22.270992
+        longitude = 113.6099
+        latitude = 22.534465
         that.setData({
           latitude,
           longitude,
@@ -824,30 +824,47 @@ Page({
 
   //通过在polyline点击得到的坐标点，循环polyline的points，判断坐标点是否在polyline上，如果在，那就根据xId获取详情
   onPolylineTap(e) {
-    const {
-      latitude,
-      longitude
-    } = e.detail
-    let point = {
-      latitude,
-      longitude
-    }
-    let polyline = this.data.polyline
+    // 获取点击点的经纬度
+    const clickPoint = {
+      x: e.detail.longitude, // 注意：这里将经度作为x，纬度作为y
+      y: e.detail.latitude
+    };
 
-    let currentPolyline = null
-    for (let i = 0; i < polyline.length; i++) {
-      if (isPointOnPolyline(point, polyline[i].points)) {
-        currentPolyline = polyline[i]
-        break
+    // 获取地图当前缩放级别，用于动态调整容差（可选）
+    const scale = this.data.scale;
+    // 一个简单的容差策略：缩放级别越大（地图越详细），容差越小
+    const tolerance = 0.001 / scale;
+
+    let hitLine = null
+    // 遍历所有polyline（如果你的polyline数组有多个元素）
+    this.data.polyline.forEach(line => {
+      const points = line.points; // 获取该条折线的所有坐标点
+      // 遍历折线中的每一小段
+      for (let i = 0; i < points.length - 1; i++) {
+        const segmentStart = {
+          x: points[i].longitude,
+          y: points[i].latitude
+        };
+        const segmentEnd = {
+          x: points[i + 1].longitude,
+          y: points[i + 1].latitude
+        };
+
+        // 调用核心判断函数
+        if (isPointOnSegment(segmentStart, segmentEnd, clickPoint, tolerance)) {
+          hitLine = line
+          break; // 找到后即可退出循环
+        }
       }
-    }
-    if (!currentPolyline) {
+    });
+    if (hitLine === null) {
       wx.showToast({
-        title: '请重新点击一下',
+        title: '请重新点击',
         icon: 'none'
       })
       return
     }
+
     if (this.data.showForm || this.disableTap || this.data.showChooseMarker) {
       return
     }
@@ -860,7 +877,7 @@ Page({
     this.resetMarker()
     this.resetPolyline()
     this.setData({
-      xId: currentPolyline.xId,
+      xId: hitLine.xId,
       showPOI: true,
       showAdd: false,
       showLocation: false,
@@ -935,9 +952,9 @@ Page({
     } = e.detail.centerLocation;
 
     // 2026年1月30日添加。为了获取更多的小区边界和出入口
-    if(new Date().getSeconds() % 5 === 0) {
-      this.addCommunity(latitude, longitude) 
-    }    
+    if (new Date().getSeconds() % 5 === 0) {
+      this.addCommunity(latitude, longitude)
+    }
 
     // x.
     if (latitude > 39.909188 - 0.01 && latitude < 39.909188 + 0.01 &&

@@ -35,22 +35,22 @@ const isStringNumber = value => {
 const convertToKilometers = meters => {
   if (meters > 1000) {
     return (meters / 1000).toFixed(1) + '公里'; // 转换为公里  
-  } else if(meters <= 1000){
+  } else if (meters <= 1000) {
     return meters + '米'; // 返回米  
   } else {
     return ''
-  }  
+  }
 }
 //日期转换
 const convertDate = inputDateTime => {
-    const date = new Date(inputDateTime);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  const date = new Date(inputDateTime);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
 const convertSecondsToHMS = seconds => {
@@ -137,7 +137,7 @@ const msgSecCheck = msg => {
   })
   return new Promise((resolve, reject) => {
     let t = this;
-    msgSecurityCheck({content:msg}).then(res => {
+    msgSecurityCheck({ content: msg }).then(res => {
       wx.hideLoading()
       if (res !== '' && !res.isContentSafe) {
         wx.showToast({
@@ -166,7 +166,7 @@ const getBdAround = (latlng, page_num) => {
     // ak: '1dOeeCbIp4xNrKWvZJSMuINxJkXEMd7E',
     // ak: 'ZGxOCttOM3lg7sxfONimtvt4wic3dfRC',
     // ak:'B9YJ9P5OSODXL15oiF9WqwaJbKSQAkkj', 我的
-    ak:'88DcVM0DIAhvvAAMxj1ObuZcNmnn055Z',
+    ak: '88DcVM0DIAhvvAAMxj1ObuZcNmnn055Z',
     page_size: 20,
     page_num,
     coord_type: 2,
@@ -193,26 +193,42 @@ const getColorFromStorage = n => {
   }
 }
 
-function isPointOnSegment(p, q, r) {
-  if (q.latitude <= Math.max(p.latitude, r.latitude) &&
-    q.latitude >= Math.min(p.latitude, r.latitude) &&
-    q.longitude <= Math.max(p.longitude, r.longitude) &&
-    q.longitude >= Math.min(p.longitude, r.longitude)) {
-    return true;
-  }
-  return false;
-}
+// function isPointOnSegment(p, q, r) {
+//   if (q.latitude <= Math.max(p.latitude, r.latitude) &&
+//     q.latitude >= Math.min(p.latitude, r.latitude) &&
+//     q.longitude <= Math.max(p.longitude, r.longitude) &&
+//     q.longitude >= Math.min(p.longitude, r.longitude)) {
+//     return true;
+//   }
+//   return false;
+// }
 
-// 判断点是否在折线上的主函数
-const isPointOnPolyline = (point, polyline) => {
-  for (let i = 0; i < polyline.length - 1; i++) {
-    const start = polyline[i];
-    const end = polyline[i + 1];
-    if (isPointOnSegment(start, point, end)) {
-      return true;
-    }
+/**
+ * 判断点c是否在线段ab上（含容差）
+ * @param {Object} a 线段起点 {x: longitude, y: latitude}
+ * @param {Object} b 线段终点 {x: longitude, y: latitude}
+ * @param {Object} c 点击点 {x: longitude, y: latitude}
+ * @param {number} tolerance 容差范围，值越小判断越严格，建议根据地图缩放级别调整
+ * @returns {boolean}
+ */
+const isPointOnSegment = (a, b, c, tolerance = 0.0001) => {
+  // 1. 计算向量ab和ac的叉积的模，判断是否共线（考虑浮点数误差）
+  // 叉积公式: (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)
+  let crossProduct = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+
+  // 如果叉积的绝对值大于容差，说明不共线，直接返回false
+  if (Math.abs(crossProduct) > tolerance) {
+    return false;
   }
-  return false;
+
+  // 2. 检查点c的坐标是否在线段ab的矩形包围盒内
+  // 即c的x坐标在a.x和b.x之间（考虑端点大小），y坐标同理
+  return (
+    Math.min(a.x, b.x) - tolerance <= c.x &&
+    c.x <= Math.max(a.x, b.x) + tolerance &&
+    Math.min(a.y, b.y) - tolerance <= c.y &&
+    c.y <= Math.max(a.y, b.y) + tolerance
+  );
 }
 
 //是否由数字+['号', '幢', '座', '栋', '单元', '层', '房号', '区', '楼宇', '片区']其中的一个字符串组成，且数字不能超过3个
@@ -241,21 +257,21 @@ const checkString = (s) => {
 }
 //根据vip过期时间判断是否vip
 const isAppVip = (expiredDate) => {
-     
-  }
 
-  // 设置N天过期的缓存
-const setStorageWithExpire = (key, data, days = 1) =>{
+}
+
+// 设置N天过期的缓存
+const setStorageWithExpire = (key, data, days = 1) => {
   const expireTime = Date.now() + days * 24 * 60 * 60 * 1000
   const cacheData = { data, expireTime }
   wx.setStorageSync(key, cacheData)
 }
 
 // 获取缓存（自动清理过期数据）
-const getStorageWithExpire=(key)=> {
+const getStorageWithExpire = (key) => {
   const cacheData = wx.getStorageSync(key)
   if (!cacheData) return null
-  
+
   if (Date.now() > cacheData.expireTime) {
     wx.removeStorageSync(key)
     return null
@@ -269,13 +285,13 @@ const getStorageWithExpire=(key)=> {
 const checkLoginAndNavigate = (navigateType = 'navigateTo') => {
   const userInfo = wx.getStorageSync('userInfo')
   if (!userInfo || !userInfo.userId) {
-    const loginUrl = 
+    const loginUrl =
       // #if IOS
       '/pages/ios/login/login'
-      // #else
-      '/pages/android/login/login'
-      // #endif
-    
+    // #else
+    '/pages/android/login/login'
+    // #endif
+
     if (navigateType === 'redirectTo') {
       wx.redirectTo({
         url: loginUrl,
@@ -305,7 +321,7 @@ module.exports = {
   msgSecCheck,
   getBdAround,
   getColorFromStorage,
-  isPointOnPolyline,
+  isPointOnSegment,
   checkString,
   setStorageWithExpire,
   getStorageWithExpire,
