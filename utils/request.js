@@ -43,13 +43,9 @@ const request = (params) => {
     ...securityHeaders
   };
 
-  // 显示加载提示（GET 请求不显示）
-  const isGet = method.toUpperCase() === 'GET';
-  if (!isGet) {
-    wx.showLoading({
-      title: '正在加载',
-    })
-  }
+  wx.showLoading({
+    title: '正在加载',
+  })
 
   return new Promise((resolve, reject) => {
     wx.request({
@@ -146,10 +142,7 @@ const request = (params) => {
         reject(err);
       },
       complete() {
-        // GET 请求不显示 loading，所以也不需要隐藏
-        if (!isGet) {
-          wx.hideLoading()
-        }
+        wx.hideLoading()
       },
     });
   });

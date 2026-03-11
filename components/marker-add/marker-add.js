@@ -128,27 +128,35 @@ Component({
 
     tagDirection: [{
       name: '➡️',
+      label: '东',
       checked: false
     }, {
       name: '⬇️',
+      label: '南',
       checked: false
     }, {
       name: '⬅️',
+      label: '西',
       checked: false
     }, {
       name: '⬆️',
+      label: '北',
       checked: false
     }, {
       name: '↗️',
+      label: '东北',
       checked: false
     }, {
       name: '↘️',
+      label: '东南',
       checked: false
     }, {
       name: '↙️',
+      label: '西南',
       checked: false
     }, {
       name: '↖️',
+      label: '西北',
       checked: false
     }],
     tagList0: [{ //楼栋标签
@@ -163,6 +171,18 @@ Component({
     }, {
       name: '无电梯',
       checked: false
+    }, {
+      name: '需业主开门',
+      checked: false
+    }, {
+      name: '有保安登记',
+      checked: false
+    }, {
+      name: '临时停车难',
+      checked: false
+    }, {
+      name: '夜间关闭',
+      checked: false
     }],
     tagList1: [{ //出入口标签
       name: '需要登记',
@@ -176,15 +196,18 @@ Component({
     }, {
       name: '需要刷卡',
       checked: false
+    }, {
+      name: '24h开放',
+      checked: false
     }],
     tagList2: [{ //出入口标签
-      name: '比较干净',
+      name: '卫生干净',
       checked: false
     }, {
-      name: '有纸巾',
+      name: '有厕纸',
       checked: false
     }, {
-      name: '24小时开放',
+      name: '24h开放',
       checked: false
     }],
     tagList3: [{ //维修店
@@ -195,6 +218,9 @@ Component({
       checked: false
     }, {
       name: '高效便捷',
+      checked: false
+    }, {
+      name: '免费充气',
       checked: false
     }],
     tagList4: [{ //换电站

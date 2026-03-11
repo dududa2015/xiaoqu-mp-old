@@ -1,3 +1,12 @@
-<view wx:if="{{tagSuggestions.length > 0 && (markerTypeIndex === 0 || markerTypeIndex === 3)}}">
-  <t-check-tag wx:for="{{tagSuggestions}}" wx:key="index" theme="default" default-checked="{{item.checked}}" checked="{{item.checked}}" wx:if="{{markerTypeIndex === 0 || markerTypeIndex === 3}}" bindchange="onTagSuggestionChange" data-item="{{item}}" variant="dark" size="medium" content="" style="margin:0 12rpx 0 0">{{item.name}}</t-check-tag>
-</view>
+<scroll-view
+  wx:if="{{tagSuggestions.length > 0 && (markerTypeIndex === 0 || markerTypeIndex === 3)}}"
+  class="tag-suggestions-scroll"
+  scroll-x="true"
+  show-scrollbar="false"
+>
+  <view class="tag-suggestions-list">
+    <view class="tag-suggestions-item" wx:for="{{tagSuggestions}}" wx:key="index">
+      <t-check-tag theme="default" default-checked="{{item.checked}}" checked="{{item.checked}}" wx:if="{{markerTypeIndex === 0 || markerTypeIndex === 3}}" bindchange="onTagSuggestionChange" data-item="{{item}}" variant="dark" size="medium" content="">{{item.name}}</t-check-tag>
+    </view>
+  </view>
+</scroll-view>

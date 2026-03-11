@@ -1,5 +1,16 @@
-.suggestions {
-  margin-right: 8px;
-  font-size: 12px;
-  color: #999;
+.tag-suggestions-scroll {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding-bottom: 2rpx;
+}
+
+.tag-suggestions-list {
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.tag-suggestions-item {
+  display: inline-block;
+  margin-right: 12rpx;
 }

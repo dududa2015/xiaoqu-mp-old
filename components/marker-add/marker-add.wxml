@@ -19,7 +19,7 @@
   </view>
 </view>
 
-<t-popup visible="{{showForm}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#f5f5f5;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx);">
+<t-popup visible="{{showForm}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#f5f5f5;padding-left:24rpx;padding-right:24rpx;width:calc(100% - 48rpx);box-shadow:0 -12rpx 36rpx rgba(0,0,0,0.08);">
   <view class="close-btn" bind:tap="onFormClose">
     <image src="/images/controls/cross.png" mode="" style="width: 40rpx; height: 40rpx;" />
   </view>
@@ -32,29 +32,44 @@
         <text slot="label" wx:if="{{markerTypeIndex === 6}}">名称<text style="color: #e34d59"> *</text> </text>
         <text slot="label" wx:if="{{markerTypeIndex !== 0 && markerTypeIndex !== 6}}">名称 </text>
       </t-input>
-      <t-cell title="" wx:if="{{markerTypeIndex === 0}}">
-        <view slot="title" style="height: 48rpx;display: flex; align-items: center;">
+      <view class="suggestions-row" wx:if="{{markerTypeIndex === 0}}">
+        <view class="suggestions-title">
           <text>猜你想输入</text>
         </view>
-        <suggestions-input id="suggestions" style="margin-left: 16rpx;height: 48rpx;" slot="note" markerTypeIndex="{{markerTypeIndex}}" name="{{name}}" bind:getSuggestions="getSuggestions"></suggestions-input>
-      </t-cell>
-      <t-cell wx:if="{{markerTypeIndex === 0}}">
-        <view slot="title" style="height: 48rpx;display: flex; align-items: center;">
+        <view class="suggestions-content">
+          <suggestions-input id="suggestions" class="suggestions-input-inner" markerTypeIndex="{{markerTypeIndex}}" name="{{name}}" bind:getSuggestions="getSuggestions"></suggestions-input>
+        </view>
+      </view>
+      <view class="suggestions-row" wx:if="{{markerTypeIndex === 0}}">
+        <view class="suggestions-title">
           <text>门的朝向</text>
         </view>
-        <view style="margin-left: 16rpx;" slot="note">
-          <t-check-tag wx:for="{{tagDirection}}" wx:key="index" theme="default" checked="{{item.checked}}" bindchange="onTagDirectionChange" data-item="{{item}}" variant="dark" size="medium" content="" style="margin:0 4rpx 0 0">{{item.name}}</t-check-tag>
+        <view class="suggestions-content">
+          <scroll-view class="direction-tags-scroll" scroll-x="true" show-scrollbar="false">
+            <view class="direction-tags-row">
+              <t-check-tag wx:for="{{tagDirection}}" wx:key="index" theme="default" checked="{{item.checked}}" bindchange="onTagDirectionChange" data-item="{{item}}" variant="dark" size="medium" content="" style="margin:0 6rpx 0 0;min-height:72rpx;">
+                <view class="direction-tag-content">
+                  <text class="direction-tag-icon">{{item.name}}</text>
+                  <text class="direction-tag-label">{{item.label}}</text>
+                </view>
+              </t-check-tag>
+            </view>
+          </scroll-view>
         </view>
-      </t-cell>
-      <t-cell bordered="{{false}}">
-        <view slot="title" style="height: 48rpx;display: flex; align-items: center;">
+      </view>
+      <view class="suggestions-row">
+        <view class="suggestions-title">
           <text>标签</text>
         </view>
-        <view style="margin-left: 16rpx;" slot="note">
-          <!--楼号-->
-          <t-check-tag wx:for="{{currentTagList}}" wx:key="index" theme="default" checked="{{item.checked}}" bindchange="onTagChange" data-item="{{item}}" variant="dark" size="medium" content="" style="margin:0 8rpx 0;background-color:{{item.checked?bgColor:''}};border-color:{{item.checked?bgColor:''}};">{{item.name}}</t-check-tag>
+        <view class="suggestions-content">
+          <scroll-view class="common-tags-scroll" scroll-x="true" show-scrollbar="false">
+            <view class="common-tags-row">
+              <!--楼号-->
+              <t-check-tag wx:for="{{currentTagList}}" wx:key="index" theme="default" checked="{{item.checked}}" bindchange="onTagChange" data-item="{{item}}" variant="dark" size="medium" content="" style="margin:0 8rpx 0;background-color:{{item.checked?bgColor:''}};border-color:{{item.checked?bgColor:''}};">{{item.name}}</t-check-tag>
+            </view>
+          </scroll-view>
         </view>
-      </t-cell>
+      </view>
     </view>
   </view>
   <view class="footer">

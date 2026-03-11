@@ -283,3 +283,84 @@
 .t-cell__title {
   margin-right: 16rpx !important;
 }
+
+.suggestions-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.suggestions-row::after {
+  content: '';
+  position: absolute;
+  left: 32rpx;
+  right: 0;
+  bottom: 0;
+  height: 1rpx;
+  background: rgba(34, 34, 34, 0.08);
+}
+
+.suggestions-title {
+  flex: 0 0 auto;
+  margin-right: 16rpx;
+  font-size: 28rpx;
+  color: #222;
+  line-height: 48rpx;
+  white-space: nowrap;
+}
+
+.suggestions-content {
+  flex: 1;
+  min-width: 0;
+  overflow: visible;
+}
+
+.suggestions-input-inner {
+  display: block;
+  width: 100%;
+  min-height: 56rpx;
+}
+
+.direction-tag-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding-top: 2rpx;
+  padding-bottom: 1rpx;
+}
+
+.direction-tag-icon {
+  font-size: 22rpx;
+  line-height: 24rpx;
+}
+
+.direction-tag-label {
+  margin-top: 10rpx;
+  font-size: 18rpx;
+  line-height: 18rpx;
+}
+
+.direction-tags-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.direction-tags-row {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.common-tags-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.common-tags-row {
+  display: inline-block;
+  white-space: nowrap;
+}
