@@ -110,21 +110,19 @@ Component({
         }, 200);
       }
     },
-    setNeighbor(name){
+    setNeighbor(name) {
       let list = generateNeighborBuildings(name)
-          console.log(list)
-          let tagSuggestionsNew = []
-          tagSuggestionsNew.push({
-            name: list[0],
-            checked: false
-          })
-          tagSuggestionsNew.push({
-            name: list[1],
-            checked: false
-          })
-          this.setData({
-            tagSuggestions:tagSuggestionsNew
-          })
+      console.log(list)
+      let tagSuggestionsNew = []
+      list.forEach(item => {
+        tagSuggestionsNew.push({
+          name: item,
+          checked: false
+        })
+      })
+      this.setData({
+        tagSuggestions: tagSuggestionsNew
+      })
     },
     buildSuggestions(name) {
       if (name.length > 0) {
@@ -164,12 +162,12 @@ Component({
         })
       }
     },
-    buildSuggestionsbyName(input){
+    buildSuggestionsbyName(input) {
       let list = generateSuggestions(input)
       console.log(list)
-      let tagSuggestions = list.map(item =>{
+      let tagSuggestions = list.map(item => {
         return {
-          name : item.toUpperCase(),
+          name: item.toUpperCase(),
           checked: false
         }
       })
