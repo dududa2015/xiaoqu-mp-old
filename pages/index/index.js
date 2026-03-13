@@ -2165,8 +2165,12 @@ Page({
       })
       this.showTabBar()
     } else {
+      let bottom = 0
+      if (typeIndex === 0) bottom = 520
+      else if(typeIndex === 1 || typeIndex === 3 || typeIndex === 4) bottom = 400
+      else bottom = 305
       this.setData({
-        bottom: typeIndex === 0 ? 520 : 320,
+        bottom: bottom,
         showGrid: false,
         showForm: true,
         showCenterMarker: true,

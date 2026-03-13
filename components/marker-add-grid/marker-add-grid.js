@@ -22,15 +22,15 @@ Component({
     }, {
       icon: '/images/grid/wc.png',
       iconType: 'png',
-      bgcolor: '#8c444f',
+      bgcolor: '#C67171',
       name: '公厕'
     }, {
-      icon: 'shop-5',
-      bgcolor: '#8c444f',
+      icon: 'battery-add',
+      bgcolor: '#C67171',
       name: '设施'
     }, {
-      icon: '/images/grid/life.png',
-      bgcolor: '#8c444f',
+      icon: 'shop',
+      bgcolor: '#C67171',
       name: '其他'
     }, {
       icon: 'street-road-1',

@@ -12,5 +12,5 @@
 
 .tag-suggestions-item {
   display: inline-block;
-  margin-right: 12rpx;
+  /* margin-right: 12rpx; */
 }

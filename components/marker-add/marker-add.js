@@ -39,19 +39,19 @@ Component({
             case 2:
               title = '公厕'
               place = '选填，最多10个字'
-              bgColor = '#8c444f'
+              bgColor = '#C67171'
               required = false
               break;
             case 3:
               title = '设施'
               place = '必填，最多10个字'
-              bgColor = '#8c444f'
+              bgColor = '#C67171'
               required = true
               break;
             case 4:
               title = '其他'
               place = '必填，最多10个字'
-              bgColor = '#8c444f'
+              bgColor = '#C67171'
               required = true
               break;
             default:

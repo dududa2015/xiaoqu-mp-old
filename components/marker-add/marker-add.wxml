@@ -27,7 +27,7 @@
   <view class="form-wrap">
     <view class="form-title">{{action}}{{title}}</view>
     <view class="input-wrap">
-      <t-input placeholder="{{place}}" model:value="{{name}}" borderless="{{false}}" maxlength="10" placeholder-class="t-input__placeholder" type="text" cursor-spacing="72" always-embed="{{true}}" clearable>
+      <t-input placeholder="{{place}}" model:value="{{name}}" borderless="{{false}}" maxlength="10" cursor-color="{{bgColor}}" placeholder-class="t-input__placeholder" type="text" cursor-spacing="72" always-embed="{{true}}" clearable>
         <text slot="label" wx:if="{{markerTypeIndex === 0}}">楼号<text style="color: #e34d59"> *</text> </text>
         <text slot="label" wx:if="{{markerTypeIndex === 3 || markerTypeIndex === 4}}">名称<text style="color: #e34d59"> *</text> </text>
         <text slot="label" wx:if="{{markerTypeIndex !== 0 && markerTypeIndex !== 3 && markerTypeIndex !== 4}}">名称 </text>

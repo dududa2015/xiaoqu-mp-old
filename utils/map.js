@@ -72,7 +72,7 @@ function getBgColorByType(type) {
   } else if (type === 1) {
     bgColor = '#E85827'
   } else if (type >= 2 && type <= 6) {
-    bgColor = '#8c444f'
+    bgColor = '#C67171'
   } else if (type === 7) {
     bgColor = '#3CB371'
   } else if(type === 8) {
