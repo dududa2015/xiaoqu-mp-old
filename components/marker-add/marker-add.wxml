@@ -29,20 +29,27 @@
     <view class="input-wrap">
       <t-input placeholder="{{place}}" model:value="{{name}}" borderless="{{false}}" maxlength="10" placeholder-class="t-input__placeholder" type="text" cursor-spacing="72" always-embed="{{true}}" clearable>
         <text slot="label" wx:if="{{markerTypeIndex === 0}}">楼号<text style="color: #e34d59"> *</text> </text>
-        <text slot="label" wx:if="{{markerTypeIndex === 6}}">名称<text style="color: #e34d59"> *</text> </text>
-        <text slot="label" wx:if="{{markerTypeIndex !== 0 && markerTypeIndex !== 6}}">名称 </text>
+        <text slot="label" wx:if="{{markerTypeIndex === 3 || markerTypeIndex === 4}}">名称<text style="color: #e34d59"> *</text> </text>
+        <text slot="label" wx:if="{{markerTypeIndex !== 0 && markerTypeIndex !== 3 && markerTypeIndex !== 4}}">名称 </text>
       </t-input>
-      <view class="suggestions-row" wx:if="{{markerTypeIndex === 0}}">
+      <view class="suggestions-row" wx:if="{{markerTypeIndex === 0 || markerTypeIndex === 1 || markerTypeIndex === 3 || markerTypeIndex === 4}}">
         <view class="suggestions-title">
-          <text>猜你想输入</text>
+          <text>快速输入</text>
         </view>
         <view class="suggestions-content">
-          <suggestions-input id="suggestions" class="suggestions-input-inner" markerTypeIndex="{{markerTypeIndex}}" name="{{name}}" bind:getSuggestions="getSuggestions"></suggestions-input>
+          <suggestions-input
+            id="suggestions"
+            class="suggestions-input-inner"
+            markerTypeIndex="{{markerTypeIndex}}"
+            name="{{name}}"
+            bgColor="{{bgColor}}"
+            bind:getSuggestions="getSuggestions"
+          ></suggestions-input>
         </view>
       </view>
       <view class="suggestions-row" wx:if="{{markerTypeIndex === 0}}">
         <view class="suggestions-title">
-          <text>门的朝向</text>
+          <text>大门朝向</text>
         </view>
         <view class="suggestions-content">
           <scroll-view class="direction-tags-scroll" scroll-x="true" show-scrollbar="false">

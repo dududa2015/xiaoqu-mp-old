@@ -2133,15 +2133,23 @@ Page({
   },
   //添加，从marker-add-grid组件的点击事件
   getMarkerTypeIndex(event) {
-    const index = event.detail
-    if (index > 6) {
+    const gridIndex = event.detail
+    // 将网格索引映射为实际的标记类型：
+    // 0:楼号 1:出入口 2:公厕 3:设施 4:其他 5:道路(类型7) 6:围墙(类型8)
+    let typeIndex = gridIndex
+    if (gridIndex === 5) {
+      typeIndex = 7
+    } else if (gridIndex === 6) {
+      typeIndex = 8
+    }
+    if (typeIndex > 4) {
       this.setData({
         showGrid: false,
         showChooseMarker: true,
         showCenterMarker: true,
         showAdd: false,
         showLocation: false,
-        markerTypeIndex: index
+        markerTypeIndex: typeIndex
       })
       //点击道路或断头路后，记录当前polyline的数量，在画线的时候把这个序号给这条线
       getApp().globalData.currentPolylineIndex = this.data.polyline.length
@@ -2158,11 +2166,11 @@ Page({
       this.showTabBar()
     } else {
       this.setData({
-        bottom: index === 0 ? 520 : 320,
+        bottom: typeIndex === 0 ? 520 : 320,
         showGrid: false,
         showForm: true,
         showCenterMarker: true,
-        markerTypeIndex: index,
+        markerTypeIndex: typeIndex,
         showLocation: true
       })
     }

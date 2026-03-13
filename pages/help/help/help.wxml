@@ -48,7 +48,7 @@
     <view class="content">小区楼号地图小程序是一款专注于小区内导航与信息查询的工具类应用，整合了楼号标注、设施定位、路线导航等核心功能，具体包括：</view>
     <view class="feature-list">
       <view class="feature-item">精准标注小区内所有楼号及单元、楼层信息，区分易混淆楼栋；</view>
-      <view class="feature-item">全面展示小区出入口、公厕、维修点、换电站等关键地点；</view>
+      <view class="feature-item">全面展示小区出入口、公厕、各类设施等关键地点；</view>
       <view class="feature-item">支持地图缩放、平移、类型切换等基础操作；</view>
       <view class="feature-item">提供搜索、分享、标记添加 / 编辑 / 删除等实用功能；</view>
       <view class="feature-item">具备步行导航能力，规划最优路线；</view>
@@ -159,22 +159,12 @@
               <view class="table-cell">比较干净、有纸巾、24 小时开放</view>
             </view>
             <view class="table-row">
-              <view class="table-cell">维修点</view>
-              <view class="table-cell">名称（选填，最多 10 字）</view>
-              <view class="table-cell">服务周到、价格公道、高效便捷</view>
+              <view class="table-cell">设施</view>
+              <view class="table-cell">名称（选填，最多 10 字，如维修点、换电站、外卖柜等）</view>
+              <view class="table-cell">服务周到、价格公道、高效便捷、便捷高效、安全可靠、安全存放</view>
             </view>
             <view class="table-row">
-              <view class="table-cell">换电站</view>
-              <view class="table-cell">名称（选填，最多 10 字）</view>
-              <view class="table-cell">便捷高效、安全可靠、经济实惠</view>
-            </view>
-            <view class="table-row">
-              <view class="table-cell">外卖柜</view>
-              <view class="table-cell">名称（选填，最多 10 字）</view>
-              <view class="table-cell">便捷高效、安全存放</view>
-            </view>
-            <view class="table-row">
-              <view class="table-cell">生活类</view>
+              <view class="table-cell">其他</view>
               <view class="table-cell">名称（选填，最多 10 字，如便利店、自助饮水机）</view>
               <view class="table-cell">经济实惠、安全卫生</view>
             </view>

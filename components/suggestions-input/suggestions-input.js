@@ -18,6 +18,9 @@ Component({
           let name = wx.getStorageSync('name')
           this.setNeighbor(name)
         }
+        if (newVal === 1) {
+          this.setEntranceSuggestions(this.data.name)
+        }
         if (newVal === 3) {
           let tagSuggestions = []
           tagSuggestions.push({
@@ -36,15 +39,43 @@ Component({
             tagSuggestions
           })
         }
+        if (newVal === 4) {
+          let tagSuggestions = []
+          tagSuggestions.push({
+            name: '便利店',
+            checked: false
+          })
+          tagSuggestions.push({
+            name: '自助售货机',
+            checked: false
+          })
+          tagSuggestions.push({
+            name: '洗车点',
+            checked: false
+          })
+          this.setData({
+            tagSuggestions
+          })
+        }
       }
     },
     name: {
       type: String,
       value: '',
       observer: function (newVal, oldVal) {
-        // 属性变化时执行的逻辑，可以触发事件  
-        this.buildSuggestionsbyName(newVal)
+        // 不同 marker 类型使用不同快速输入策略
+        if (this.data.markerTypeIndex === 0) {
+          this.buildSuggestionsbyName(newVal)
+          return
+        }
+        if (this.data.markerTypeIndex === 1) {
+          this.setEntranceSuggestions(newVal)
+        }
       }
+    },
+    bgColor: {
+      type: String,
+      value: ''
     }
   },
 
@@ -122,6 +153,21 @@ Component({
       })
       this.setData({
         tagSuggestions: tagSuggestionsNew
+      })
+    },
+    // 出入口快速输入推荐
+    setEntranceSuggestions(name) {
+      const entranceList = ['东门', '南门', '西门', '北门', '正门', '侧门']
+      const input = (name || '').trim()
+      const list = input ? entranceList.filter(item => item.includes(input)) : entranceList
+      let tagSuggestions = list.map(item => {
+        return {
+          name: item,
+          checked: false
+        }
+      })
+      this.setData({
+        tagSuggestions
       })
     },
     buildSuggestions(name) {

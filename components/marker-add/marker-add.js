@@ -43,25 +43,13 @@ Component({
               required = false
               break;
             case 3:
-              title = '维修点'
-              place = '选填，最多10个字'
+              title = '设施'
+              place = '必填，最多10个字'
               bgColor = '#8c444f'
-              required = false
+              required = true
               break;
             case 4:
-              title = '换电站'
-              place = '选填，最多10个字'
-              bgColor = '#8c444f'
-              required = false
-              break;
-            case 5:
-              title = '外卖柜'
-              place = '选填，最多10个字'
-              bgColor = '#8c444f'
-              required = false
-              break;
-            case 6:
-              title = '生活类'
+              title = '其他'
               place = '必填，最多10个字'
               bgColor = '#8c444f'
               required = true
@@ -88,7 +76,7 @@ Component({
       type: Boolean,
       value: false,
       observer(newVal, oldVal) {
-        if (newVal) {
+        if (newVal && this.data.markerTypeIndex === 0) {
           const child = this.selectComponent('#suggestions');
           setTimeout(() => {
             if (child) {
@@ -122,7 +110,7 @@ Component({
     title: '楼号',
     // showChooseMarker: false, //是否显示选点按钮
     showForm: false, //是否显示底部的编辑表单
-    markerType: ['楼号', '出入口', '公厕', '其他'],
+    markerType: ['楼号', '出入口', '公厕', '设施', '其他'],
     // markerTypeIndex: 0,
     remarkTagList: [], //用于显示标记点详情用
 
@@ -210,7 +198,7 @@ Component({
       name: '24h开放',
       checked: false
     }],
-    tagList3: [{ //维修店
+    tagList3: [{ //设施
       name: '服务周到',
       checked: false
     }, {
@@ -220,31 +208,23 @@ Component({
       name: '高效便捷',
       checked: false
     }, {
-      name: '免费充气',
-      checked: false
-    }],
-    tagList4: [{ //换电站
       name: '便捷高效',
       checked: false
     }, {
       name: '安全可靠',
       checked: false
     }, {
-      name: '经济实惠',
-      checked: false
-    }],
-    tagList5: [{ //换电站
-      name: '便捷高效',
-      checked: false
-    }, {
       name: '安全存放',
       checked: false
     }],
-    tagList6: [{ //生活
+    tagList4: [{ //其他
       name: '经济实惠',
       checked: false
     }, {
       name: '安全卫生',
+      checked: false
+    }, {
+      name: '使用方便',
       checked: false
     }],
     currentTagList: [], //当前标签，通过markerTypeIndex来取值
@@ -341,6 +321,9 @@ Component({
         case 3:
           place = '必填，最多10个字'
           break;
+        case 4:
+          place = '必填，最多10个字'
+          break;
         default:
           place = '必填，最多10个字'
           break;
@@ -412,20 +395,14 @@ Component({
           break;
         case 3:
           if (!this.data.name) {
-            this.data.name = '维修点'
+            wx.showToast({
+              title: '请输入名称',
+              icon: 'none'
+            })
+            return
           }
           break;
         case 4:
-          if (!this.data.name) {
-            this.data.name = '换电站'
-          }
-          break;
-        case 5:
-          if (!this.data.name) {
-            this.data.name = '外卖柜'
-          }
-          break;
-        case 6:
           if (!this.data.name) {
             wx.showToast({
               title: '请输入名称',

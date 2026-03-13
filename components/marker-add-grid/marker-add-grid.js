@@ -27,19 +27,11 @@ Component({
     }, {
       icon: 'shop-5',
       bgcolor: '#8c444f',
-      name: '维修点'
-    }, {
-      icon: 'battery-add',
-      bgcolor: '#8c444f',
-      name: '换电站'
-    }, {
-      icon: 'archway',
-      bgcolor: '#8c444f',
-      name: '外卖柜'
+      name: '设施'
     }, {
       icon: '/images/grid/life.png',
       bgcolor: '#8c444f',
-      name: '生活类'
+      name: '其他'
     }, {
       icon: 'street-road-1',
       bgcolor: '#3CB371',

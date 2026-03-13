@@ -10,7 +10,7 @@ Page({
     loading: false, // 是否正在加载中
     page: 0, // 当前页数
     deleted: 0,
-    typeList: ['楼号', '出入口', '公厕', '维修点', '换电站', '外卖柜', '生活类', '道路', '围墙'],
+    typeList: ['楼号', '出入口', '公厕', '设施', '设施', '设施', '其他', '道路', '围墙'],
     visible: false
   },
   onLoad: function (options) {
