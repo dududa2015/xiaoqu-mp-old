@@ -32,7 +32,7 @@
       <text class="url-text">{{downloadUrl}}</text>
     </view>
     <button class="primary-btn disabled-btn" disabled>应用已下线，暂不可下载</button>
-    <view class="tip offline-tip">安卓App已在应用宝下线，预计明年4月份左右恢复下载。如有疑问，请联系客服。</view>
+    <view class="tip offline-tip">安卓App已在应用宝下线，预计2026年4月份左右恢复下载。如有疑问，请联系客服。</view>
 
 
   </view>
