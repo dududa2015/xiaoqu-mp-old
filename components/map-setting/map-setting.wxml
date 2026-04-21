@@ -13,6 +13,25 @@
             <view class="{{enableSatellite   ? 'text text-checked' : 'text'}}">卫星地图</view>
         </view>
     </view>
+    <!-- #if NATIVE-->
+    <view class="setting map-mode-setting">
+        <view class="row flex f-x-sb">
+            <view class="row-title">个人地图</view>
+            <view class="row-title">
+                <t-switch value="{{mapType === 2}}" slot="note" size="small" bind:change="onPersonalMapSwitch" />
+            </view>
+        </view>
+        <view class="row flex f-x-sb" wx:if="{{mapType === 2}}">
+            <view class="row-title row-title-stack">
+                <text>合并公共地图</text>
+                <text class="row-sub">在个人地图中显示公共地图数据</text>
+            </view>
+            <view class="row-title">
+                <t-switch value="{{isPubMap}}" slot="note" size="small" bind:change="onMergePubMapSwitch" />
+            </view>
+        </view>
+    </view>
+    <!-- #endif -->
     <!-- 位置、形状、旋转设置 -->
     <view class="setting">
         <!-- #if NATIVE-->

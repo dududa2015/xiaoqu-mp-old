@@ -34,7 +34,7 @@
         </view>
     </view>
     <!-- 退款说明 -->
-    <view class="refund-notice" wx:if="{{ currentProductIdentifier === 'com.louhao.xiaoqu.vip' }}">
+    <!-- <view class="refund-notice" wx:if="{{ currentProductIdentifier === 'com.louhao.xiaoqu.vip' }}">
         <view class="refund-notice-row">
             <view class="refund-notice-text-wrap">
                 <view 
@@ -44,7 +44,7 @@
                 </view>
             </view>
         </view>
-    </view>
+    </view> -->
     <view class="tips" wx:if="{{showTips}}">
         <!-- 温馨提醒：终身会员从7月起，每月涨价5元 -->
         <!-- <text class="mp-name" bind:tap="toMP">【小区楼号分布图】</text> -->

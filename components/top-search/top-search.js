@@ -1,3 +1,5 @@
+const { checkLoginAndNavigate } = require('../../utils/util.js')
+
 // components/top-search/top-search.js
 Component({
 
@@ -29,7 +31,6 @@ Component({
     data: {
         topAddress: '搜索附近小区',
         firstChar: '',
-        isFlipped: false //初始未翻转
     },
     ready: function () {
         let mapName = wx.getStorageSync('mapName')
@@ -42,6 +43,11 @@ Component({
      * 组件的方法列表
      */
     methods: {
+        onSettingTap() {
+            if (checkLoginAndNavigate()) {
+                this.triggerEvent('onSetting')
+            }
+        },
         onChooseLocation() {
             const that = this
             wx.chooseLocation({
@@ -54,13 +60,6 @@ Component({
                     this.triggerEvent('onChooseLocation', res)
                 }
             });
-        },
-        toMap() {
-            this.setData({
-                showUp: true,
-                isFlipped: !this.data.isFlipped
-            })
-            this.triggerEvent('toMap');
         },
     }
 })

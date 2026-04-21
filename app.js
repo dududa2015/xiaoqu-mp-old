@@ -37,7 +37,7 @@ App({
     // #if MP
     this.tryTimes = MAX_RETRY_TIMES
     this.autoUpdate()
-    this.login(options.query?.userId)
+    this.login()
     // #else
     this.appleLogin()
     this.getDeviceId()
@@ -63,16 +63,19 @@ App({
   },
 
   // 登录逻辑
-  async login(friendUserId = '') {
+  async login() {
     if (this.tryTimes-- <= 0) return
 
     try {
       const userId = wx.getStorageSync('userId')
-      if (!userId) {
+      const userInfo = wx.getStorageSync('userInfo')
+
+      //迁移后只判断!userId
+      if (!userId || !userInfo || !userInfo.openId || !userInfo.unionId) {
         const code = await this.wxLogin()
-        await this.getMPUserInfo(code, '', friendUserId)
+        await this.getMPUserInfo(code, '')
       } else {
-        await this.getMPUserInfo('', userId, friendUserId)
+        await this.getMPUserInfo('', userId)
       }
       
       // 仅在微信小程序环境下保存设备信息
@@ -96,12 +99,11 @@ App({
   },
 
   // 获取用户信息
-  async getMPUserInfo(code = '', userId = '', friendUserId = '') {
+  async getMPUserInfo(code = '', userId = '') {
     try {
       const res = await getUserInfo({
         code,
-        userId,
-        friendUserId
+        userId
       })
       this.cacheUserData(res)
     } catch (error) {

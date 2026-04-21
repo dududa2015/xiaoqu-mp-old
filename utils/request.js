@@ -1,7 +1,22 @@
-// api URL
-// const apiUrl = "http://localhost:5213/api"
-// const apiUrl = "https://test.zhuzixi.cn/api"
-const apiUrl = "https://mp.zhuzixi.cn/api"
+// api URL：仅开发者工具走测试；正式版、体验版均走生产
+const API_URL_PROD = 'https://mp.zhuzixi.cn/api'
+const API_URL_TEST = 'https://mp.zhuzixi.cn/api'
+
+function resolveApiUrl() {
+  try {
+    const { miniProgram } = wx.getAccountInfoSync()
+    // develop: 开发者工具 → 测试；trial: 体验版、release: 正式版 → 生产
+    if (miniProgram.envVersion === 'develop') {
+      return API_URL_TEST
+    }
+    return API_URL_PROD
+  } catch (e) {
+    console.warn('getAccountInfoSync failed, fallback to prod api', e)
+  }
+  return API_URL_PROD
+}
+
+const apiUrl = resolveApiUrl()
 
 // 导入安全工具模块
 const {

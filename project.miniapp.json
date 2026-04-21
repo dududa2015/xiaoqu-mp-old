@@ -1,8 +1,8 @@
 {
   "miniVersion": "v2",
   "name": "小区楼号",
-  "version": "2.0.1",
-  "versionCode": 20260131,
+  "version": "2.0.2",
+  "versionCode": 20260420,
   "i18nFilePath": "i18n",
   "mini-android": {
     "resourcePath": "miniapp/android/nativeResources",
@@ -43,7 +43,7 @@
     }
   },
   "mini-ios": {
-    "sdkVersion": "1.6.23",
+    "sdkVersion": "1.7.0",
     "toolkitVersion": "0.0.9",
     "useExtendedSdk": {
       "WeAppOpenFuns": true,
@@ -107,7 +107,7 @@
     "buildCloud": {
       "useRemote": true,
       "p12": "miniapp/ios/iosCloudBuildMaterial/PC5SUA5M62_DISTRIBUTION_1779677648000.p12",
-      "p12passwordEncrypted": "EKW8JZ/Glsmgpu+kBj2S+jpJw+FlTR3nyw+DvaQdPq1fez3rXn0lVZ/+zjz+PyLwy0+nCFr0CptvHcskmXBVXJAx3pekotsnsUbWUSPEPp9n4Cx9cs0PNA9dKuPdF9EzkbQsBnvqqHhvAXwzPYJZcBVjq7R3oO3tyIgCpQp1RPU=",
+      "p12passwordEncrypted": "zJasnZijRD4hLF2UsHvUDpCg0VkxjAyl1IYgVmXG9vHitTSaxV4xvhbNbaKdVMVgm4K3b8S47Kglk92zkYlXzbXLXMR9pUvPRGn1MKzPVzJHAqbSHkHdEW5XBKORVZsuRDYztT6Z0qOyZnxHfPRkDqbhJ4ZK2oqazq59hRzpktY=",
       "certificate": "Apple Distribution: jian zhu (BB8CM6ZM4C)",
       "profile": "miniapp/ios/iosCloudBuildMaterial/YF3MG24973_IOS_APP_STORE_1779677648000.mobileprovision"
     },

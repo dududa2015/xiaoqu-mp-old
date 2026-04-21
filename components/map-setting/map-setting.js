@@ -1,3 +1,7 @@
+import {
+  changeIsPubMap as requestPubMapMerge
+} from '../../apis/user-api'
+
 // components/map-layer/map-layer.js
 Component({
 
@@ -91,6 +95,106 @@ Component({
       }
       this.setData({
         showRedDot: typeof showRedDot === 'boolean' ? showRedDot : true
+      })
+      const mapType = parseInt(wx.getStorageSync('mapType'), 10) || 1
+      const userInfo = wx.getStorageSync('userInfo') || {}
+      this.setData({
+        mapType,
+        isPubMap: !!userInfo.isPubMap
+      })
+    },
+    ensureLoggedInForMapMode() {
+      const userInfo = wx.getStorageSync('userInfo')
+      if (userInfo && (userInfo.openId || userInfo.appleId)) {
+        return true
+      }
+      // #if IOS
+      wx.navigateTo({
+        url: '/pages/ios/login/login',
+      })
+      // #else
+      wx.navigateTo({
+        url: '/pages/android/login/login',
+      })
+      // #endif
+      return false
+    },
+    onPersonalMapSwitch(e) {
+      const wantPersonal = e.detail.value
+      if (wantPersonal && !this.ensureLoggedInForMapMode()) {
+        this.setData({
+          mapType: 1
+        })
+        return
+      }
+      const mapType = wantPersonal ? 2 : 1
+      const mapName = wantPersonal ? '个人地图' : '公共地图'
+      wx.setStorageSync('mapType', mapType)
+      wx.setStorageSync('mapName', mapName)
+      this.setData({
+        mapType
+      })
+      this.triggerEvent('onMapTypeChange', {
+        mapType,
+        mapName
+      })
+    },
+    onMergePubMapSwitch(e) {
+      const next = e.detail.value
+      const prev = !next
+      if (!this.ensureLoggedInForMapMode()) {
+        this.setData({
+          isPubMap: prev
+        })
+        return
+      }
+      this.applyPubMapMerge(next).then((ok) => {
+        if (!ok) {
+          this.setData({
+            isPubMap: prev
+          })
+        }
+      })
+    },
+    applyPubMapMerge(isPubMap) {
+      const userInfo = wx.getStorageSync('userInfo')
+      if (!userInfo || !userInfo.userId) {
+        wx.showToast({
+          title: '请先登录',
+          icon: 'none'
+        })
+        return Promise.resolve(false)
+      }
+      const userId = userInfo.userId
+      return requestPubMapMerge({
+        userId,
+        isPubMap
+      }).then(res => {
+        if (res) {
+          wx.showToast({
+            title: isPubMap ? '已合并公共地图' : '已取消合并',
+          })
+          this.updateUserInfoIsPubMap(isPubMap)
+          this.triggerEvent('onMapTypeChange', {
+            mapType: wx.getStorageSync('mapType'),
+            mapName: wx.getStorageSync('mapName')
+          })
+          return true
+        }
+        wx.showToast({
+          title: '操作失败，请重试',
+          icon: 'none'
+        })
+        return false
+      }).catch(() => false)
+    },
+    updateUserInfoIsPubMap(isPubMap) {
+      const userInfo = wx.getStorageSync('userInfo')
+      if (!userInfo) return
+      userInfo.isPubMap = isPubMap
+      wx.setStorageSync('userInfo', userInfo)
+      this.setData({
+        isPubMap
       })
     },
     onClose() {

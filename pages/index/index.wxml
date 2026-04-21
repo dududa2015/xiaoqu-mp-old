@@ -9,7 +9,7 @@
     <image src="/images/marker4.png" class="cross {{markerBounce ? 'bounce' : ''}}" wx:if="{{showCenterMarker && markerTypeIndex === 8}}"></image>
   </map>
   <!-- enable-rotate rotate="{{rotate}}"  -->
-  <top-search rect="{{rect}}" showUp="{{showUp}}" showMapName="{{showMapName}}" mapName="{{mapName}}" bind:toMap="toMap" bind:onChooseLocation="onChooseLocation"></top-search>
+  <top-search rect="{{rect}}" showUp="{{showUp}}" showMapName="{{showMapName}}" mapName="{{mapName}}" bind:onChooseLocation="onChooseLocation" bind:onSetting="onSetting"></top-search>
   <top-tip noticeList="{{noticeList}}" id="topTip"></top-tip>
   <top-bar rect="{{rect}}" position="{{position}}" showRedDot="{{showRedDot}}" bind:onChooseLocation="onChooseLocation" bind:onSetting="onSetting" bind:onShowChooseLocation="onShowChooseLocation"></top-bar>
   <!-- #if NATIVE -->
@@ -24,8 +24,7 @@
   <marker-add markerTypeIndex="{{markerTypeIndex}}" showForm="{{showForm}}" showChooseMarker="{{showChooseMarker}}" markerDetail="{{markerDetail}}" mapCtx="{{mapCtx}}" bind:addUserMarkerByUser="addUserMarkerByUser" bind:updateUserMarkerByUser="updateUserMarkerByUser" bind:showBottomBar="showBottomBar" bind:onFormClose="onFormClose" bind:onChooseMarker="onChooseMarker" bind:onBackChooseMarker="onBackChooseMarker" bind:onFinishChooseMarker="onFinishChooseMarker" bind:onCancelChooseMarker="onCancelChooseMarker"></marker-add>
   <marker-feedback markerDetail="{{markerDetail}}" showFeedback="{{showFeedback}}" bind:onCloseFeedback="onCloseFeedback"></marker-feedback>
   <!-- <marker-filter bind:getCheckedIndex="getCheckedIndex"></marker-filter> -->
-  <map-setting id="mapSetting" showSetting="{{showSetting}}" bind:onSettingClose="onSettingClose" bind:onLocIcon="onLocIcon" bind:onSatellite="onSatellite" bind:mapChange="mapChange" bind:onPosition="onPosition" bind:onRotate="onRotate" bind:onCommunityDetailChange="onCommunityDetailChange" bind:on3D="on3D"></map-setting>
-  <personal-map showMap="{{showMap}}" bind:onMapChange="onMapChange" bind:onMapClose="onMapClose"></personal-map>
+  <map-setting id="mapSetting" showSetting="{{showSetting}}" bind:onSettingClose="onSettingClose" bind:onLocIcon="onLocIcon" bind:onSatellite="onSatellite" bind:mapChange="mapChange" bind:onMapTypeChange="onMapTypeChange" bind:onPosition="onPosition" bind:onRotate="onRotate" bind:onCommunityDetailChange="onCommunityDetailChange" bind:on3D="on3D"></map-setting>
   <!-- 版本升级提示 -->
   <!-- #if NATIVE -->
   <version-update showVersionUpdate="{{showVersionUpdate}}" iosContent="{{iosContent}}" iosForceUpdate="{{iosForceUpdate}}" androidContent="{{androidContent}}" androidForceUpdate="{{androidForceUpdate}}"></version-update>

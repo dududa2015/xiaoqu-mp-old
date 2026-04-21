@@ -1,12 +1,8 @@
 <!-- #if NATIVE -->
-<view class="top-search-wrap" style="top:{{rect.top}}px;">
+<view class="top-search-wrap" style="top:{{rect.top}}px;" bind:tap="onSettingTap">
     <view class="top-wrap">
-        <view class="map-name-wrap" bind:tap="toMap">
+        <view class="map-name-wrap">
             <text class="name">{{ mapName || '公共地图'}}</text>
-            <view style="width: 44rpx;">
-                <!-- <t-icon name="chevron-up-s" size="44rpx" color="#000" wx:if="{{showUp}}"></t-icon> -->
-                <t-icon name="chevron-down-s" class="down-icon {{isFlipped ? 'flipped' : ''}}" size="44rpx" color="#000"></t-icon>
-            </view>
         </view>
     </view>
 </view>

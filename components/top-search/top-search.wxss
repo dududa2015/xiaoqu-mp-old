@@ -21,13 +21,12 @@
 }
 
 .top-search-wrap {
-    /* background: linear-gradient(to top, transparent, #fff 80%); */
-    width: calc(100% - 64rpx);
     position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    padding: 0 32rpx;
 }
 
 .round-wrap {
@@ -66,23 +65,20 @@
     height: 44rpx;
     line-height: 44rpx;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
     color: #333;
     /* margin: 0 auto; */
 }
 
 .top-wrap {
-    background-color: #fff;
-    border-radius: 24rpx;
-    overflow: hidden;
-    box-shadow: 0rpx 4rpx 24rpx 0rpx rgba(100, 101, 102, 0.12);
+    background-color: transparent;
+    box-shadow: none;
     z-index: 9999;
 }
 
 .map-name-wrap {
     display: flex;
     padding: 12rpx 24rpx;
-    /* height: 50rpx; */
 }
 .down-icon {
   transition: transform 0.5s ease; /* 平滑过渡效果 */
