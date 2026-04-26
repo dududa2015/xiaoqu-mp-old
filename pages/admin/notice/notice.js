@@ -46,8 +46,10 @@ Page({
         bdCount: res.bdCount,
         iosContent: res.iosContent,
         iosVersion: res.iosVersion,
+        iosForceUpdate: res.iosForceUpdate,
         androidContent: res.androidContent,
-        androidVersion: res.androidVersion
+        androidVersion: res.androidVersion,
+        androidForceUpdate: res.androidForceUpdate
       })
     })
   },
@@ -59,8 +61,10 @@ Page({
       bdCount: this.data.bdCount,
       iosContent: this.data.iosContent,
       iosVersion: this.data.iosVersion,
+      iosForceUpdate: this.data.iosForceUpdate,
       androidContent: this.data.androidContent,
-      androidVersion: this.data.androidVersion
+      androidVersion: this.data.androidVersion,
+      androidForceUpdate: this.data.androidForceUpdate
     }
     console.log(param)
     updateNotice(param).then(res => {

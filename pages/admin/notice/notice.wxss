@@ -33,3 +33,18 @@
   border-radius: 16rpx;
   overflow: hidden;
 }
+
+.switch-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 24rpx 32rpx;
+  background-color: #fff;
+  border-radius: 16rpx;
+}
+
+.switch-label {
+  font-size: 28rpx;
+  color: #333;
+}

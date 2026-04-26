@@ -13,11 +13,21 @@
     <text slot="label">苹果版本<text style="color: #e34d59"> *</text> </text>
   </t-input>
 
+  <view class="switch-wrap">
+    <text>苹果强制更新</text>
+    <t-switch model:value="{{iosForceUpdate}}" />
+  </view>
+
   <t-textarea model:value="{{androidContent}}" label="安卓更新功能" t-class="textarea120" placeholder="请输入安卓更新功能" disableDefaultPadding="{{true}}" />
 
   <t-input model:value="{{androidVersion}}" t-class="input" type="number" placeholder="请输入安卓版本" borderless maxlength="10">
     <text slot="label">安卓版本<text style="color: #e34d59"> *</text> </text>
   </t-input>
+
+  <view class="switch-wrap">
+    <text>安卓强制更新</text>
+    <t-switch model:value="{{androidForceUpdate}}" />
+  </view>
 </view>
 <view class="btn-wrap">
   <t-button theme="primary" size="large" block bind:tap="onSave">保存</t-button>
