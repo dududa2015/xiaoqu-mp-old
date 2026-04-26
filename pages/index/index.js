@@ -101,6 +101,7 @@ Page({
     // #else
     //获取设备id
     // this.getDeviceId()
+    this.checkAppOpenId()
     this.appUpdate()
     this.setLocMarkerIcon()
     this.getMarkerListUpdate()
@@ -114,10 +115,8 @@ Page({
     // #if NATIVE
     this.initLocMarkerIcon()
     // 使用 waitForUserInfo 替代 setTimeout，确保 userInfo 就绪后再检查 VIP
-    
     this.waitForUserInfo().then(() => {
       this.checkVip()
-      this.checkAppOpenId()
     }).catch(() => {
       // 超时后跳转到登录页面
       //如果没有获取到用户信息，且试用无效就跳转到登录页面--一般不会出现这种情况，先注释
@@ -126,8 +125,8 @@ Page({
       // }
     })
     const childComp = this.selectComponent('#topTip');
-    if (childComp && typeof childComp.initNotices === 'function') {
-      childComp.initNotices()
+    if (childComp) {
+      childComp.initNotice()
     }
     // #endif
 
@@ -352,13 +351,6 @@ Page({
     wx.setKeepScreenOn({
       keepScreenOn: !!enableScreenOn
     })
-
-    const mapName = wx.getStorageSync('mapName')
-    if (mapName) {
-      this.setData({
-        mapName
-      })
-    }
   },
   initLocMarkerIcon() {
     if (!this.isSetLocMarkerIcon) {
@@ -1035,26 +1027,23 @@ Page({
       markers
     })
   },
-  //关闭所有；opts.keepSetting 为 true 时不关闭设置弹窗（如在设置内切换公共/个人地图）
-  resetMap(opts) {
-    const keepSetting = opts && opts.keepSetting
+  //关闭所有
+  resetMap() {
     this.resetMarker()
     this.resetPolyline()
-    const state = {
+    this.setData({
       showUp: false,
       showAdd: true,
       showFeedback: false,
       showLocation: true,
       showPOI: false,
       showGrid: false,
+      showMap: false,
+      showSetting: false,
       showNoAd: false,
       bottom: 0,
       polygons: []
-    }
-    if (!keepSetting) {
-      state.showSetting = false
-    }
-    this.setData(state)
+    })
     let markers = []
     this.data.markers.forEach(element => {
       if (!element.id.toString().startsWith('999')) {
@@ -1763,6 +1752,36 @@ Page({
       showFeedback: false
     })
   },
+  //打开个人地图
+  toMap() {
+    let userInfo = wx.getStorageSync('userInfo')
+    if (userInfo.openId || userInfo.appleId) {
+      this.disableMapTap()
+      this.setData({
+        showSetting: false,
+        showNoAd: false,
+        showMap: !this.data.showMap, //点击个人地图时实现开和关两种状态
+        showGrid: false,
+        showForm: false
+      })
+      if (this.data.showMap) {
+        this.hideTabBar()
+      } else {
+        this.showTabBar()
+      }
+
+    } else {
+      // #if IOS
+      wx.navigateTo({
+        url: '/pages/ios/login/login',
+      })
+      // #else
+      wx.navigateTo({
+        url: '/pages/android/login/login',
+      })
+      // #endif
+    }
+  },
   // #if NATIVE
   //步行导航
   onFoot(e) {
@@ -1877,18 +1896,29 @@ Page({
     }
   },
   // #endif
-  // 设置内切换公共/个人地图
-  onMapTypeChange(e) {
-    const mapName = e.detail.mapName
+  //个人地图关闭
+  onMapClose() {
+    this.disableMapTap()
+    this.setData({
+      showMap: false
+    })
+    this.resetMap()
+    this.showTabBar()
+  },
+  //个人地图选择
+  onMapChange(e) {
+    let mapType = e.detail.mapType
+    let mapName = e.detail.mapName
+    console.log(mapType)
     this.setData({
       showUp: false,
       mapName,
       markers: [],
       polyline: [],
+      showMap: false
     })
-    this.resetMap({
-      keepSetting: true
-    })
+    this.showTabBar()
+    this.resetMap()
     this.getLocation()
     this.setTabBarName()
   },
@@ -1907,6 +1937,7 @@ Page({
     this.setData({
       showSetting: true,
       showNoAd: false,
+      showMap: false,
       showGrid: false,
       showForm: false,
       showPOI: false
@@ -2136,7 +2167,7 @@ Page({
     } else {
       let bottom = 0
       if (typeIndex === 0) bottom = 520
-      else if (typeIndex === 1 || typeIndex === 3 || typeIndex === 4) bottom = 400
+      else if(typeIndex === 1 || typeIndex === 3 || typeIndex === 4) bottom = 400
       else bottom = 305
       this.setData({
         bottom: bottom,
@@ -2232,26 +2263,10 @@ Page({
   },
   //因为微信开放平台迁移会导致unionId发生变化，无法使用unionId来关联移动应用和小程序，
   //这里增加一个功能，如果是微信登录且appOpenId为空，提示用户重新登录
-  checkAppOpenId() {
+  checkAppOpenId(){
     let userInfo = wx.getStorageSync('userInfo')
-    if (userInfo && !userInfo.appleId && !userInfo.appOpenId) {
+    if(userInfo && !userInfo.appleId && !userInfo.appOpenId) {
       console.log('-----------need login------------')
-      wx.showModal({
-        title: "登录状态已过期",
-        content: "为保障账号安全，需重新登录验证后方可继续使用",
-        showCancel: false,
-        confirmText: "重新登录",
-        success: (res) => {
-          if (res.confirm) {
-            wx.removeStorageSync('userId');
-            wx.removeStorageSync('userInfo');
-            wx.switchTab({
-              url:"/pages/my/index/index"
-            })
-            // wx.navigateTo({ url: '/pages/ios/login/login' })
-          }
-        }
-      })
     }
   },
   //版本号比较
