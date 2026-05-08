@@ -238,6 +238,6 @@ page {
 }
 
 .copyright {
-  font-size: 22rpx;
+  font-size: 24rpx;
   color: #999999;
 }

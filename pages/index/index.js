@@ -1922,6 +1922,15 @@ Page({
     this.getLocation()
     this.setTabBarName()
   },
+  //个人地图开关
+  onMapTypeChange(e) {
+    let mapType = e.detail.mapType
+    let mapName = e.detail.mapName
+    this.setData({
+      mapName
+    })
+    this.setTabBarName()
+  },
   setTabBarName() {
     let mapName = wx.getStorageSync('mapName')
     setTimeout(() => {
