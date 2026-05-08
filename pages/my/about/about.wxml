@@ -1,0 +1,24 @@
+<view class="about-container">
+  <view class="intro-section">
+    <view class="section-title">应用介绍</view>
+    <view class="intro-card">
+      <text class="intro-text">小区楼号是一款专注于小区内导航与信息查询的工具类应用，帮助用户快速定位楼栋、单元、门牌号，同时支持标记公共设施位置，如快递柜、充电桩、物业等，让您的出行更加便捷。</text>
+    </view>
+  </view>
+  <view class="section-title">联系我们</view>
+  <t-cell-group style="border-radius: 24rpx; overflow: hidden;">
+    <t-cell title="客户服务" hover arrow bind:tap="toCS">
+    </t-cell>
+    <t-cell title="工作时间：" hover note="工作日 9:00-18:00">
+    </t-cell>
+  </t-cell-group>
+
+  <view class="footer-section">
+    <view class="footer-links">
+      <navigator class="footer-link" url="/pages/android/user-agreement/user-agreement">用户协议</navigator>
+      <view class="link-divider">|</view>
+      <navigator class="footer-link" url="/pages/android/user-policy/user-policy">隐私政策</navigator>
+    </view>
+    <text class="copyright">© {{year}} 中山市二层楼科技有限公司 版权所有</text>
+  </view>
+</view>
