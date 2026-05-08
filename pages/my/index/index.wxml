@@ -42,7 +42,13 @@
       </t-cell>
       <!-- #endif -->
     </t-cell-group>
-
+    <!-- #if ANDROID -->
+    <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
+      <t-cell title="关于小区楼号" hover arrow url="/pages/my/about/about">
+        <image src="/images/my/about.png" class="left-icon" mode="" slot="left-icon" />
+      </t-cell>
+    </t-cell-group>
+    <!-- #endif -->
     <!-- #if MP -->
     <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
       <!-- <t-cell title="意见反馈" hover arrow>
@@ -70,11 +76,11 @@
     </t-cell-group>
 
     <!-- #if ANDROID -->
-    <view class="footer flex f-x-center f-y-center">
+    <!-- <view class="footer flex f-x-center f-y-center">
       <navigator class="margin8 text-underline" url="/pages/android/user-agreement/user-agreement">用户协议</navigator>
       <view class="margin8">|</view>
       <navigator class="margin8 text-underline" url="/pages/android/user-policy/user-policy">隐私政策</navigator>
-    </view>
+    </view> -->
     <!-- #endif -->
   </view>
 </view>

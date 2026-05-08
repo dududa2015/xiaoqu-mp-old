@@ -1,6 +1,6 @@
 // api URL：仅开发者工具走测试；正式版、体验版均走生产
 const API_URL_PROD = 'https://mp.zhuzixi.cn/api'
-const API_URL_TEST = 'https://mp.zhuzixi.cn/api'
+const API_URL_TEST = 'https://test.zhuzixi.cn/api'
 
 function resolveApiUrl() {
   try {

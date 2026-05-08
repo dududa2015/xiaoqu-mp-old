@@ -105,7 +105,7 @@ Component({
     },
     ensureLoggedInForMapMode() {
       const userInfo = wx.getStorageSync('userInfo')
-      if (userInfo && (userInfo.openId || userInfo.appleId)) {
+      if (userInfo) {
         return true
       }
       // #if IOS

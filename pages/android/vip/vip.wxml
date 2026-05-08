@@ -80,12 +80,6 @@
                 >
                     · 非订阅模式，到期后不会自动扣费，需您手动操作续费
                 </text>
-                <text 
-                    class="refund-text" style="color:red"
-                    wx:else
-                >
-                    · 2026年4月起将调整为108元
-                </text>
                 <text class="refund-text">
                     · 支付成功后会员即时生效，网络波动时可能延迟1~2分钟
                 </text>

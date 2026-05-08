@@ -99,7 +99,8 @@
       "pages/android/refund/agreement/agreement",
       "pages/search/index/index",
       "pages/search/search/search",
-      "pages/admin/auditNotNew/auditNotNew"
+      "pages/admin/auditNotNew/auditNotNew",
+      "pages/my/about/about"
     ]
   },
   "window": {
