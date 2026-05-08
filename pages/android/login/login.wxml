@@ -23,7 +23,7 @@
     <view class="line"></view>
   </view>
   <view class="others-img">
-    <image src="/images/login/wx.png" wx:if="{{hasWechatInstall}}" class="img" mode="" bind:tap="wxLogin" />
+    <image src="/images/login/wx-green.png" wx:if="{{hasWechatInstall}}" class="img" mode="" bind:tap="wxLogin" />
     <!-- #if IOS -->
     <image src="/images/login/apple.png" class="img" mode="" bind:tap="appleLogin" />
     <!-- #endif -->

@@ -2178,6 +2178,10 @@ Page({
       if (typeIndex === 0) bottom = 520
       else if(typeIndex === 1 || typeIndex === 3 || typeIndex === 4) bottom = 400
       else bottom = 305
+      // #if ANDROID
+      //安卓得加48，不然会和弹窗重叠
+      bottom = bottom + 48
+      // #endif
       this.setData({
         bottom: bottom,
         showGrid: false,

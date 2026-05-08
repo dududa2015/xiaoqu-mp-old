@@ -44,7 +44,7 @@
     </t-cell-group>
     <!-- #if ANDROID -->
     <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
-      <t-cell title="关于小区楼号" hover arrow url="/pages/my/about/about">
+      <t-cell title="关于" hover arrow url="/pages/my/about/about">
         <image src="/images/my/about.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
     </t-cell-group>
