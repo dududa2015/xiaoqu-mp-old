@@ -20,12 +20,22 @@
 </view>
 
 <t-popup visible="{{showForm}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#f5f5f5;padding-left:24rpx;padding-right:24rpx;width:calc(100% - 48rpx);box-shadow:0 -12rpx 36rpx rgba(0,0,0,0.08);">
-  <view class="close-btn" bind:tap="onFormClose">
-    <image src="/images/controls/cross.png" mode="" style="width: 40rpx; height: 40rpx;" />
-  </view>
-
   <view class="form-wrap">
-    <view class="form-title">{{action}}{{title}}</view>
+    <view class="form-header">
+      <view class="form-header-slot form-header-slot--start">
+        <view class="ios-toolbar-btn ios-toolbar-btn--glass" bind:tap="onFormClose" hover-class="ios-toolbar-btn--pressed" hover-stay-time="80">
+          <text class="ios-toolbar-btn__label">关闭</text>
+        </view>
+      </view>
+      <view class="form-header-slot form-header-slot--center">
+        <text class="form-header-title">{{action}}{{title}}</text>
+      </view>
+      <view class="form-header-slot form-header-slot--end">
+        <view class="ios-toolbar-btn ios-toolbar-btn--glass" bind:tap="onSaveMarker" hover-class="ios-toolbar-btn--pressed" hover-stay-time="80">
+          <text class="ios-toolbar-btn__label" style="color:{{bgColor}};">保存</text>
+        </view>
+      </view>
+    </view>
     <view class="input-wrap">
       <t-input placeholder="{{place}}" model:value="{{name}}" borderless="{{false}}" maxlength="10" cursor-color="{{bgColor}}" placeholder-class="t-input__placeholder" type="text" cursor-spacing="72" always-embed="{{true}}" clearable>
         <text slot="label" wx:if="{{markerTypeIndex === 0}}">楼号<text style="color: #e34d59"> *</text> </text>
@@ -78,8 +88,5 @@
         </view>
       </view>
     </view>
-  </view>
-  <view class="footer">
-    <button type="primary" style="background-color:{{bgColor}};" bind:tap="onSaveMarker">保存</button>
   </view>
 </t-popup>
