@@ -326,23 +326,24 @@
 
 .direction-tag-content {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  padding-top: 2rpx;
-  padding-bottom: 1rpx;
+  padding-left: 4rpx;
+  padding-right: 4rpx;
 }
 
 .direction-tag-icon {
   font-size: 22rpx;
   line-height: 24rpx;
+  flex-shrink: 0;
 }
 
 .direction-tag-label {
-  margin-top: 10rpx;
+  margin-left: 8rpx;
   font-size: 18rpx;
-  line-height: 18rpx;
+  line-height: 24rpx;
 }
 
 .direction-tags-scroll {

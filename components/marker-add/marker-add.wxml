@@ -54,7 +54,7 @@
         <view class="suggestions-content">
           <scroll-view class="direction-tags-scroll" scroll-x="true" show-scrollbar="false">
             <view class="direction-tags-row">
-              <t-check-tag wx:for="{{tagDirection}}" wx:key="index" theme="default" checked="{{item.checked}}" bindchange="onTagDirectionChange" data-item="{{item}}" variant="dark" size="medium" content="" style="margin:0 6rpx 0 0;min-height:72rpx;">
+              <t-check-tag wx:for="{{tagDirection}}" wx:key="index" theme="default" checked="{{item.checked}}" bindchange="onTagDirectionChange" data-item="{{item}}" variant="dark" size="medium" content="" style="margin:0 6rpx 0 0;">
                 <view class="direction-tag-content">
                   <text class="direction-tag-icon">{{item.name}}</text>
                   <text class="direction-tag-label">{{item.label}}</text>
