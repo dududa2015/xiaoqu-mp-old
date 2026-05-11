@@ -10,6 +10,7 @@ import {
 import {
   getBicycleRoute
 } from '../../apis/amap-apis'
+const { cosImageUrlThumb200 } = require('../../utils/cos-image-url')
 Component({
   /**
    * 组件的属性列表
@@ -27,7 +28,8 @@ Component({
             showNickName: true,
             hasLike: likeList.includes(newVal.toString()),
             duration: 0,
-            distance: 0
+            distance: 0,
+            markerImages: [],
           })
           this.getLouhao(newVal)
         }
@@ -47,7 +49,8 @@ Component({
             canDeleteUserMarker: false,
             showFeedback: false,
             duration: 0,
-            distance: 0
+            distance: 0,
+            markerImages: [],
           })
           this.poiInfo = {}
           this.poiInfo.lat = newVal.latitude
@@ -99,6 +102,7 @@ Component({
     canDeleteUserMarker: false, //用户的标记点是否可以删除 
     isYours: false, //是否自己的标记
     poiCommunity: '',
+    markerImages: [],
   },
 
   /**
@@ -132,6 +136,10 @@ Component({
         nickName = result.nickName ? result.nickName : '匿名'
         // }
 
+        const markerImages = that.normalizeMarkerImages(result.images)
+        const hasMarkerImages = markerImages.length > 0
+        const isOwner = wx.getStorageSync('userId') === result.userId
+
         this.poiInfo = result
         //显示楼号信息
         that.showLouhao({
@@ -156,6 +164,12 @@ Component({
         //app的权限和编辑一样
         let canDeleteUserMarker = canEditUserMarker
         // #endif
+        // 有现场图的标记点：仅创建者可修改/删除；他人不可编辑、删除、报错
+        if (hasMarkerImages && !isOwner) {
+          canEditUserMarker = false
+          canDeleteUserMarker = false
+          showFeedback = false
+        }
         that.setData({
           markerType: result.type,
           canEditUserMarker: !!canEditUserMarker,
@@ -165,8 +179,33 @@ Component({
           remarkTagList,
           // nickName,
           nickName: result.userId === wx.getStorageSync('userId') ? '您' : nickName,
-          createdDate: this.convertDate(result.createdDate)
+          createdDate: this.convertDate(result.createdDate),
+          markerImages,
         })
+      })
+    },
+    normalizeMarkerImages(images) {
+      if (!images || !images.length) return []
+      const list = images.slice().sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
+      return list
+        .map((it) => {
+          const full = it.presignedGetUrl || it.url || it.publicUrl || ''
+          if (!full) return null
+          return {
+            full,
+            thumb: cosImageUrlThumb200(full),
+          }
+        })
+        .filter(Boolean)
+    },
+    onPreviewMarkerImage(e) {
+      const index = Number(e.currentTarget.dataset.index) || 0
+      const markerImages = this.data.markerImages
+      if (!markerImages || !markerImages.length) return
+      const urls = markerImages.map((m) => m.full)
+      wx.previewImage({
+        current: urls[index],
+        urls,
       })
     },
     convertDate(inputDateTime) {
@@ -322,7 +361,7 @@ Component({
     },
     onClose() {
       this.setData({
-        showPOI: false
+        showPOI: false,
       })
       this.triggerEvent('onClose')
     }

@@ -13,6 +13,20 @@
     </view>
     <view class="poi-desc">{{poiAddress}}</view>
     <view class="poi-desc" wx:if="{{showNickName}}"> {{nickName}}创建于{{createdDate}}</view>
+    <scroll-view wx:if="{{markerImages.length}}" class="poi-images-scroll" scroll-x enable-flex>
+      <view class="poi-images-row">
+        <image
+          wx:for="{{markerImages}}"
+          wx:for-index="imgIdx"
+          wx:key="full"
+          class="poi-image-thumb"
+          mode="aspectFill"
+          src="{{item.thumb}}"
+          data-index="{{imgIdx}}"
+          bindtap="onPreviewMarkerImage"
+        />
+      </view>
+    </scroll-view>
   </view>
   <view class="button-wrap">
     <view class="left">
