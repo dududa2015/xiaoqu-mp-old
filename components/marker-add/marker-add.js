@@ -101,6 +101,13 @@ Component({
     }
   },
 
+  lifetimes: {
+    attached() {
+      this._markerPhotoPendingBatch = []
+      this._markerPhotoUploadGen = 0
+    }
+  },
+
   /**
    * 组件的初始数据
    */
@@ -230,12 +237,153 @@ Component({
     currentTagList: [], //当前标签，通过markerTypeIndex来取值
     tagNameList: [], //选中的标签
     place: '必填，最多10个字',
+    /** 新增时现场照片（t-upload 受控列表） */
+    markerUploadFiles: [],
+    uploadMediaType: ['image'],
+    uploadMax: 4,
+    // 与后端 img_sec_check 1MB 上限一致（超出将被拒）
+    uploadSizeLimitKb: 10240,
+    uploadConfig: {
+      count: 4,
+      sizeType: ['compressed', 'original'],
+      sourceType: ['camera', 'album']
+    },
+    uploadGridConfig: {
+      column: 4,
+      width: 108,
+      height: 108
+    }
   },
 
   /**
    * 组件的方法列表
    */
   methods: {
+    onAddFile(e) {
+      const batch = (e.detail && e.detail.files) || []
+      if (!batch.length) return
+      batch.forEach((f) => {
+        if (f && !f._markerUploadId) {
+          f._markerUploadId =
+            'mu_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10)
+        }
+      })
+      this._markerPhotoPendingBatch = (this._markerPhotoPendingBatch || []).concat(batch)
+    },
+    _markerUploadMarkLoadingFailed(reasonToast) {
+      const list = (this.data.markerUploadFiles || []).map((f) => {
+        if (!f.cosObjectKey && f.status === 'loading') {
+          return Object.assign({}, f, { status: 'failed', percent: 0 })
+        }
+        return f
+      })
+      this.setData({ markerUploadFiles: list })
+      if (reasonToast) {
+        wx.showToast({ title: reasonToast, icon: 'none' })
+      }
+    },
+    _findMarkerUploadSlot(list, pf, localUrl) {
+      const id = pf && pf._markerUploadId
+      if (id) {
+        const byId = list.findIndex(
+          (f) => f._markerUploadId === id && !f.cosObjectKey
+        )
+        if (byId >= 0) return byId
+      }
+      return list.findIndex((f) => f.url === localUrl && !f.cosObjectKey)
+    },
+    _markerPatchSlotStatus(localUrl, pf, patch) {
+      const list = (this.data.markerUploadFiles || []).slice()
+      const k = this._findMarkerUploadSlot(list, pf, localUrl)
+      if (k < 0) return false
+      list[k] = Object.assign({}, list[k], patch)
+      this.setData({ markerUploadFiles: list })
+      return true
+    },
+    async _flushMarkerPhotoUploads(pending) {
+      const gen = ++this._markerPhotoUploadGen
+      const token = wx.getStorageSync('token')
+      if (!token) {
+        this._markerUploadMarkLoadingFailed('请先登录后再上传照片')
+        return
+      }
+      if (!pending || !pending.length) return
+
+      const list0 = this.data.markerUploadFiles || []
+      const needUpload = pending.some((pf) => {
+        const localUrl = pf && pf.url
+        if (!localUrl) return false
+        return list0.some((f) => {
+          if (f.cosObjectKey) return false
+          if (pf._markerUploadId && f._markerUploadId === pf._markerUploadId)
+            return true
+          return f.url === localUrl
+        })
+      })
+      if (!needUpload) return
+
+      const {
+        uploadMarkerPhoto,
+        compressThenPath
+      } = require('../../apis/cos-upload-api')
+      let idx = 0
+      for (const pf of pending) {
+        if (gen !== this._markerPhotoUploadGen) return
+        if (idx > 0) {
+          await new Promise((r) => setTimeout(r, 150))
+        }
+        idx += 1
+        const localUrl = pf && pf.url
+        if (!localUrl) continue
+        const curList = this.data.markerUploadFiles || []
+        const j = this._findMarkerUploadSlot(curList, pf, localUrl)
+        if (j < 0) {
+          wx.showToast({ title: '图片队列异常，请删除后重选', icon: 'none' })
+          continue
+        }
+        try {
+          const path = await compressThenPath(localUrl, 72)
+          if (gen !== this._markerPhotoUploadGen) return
+          const data = await uploadMarkerPhoto(path)
+          if (gen !== this._markerPhotoUploadGen) return
+          const list = (this.data.markerUploadFiles || []).slice()
+          const k = this._findMarkerUploadSlot(list, pf, localUrl)
+          if (k < 0) continue
+          const item = Object.assign({}, list[k], {
+            cosObjectKey: data.objectKey,
+            publicUrl: data.publicUrl || '',
+            percent: 100,
+            status: 'done'
+          })
+          item.url =
+            data.publicUrl && String(data.publicUrl).length > 0
+              ? data.publicUrl
+              : list[k].url
+          list[k] = item
+          this.setData({
+            markerUploadFiles: list
+          })
+        } catch (err) {
+          console.warn('marker photo upload', err)
+          this._markerPatchSlotStatus(localUrl, pf, {
+            status: 'failed',
+            percent: 0
+          })
+          wx.showToast({
+            title: (err && err.message) || '上传失败',
+            icon: 'none'
+          })
+        }
+      }
+    },
+    onMarkerUploadFail(e) {
+      const err = e.detail || {}
+      console.warn('marker upload fail', err)
+      wx.showToast({
+        title: err.errMsg || '上传失败',
+        icon: 'none'
+      })
+    },
     onChooseMarker() {
       let pointsCount = this.data.pointsCount
       pointsCount += 1
@@ -263,6 +411,45 @@ Component({
       this.resetName()
       this.resetDirection()
       this.resetTagList()
+      this._markerPhotoPendingBatch = []
+      this._markerPhotoUploadGen = (this._markerPhotoUploadGen || 0) + 1
+      this.setData({
+        markerUploadFiles: []
+      })
+    },
+    onMarkerUploadSuccess(e) {
+      const files = e.detail && e.detail.files
+      if (!files || !Array.isArray(files)) return
+      const pending = this._markerPhotoPendingBatch || []
+      this._markerPhotoPendingBatch = []
+      const normalized = files.map((f) => {
+        const o = Object.assign({}, f)
+        if (o.cosObjectKey) {
+          o.status = 'done'
+        } else {
+          o.status = 'loading'
+          o.percent = 0
+        }
+        return o
+      })
+      this.setData({
+        markerUploadFiles: normalized
+      }, () => {
+        if (pending.length) {
+          wx.nextTick(() => {
+            this._flushMarkerPhotoUploads(pending)
+          })
+        }
+      })
+    },
+    onRemoveFile(e) {
+      const idx = e.detail && e.detail.index
+      if (idx === undefined || idx === null) return
+      const list = this.data.markerUploadFiles.slice()
+      list.splice(idx, 1)
+      this.setData({
+        markerUploadFiles: list
+      })
     },
     resetName() {
       this.setData({
@@ -483,6 +670,7 @@ Component({
         type: this.data.markerTypeIndex,
         name: this.data.name,
         remark: this.getRemark(),
+        imageObjectKeys: this.getImageObjectKeys(),
         deleted,
         lat: latitude,
         lng: longitude,
@@ -542,6 +730,7 @@ Component({
         type: this.data.markerTypeIndex,
         name: this.data.name,
         remark: this.getRemark(),
+        imageObjectKeys: this.getImageObjectKeys(),
         deleted,
         lng: longitude,
         lat: latitude,
@@ -596,9 +785,40 @@ Component({
       })
       return arr.map(item => item.name).join(',')
     },
+    getImageObjectKeys() {
+      return (this.data.markerUploadFiles || [])
+        .map((f) => f.cosObjectKey)
+        .filter(Boolean)
+    },
+    /** 编辑时把后端 images 转为 t-upload 条目（已上传，仅展示与提交 objectKey） */
+    buildMarkerUploadFilesFromServer(images) {
+      if (!images || !images.length) return []
+      const list = images
+        .slice()
+        .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
+      return list
+        .map((it) => {
+          const cosObjectKey = it.objectKey || it.cosObjectKey || ''
+          const url = it.presignedGetUrl || it.url || it.publicUrl || ''
+          if (!cosObjectKey && !url) return null
+          return {
+            url,
+            cosObjectKey,
+            status: 'done',
+            percent: 100,
+            type: 'image',
+          }
+        })
+        .filter(Boolean)
+    },
     //编辑用户标记点
     onUserMarkerEdit(marker) {
       this.selectedMarker = marker
+      this._markerPhotoPendingBatch = []
+      this._markerPhotoUploadGen = (this._markerPhotoUploadGen || 0) + 1
+      const markerUploadFiles = this.buildMarkerUploadFilesFromServer(
+        marker && marker.images
+      )
       let has = this.hasDirection(this.selectedMarker.name)
       let name = this.initName(this.selectedMarker.name, has)
       this.initDirection(this.selectedMarker.name, has)
@@ -618,6 +838,7 @@ Component({
         name: name,
         remark: this.selectedMarker.remark,
         currentTagList: this.data[`tagList${this.selectedMarker.type}`],
+        markerUploadFiles,
       })
 
       setTimeout(() => {

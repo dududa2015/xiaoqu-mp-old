@@ -66,12 +66,14 @@ let Upload = class Upload extends SuperComponent {
         };
         this.methods = {
             uploadFiles(files) {
-                return new Promise((resolve) => {
+                // requestMethod 返回 Promise 时，原实现用 new Promise 包裹后 return task，
+                // 外层 Promise 永远不会 resolve，导致 success/fail 均不触发（见 tdesign-miniprogram #2345）
+                return Promise.resolve().then(() => {
                     const task = this.data.requestMethod(files);
                     if (task instanceof Promise) {
                         return task;
                     }
-                    resolve({});
+                    return Promise.resolve({});
                 });
             },
             startUpload(files) {

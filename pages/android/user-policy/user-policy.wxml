@@ -10,10 +10,10 @@
 
   <!-- 二、主体信息声明 -->
   <view class="h3-title">二、主体信息声明</view>
-  <view class="h3-title">应用运营方/开发者</view>
+  <view class="h3-title">应用运营方</view>
   <view class="paragraph">
-    本应用由个人开发者朱剑运营。如果您对本隐私政策有任何疑问、意见或建议，请通过以下方式与我联系：
-    邮箱：<navigator url="mailto:zhuj1an@vip.qq.com" class="link">zhuj1an@vip.qq.com</navigator>
+    本应用由中山市二层楼科技有限公司运营。如果您对本隐私政策有任何疑问、意见或建议，请通过以下方式与我们联系：
+    邮箱：<navigator url="mailto:zsercenglou@163.com" class="link">zsercenglou@163.com</navigator>
   </view>
 
   <!-- 三、信息收集与使用 -->
@@ -145,7 +145,7 @@
     1、自助注销流程：打开 APP，进入「我的」-「昵称」-「页面底部」-「注销账号」页面。进入7天注销静默期，静默期结束后，账号将正式注销。
   </view>
   <view class="paragraph">
-    2、人工辅助注销：发送邮件至<text class="link">zhuj1an@vip.qq.com</text>，邮件标题注明”账号注销申请“，正文需包含个人中心截图、最近三次使用时间。客服将在48小时内回复确认函，用户需打印后手写签名，拍照回传完成验证。
+    2、人工辅助注销：发送邮件至<navigator url="mailto:zsercenglou@163.com" class="link">zsercenglou@163.com</navigator>，邮件标题注明”账号注销申请“，正文需包含个人中心截图、最近三次使用时间。客服将在48小时内回复确认函，用户需打印后手写签名，拍照回传完成验证。
   </view>
 
   <!-- 九、联系方式 -->
@@ -154,7 +154,7 @@
     若您对本隐私政策有任何疑问、建议或投诉，可通过以下方式联系我们：
   </view>
   <view class="paragraph">
-    app内联系微信客服，或者给开发者发送邮件：<navigator url="mailto:zhuj1an@vip.qq.com" class="link">zhuj1an@vip.qq.com</navigator>
+    app内联系微信客服，或者给我们发送邮件：<navigator url="mailto:zsercenglou@163.com" class="link">zsercenglou@163.com</navigator>
     ，我们将在收到您的沟通请求后 15 个工作日内予以回复。
   </view>
 </view>

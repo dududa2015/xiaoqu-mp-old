@@ -87,6 +87,32 @@
           </scroll-view>
         </view>
       </view>
+      <view class="suggestions-row suggestions-row--upload">
+        <view class="suggestions-title">
+          <text>现场照片</text>
+        </view>
+        <view class="suggestions-content suggestions-content--upload">
+          <t-upload
+            class="marker-photo-upload"
+            style="--td-upload-radius: 16rpx; --td-image-round-radius: 16rpx;"
+            media-type="{{uploadMediaType}}"
+            config="{{uploadConfig}}"
+            files="{{markerUploadFiles}}"
+            max="{{uploadMax}}"
+            grid-config="{{uploadGridConfig}}"
+            gutter="{{8}}"
+            size-limit="{{uploadSizeLimitKb}}"
+            bind:add="onAddFile"
+            bind:success="onMarkerUploadSuccess"
+            bind:remove="onRemoveFile"
+            bind:fail="onMarkerUploadFail"
+          >
+            <view slot="add-content" class="marker-upload-add">
+              <image class="marker-upload-add__icon" src="/images/camera.png" mode="aspectFit" />
+            </view>
+          </t-upload>
+        </view>
+      </view>
     </view>
   </view>
 </t-popup>

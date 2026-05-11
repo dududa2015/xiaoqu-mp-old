@@ -9,6 +9,7 @@
     "t-radio-group": "tdesign-miniprogram/radio-group/radio-group",
     "t-radio": "tdesign-miniprogram/radio/radio",
     "t-check-tag": "tdesign-miniprogram/check-tag/check-tag",
+    "t-upload": "tdesign-miniprogram/upload/upload",
     "suggestions-input": "/components/suggestions-input/suggestions-input"
   },
   "styleIsolation": "apply-shared"
