@@ -71,12 +71,15 @@ App({
       const userInfo = wx.getStorageSync('userInfo')
 
       //迁移后只判断!userId
-      if (!userId || !userInfo || !userInfo.openId || !userInfo.unionId) {
-        const code = await this.wxLogin()
-        await this.getMPUserInfo(code, '')
-      } else {
-        await this.getMPUserInfo('', userId)
-      }
+      // if (!userId || !userInfo || !userInfo.openId || !userInfo.unionId) {
+      //   const code = await this.wxLogin()
+      //   await this.getMPUserInfo(code, '')
+      // } else {
+      //   await this.getMPUserInfo('', userId)
+      // }
+      // 现在走下面这2行，以后注释掉，把上面这一段去掉注释 20260512
+      const code = await this.wxLogin()
+      await this.getMPUserInfo(code, userId)
       
       // 仅在微信小程序环境下保存设备信息
       // #if MP

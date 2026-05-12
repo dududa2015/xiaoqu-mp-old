@@ -86,6 +86,37 @@
   height: 45vh;
 }
 
+.audit-photo-block {
+  margin: 0 20rpx 16rpx;
+}
+
+.audit-photo-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.audit-photo-scroll {
+  width: 100%;
+  max-height: 200rpx;
+}
+
+.audit-photo-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16rpx;
+  padding-right: 8rpx;
+}
+
+.audit-photo-thumb {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  flex-shrink: 0;
+  background-color: #f3f4f6;
+}
+
 /* 数据面板 */
 .data-panel {
   display: flex;

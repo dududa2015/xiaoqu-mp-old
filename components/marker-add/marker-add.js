@@ -445,10 +445,20 @@ Component({
     onRemoveFile(e) {
       const idx = e.detail && e.detail.index
       if (idx === undefined || idx === null) return
-      const list = this.data.markerUploadFiles.slice()
-      list.splice(idx, 1)
-      this.setData({
-        markerUploadFiles: list
+      wx.showModal({
+        title: '确认删除',
+        content: '确定要删除这张照片吗？',
+        confirmText: '删除',
+        confirmColor: '#e34d59',
+        success: (res) => {
+          if (!res.confirm) return
+          const list = (this.data.markerUploadFiles || []).slice()
+          if (idx < 0 || idx >= list.length) return
+          list.splice(idx, 1)
+          this.setData({
+            markerUploadFiles: list
+          })
+        }
       })
     },
     resetName() {

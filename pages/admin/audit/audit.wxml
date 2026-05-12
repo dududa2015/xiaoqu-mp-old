@@ -37,11 +37,8 @@
   <view class="content">
     <t-cell-group wx:if="{{auditList.length > 0}}">
       <t-swipe-cell wx:for="{{auditList}}" wx:key="index">
-        <t-cell title="{{index+1}}、 {{item.name}}" hover arrow bordered="{{index !== auditList.length-1}}" note="{{item.typeName + (item.isPersonal?'(个人)':'')}}" bind:tap="onMarkerTap" data-item="{{item}}" />
+        <t-cell title="{{index+1}}、 {{item.name}}" hover arrow bordered="{{index !== auditList.length-1}}" note="{{item.typeName + (item.isPersonal?'(个人)' : '') + (item.images && item.images.length ? ' · 图×' + item.images.length : '')}}" bind:tap="onMarkerTap" data-item="{{item}}" />
         <view slot="right" class="btn-wrapper">
-          <view class="btn delete-btn-1" bind:tap="auditNotPassed" data-points="10" data-item="{{item}}">
-            删扣10
-          </view>
           <view class="btn delete-btn-2" bind:tap="auditNotPassed" data-points="0" data-item="{{item}}">
             删不扣
           </view>
