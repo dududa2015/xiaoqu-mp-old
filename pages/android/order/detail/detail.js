@@ -205,7 +205,7 @@ Page({
     }
 
     wx.miniapp.requestPayment({
-      mchId: '1715931589', // 商户号
+      mchId: '1112580418', // 商户号
       prepayId: data.prepayId,
       nonceStr: data.nonceStr,
       package: 'Sign=WXPay',

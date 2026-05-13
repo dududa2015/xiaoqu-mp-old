@@ -237,7 +237,7 @@ Component({
     currentTagList: [], //当前标签，通过markerTypeIndex来取值
     tagNameList: [], //选中的标签
     place: '必填，最多10个字',
-    /** 新增时现场照片（t-upload 受控列表） */
+    /** 新增时照片（t-upload 受控列表） */
     markerUploadFiles: [],
     uploadMediaType: ['image'],
     uploadMax: 4,

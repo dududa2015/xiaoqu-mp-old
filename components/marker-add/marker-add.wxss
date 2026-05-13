@@ -419,7 +419,7 @@
   white-space: nowrap;
 }
 
-/* 新增 – 现场照片上传（t-upload） */
+/* 新增 – 照片上传（t-upload） */
 .suggestions-row--upload {
   align-items: flex-start;
 }

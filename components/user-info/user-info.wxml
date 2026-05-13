@@ -28,7 +28,7 @@
         </view>
         <!-- #if NATIVE -->
         <!-- 会员到期信息 先注释，以后打开 -->
-        <!-- <view class="vip-info" wx:if="{{vipExpiredDate && !isLifetimeVip}}">
+        <view class="vip-info" wx:if="{{vipExpiredDate && !isLifetimeVip}}">
             <view class="vip-badge-row">
                 <view class="vip-label-badge">{{showVip ? 'VIP' : '过期'}}</view>
                 <text class="vip-date-text">到期时间：{{vipExpiredDate}}</text>
@@ -36,7 +36,7 @@
                 <view class="vip-days-tag vip-warning" wx:elif="{{showVip && isVipExpiringSoon && showHours}}">剩{{vipHoursLeft}}小时</view>
                 <view class="vip-days-tag vip-warning" wx:elif="{{showVip && isVipExpiringSoon}}">剩{{vipDaysLeft}}天</view>
             </view>
-        </view> -->
+        </view>
         <!-- #endif -->
     </view>
     <!-- 统计数据区域 -->

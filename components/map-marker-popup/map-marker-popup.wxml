@@ -18,9 +18,9 @@
       <map class="map-comp" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" scale="{{17}}" show-location="{{true}}"></map>
     </view>
 
-    <!-- 现场照片（待审列表 images + presignedGetUrl） -->
+    <!-- 照片（待审列表 images + presignedGetUrl） -->
     <view wx:if="{{markerImages.length}}" class="audit-photo-block">
-      <view class="audit-photo-title">现场照片 · {{markerImages.length}}张</view>
+      <view class="audit-photo-title">照片 · {{markerImages.length}}张</view>
       <scroll-view class="audit-photo-scroll" scroll-x enable-flex>
         <view class="audit-photo-row">
           <image

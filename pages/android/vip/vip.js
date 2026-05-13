@@ -126,7 +126,7 @@ Page({
     });
     console.log(this.data.currentProduct)
   },
-  //支付 1715931589
+  //支付 1112580418
   async onPurchase() {
     if (!this.data.currentProduct) {
       wx.showToast({
@@ -189,7 +189,7 @@ Page({
 
     // 假设从你的服务端接口收到了所有支付参数
     wx.miniapp.requestPayment({
-      mchId: '1715931589', // 你的商户号
+      mchId: '1112580418', // 你的商户号
       prepayId: data.prepayId, // 服务端返回的prepay_id
       nonceStr: data.nonceStr, // 随机字符串
       package: 'Sign=WXPay', // 固定值
