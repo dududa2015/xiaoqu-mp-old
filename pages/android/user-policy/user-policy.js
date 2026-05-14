@@ -1,66 +1,45 @@
-// pages/android/user-policy/user-policy.js
+// pages/privacy/privacy.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    openIndex: -1 // 控制哪个折叠面板展开，-1表示全部收起
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  // 切换折叠面板
+  toggleAccordion(e) {
+    const index = e.currentTarget.dataset.index;
+    this.setData({
+      openIndex: this.data.openIndex === index ? -1 : index
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  // 复制邮箱
+  copyEmail() {
+    wx.setClipboardData({
+      data: 'zsercenglou@163.com',
+      success() {
+        wx.showToast({ title: '邮箱已复制', icon: 'success' });
+      }
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  // 跳转自助注销页面
+  goToSelfService() {
+    wx.navigateTo({
+      url: '/pages/account/cancel/cancel' // 替换为实际注销页面路径
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+  // 联系邮箱（或唤起邮件客户端）
+  contactEmail() {
+    wx.setClipboardData({
+      data: 'zsercenglou@163.com',
+      success() {
+        wx.showModal({
+          title: '提示',
+          content: '邮箱地址已复制，请前往邮件应用发送注销申请。',
+          showCancel: false
+        });
+      }
+    });
   }
 })
