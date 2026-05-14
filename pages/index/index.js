@@ -172,7 +172,6 @@ Page({
       content: '安卓🤖App已在腾讯应用宝上架，欢迎下载体验',
       url: '/pages/my/app/android/android'
     }
-    if (!isIOS) return //安卓恢复下载的时候去掉
     wx.showModal({
       title: config.title,
       content: config.content,

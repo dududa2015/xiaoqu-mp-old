@@ -3,16 +3,15 @@
     <!-- 顶部标签 -->
     <view class="badge-row">
       <view class="badge badge-platform">Android 官方版</view>
-      <view class="badge badge-offline">已下线</view>
+      <view class="badge badge-safe">应用宝可下载</view>
     </view>
 
-    <!-- 下线提示 -->
-    <view class="offline-notice">
-      <view class="offline-icon">⚠️</view>
-      <view class="offline-content">
-        <view class="offline-title">应用已下线</view>
-        <view class="offline-desc">由于应用宝平台政策，个人开发者上传的定位功能APP暂不收录，因此安卓App已从应用宝下线。给您带来的不便，我们深表歉意，感谢您的理解与支持。</view>
-        <view class="offline-time">预计2026年5月份左右恢复下载，请耐心等待。</view>
+    <!-- 上线提示 -->
+    <view class="online-notice">
+      <view class="online-icon">✓</view>
+      <view class="online-content">
+        <view class="online-title">应用已重新上线</view>
+        <view class="online-desc">安卓 App 已恢复在腾讯应用宝上架。点击下方按钮复制官方下载链接，在手机浏览器中打开即可前往应用宝安装。</view>
       </view>
     </view>
 
@@ -31,11 +30,10 @@
     <view class="url-box">
       <text class="url-text">{{downloadUrl}}</text>
     </view>
-    <button class="primary-btn disabled-btn" disabled>应用已下线，暂不可下载</button>
-    <view class="tip offline-tip">安卓App已在应用宝下线，预计2026年4月份左右恢复下载。如有疑问，请联系客服。</view>
+    <button class="primary-btn" bind:tap="onCopyLink">复制下载链接</button>
+    <view class="tip">复制后请在浏览器中粘贴打开；也可在应用宝内搜索「小区楼号」。如有疑问，请联系客服。</view>
 
 
   </view>
 </view>
-
 

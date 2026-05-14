@@ -12,7 +12,7 @@ Page({
       data: downloadUrl,
       success: () => {
         wx.showToast({
-          title: '下载链接已复制',
+          title: '链接已复制，请在浏览器中打开',
           icon: 'none'
         })
       }
