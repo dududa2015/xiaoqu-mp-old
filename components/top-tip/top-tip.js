@@ -61,7 +61,7 @@ Component({
 
     getMpNotices(systemInfo) {
       const isIphone = systemInfo.platform === 'ios' || systemInfo.model.indexOf('iPhone') > -1
-      return isIphone ? ['苹果App已上线，欢迎下载 →'] : ['安卓🤖App已上线，欢迎下载 →']
+      return isIphone ? ['苹果App已上线，欢迎下载 →'] : ['安卓App已重新上线，欢迎下载 →']
     },
 
     getAppNotices(userInfo, platform) {
