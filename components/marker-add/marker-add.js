@@ -246,7 +246,7 @@ Component({
     uploadConfig: {
       count: 4,
       sizeType: ['compressed', 'original'],
-      sourceType: ['camera', 'album']
+      sourceType: ['camera']
     },
     uploadGridConfig: {
       column: 4,

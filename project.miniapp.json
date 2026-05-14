@@ -6,7 +6,7 @@
   "i18nFilePath": "i18n",
   "mini-android": {
     "resourcePath": "miniapp/android/nativeResources",
-    "sdkVersion": "1.6.20",
+    "sdkVersion": "1.6.24",
     "toolkitVersion": "0.11.0",
     "useExtendedSdk": {
       "media": false,
@@ -40,6 +40,14 @@
     },
     "gdt": {
       "splashAd_fetchDelay": 0
+    },
+    "targetSdkVersion": 30,
+    "uselessPermissions": [
+      "android.permission.READ_EXTERNAL_STORAGE",
+      "android.permission.WRITE_EXTERNAL_STORAGE"
+    ],
+    "privateDescriptions": {
+      "CAMERA": "拍摄楼栋号、出入口、公厕、换电场所等照片，帮助我们完善地图信息。拒绝授权将无法通过拍照补充信息，但不影响您正常浏览和使用地图其他功能"
     }
   },
   "mini-ios": {
