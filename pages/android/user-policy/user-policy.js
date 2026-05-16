@@ -3,7 +3,19 @@ Page({
   data: {
     openIndex: -1 // 控制哪个折叠面板展开，-1表示全部收起
   },
-
+  onCopy(e) {
+    const text = e.currentTarget.dataset.text; // 获取要复制的文本
+    wx.setClipboardData({
+      data: text, // 写入剪贴板
+      success: () => {
+        // 复制成功后给用户反馈
+        wx.showToast({
+          title: '复制成功',
+          icon: 'success'
+        });
+      }
+    });
+  },
   // 切换折叠面板
   toggleAccordion(e) {
     const index = e.currentTarget.dataset.index;
@@ -17,7 +29,10 @@ Page({
     wx.setClipboardData({
       data: 'zsercenglou@163.com',
       success() {
-        wx.showToast({ title: '邮箱已复制', icon: 'success' });
+        wx.showToast({
+          title: '邮箱已复制',
+          icon: 'success'
+        });
       }
     });
   },

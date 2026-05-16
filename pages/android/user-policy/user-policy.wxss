@@ -39,6 +39,10 @@
   margin-bottom: 20rpx;
   line-height: 1.7;
 }
+.text-blue {
+  color: #0066cc;                 /* 文字颜色设为蓝色 */
+  text-decoration: underline;  /* 添加下划线 */
+}
 
 .bold {
   font-weight: bold;
@@ -55,6 +59,7 @@
   color: #666;
   font-size: 28rpx;
   line-height: 1.6;
+  word-break: break-all;
 }
 
 /* 链接样式 */

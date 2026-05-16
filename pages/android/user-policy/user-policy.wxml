@@ -11,7 +11,8 @@
   <!-- 主体信息声明 -->
   <view class="section">
     <view class="section-title">二、主体信息声明</view>
-    <view class="text">本应用由中山市二层楼科技有限公司运营。如果您对本隐私政策有任何疑问、意见或建议，请通过以下方式与我们联系：邮箱：<navigator open-type="sendmail" hover-class="none">zsercenglou@163.com</navigator></view>
+    <view class="text">本应用由中山市二层楼科技有限公司运营。如果您对本隐私政策有任何疑问、意见或建议，请通过以下方式与我们联系：邮箱：<text bind:longtap="onCopy" data-text="zsercenglou@163.com" class="text-blue">zsercenglou@163.com</text>
+    </view>
   </view>
 
   <!-- 信息收集与使用 -->
@@ -22,7 +23,7 @@
     <view class="text">1、为确保本地图的基础功能正常运行、保障服务稳定性及设备兼容性，我们可能会收集您的以下信息：</view>
 
     <view class="list">
-      <view class="list-item">• <text class="bold">设备基础信息：</text>设备型号、操作系统版本、设备唯一标识符（如 IMEI、Android ID、设备 MAC 地址等）、网络连接状态（如 Wi-Fi、蜂窝网络类型）；</view>
+      <view class="list-item">• <text class="bold">设备基础信息：</text>设备型号、操作系统版本、设备唯一标识符（如 IMEI、Android ID、OAID（开放匿名设备标识符）、设备 MAC 地址等）、网络连接状态（如 Wi-Fi、蜂窝网络类型）；其中 OAID 可能由系统或我们接入的第三方 SDK（如微信开放组件、地图、广告等）在您同意本政策后通过标准接口读取，用于匿名化设备区分、广告投放与效果统计、反作弊、安全风控及服务优化，读取发生于应用使用期间，处理范围以本政策及首次弹窗明示为准；</view>
       <view class="list-item">• <text class="bold">软件环境信息：</text>软件安装列表（仅针对“微信”应用进行存在性判断，不收集任何其他第三方应用安装情况），该收集行为仅为支持您选择“微信登录”功能时，快速验证设备是否已安装微信以确保登录流程顺畅，无其他用途。</view>
       <view class="list-item">• <text class="bold">定位相关信息：</text>仅在您开启定位权限并使用地图定位功能时收集地理位置信息，用于精准显示您所在位置及周边楼号分布；</view>
       <view class="list-item">• <text class="bold">相机与相册信息：</text>当您使用“拍摄上传”功能（如拍摄小区楼栋号、出入口、公厕、换电场所等照片）时，我们会申请调用您的 相机权限及相册（存储）权限。我们仅采集您主动拍摄或选择的照片/图片文件。特别说明：我们不会通过相机进行人脸识别、活体检测，也不会主动采集照片中可能包含的人脸、车牌等无关个人信息。该信息仅用于您上传并补充小区地图中的点位信息，优化地图内容的准确性。</view>
@@ -33,7 +34,7 @@
     <view class="subsection">（二）信息使用目的</view>
     <view class="list">
       <view class="list-item">• 为您提供小区楼号查询、定位导航、楼号分布展示等核心服务；</view>
-      <view class="list-item">• 优化本地图的性能和功能，提升运行稳定性和用户体验，例如根据用户常用搜索区域优化地图加载速度，通过设备 MAC 地址辅助识别异常登录设备、保障账号登录安全；通过对软件安装列表中微信应用的存在性判断，支持“微信登录”功能的正常触发，减少登录流程中的操作步骤；</view>
+      <view class="list-item">• 优化本地图的性能和功能，提升运行稳定性和用户体验，例如根据用户常用搜索区域优化地图加载速度，通过设备 MAC 地址、OAID 等匿名标识辅助识别异常登录设备、保障账号登录安全；通过对软件安装列表中微信应用的存在性判断，支持“微信登录”功能的正常触发，减少登录流程中的操作步骤；</view>
       <view class="list-item">• 回应您的咨询、反馈和投诉，为您提供必要的技术支持（如当您反馈登录问题时，可结合设备 MAC 地址和微信安装验证结果快速定位问题原因）；</view>
       <view class="list-item">• 保障账号安全，防范欺诈、恶意攻击等违法违规行为，保护您和其他用户的合法权益；</view>
       <view class="list-item">• 在获得您明确同意的前提下，向您推送与小区相关的重要通知（如设施维护、安全提示等）；</view>
@@ -77,9 +78,41 @@
     <view class="text">我们不会公开披露您的个人信息，除非获得您的明确同意，或依据法律法规、司法机关、行政主管部门的强制性要求，在披露前将尽可能向您告知披露的目的、范围等信息（法律法规禁止的除外）。</view>
   </view>
 
+  <view class="section">
+    <view class="section-title">六、第三方 SDK 清单及说明</view>
+    <view class="text">为实现本应用相关功能，我们集成了下列第三方 SDK。下表已按监管常见要求列明各 SDK 名称、Android 包名、SDK 开发者、使用目的、收集个人信息的大致类型与范围，并提供该 SDK 官方公示的隐私政策链接（您可长按链接复制后在浏览器中打开）。具体收集内容以实现对应功能所必需为限，并以各 SDK 提供方最新公示为准。</view>
+    <view class="subsection">（一）微信 OpenSDK（Android）</view>
+    <view class="list">
+      <view class="list-item">• <text class="bold">SDK 名称：</text>微信 OpenSDK（Android）</view>
+      <view class="list-item">• <text class="bold">Android 包名：</text>com.tencent.mm.opensdk</view>
+      <view class="list-item">• <text class="bold">SDK 开发者：</text>深圳市腾讯计算机系统有限公司</view>
+      <view class="list-item">• <text class="bold">使用目的 / 功能场景：</text>支持微信授权登录、分享、支付（若您使用相关能力）及与微信客户端协同所需的网络与安装状态检测等。</view>
+      <view class="list-item">• <text class="bold">收集个人信息类型与范围：</text>为实现上述能力，可能涉及设备标识信息、网络状态、应用安装情况（如判断是否安装微信客户端）、用户主动选择的图片/内容及订单与支付状态等；具体类型与处理规则以 SDK 官方说明为准。</view>
+      <view class="list-item" bind:longtap="onCopy" data-text="https://support.weixin.qq.com/cgi-bin/mmsupportacctnodeweb-bin/pages/RYiYJkLOrQwu0nb8">• <text class="bold">SDK 隐私政策链接：</text>https://support.weixin.qq.com/cgi-bin/mmsupportacctnodeweb-bin/pages/RYiYJkLOrQwu0nb8（《微信 Open SDK 个人信息处理规则》）</view>
+    </view>
+    <view class="subsection">（二）腾讯地图 SDK（Android）</view>
+    <view class="list">
+      <view class="list-item">• <text class="bold">SDK 名称：</text>腾讯地图 SDK（Android）</view>
+      <view class="list-item">• <text class="bold">Android 包名：</text>com.tencent.tencentmap.mapsdk.maps</view>
+      <view class="list-item">• <text class="bold">SDK 开发者：</text>深圳市腾讯计算机系统有限公司</view>
+      <view class="list-item">• <text class="bold">使用目的 / 功能场景：</text>地图底图与覆盖物展示、缩放与交互、检索周边小区/楼号及 POI 等与地图渲染相关的服务。</view>
+      <view class="list-item">• <text class="bold">收集个人信息类型与范围：</text>可能包括设备型号、操作系统版本、网络类型、IP 地址、OAID、WLAN 信息（如 SSID/BSSID）、传感器信息等，用于地图渲染、性能优化与反作弊；具体以 SDK 官方说明为准。</view>
+      <view class="list-item" bind:longtap="onCopy" data-text="https://privacy.qq.com/document/preview/a10a8634f237464da9a95f4f07e73e40">• <text class="bold">SDK 隐私政策链接：</text>https://privacy.qq.com/document/preview/a10a8634f237464da9a95f4f07e73e40（腾讯地图地图 SDK 隐私协议，索引页：https://lbs.qq.com/userAgreements/agreements/mapSdkPrivacy ）</view>
+    </view>
+    <view class="subsection">（三）腾讯定位 SDK（Android）</view>
+    <view class="list">
+      <view class="list-item">• <text class="bold">SDK 名称：</text>腾讯定位 SDK（Android）</view>
+      <view class="list-item">• <text class="bold">Android 包名：</text>com.tencent.map.geolocation</view>
+      <view class="list-item">• <text class="bold">SDK 开发者：</text>深圳市腾讯计算机系统有限公司</view>
+      <view class="list-item">• <text class="bold">使用目的 / 功能场景：</text>获取您的地理位置（含精确定位），用于在地图上标定当前位置、周边楼号分布与路线相关能力。</view>
+      <view class="list-item">• <text class="bold">收集个人信息类型与范围：</text>可能包括精确位置信息（如 GNSS）、粗略位置、设备信息、WLAN 及基站相关信息、传感器信息等；具体以 SDK 官方说明为准。</view>
+      <view class="list-item" bind:longtap="onCopy" data-text="https://privacy.qq.com/document/preview/dbd484ce652c486cb6d7e43ef12cefb0">• <text class="bold">SDK 隐私政策链接：</text>https://privacy.qq.com/document/preview/dbd484ce652c486cb6d7e43ef12cefb0（腾讯地图定位 SDK 隐私协议）</view>
+    </view>
+  </view>
+
   <!-- 用户权利 -->
   <view class="section">
-    <view class="section-title">六、用户权利</view>
+    <view class="section-title">七、用户权利</view>
     <view class="list">
       <view class="list-item">• <text class="bold">访问与查询权：</text>您有权访问和查询您的个人信息（如昵称等），可通过本地图的个人中心或联系客服进行操作。</view>
       <view class="list-item">• <text class="bold">更正权：</text>若您发现您的个人信息存在错误或不完整，有权要求我们进行更正。您可通过客服渠道提交更正申请，并提供相关证明材料，我们将在核实后及时处理。</view>
@@ -91,34 +124,34 @@
 
   <!-- 未成年人保护 -->
   <view class="section">
-    <view class="section-title">七、未成年人保护</view>
+    <view class="section-title">八、未成年人保护</view>
     <view class="text">本地图不面向未成年人提供服务，若未成年人在未经监护人同意的情况下使用本地图，监护人发现后可联系我们，我们将及时删除相关未成年人的个人信息，并采取措施制止其继续使用。监护人应承担起保护未成年人个人信息的责任，引导其正确使用网络服务。</view>
   </view>
 
   <!-- 隐私政策的变更 -->
   <view class="section">
-    <view class="section-title">八、隐私政策的变更</view>
+    <view class="section-title">九、隐私政策的变更</view>
     <view class="text">我们可能会根据法律法规的更新、业务功能的调整或用户需求的变化，对本隐私政策进行修订。</view>
     <view class="text">隐私政策变更后，我们将在本地图的显著位置（如首页弹窗、设置页面）公示变更后的内容，并注明生效日期。若您在变更生效后继续使用本地图，视为您接受变更后的隐私政策；若您不同意，应立即停止使用本地图。</view>
   </view>
 
   <!-- 账号注销 -->
   <view class="section">
-    <view class="section-title">九、账号注销</view>
+    <view class="section-title">十、账号注销</view>
     <view class="text">账号注销前，需确保已阅读并同意本注销规则及 APP 隐私政策全部内容，账号注销后不可恢复，请提前备份账号下的个人信息、数据及相关凭证，注销将导致账号关联的所有权益自动失效，未使用的权益视为自愿放弃。</view>
 
     <view class="text bold">提供两种注销途径：</view>
     <view class="list">
       <view class="list-item">• <text class="bold">自助注销流程：</text>打开 APP，进入「我的」-「昵称」-「页面底部」-「注销账号」页面。进入7天注销静默期，静默期结束后，账号将正式注销。</view>
-      <view class="list-item">• <text class="bold">人工辅助注销：</text>发送邮件至 <navigator open-type="sendmail" hover-class="none">zsercenglou@163.com</navigator>，邮件标题注明“账号注销申请”，正文需包含个人中心截图、最近三次使用时间。客服将在48小时内回复确认函，用户需打印后手写签名，拍照回传完成验证。</view>
+      <view class="list-item">• <text class="bold">人工辅助注销：</text>发送邮件至 <text bind:longtap="onCopy" data-text="zsercenglou@163.com" class="text-blue">zsercenglou@163.com</text>，邮件标题注明“账号注销申请”，正文需包含个人中心截图、最近三次使用时间。客服将在48小时内回复确认函，用户需打印后手写签名，拍照回传完成验证。</view>
     </view>
   </view>
 
   <!-- 联系方式 -->
   <view class="section">
-    <view class="section-title">十、联系方式</view>
+    <view class="section-title">十一、联系方式</view>
     <view class="text">若您对本隐私政策有任何疑问、建议或投诉，可通过以下方式联系我们：</view>
-    <view class="text">app内联系微信客服，或者发送邮件：<navigator open-type="sendmail" hover-class="none">zsercenglou@163.com</navigator>
+    <view class="text">app内联系微信客服，或者发送邮件：<text bind:longtap="onCopy" data-text="zsercenglou@163.com" class="text-blue">zsercenglou@163.com</text>
     </view>
     <view class="text">我们将在收到您的沟通请求后 15 个工作日内予以回复。</view>
   </view>

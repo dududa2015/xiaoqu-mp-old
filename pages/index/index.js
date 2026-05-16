@@ -955,21 +955,21 @@ Page({
       this.addCommunity(latitude, longitude)
     }
 
-    // x.
-    if (latitude > 39.909188 - 0.01 && latitude < 39.909188 + 0.01 &&
-      longitude > 116.397478 - 0.01 && longitude < 116.397478 + 0.01) {
-      wx.showModal({
-        title: '定位失败',
-        content: '无法定位当前位置？建议前往「常见问题解答」页面查看解决方案',
-        success(res) {
-          if (res.confirm) {
-            wx.navigateTo({
-              url: '/pages/help/question/question'
-            })
-          }
-        }
-      });
-    }
+    // 发布小米应用商店时注释 20260515
+    // if (latitude > 39.909188 - 0.01 && latitude < 39.909188 + 0.01 &&
+    //   longitude > 116.397478 - 0.01 && longitude < 116.397478 + 0.01) {
+    //   wx.showModal({
+    //     title: '定位失败',
+    //     content: '无法定位当前位置？建议前往「常见问题解答」页面查看解决方案',
+    //     success(res) {
+    //       if (res.confirm) {
+    //         wx.navigateTo({
+    //           url: '/pages/help/question/question'
+    //         })
+    //       }
+    //     }
+    //   });
+    // }
 
     const {
       northeast,
