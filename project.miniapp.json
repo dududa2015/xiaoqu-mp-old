@@ -2,7 +2,7 @@
   "miniVersion": "v2",
   "name": "小区楼号",
   "version": "1.0.1",
-  "versionCode": 20260514,
+  "versionCode": 20260517,
   "i18nFilePath": "i18n",
   "mini-android": {
     "resourcePath": "miniapp/android/nativeResources",
@@ -47,7 +47,9 @@
       "android.permission.WRITE_EXTERNAL_STORAGE"
     ],
     "privateDescriptions": {
-      "CAMERA": "拍摄楼栋号、出入口、公厕、换电场所等照片，帮助我们完善地图信息。拒绝授权将无法通过拍照补充信息，但不影响您正常浏览和使用地图其他功能"
+      "CAMERA": "拍摄楼栋号、出入口、公厕、换电场所等照片，帮助我们完善地图信息。拒绝授权将无法通过拍照补充信息，但不影响您正常浏览和使用地图其他功能",
+      "ACCESS_FINE_LOCATION": "为了实时定位您的位置及规划步行导航路线至目标楼号。您的数据仅用于地图服务，不会未经允许共享给第三方。",
+      "ACCESS_COARSE_LOCATION": "为了快速定位您附近的小区楼号，我们需要获取您的位置信息。您的数据仅用于地图服务，不会未经允许共享给第三方。"
     }
   },
   "mini-ios": {

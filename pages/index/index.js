@@ -47,7 +47,7 @@ Page({
     showRedDot: true, //红点（统一控制设置入口和小区边界红点）
     enableRotate: false, //是否开启旋转
     isVip: false, //是否vip
-    scale: 17,
+    scale: 3,
     rotate: 0,
     skew: 0, //倾斜角度，范围 0 ~ 40 , 关于 z 轴的倾角
     enable3D: false,
@@ -79,7 +79,10 @@ Page({
   },
   onLoad() {
     this.getWindowInfo()
-    this.getLocation()
+    // 仅首次安装（无历史定位缓存）时不自动定位，避免启动即读取位置；用户可点底部定位按钮
+    if (this.hasStoredLocation()) {
+      this.getLocation()
+    }
     this.getPadding()
     this.getStatusBar()
 
@@ -506,6 +509,16 @@ Page({
     } else {
       console.log('用户是VIP，不显示插屏广告')
     }
+  },
+  hasStoredLocation() {
+    const latitude = wx.getStorageSync('latitude')
+    const longitude = wx.getStorageSync('longitude')
+    if (latitude === '' || latitude == null || longitude === '' || longitude == null) {
+      return false
+    }
+    const lat = parseFloat(latitude)
+    const lng = parseFloat(longitude)
+    return !isNaN(lat) && !isNaN(lng)
   },
   //获取当前位置
   getLocation() {
@@ -2175,7 +2188,7 @@ Page({
     } else {
       let bottom = 0
       if (typeIndex === 0) bottom = 520
-      else if(typeIndex === 1 || typeIndex === 3 || typeIndex === 4) bottom = 400
+      else if (typeIndex === 1 || typeIndex === 3 || typeIndex === 4) bottom = 400
       else bottom = 305
       // #if ANDROID
       //安卓得加48，不然会和弹窗重叠
@@ -2275,9 +2288,9 @@ Page({
   },
   //因为微信开放平台迁移会导致unionId发生变化，无法使用unionId来关联移动应用和小程序，
   //这里增加一个功能，如果是微信登录且appOpenId为空，提示用户重新登录
-  checkAppOpenId(){
+  checkAppOpenId() {
     let userInfo = wx.getStorageSync('userInfo')
-    if(userInfo && !userInfo.appleId && !userInfo.appOpenId) {
+    if (userInfo && !userInfo.appleId && !userInfo.appOpenId) {
       console.log('-----------need login------------')
     }
   },
