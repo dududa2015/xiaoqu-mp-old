@@ -12,6 +12,7 @@ Page({
     bottom: 120,
     index: 0,
     markerBounce: false, //标记点弹跳动画状态
+    showMapLocation: false,
   },
   onShow() {
     let poi = wx.getStorageSync('poi')
@@ -90,9 +91,9 @@ Page({
       // })
 
       let poi = wx.getStorageSync('poi')
-      if(poi){
-        let index = poiList.findIndex(item=>item.name === poi.name)
-        if(index === -1){
+      if (poi) {
+        let index = poiList.findIndex(item => item.name === poi.name)
+        if (index === -1) {
           poiList.unshift(poi)
         }
       }
@@ -114,11 +115,40 @@ Page({
     wx.navigateBack()
   },
   onLocation() {
-    let latitude = wx.getStorageSync('latitude')
-    let longitude = wx.getStorageSync('longitude')
-    this.mapCtx.moveToLocation({
-      latitude: latitude,
-      longitude: longitude
+    const that = this
+    wx.getLocation({
+      type: 'gcj02',
+      success(res) {
+        const {
+          latitude,
+          longitude
+        } = res
+        wx.setStorageSync('latitude', latitude)
+        wx.setStorageSync('longitude', longitude)
+        that.setData({
+          latitude,
+          longitude,
+          showMapLocation: true
+        })
+        that.mapCtx.moveToLocation({
+          latitude,
+          longitude
+        })
+      },
+      fail() {
+        const latitude = wx.getStorageSync('latitude')
+        const longitude = wx.getStorageSync('longitude')
+        if (latitude == null || latitude === '' || longitude == null || longitude === '') {
+          return
+        }
+        that.setData({
+          showMapLocation: true
+        })
+        that.mapCtx.moveToLocation({
+          latitude,
+          longitude
+        })
+      }
     })
   },
   onRegionChange(e) {

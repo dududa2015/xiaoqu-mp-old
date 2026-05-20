@@ -62,9 +62,9 @@ Page({
     showFeedback: false, //是否显示反馈按钮
     markerBounce: false, //标记点弹跳动画状态
     showLocation: true,
+    showMapLocation: false,
     bottom: 0,
     showAdd: true,
-    showLocation: true,
     markers: [],
     show: false,
     polyline: [],
@@ -129,7 +129,7 @@ Page({
     })
     const childComp = this.selectComponent('#topTip');
     if (childComp) {
-      childComp.initNotice()
+      childComp.initNotices()
     }
     // #endif
 
@@ -547,7 +547,8 @@ Page({
           latitude,
           longitude,
           scale: 17,
-          rotate: 0
+          rotate: 0,
+          showMapLocation: true
         })
         wx.setStorageSync('latitude', latitude)
         wx.setStorageSync('longitude', longitude)
@@ -655,7 +656,8 @@ Page({
                     that.setData({
                       longitude,
                       latitude,
-                      scale: 17
+                      scale: 17,
+                      showMapLocation: true
                     })
                   }
                 });

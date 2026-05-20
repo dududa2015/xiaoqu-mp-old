@@ -1,7 +1,7 @@
 <t-popup visible="{{showChooseLocation}}" placement="bottom" style="width: 100%; height: 100%; border-radius: 0; background: transparent;" z-index="999999" placement="top">
     <view class="cotainer">
-        <map style="width: 100%;height:60vh" latitude="{{latitude}}" longitude="{{longitude}}" show-location=" true">
-            <bottom-location position="{{position}}" bottom="{{bottom}}" bind:onLocation="getLocation"></bottom-location>
+        <map style="width: 100%;height:60vh" latitude="{{latitude}}" longitude="{{longitude}}" show-location="{{showMapLocation}}">
+            <bottom-location position="{{position}}" bottom="{{bottom}}" bind:onLocation="onLocation"></bottom-location>
             <view class="search-wrap">
                 <view class="search-bar">
                     <image src="/images/controls/search.png" mode="" />

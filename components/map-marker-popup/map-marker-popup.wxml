@@ -15,7 +15,7 @@
     
     <!-- 地图 -->
     <view class="map-box">
-      <map class="map-comp" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" scale="{{17}}" show-location="{{true}}"></map>
+      <map class="map-comp" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" scale="{{17}}" show-location="{{false}}"></map>
     </view>
 
     <!-- 照片（待审列表 images + presignedGetUrl） -->
