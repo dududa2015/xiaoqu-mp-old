@@ -1,0 +1,64 @@
+<view class="vip-container">
+    <view class="header">
+        <view class="title-wrap flex  f-y-center">
+            <view class="line"></view>
+            <view class="title">会员权益<text class="title-2">(相比小程序)</text></view>
+        </view>
+        <view class="rights-wrap flex f-x-fs f-y-center">
+            <view class="rights" wx:for="{{rightsList}}" wx:key="index">
+                <view class="rights-img-wrap flex f-x-center f-y-center">
+                    <text class="rights-icon">{{item.icon}}</text>
+                </view>
+                <view class="rights-text">{{item.name}}</view>
+            </view>
+        </view>
+    </view>
+    <view class="content ">
+        <view class="title-wrap flex  f-y-center">
+            <view class="line"></view>
+            <view class="title">会员选择</view>
+        </view>
+        <view class="vip-wrap flex">
+            <view class="{{ item.checked ? 'box box-selected':'box'}}" wx:for="{{productList}}" wx:key="productId" bind:tap="onVipChange" data-index="{{index}}">
+                <view class="name">{{item.localizedTitle || item.name}}</view>
+                <view class="price"><text class="price-sign">￥</text>{{item.priceText || item.price}}</view>
+                <view class="original-price" wx:if="{{item.originalPrice && item.originalPrice > item.price}}">￥{{item.originalPriceText || item.originalPrice}}</view>
+                <view class="note">{{item.note}}</view>
+                <view class="recommend" wx:if="{{item.recommend}}"><text class="recommend-text">{{item.recommend}}</text></view>
+            </view>
+        </view>
+    </view>
+
+    <view class="refund-notice">
+        <view class="refund-notice-row">
+            <view class="refund-notice-text-wrap">
+                <text class="refund-text">· 开通即开启自动续费，到期前将自动扣款续费</text>
+                <text class="refund-text">· 可随时在「我的-会员管理」中关闭自动续费</text>
+                <text class="refund-text">· 首次开通成功后会员即时生效，网络波动时可能延迟1~2分钟</text>
+            </view>
+        </view>
+    </view>
+
+    <view class="footer">
+        <view class="agree-checkbox-wrap">
+            <view class="agree-checkbox-row">
+                <t-checkbox block="{{false}}" borderless="{{true}}" value="{{agreedRenew}}" bind:change="onAgreedRenewChange"></t-checkbox>
+                <view class="agree-checkbox-text">
+                    已阅读并同意
+                    <text class="agree-link" catch:tap="toUseAgreement">《会员服务协议》</text>
+                    和
+                    <text class="agree-link" catch:tap="toDaikouAgreement">《自动续费协议》</text>
+                </view>
+            </view>
+        </view>
+        <button
+            type="primary"
+            style="background-color: rgba(219, 179, 122, 1);"
+            bind:tap="onPurchase"
+            disabled="{{paying || !currentProduct || !agreedRenew}}"
+            loading="{{paying}}"
+        >
+            {{paying ? '支付中...' : purchaseButtonText}}
+        </button>
+    </view>
+</view>

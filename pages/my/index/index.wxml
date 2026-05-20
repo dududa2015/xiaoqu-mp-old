@@ -19,6 +19,8 @@
           </t-tag>
         </view>
       </t-cell>
+      <t-cell title="会员管理" hover arrow left-icon="/images/my/vip-management.png" url="/pages/android/vip-manage/vip-manage">
+      </t-cell>
       <t-cell title="缴费记录" hover arrow url="/pages/android/order/list/list">
         <image src="/images/my/pay.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>

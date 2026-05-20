@@ -191,7 +191,7 @@ Page({
       })
       // #else
       wx.navigateTo({
-        url: '/pages/android/vip/vip',
+        url: '/pages/android/vip-daikou/vip-daikou',
       })
       // #endif
     }

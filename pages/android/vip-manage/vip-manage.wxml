@@ -1,0 +1,74 @@
+<view class="manage-container">
+  <block wx:if="{{memberInfo.isVip}}">
+    <view class="status-card">
+      <view class="status-header">
+        <view>
+          <view class="status-title">VIP 会员</view>
+          <view class="status-plan">{{memberInfo.planName}}</view>
+        </view>
+        <t-tag theme="success" variant="light" size="small">生效中</t-tag>
+      </view>
+      <view class="status-body">
+        <view class="status-item">
+          <text class="status-label">到期时间</text>
+          <text class="status-value">{{memberInfo.expireDate}}</text>
+        </view>
+        <view class="status-item">
+          <text class="status-label">剩余天数</text>
+          <text class="status-value">{{memberInfo.daysLeft}} 天</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-title">自动续费</view>
+    <view class="cell-group">
+      <t-cell-group>
+        <t-cell title="自动续费">
+          <t-switch
+            slot="note"
+            value="{{memberInfo.autoRenewEnabled}}"
+            size="small"
+            bind:change="onAutoRenewChange"
+          />
+        </t-cell>
+        <t-cell wx:if="{{memberInfo.autoRenewEnabled}}" title="下次扣费时间">
+          <text slot="note" class="cell-note">{{memberInfo.nextChargeDate}}</text>
+        </t-cell>
+        <t-cell wx:if="{{memberInfo.autoRenewEnabled}}" title="下次扣费金额">
+          <text slot="note" class="cell-note">¥{{memberInfo.nextChargeAmount}}</text>
+        </t-cell>
+        <t-cell title="扣费方式">
+          <text slot="note" class="cell-note">{{memberInfo.payMethod}}</text>
+        </t-cell>
+        <t-cell title="签约时间">
+          <text slot="note" class="cell-note-muted">{{memberInfo.signedDate}}</text>
+        </t-cell>
+      </t-cell-group>
+    </view>
+
+    <view class="tips-card">
+      <view class="tips-title">温馨提示</view>
+      <text class="tips-text">· 关闭自动续费后，当前会员权益不受影响，到期后将不再自动扣款</text>
+      <text class="tips-text">· 如需取消下一周期扣款，请至少提前 24 小时关闭自动续费</text>
+      <text class="tips-text">· 也可在微信「我 - 服务 - 钱包 - 支付设置 - 自动续费」中管理</text>
+      <text class="tips-text tips-link" bind:tap="toDaikouAgreement">· 查看《自动续费协议》</text>
+    </view>
+
+    <view class="section-title">更多</view>
+    <view class="cell-group">
+      <t-cell-group>
+        <t-cell title="缴费记录" hover arrow bind:tap="toOrderList" />
+        <t-cell title="变更订阅方案" hover arrow bind:tap="toVipDaikou" />
+      </t-cell-group>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="empty-card">
+      <view class="empty-icon">👑</view>
+      <text class="empty-title">暂未开通会员</text>
+      <text class="empty-desc">开通连续包月，享受免广告、个人地图等专属权益</text>
+      <t-button theme="primary" size="large" bind:tap="toVipDaikou">立即开通</t-button>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,24 @@
+@import "../vip/vip.wxss";
+
+.agree-checkbox-wrap {
+  margin-bottom: 16rpx;
+  padding: 0 8rpx;
+  text-align: left;
+}
+
+.agree-checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8rpx;
+}
+
+.agree-checkbox-text {
+  flex: 1;
+  font-size: 24rpx;
+  line-height: 36rpx;
+  color: rgba(50, 50, 51, 1);
+}
+
+.agree-link {
+  color: rgba(22, 93, 255, 1);
+}

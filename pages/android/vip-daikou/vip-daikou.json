@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "t-checkbox": "tdesign-miniprogram/checkbox/checkbox",
+    "navigation-bar": "/components/navigation-bar/navigation-bar"
+  },
+  "navigationBarTitleText": "自动续费会员"
+}
