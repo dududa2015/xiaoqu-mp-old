@@ -5,7 +5,7 @@
     <view class="button-desc">未注册的手机号将自动注册并登录</view> -->
   <view class="logo-wrap">
     <image class="logo-img" src="https://c-ssl.duitang.com/uploads/blog/202503/11/y9SD3p84tbdGzxx.png"></image>
-    <view class="logo-text">小区楼号地图</view>
+    <view class="logo-text">小区楼号</view>
   </view>
   <view class="input-wrap">
     <t-input prefixIcon="user" value="{{userId}}" placeholder="请输入小程序用户编号" maxlength="20" borderless bind:change="onUserIdInput" />

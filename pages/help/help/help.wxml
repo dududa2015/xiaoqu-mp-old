@@ -38,14 +38,14 @@
 
     <view class="subsection">
       <view class="subsection-title">2. 文档目的</view>
-      <view class="content">详细介绍小区楼号地图小程序的功能模块、操作步骤及注意事项，解答用户在使用过程中可能遇到的常见问题，确保用户能够轻松上手、熟练运用小程序各项功能。</view>
+      <view class="content">详细介绍小区楼号的功能模块、操作步骤及注意事项，解答用户在使用过程中可能遇到的常见问题，确保用户能够轻松上手、熟练运用小程序各项功能。</view>
     </view>
   </view>
 
   <!-- 二、核心功能概述 -->
   <view class="section" id="overview">
     <view class="section-title">二、核心功能概述</view>
-    <view class="content">小区楼号地图小程序是一款专注于小区内导航与信息查询的工具类应用，整合了楼号标注、设施定位、路线导航等核心功能，具体包括：</view>
+    <view class="content">小区楼号是一款专注于小区内导航与信息查询的工具类应用，整合了楼号标注、设施定位、路线导航等核心功能，具体包括：</view>
     <view class="feature-list">
       <view class="feature-item">精准标注小区内所有楼号及单元、楼层信息，区分易混淆楼栋；</view>
       <view class="feature-item">全面展示小区出入口、公厕、各类设施等关键地点；</view>

@@ -64,7 +64,7 @@ Component({
     toShare() {
       console.log('onShare')
       wx.miniapp.shareWebPageMessage({
-        title: '小区楼号地图',
+        title: '小区楼号',
         description: '专注于提供小区楼栋号数字化查询服务​',
         thumbPath: '/images/icon-83.5@2x.png',
         webpageUrl: 'https://apps.apple.com/us/app/%E5%B0%8F%E5%8C%BA%E6%A5%BC%E5%8F%B7%E5%9C%B0%E5%9B%BE-%E5%BF%AB%E9%80%92%E5%A4%96%E5%8D%96%E6%9E%81%E9%80%9F%E5%AF%BC%E8%88%AA/id6743986452',
