@@ -80,9 +80,13 @@ Page({
   onLoad() {
     this.getWindowInfo()
     // 仅首次安装（无历史定位缓存）时不自动定位，避免启动即读取位置；用户可点底部定位按钮
+    // #if MP || IOS
+    this.getLocation()
+    // #else
     if (this.hasStoredLocation()) {
       this.getLocation()
     }
+    // #endif
     this.getPadding()
     this.getStatusBar()
 

@@ -142,7 +142,10 @@
     transition: all 0.2s ease;
     box-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.04);
 }
-
+.img {
+  width: 16px;
+  height: 16px;
+}
 .action-btn:active {
     transform: scale(0.92);
     background: #e5e7eb;

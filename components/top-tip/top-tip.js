@@ -30,7 +30,11 @@ Component({
 
       if (this.isMpEnvironment()) {
         const systemInfo = wx.getSystemInfoSync()
-        notices = this.getMpNotices(systemInfo)
+        const deviceInfo = wx.getDeviceInfo ? wx.getDeviceInfo() : {}
+        notices = this.getMpNotices({
+          ...systemInfo,
+          brand: deviceInfo.brand || systemInfo.brand
+        })
       } else {
         const systemInfo = wx.getSystemInfoSync()
         const platform = this.getPlatform(systemInfo)
@@ -41,15 +45,11 @@ Component({
     },
 
     isMpEnvironment() {
-      // #ifdef MP
+      // #if MP
       return true
-      // #endif
-      
-      // #ifdef APP
+      // #else
       return false
       // #endif
-      
-      return true
     },
 
     getPlatform(systemInfo) {
@@ -60,8 +60,23 @@ Component({
     },
 
     getMpNotices(systemInfo) {
-      const isIphone = systemInfo.platform === 'ios' || systemInfo.model.indexOf('iPhone') > -1
-      return isIphone ? ['苹果App已上线，欢迎下载 →'] : ['安卓App已重新上线，欢迎下载 →']
+      const { platform = '', model = '', brand = '' } = systemInfo
+      const modelLower = model.toLowerCase()
+      const brandLower = brand.toLowerCase()
+
+      if (platform === 'ios' || modelLower.includes('iphone')) {
+        return ['苹果 App 已上线，欢迎下载 →']
+      }
+
+      if (brandLower.includes('xiaomi') || brandLower.includes('redmi')) {
+        return ['小米应用商店已上架，欢迎下载 →']
+      }
+
+      if (brandLower.includes('oppo') || brandLower.includes('realme') || brandLower.includes('oneplus')) {
+        return ['OPPO 软件商店已上架，欢迎下载 →']
+      }
+
+      return ['安卓 App 已重新上线，欢迎下载 →']
     },
 
     getAppNotices(userInfo, platform) {

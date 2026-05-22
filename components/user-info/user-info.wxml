@@ -23,7 +23,8 @@
                 </view>
             </view>
             <view class="action-btn">
-                <t-icon name="edit" size="32rpx" color="#4b5563" />
+              <image src="/images/poi-detail/edit.png" class="img" mode="" />
+                <!-- <t-icon name="edit" size="32rpx" color="#4b5563" /> -->
             </view>
         </view>
         <!-- #if NATIVE -->
