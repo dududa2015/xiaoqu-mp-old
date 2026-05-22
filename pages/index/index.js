@@ -94,8 +94,6 @@ Page({
     this.initStorage()
     //插屏广告
     // #if MP
-
-    this.showAppNotice()
     setTimeout(() => {
       //初始化插屏和激励视频广告
       this.initCPAd()
@@ -159,43 +157,6 @@ Page({
         key: 'poi',
       })
     }
-  },
-  //显示app下载提示框
-  showAppNotice() {
-    // 如果已经显示过，不再显示
-    if (wx.getStorageSync('showAppNotice')) {
-      return
-    }
-
-    const systemInfo = wx.getDeviceInfo()
-    const isIOS = systemInfo.platform === 'ios' || (systemInfo.model && systemInfo.model.includes('iPhone'))
-
-    const config = isIOS ? {
-      title: '苹果App下载',
-      content: '苹果App已在App Store上架，欢迎下载体验',
-      url: '/pages/my/app/ios/ios'
-    } : {
-      title: '安卓App下载',
-      content: '安卓🤖App已在腾讯应用宝上架，欢迎下载体验',
-      url: '/pages/my/app/android/android'
-    }
-    wx.showModal({
-      title: config.title,
-      content: config.content,
-      confirmText: '立即下载',
-      cancelText: '不再提示',
-      cancelColor: '#808080',
-      success: (res) => {
-        // 无论用户选择什么，都标记为已显示，避免重复打扰
-        wx.setStorageSync('showAppNotice', true)
-
-        if (res.confirm) {
-          wx.navigateTo({
-            url: config.url,
-          })
-        }
-      }
-    })
   },
   //检查小区边界功能是否过期
   checkCommunityDetailExpired() {

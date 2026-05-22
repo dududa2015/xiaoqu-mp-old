@@ -35,7 +35,7 @@ page {
 }
 
 .t-notice-bar__content--vertical-item {
-  font-size: 26rpx !important;
+  font-size: 28rpx !important;
   color: #FF4500 !important;
   font-weight: 600;
 }
