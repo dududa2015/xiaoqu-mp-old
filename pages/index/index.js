@@ -119,15 +119,9 @@ Page({
     this.amapSearch()
     // #if NATIVE
     this.initLocMarkerIcon()
-    // 使用 waitForUserInfo 替代 setTimeout，确保 userInfo 就绪后再检查 VIP
-    this.waitForUserInfo().then(() => {
+    // 无论 userInfo 就绪或超时（未登录），都需检查 VIP/试用状态
+    this.waitForUserInfo().finally(() => {
       this.checkVip()
-    }).catch(() => {
-      // 超时后跳转到登录页面
-      //如果没有获取到用户信息，且试用无效就跳转到登录页面--一般不会出现这种情况，先注释
-      // if(!wx.getStorageSync('deviceTrialIsActive')) {
-      //   checkLoginAndNavigate()
-      // }
     })
     const childComp = this.selectComponent('#topTip');
     if (childComp) {
@@ -230,11 +224,12 @@ Page({
     // 统一取出当前平台的会员到期时间
     let vipExpiredDate = null
     // #if IOS
-    vipExpiredDate = userInfo.iosVipExpiredDate || null
+    vipExpiredDate = userInfo?.iosVipExpiredDate || null
     // #elif ANDROID
-    vipExpiredDate = userInfo.androidVipExpiredDate || null
+    vipExpiredDate = userInfo?.androidVipExpiredDate || null
     // #endif
 
+    console.log('checkVip:vipExpiredDate', vipExpiredDate)
     if (vipExpiredDate) {
       const targetDate = new Date(vipExpiredDate)
       const currentDate = new Date()

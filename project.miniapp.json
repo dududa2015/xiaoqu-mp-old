@@ -27,7 +27,7 @@
       "xhdpi": "",
       "xxhdpi": ""
     },
-    "enableVConsole": "close",
+    "enableVConsole": "open",
     "privacy": {
       "enable": true,
       "template": "miniapp-privacy-android.json"
@@ -141,5 +141,9 @@
         "pluginVersion": "1.0.0"
       }
     ]
+  },
+  "mini-ohos": {
+    "enableDebug": true,
+    "sdkVersion": "0.6.0"
   }
 }

@@ -117,7 +117,13 @@ App({
   // Apple登录
   async appleLogin() {
     const userId = wx.getStorageSync('userId')
-    if (!userId) return
+    if (!userId) {
+      if (this._resolveUserInfo) {
+        this._resolveUserInfo(null)
+        this._resolveUserInfo = null
+      }
+      return
+    }
 
     try {
       const res = await getAppleUserInfo({
@@ -126,6 +132,10 @@ App({
       this.cacheUserData(res)
     } catch (error) {
       console.error('Apple登录失败:', error)
+      if (this._resolveUserInfo) {
+        this._resolveUserInfo(null)
+        this._resolveUserInfo = null
+      }
     }
   },
   //获取设备id==>每次卸载重装后的deviceId都不一样，这个方法没有存在的意义
