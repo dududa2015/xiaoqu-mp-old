@@ -46,6 +46,10 @@
         <image src="/images/poi-detail/thumb-down-grey.png" class="img" mode="" />
         <view class="b-text-grey">{{bad}}</view>
       </view> -->
+      <view class="thumb-wrap" wx:if="{{showFavoriteButton}}" bind:tap="onToggleFavorite">
+        <image src="/images/poi-detail/{{isFavorite ? 'fav' : 'fav-no'}}.png" class="img" mode="" />
+        <view class="b-text">{{isFavorite ? '已收藏' : '收藏'}}</view>
+      </view>
       <view class="thumb-wrap" wx:if="{{canEditUserMarker && markerType<6}}" bind:tap="onEdit">
         <image src="/images/poi-detail/edit.png" class="img" mode="" />
         <view class="b-text">修改</view>

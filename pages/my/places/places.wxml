@@ -1,0 +1,23 @@
+<view class="content">
+  <t-cell-group wx:if="{{list.length > 0}}">
+    <t-cell
+      wx:for="{{list}}"
+      wx:key="placeKey"
+      title="{{item.name}}"
+      note="{{item.typeLabel}}"
+      hover
+      arrow
+      bind:tap="onItemTap"
+      data-item="{{item}}"
+    >
+      <view slot="description" class="cell-desc" wx:if="{{item.subtitle && item.subtitle !== item.typeLabel}}">{{item.subtitle}}</view>
+      <view slot="right-icon" class="remove-btn" catch:tap="onRemoveItem" data-item="{{item}}">删除</view>
+    </t-cell>
+  </t-cell-group>
+
+  <view class="empty" wx:else>
+    <view class="empty-text">暂无收藏</view>
+  </view>
+
+  <view class="loading-text" wx:if="{{loading}}">正在加载...</view>
+</view>

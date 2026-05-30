@@ -28,6 +28,12 @@
     <!-- #endif -->
 
     <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
+      <t-cell title="我的收藏" hover arrow url="/pages/my/places/places">
+        <image src="/images/my/fav.png" class="left-icon" mode="" slot="left-icon" />
+      </t-cell>
+    </t-cell-group>
+
+    <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
       <t-cell title="使用帮助" hover arrow url="/pages/help/help/help">
         <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>

@@ -10,6 +10,14 @@ import {
 import {
   getBicycleRoute
 } from '../../apis/amap-apis'
+import {
+  isFavorite,
+  toggleFavorite
+} from '../../apis/place-api'
+const {
+  buildMarkerPlaceRecord,
+  withUserId
+} = require('../../utils/place-record')
 const { cosImageUrlThumb200 } = require('../../utils/cos-image-url')
 Component({
   /**
@@ -106,6 +114,9 @@ Component({
     isYours: false, //是否自己的标记
     poiCommunity: '',
     markerImages: [],
+    isFavorite: false,
+    showFavoriteButton: false,
+    currentPlaceKey: '',
   },
 
   /**
@@ -152,10 +163,6 @@ Component({
           isUserMarker: true,
           deleted: result.deleted
         })
-        that.triggerEvent('moveToCenter', {
-          latitude: result.lat,
-          longitude: result.lng,
-        });
         let userInfo = wx.getStorageSync('userInfo')
         let showFeedback = wx.getStorageSync('userId') !== result.userId
         // #if MP
@@ -184,7 +191,49 @@ Component({
           nickName: result.userId === wx.getStorageSync('userId') ? '您' : nickName,
           createdDate: this.convertDate(result.createdDate),
           markerImages,
+          showFavoriteButton: !!wx.getStorageSync('userId'),
         })
+        that.syncFavoriteState(result)
+      })
+    },
+    syncFavoriteState(result) {
+      const record = withUserId(buildMarkerPlaceRecord(result))
+      if (!record) {
+        return
+      }
+      this.setData({
+        currentPlaceKey: record.placeKey
+      })
+      isFavorite({
+        userId: record.userId,
+        placeKey: record.placeKey
+      }).then((res) => {
+        this.setData({
+          isFavorite: !!(res && res.isFavorite)
+        })
+      }).catch((error) => {
+        console.error('isFavorite failed', error)
+      })
+    },
+    onToggleFavorite() {
+      if (!checkLoginAndNavigate()) {
+        return
+      }
+      const record = withUserId(buildMarkerPlaceRecord(this.poiInfo))
+      if (!record) {
+        return
+      }
+      toggleFavorite(record).then((res) => {
+        this.setData({
+          isFavorite: !!(res && res.isFavorite),
+          currentPlaceKey: record.placeKey
+        })
+        wx.showToast({
+          title: res && res.isFavorite ? '已收藏' : '已取消收藏',
+          icon: 'none'
+        })
+      }).catch((error) => {
+        console.error('toggleFavorite failed', error)
       })
     },
     normalizeMarkerImages(images) {

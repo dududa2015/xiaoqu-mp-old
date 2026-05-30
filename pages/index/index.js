@@ -13,7 +13,8 @@ import {
 import {
   buildMarkers,
   buildPolyline,
-  buildPolygon
+  buildPolygon,
+  applyMarkerSelectedStyle
 } from '../../utils/map'
 
 import {
@@ -124,6 +125,7 @@ Page({
   },
   onShow() {
     this.amapSearch()
+    this.openPlaceFromStorage()
     // #if NATIVE
     this.initLocMarkerIcon()
     // 等待登录态与设备试用状态就绪后再检查，避免首装竞态误弹窗
@@ -189,6 +191,78 @@ Page({
       wx.removeStorage({
         key: 'poi',
       })
+    }
+  },
+  openPlaceFromStorage() {
+    const place = wx.getStorageSync('openPlace')
+    if (!place || !place.kind) {
+      return
+    }
+    wx.removeStorageSync('openPlace')
+
+    if (place.kind === 'marker' && place.xId) {
+      const xId = parseInt(place.xId, 10)
+      if (!isNaN(xId) && xId > 0) {
+        this.hideTabBar()
+        this.resetMarker()
+        this.resetPolyline()
+        const latitude = place.lat ? parseFloat(place.lat) : null
+        const longitude = place.lng ? parseFloat(place.lng) : null
+        const mapUpdate = latitude && longitude ? {
+          latitude,
+          longitude,
+          scale: 17
+        } : {}
+        this.setData({
+          xId,
+          poiDetail: {},
+          showPOI: true,
+          showAdd: false,
+          showLocation: false,
+          ...mapUpdate
+        }, () => {
+          this.updateSelectedMarkerHighlight()
+        })
+        if (latitude && longitude) {
+          this.moveToLocation(latitude, longitude)
+          wx.setStorageSync('lastLatitude', latitude)
+          wx.setStorageSync('lastLongitude', longitude)
+          this.getAroundList(latitude, longitude)
+          this.getAroundCommunityList(latitude, longitude)
+        }
+      }
+      return
+    }
+
+    if (place.kind === 'community' && place.xId) {
+      if (place.lat && place.lng) {
+        const latitude = parseFloat(place.lat)
+        const longitude = parseFloat(place.lng)
+        this.setData({
+          latitude,
+          longitude,
+          scale: 17
+        })
+        this.moveToLocation(latitude, longitude)
+        wx.setStorageSync('lastLatitude', latitude)
+        wx.setStorageSync('lastLongitude', longitude)
+        this.getAroundList(latitude, longitude)
+        this.getAroundCommunityList(latitude, longitude)
+      }
+      this.getCommunityFullDetail(String(place.xId))
+      return
+    }
+
+    if (place.kind === 'search' && place.lat && place.lng) {
+      const latitude = parseFloat(place.lat)
+      const longitude = parseFloat(place.lng)
+      this.getMapContext().moveToLocation({
+        latitude,
+        longitude
+      })
+      this.addMarker2Map(latitude, longitude)
+      this.getAroundList(latitude, longitude)
+      this.getAroundCommunityList(latitude, longitude)
     }
   },
   //检查小区边界功能是否过期
@@ -876,6 +950,8 @@ Page({
       showAdd: false,
       showLocation: false,
       showGrid: false
+    }, () => {
+      this.updateSelectedMarkerHighlight()
     })
   },
   //根据点击的坐标添加小区、门、边界。
@@ -1006,6 +1082,8 @@ Page({
       showAdd: false,
       showLocation: false,
       showGrid: false
+    }, () => {
+      this.updateSelectedMarkerHighlight()
     })
   },
   onMapTap() {
@@ -1177,6 +1255,7 @@ Page({
     this.setData({
       markers
     })
+    this.updateSelectedMarkerHighlight()
   },
   //去掉id为-1的标记
   resetMarker() {
@@ -1419,6 +1498,24 @@ Page({
     const match = dateStr.match(/\d+/);
     return match ? parseInt(match[0], 10) : 0;
   },
+  updateSelectedMarkerHighlight() {
+    const selectedId = this.data.showPOI && this.data.xId > 0 ? parseInt(this.data.xId, 10) : 0
+    if (!Array.isArray(this.data.markers) || this.data.markers.length === 0) {
+      return
+    }
+    const markers = this.data.markers.map((marker) => {
+      const isSelected = selectedId > 0 && marker.id === selectedId
+      const cloned = { ...marker }
+      if (cloned.label) {
+        cloned.label = { ...cloned.label }
+      }
+      if (cloned.callout) {
+        cloned.callout = { ...cloned.callout }
+      }
+      return applyMarkerSelectedStyle(cloned, isSelected)
+    })
+    this.setData({ markers })
+  },
   //把db中的周围的数据添加到地图的标记上
   addAroundList2Map(list) {
     let markers = this.data.markers
@@ -1443,6 +1540,8 @@ Page({
     this.setData({
       markers,
       polyline
+    }, () => {
+      this.updateSelectedMarkerHighlight()
     })
   },
   //判断路线是否在当前地图中,用记录中的lat和lng来判断
@@ -1830,6 +1929,8 @@ Page({
       showPOI: false,
       showAdd: true,
       showLocation: true
+    }, () => {
+      this.updateSelectedMarkerHighlight()
     })
   },
   moveToCenter(event) {
@@ -1847,14 +1948,18 @@ Page({
   },
   //编辑用户标记点
   onUserMarkerEdit(event) {
+    const detail = event.detail
     this.setData({
-      markerTypeIndex: event.detail.type,
+      markerTypeIndex: detail.type,
       showForm: true,
       showCenterMarker: true,
       showAdd: false,
       showLocation: false,
-      markerDetail: event.detail
+      markerDetail: detail
     })
+    if (detail.lat && detail.lng) {
+      this.moveToLocation(parseFloat(detail.lat), parseFloat(detail.lng))
+    }
   },
   //反馈
   onFeedback(event) {

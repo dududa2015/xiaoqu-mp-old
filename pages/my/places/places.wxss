@@ -1,0 +1,43 @@
+.content {
+  padding: 24rpx;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16rpx;
+}
+
+.toolbar-text {
+  font-size: 26rpx;
+  color: #0074FE;
+}
+
+.cell-desc {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
+
+.remove-btn {
+  font-size: 24rpx;
+  color: #999;
+  padding: 0 8rpx;
+}
+
+.empty {
+  padding: 120rpx 0;
+  text-align: center;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.loading-text {
+  text-align: center;
+  font-size: 24rpx;
+  color: #999;
+  padding: 24rpx 0;
+}

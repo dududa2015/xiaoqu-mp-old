@@ -1,4 +1,35 @@
-const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted) => {
+const MARKER_LABEL_FONT_SIZE = 11
+const MARKER_LABEL_FONT_SIZE_SELECTED = 14
+const MARKER_LABEL_PADDING = 3
+const MARKER_LABEL_BORDER_WIDTH = 0.4
+const MARKER_LABEL_BORDER_COLOR = '#f5f5f5'
+const MARKER_LABEL_ANCHOR_Y = -16
+const MARKER_LABEL_ANCHOR_Y_SELECTED = -17
+
+function applyMarkerSelectedStyle(marker, selected) {
+  if (!marker || marker.id <= 0) {
+    return marker
+  }
+  const fontSize = selected ? MARKER_LABEL_FONT_SIZE_SELECTED : MARKER_LABEL_FONT_SIZE
+  const anchorY = selected ? MARKER_LABEL_ANCHOR_Y_SELECTED : MARKER_LABEL_ANCHOR_Y
+
+  if (marker.label) {
+    const name = marker.label.content || ''
+    marker.label.fontSize = fontSize
+    marker.label.padding = MARKER_LABEL_PADDING
+    marker.label.borderWidth = MARKER_LABEL_BORDER_WIDTH
+    marker.label.borderColor = MARKER_LABEL_BORDER_COLOR
+    marker.label.anchorY = anchorY
+    marker.label.anchorX = getAnchorX(name, fontSize)
+  }
+  if (marker.callout) {
+    marker.callout.fontSize = fontSize
+  }
+  marker.zIndex = selected ? 2 : 0
+  return marker
+}
+
+const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted, selected = false) => {
   let bgColor = getBgColorByType(type)
   let anchorX = getAnchorX(name)
   if (deleted === -1) {
@@ -18,8 +49,8 @@ const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted) => 
     markers.callout = null
     markers.label = {
       content: name,
-      borderWidth: 0.4,
-      borderColor: "#f5f5f5",
+      borderWidth: MARKER_LABEL_BORDER_WIDTH,
+      borderColor: MARKER_LABEL_BORDER_COLOR,
       borderRadius: 8,
       bgColor,
       color: "#fff",
@@ -41,13 +72,13 @@ const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted) => 
     }
     markers.label = null
   }
-  return markers
+  return applyMarkerSelectedStyle(markers, selected)
 }
 
-function getAnchorX(name) {
+function getAnchorX(name, fontSize = MARKER_LABEL_FONT_SIZE) {
   if (getApp().globalData.isAndroid) {
     let len = getTextByteLen(name)
-    return -(len + 2) * 11 * 0.25
+    return -(len + 2) * fontSize * 0.25
   } else {
     return 0
   }
@@ -143,5 +174,6 @@ function buildPolylineColor(type) {
 module.exports = {
   buildMarkers,
   buildPolyline,
-  buildPolygon
+  buildPolygon,
+  applyMarkerSelectedStyle
 }

@@ -1,6 +1,6 @@
 // api URL：仅开发者工具走测试；正式版、体验版均走生产
 const API_URL_PROD = 'https://mp.zhuzixi.cn/api'
-const API_URL_TEST = 'https://mp.zhuzixi.cn/api'
+const API_URL_TEST = 'https://test.zhuzixi.cn/api'
 // const API_URL_TEST = 'http://localhost:5213/api'
 
 function resolveApiUrl() {
@@ -59,9 +59,14 @@ const request = (params) => {
     ...securityHeaders
   };
 
-  wx.showLoading({
-    title: '正在加载',
-  })
+  // GET 默认不显示 loading，POST 保留；silent: true 可强制关闭
+  const shouldShowLoading = !params.silent && method.toUpperCase() === 'POST'
+
+  if (shouldShowLoading) {
+    wx.showLoading({
+      title: '正在加载',
+    })
+  }
 
   return new Promise((resolve, reject) => {
     wx.request({
@@ -158,7 +163,9 @@ const request = (params) => {
         reject(err);
       },
       complete() {
-        wx.hideLoading()
+        if (shouldShowLoading) {
+          wx.hideLoading()
+        }
       },
     });
   });
