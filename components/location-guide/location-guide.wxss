@@ -1,0 +1,116 @@
+.location-guide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 12;
+}
+
+.guide-anchor {
+  position: absolute;
+  width: 76rpx;
+  height: 76rpx;
+  pointer-events: none;
+}
+
+.pulse-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 76rpx;
+  height: 76rpx;
+  margin-top: -38rpx;
+  margin-left: -38rpx;
+  border-radius: 24rpx;
+  border: 3rpx solid rgba(0, 116, 254, 0.5);
+  background-color: rgba(0, 116, 254, 0.15);
+  animation: location-pulse 2s ease-out infinite;
+}
+
+.pulse-ring-2 {
+  animation-delay: 1s;
+}
+
+.bubble-panel {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+
+.bubble-panel-right {
+  right: 100%;
+  flex-direction: row;
+  margin-right: 20rpx;
+}
+
+.bubble-panel-left {
+  left: 100%;
+  flex-direction: row-reverse;
+  margin-left: 20rpx;
+}
+
+.bubble {
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.96);
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+}
+
+.bubble-text {
+  font-size: 26rpx;
+  line-height: 1.5;
+  color: #333333;
+  white-space: nowrap;
+}
+
+.bubble-action {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #0074FE;
+}
+
+.shadow {
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  flex-shrink: 0;
+}
+
+.arrow-right {
+  border-top: 12rpx solid transparent;
+  border-bottom: 12rpx solid transparent;
+  border-left: 14rpx solid rgba(255, 255, 255, 0.96);
+  filter: drop-shadow(2rpx 0 2rpx rgba(0, 0, 0, 0.06));
+}
+
+.arrow-left {
+  border-top: 12rpx solid transparent;
+  border-bottom: 12rpx solid transparent;
+  border-right: 14rpx solid rgba(255, 255, 255, 0.96);
+  filter: drop-shadow(-2rpx 0 2rpx rgba(0, 0, 0, 0.06));
+}
+
+@keyframes location-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+
+  70% {
+    transform: scale(1.65);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1.65);
+    opacity: 0;
+  }
+}

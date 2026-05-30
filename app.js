@@ -22,7 +22,10 @@ App({
     padding: 3,
     mapType: 'amap',
     // userInfo 就绪 Promise
-    userInfoReady: null
+    userInfoReady: null,
+    // 设备试用状态是否已初始化完成
+    deviceTrialReady: false,
+    deviceTrialReadyPromise: null
   },
 
   onLaunch(options) {
@@ -39,9 +42,31 @@ App({
     this.autoUpdate()
     this.login()
     // #else
+    this.initDeviceTrialReady()
     this.appleLogin()
     this.getDeviceId()
     // #endif
+  },
+
+  initDeviceTrialReady() {
+    if (this.globalData.deviceTrialReady) {
+      this.globalData.deviceTrialReadyPromise = Promise.resolve()
+      return
+    }
+
+    let resolveDeviceTrialReady = null
+    this.globalData.deviceTrialReadyPromise = new Promise((resolve) => {
+      resolveDeviceTrialReady = resolve
+    })
+    this._resolveDeviceTrialReady = resolveDeviceTrialReady
+  },
+
+  markDeviceTrialReady() {
+    this.globalData.deviceTrialReady = true
+    if (this._resolveDeviceTrialReady) {
+      this._resolveDeviceTrialReady()
+      this._resolveDeviceTrialReady = null
+    }
   },
 
   // 初始化 userInfo 就绪 Promise
@@ -162,7 +187,10 @@ App({
           // #endif
           const end = Date.now();
           console.log(`getDeviceId 耗时：${end - start}ms`);
-          // ios plugin 20C13C69-B33C-4641-8074-C2F438A28430
+          if (!deviceId) {
+            that.markDeviceTrialReady()
+            return
+          }
           that.addUserDeviceLog()
           that.initDeviceTrial(deviceId)
         },
@@ -170,7 +198,7 @@ App({
           console.log('启动getDeviceId插件失败')
           const end = Date.now();
           console.log(`getDeviceId 耗时：${end - start}ms`);
-          // 启动插件失败
+          that.markDeviceTrialReady()
         }
       })
     } else {
@@ -193,9 +221,12 @@ App({
     }
   },
 
-  // 初始化设备试用期：仅针对 Android，一机一次 3 天试用
+  // 初始化设备试用期：Native App 一机一次 3 天试用
   async initDeviceTrial(deviceId) {
-    if (!deviceId) return
+    if (!deviceId) {
+      this.markDeviceTrialReady()
+      return
+    }
 
     try {
       // 1. 查询当前设备是否已有试用记录
@@ -232,6 +263,8 @@ App({
     } catch (error) {
       console.error('initDeviceTrial error:', error)
       // 出错时不影响正常使用，只是不再自动开试用
+    } finally {
+      this.markDeviceTrialReady()
     }
   },
 

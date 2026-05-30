@@ -17,9 +17,10 @@
   <!-- #endif -->
   <!-- 底部添加和定位按钮 -->
   <bottom-add position="{{position}}" bind:onAdd="onAdd" wx:if="{{showAdd}}"></bottom-add>
-  <bottom-location position="{{position}}" bottom="{{bottom}}" bind:onLocation="getLocation" wx:if="{{showLocation}}"></bottom-location>
+  <location-guide visible="{{showLocationGuide}}" position="{{position}}" bottom="{{bottom}}" bind:close="onLocationGuideClose"></location-guide>
+  <bottom-location position="{{position}}" bottom="{{bottom}}" highlight="{{showLocationGuide}}" bind:onLocation="getLocation" wx:if="{{showLocation}}"></bottom-location>
   <ad-custom unit-id="adunit-49b176d9a7ef45d4" wx:if="{{!isVip}}" style="position: absolute;bottom: 0; {{position==='right'?'left':'right'}}: 0"></ad-custom>
-  <poi-detail showPOI="{{showPOI}}" xId="{{xId}}" poiDetail="{{poiDetail}}" windowInfo="{{windowInfo}}" bind:moveToCenter="moveToCenter" bind:getPolyline="getPolyline" bind:onDelete="onUserMarkerDelete" bind:onEdit="onUserMarkerEdit" bind:onFeedback="onFeedback" bind:onClose="onClosePoi"></poi-detail>
+  <poi-detail id="poiDetail" showPOI="{{showPOI}}" xId="{{xId}}" poiDetail="{{poiDetail}}" windowInfo="{{windowInfo}}" bind:moveToCenter="moveToCenter" bind:getPolyline="getPolyline" bind:clearRoutePolyline="clearRoutePolyline" bind:requestRouteAd="onRequestRouteAd" bind:onDelete="onUserMarkerDelete" bind:onEdit="onUserMarkerEdit" bind:onFeedback="onFeedback" bind:onClose="onClosePoi"></poi-detail>
   <marker-add-grid show="{{showGrid}}" bind:getMarkerTypeIndex="getMarkerTypeIndex" bind:createMap="createMap"></marker-add-grid>
   <marker-add markerTypeIndex="{{markerTypeIndex}}" showForm="{{showForm}}" showChooseMarker="{{showChooseMarker}}" markerDetail="{{markerDetail}}" mapCtx="{{mapCtx}}" bind:addUserMarkerByUser="addUserMarkerByUser" bind:updateUserMarkerByUser="updateUserMarkerByUser" bind:showBottomBar="showBottomBar" bind:onFormClose="onFormClose" bind:onChooseMarker="onChooseMarker" bind:onBackChooseMarker="onBackChooseMarker" bind:onFinishChooseMarker="onFinishChooseMarker" bind:onCancelChooseMarker="onCancelChooseMarker"></marker-add>
   <marker-feedback markerDetail="{{markerDetail}}" showFeedback="{{showFeedback}}" bind:onCloseFeedback="onCloseFeedback"></marker-feedback>

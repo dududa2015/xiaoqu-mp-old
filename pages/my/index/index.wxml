@@ -12,16 +12,16 @@
     <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
       <t-cell title="升级会员" hover arrow bind:tap="toVip">
         <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
-        <!-- 会员即将到期：在说明区域增加黄色小标签（与箭头共存） -->
-        <view slot="note" wx:if="{{vipExpiringSoon}}">
-          <t-tag size="small" variant="light" theme="warning">
-            剩 {{vipDaysLeft}} 天
+        <!-- 权益即将到期：VIP 黄色 / 试用 蓝色 -->
+        <view slot="note" wx:if="{{entitlementShowCellNote}}">
+          <t-tag size="small" variant="light" theme="{{entitlementCellNoteTheme}}">
+            {{entitlementCellNoteText}}
           </t-tag>
         </view>
       </t-cell>
-      <t-cell title="会员管理" hover arrow left-icon="/images/my/vip-management.png" url="/pages/android/vip-manage/vip-manage">
+      <t-cell title="会员管理" hover arrow left-icon="/images/my/vip-management.png" bind:tap="toVipManage">
       </t-cell>
-      <t-cell title="缴费记录" hover arrow url="/pages/android/order/list/list">
+      <t-cell title="缴费记录" hover arrow bind:tap="toOrderList">
         <image src="/images/my/pay.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
     </t-cell-group>

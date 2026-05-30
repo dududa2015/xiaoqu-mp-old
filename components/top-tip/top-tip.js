@@ -1,6 +1,7 @@
 import {
   formatTime
 } from '../../utils/util'
+import { getEntitlementStatus, getEntitlementNotice } from '../../utils/entitlement'
 
 Component({
   data: {
@@ -80,25 +81,14 @@ Component({
     },
 
     getAppNotices(userInfo, platform) {
-      const isVip = userInfo.isIOSVip || userInfo.isAndroidVip
-
-      if (platform === 'ANDROID') {
-        const vipExpiredRaw = userInfo.androidVipExpiredDate
-        if (vipExpiredRaw) {
-          const now = new Date()
-          const expiredDate = new Date(vipExpiredRaw)
-          if (expiredDate > now) {
-            const daysLeft = Math.ceil((expiredDate - now) / (1000 * 60 * 60 * 24))
-            if (daysLeft > 0 && daysLeft <= 7) {
-              const dateStr = vipExpiredRaw.toString().slice(0, 10)
-              return [`会员将于 ${dateStr} 到期（剩 ${daysLeft} 天）→`]
-            }
-          }
-        }
+      const notice = getEntitlementNotice()
+      if (notice) {
+        return [notice]
       }
 
-      if (!isVip) {
-        return ['免费试用3天，结束后需要订阅 →']
+      const status = getEntitlementStatus(userInfo)
+      if (status.type === 'lifetime_vip' || status.type === 'vip') {
+        return ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
       }
 
       return ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
@@ -117,25 +107,15 @@ Component({
 
       const systemInfo = wx.getSystemInfoSync()
       const platform = this.getPlatform(systemInfo)
-      const isVip = userInfo.isIOSVip || userInfo.isAndroidVip
-      if (!isVip) {
+      const status = getEntitlementStatus(userInfo)
+      if (status.type !== 'lifetime_vip' && status.type !== 'vip') {
         wx.navigateTo({ url: platform === 'IOS' ? '/pages/ios/vip/vip' : '/pages/android/vip/vip' })
         return
       }
 
-      if (platform === 'ANDROID') {
-        const vipExpiredRaw = userInfo.androidVipExpiredDate
-        if (vipExpiredRaw) {
-          const now = new Date()
-          const expiredDate = new Date(vipExpiredRaw)
-          if (expiredDate > now) {
-            const daysLeft = Math.ceil((expiredDate - now) / (1000 * 60 * 60 * 24))
-            if (daysLeft > 0 && daysLeft <= 7) {
-              wx.navigateTo({ url: '/pages/android/vip/vip' })
-              return
-            }
-          }
-        }
+      if (status.type === 'vip' && status.expiringSoon) {
+        wx.navigateTo({ url: platform === 'IOS' ? '/pages/ios/vip/vip' : '/pages/android/vip/vip' })
+        return
       }
     },
 

@@ -14,6 +14,10 @@ Component({
       type: String,
       value: 'right'
     },
+    highlight: {
+      type: Boolean,
+      value: false
+    },
   },
 
   /**

@@ -100,6 +100,12 @@
     overflow: hidden;
 }
 
+.badge-trial {
+    background: linear-gradient(135deg, #3b82f6 0%, #0074FE 100%);
+    color: #ffffff;
+    box-shadow: 0 2rpx 6rpx rgba(0, 116, 254, 0.25);
+}
+
 .badge-lifetime::before {
     content: '';
     position: absolute;
@@ -152,7 +158,114 @@
     color: #4b5563;
 }
 
-/* 会员信息 */
+/* 权益信息 */
+.entitlement-info {
+    margin-top: 20rpx;
+    position: relative;
+    z-index: 1;
+}
+
+.entitlement-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 10rpx;
+    padding: 14rpx 18rpx;
+    border-radius: 20rpx;
+    border: 1rpx solid transparent;
+}
+
+.entitlement-vip .entitlement-badge-row {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-color: rgba(245, 158, 11, 0.15);
+}
+
+.entitlement-trial .entitlement-badge-row {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-color: rgba(0, 116, 254, 0.15);
+}
+
+.entitlement-expired .entitlement-badge-row {
+    background: #f3f4f6;
+    border-color: #e5e7eb;
+}
+
+.entitlement-label-badge {
+    flex-shrink: 0;
+    padding: 4rpx 14rpx;
+    border-radius: 12rpx;
+    font-size: 20rpx;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.entitlement-vip .entitlement-label-badge {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    box-shadow: 0 2rpx 6rpx rgba(245, 158, 11, 0.25);
+}
+
+.entitlement-trial .entitlement-label-badge {
+    background: linear-gradient(135deg, #3b82f6 0%, #0074FE 100%);
+    box-shadow: 0 2rpx 6rpx rgba(0, 116, 254, 0.25);
+}
+
+.entitlement-expired .entitlement-label-badge {
+    background: #9ca3af;
+    box-shadow: none;
+}
+
+.entitlement-date-text {
+    flex: 1;
+    font-size: 22rpx;
+    font-weight: 500;
+}
+
+.entitlement-vip .entitlement-date-text {
+    color: #92400e;
+}
+
+.entitlement-trial .entitlement-date-text {
+    color: #1e40af;
+}
+
+.entitlement-expired .entitlement-date-text {
+    color: #6b7280;
+}
+
+.entitlement-days-tag {
+    flex-shrink: 0;
+    padding: 6rpx 14rpx;
+    border-radius: 12rpx;
+    font-size: 20rpx;
+    font-weight: 600;
+    color: #ffffff;
+    border: none;
+}
+
+.entitlement-vip .entitlement-days-tag:not(.entitlement-warning):not(.entitlement-expired-tag) {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    box-shadow: 0 2rpx 6rpx rgba(16, 185, 129, 0.25);
+}
+
+.entitlement-trial .entitlement-days-tag:not(.entitlement-warning):not(.entitlement-expired-tag) {
+    background: linear-gradient(135deg, #3b82f6 0%, #0074FE 100%);
+    box-shadow: 0 2rpx 6rpx rgba(0, 116, 254, 0.25);
+}
+
+.entitlement-warning {
+    background: #f59e0b;
+    animation: pulse-warning 2s ease-in-out infinite;
+}
+
+.entitlement-expired-tag {
+    background: #9ca3af;
+}
+
+@keyframes pulse-warning {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.75; }
+}
+
+/* 会员信息（保留旧类名兼容） */
 .vip-info {
     margin-top: 20rpx;
     position: relative;

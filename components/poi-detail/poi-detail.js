@@ -21,6 +21,7 @@ Component({
       value: 0,
       observer(newVal, oldVal) {
         if (newVal > 0) {
+          this.resetRouteState()
           let likeList = wx.getStorageSync('likeList')
 
           this.setData({
@@ -41,6 +42,7 @@ Component({
       value: {},
       observer(newVal, oldVal) {
         if (newVal) {
+          this.resetRouteState()
           this.setData({
             showLike: false,
             showNickName: false,
@@ -95,6 +97,7 @@ Component({
    */
   data: {
     showPolylineButton: false,
+    routeVisible: false,
     walkingMsg: '', //当超出距离时的提示
     distance: '', //距离
     duration: '', //耗时
@@ -238,30 +241,58 @@ Component({
       this.longitude = longitude
     },
 
+    resetRouteState() {
+      this.setData({
+        routeVisible: false,
+        distance: 0,
+        duration: 0,
+        walkingMsg: ''
+      })
+      this.triggerEvent('clearRoutePolyline')
+    },
+
     showPolyline() {
       if (!checkLoginAndNavigate()) {
         return
       }
+      if (this.data.routeVisible) {
+        this.resetRouteState()
+        return
+      }
+      // #if MP
+      const { isRewardedAdActive } = require('../../utils/rewarded-video')
+      if (!isRewardedAdActive('route')) {
+        this.triggerEvent('requestRouteAd')
+        return
+      }
+      // #endif
+      this.fetchAndShowRoute()
+    },
+
+    fetchAndShowRoute() {
       const {
         lat,
         lng
       } = this.poiInfo
-      var that = this;
-      let latitude = wx.getStorageSync('latitude')
-      let longitude = wx.getStorageSync('longitude')
+      if (!lat || !lng) {
+        return
+      }
+      const that = this
+      const latitude = wx.getStorageSync('latitude')
+      const longitude = wx.getStorageSync('longitude')
 
       getBicycleRoute({
         origin: longitude + ',' + latitude,
         destination: lng + ',' + lat
       }).then(res => {
         console.log(res)
-        let distance = convertToKilometers(res.distance)
-        let duration = convertSecondsToHMS(res.duration)
-        let pl = []
+        const distance = convertToKilometers(res.distance)
+        const duration = convertSecondsToHMS(res.duration)
+        const pl = []
         for (const s of res.steps) {
-          let polylineList = s.polyline.split(';')
+          const polylineList = s.polyline.split(';')
           for (const p of polylineList) {
-            let poly = p.split(',')
+            const poly = p.split(',')
             pl.push({
               longitude: poly[0],
               latitude: poly[1]
@@ -272,7 +303,8 @@ Component({
         that.setData({
           distance: distance,
           duration: duration,
-          walkingMsg: ''
+          walkingMsg: '',
+          routeVisible: true
         })
         that.triggerEvent('getPolyline', {
           polyline: [{
@@ -280,7 +312,7 @@ Component({
             color: '#E85827',
             width: 4
           }]
-        });
+        })
       })
     },
     openLocation(e) {

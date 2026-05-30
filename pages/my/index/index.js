@@ -5,6 +5,8 @@ import {
 import {
   getUserMarkerStatistics
 } from '../../../apis/marker-apis'
+import { checkLoginAndNavigate } from '../../../utils/util'
+import { getEntitlementStatus } from '../../../utils/entitlement'
 Page({
 
   /**
@@ -21,9 +23,10 @@ Page({
     isAdministator: false,
     showRank: false,
     rankInfo: null,
-    // 会员到期提示相关
-    vipDaysLeft: 0,
-    vipExpiringSoon: false,
+    // 权益到期提示（升级会员行）
+    entitlementShowCellNote: false,
+    entitlementCellNoteText: '',
+    entitlementCellNoteTheme: 'warning',
     // 是否显示升级会员链接（在2026年5月13日12点前隐藏，之后显示）
     showVip: false,
     // 标记统计数据
@@ -36,7 +39,17 @@ Page({
 
   onShow() {
     this.checkAndroidDownloadDate()
+    this.applyEntitlement()
     this.getUserInfo()
+  },
+
+  applyEntitlement(userInfo) {
+    const entitlement = getEntitlementStatus(userInfo || null)
+    this.setData({
+      entitlementShowCellNote: entitlement.showCellNote,
+      entitlementCellNoteText: entitlement.cellNoteText,
+      entitlementCellNoteTheme: entitlement.cellNoteTheme
+    })
   },
 
   /**
@@ -70,32 +83,11 @@ Page({
           wx.setStorageSync('userId', res.userId)
           wx.setStorageSync('userInfo', res)
 
-          // 计算会员到期相关信息（与 user-info-app 保持一致）
-          let vipExpiredRaw
-          // #if IOS
-          vipExpiredRaw = res.iosVipExpiredDate
-          // #else
-          vipExpiredRaw = res.androidVipExpiredDate
-          // #endif
-
-          const now = new Date()
-          const expiredDateObj = vipExpiredRaw ? new Date(vipExpiredRaw) : null
-          let vipDaysLeft = 0
-          let vipExpiringSoon = false
-
-          if (expiredDateObj && expiredDateObj > now) {
-            const diffMs = expiredDateObj.getTime() - now.getTime()
-            vipDaysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
-            if (vipDaysLeft > 0 && vipDaysLeft <= 7) {
-              vipExpiringSoon = true
-            }
-          }
+          this.applyEntitlement(res)
 
           this.setData({
             userInfo: res,
-            isAdministator: res.userId === '92918a62b30c' || res.userId === 'f55b972720be',
-            vipDaysLeft,
-            vipExpiringSoon
+            isAdministator: res.userId === '92918a62b30c' || res.userId === 'f55b972720be'
           })
 
           // 获取标记统计数据
@@ -111,6 +103,7 @@ Page({
       this.setData({
         userInfo: null
       })
+      this.applyEntitlement(null)
     }
   },
 
@@ -174,27 +167,34 @@ Page({
     })
   },
   toVip() {
-    if (!this.data.userInfo) {
-      // #if IOS
-      wx.navigateTo({
-        url: '/pages/ios/login/login',
-      })
-      // #else
-      wx.navigateTo({
-        url: '/pages/android/login/login',
-      })
-      // #endif
-    } else {
-      // #if IOS
-      wx.navigateTo({
-        url: '/pages/ios/vip/vip',
-      })
-      // #else
-      wx.navigateTo({
-        url: '/pages/android/vip-daikou/vip-daikou',
-      })
-      // #endif
+    if (!checkLoginAndNavigate()) {
+      return
     }
+    // #if IOS
+    wx.navigateTo({
+      url: '/pages/ios/vip/vip',
+    })
+    // #else
+    wx.navigateTo({
+      url: '/pages/android/vip-daikou/vip-daikou',
+    })
+    // #endif
+  },
+  toVipManage() {
+    if (!checkLoginAndNavigate()) {
+      return
+    }
+    wx.navigateTo({
+      url: '/pages/android/vip-manage/vip-manage',
+    })
+  },
+  toOrderList() {
+    if (!checkLoginAndNavigate()) {
+      return
+    }
+    wx.navigateTo({
+      url: '/pages/android/order/list/list',
+    })
   },
   getStatusBar() {
     // 获取菜单按钮（右上角胶囊按钮）的布局位置信息。坐标信息以屏幕左上角为原点。

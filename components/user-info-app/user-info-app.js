@@ -1,4 +1,7 @@
 // components/user-info-app/user-info-app.js
+const { checkLoginAndNavigate } = require('../../utils/util.js')
+const { getEntitlementStatus } = require('../../utils/entitlement.js')
+
 Component({
 
   /**
@@ -8,63 +11,8 @@ Component({
     userInfo: {
       type: Object,
       value: {},
-      observer(newVal, oldVal) {
-        //userInfo对象为空，nickName为'点击登录'，如果有昵称则显示昵称
-        let nickName = ''
-        let userId = ''
-        // if (newVal.openId || newVal.appleId) {
-        if (newVal && (newVal.openId || newVal.appleId)) {
-          nickName = newVal.nickName || '小区楼号'
-          userId = newVal.userId.slice(-8)
-        } else {
-          newVal = {}
-          nickName = '点击登录'
-        }        
-        // 会员到期相关
-        let vipExpiredDate = ''
-        // #if IOS
-        const vipExpiredRaw = newVal.iosVipExpiredDate
-        // #else
-        const vipExpiredRaw = newVal.androidVipExpiredDate
-        // #endif
-
-        vipExpiredDate = this.formatDate(vipExpiredRaw)
-
-        // 是否当前仍在会员有效期内
-        const now = new Date()
-        const expiredDateObj = vipExpiredRaw ? new Date(vipExpiredRaw) : null
-        const showVip = expiredDateObj && expiredDateObj > now
-
-        // 检查是否是终身会员（2099/12/31 00:00:00）
-        const lifetimeDate = new Date('2099-12-31 00:00:00')
-        const isLifetimeVip = expiredDateObj && expiredDateObj.getTime() === lifetimeDate.getTime()
-
-        // 计算剩余天数（只对未过期的会员算，终身会员不计算）
-        let vipDaysLeft = 0
-        let isVipExpiringSoon = false
-        if (showVip && expiredDateObj && !isLifetimeVip) {
-          const diffMs = expiredDateObj.getTime() - now.getTime()
-          // 使用 Math.ceil，保证还有一点点时间也显示为 1 天
-          vipDaysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24))
-          // 阈值：7 天内视为"即将到期"
-          if (vipDaysLeft > 0 && vipDaysLeft <= 7) {
-            isVipExpiringSoon = true
-          }
-        }
-
-        this.setData({
-          nickName,
-          userId,
-          points: this.convertToWan(newVal ? newVal.points : 0),
-          markers: this.convertToWan(newVal ? newVal.markers : 0),
-          friends: this.convertToWan(newVal ? newVal.friends : 0),
-          deleted: this.convertToWan(newVal ? newVal.deleted : 0),
-          showVip,
-          vipExpiredDate,
-          vipDaysLeft,
-          isVipExpiringSoon,
-          isLifetimeVip
-        })
+      observer(newVal) {
+        this.applyUserInfo(newVal)
       }
     }
   },
@@ -80,10 +28,51 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    //登录或者编辑
+    applyUserInfo(newVal) {
+      let nickName = ''
+      let userId = ''
+      let user = newVal
+
+      if (newVal && (newVal.openId || newVal.appleId)) {
+        nickName = newVal.nickName || '小区楼号'
+        userId = newVal.userId.slice(-8)
+      } else {
+        user = null
+        nickName = '点击登录'
+      }
+
+      const entitlement = getEntitlementStatus(user)
+
+      this.setData(Object.assign({
+        nickName,
+        userId,
+        points: this.convertToWan(user ? user.points : 0),
+        markers: this.convertToWan(user ? user.markers : 0),
+        friends: this.convertToWan(user ? user.friends : 0),
+        deleted: this.convertToWan(user ? user.deleted : 0)
+      }, this.mapEntitlementData(entitlement)))
+    },
+
+    mapEntitlementData(entitlement) {
+      return {
+        isLifetimeVip: entitlement.isLifetimeVip,
+        showVip: entitlement.showVip,
+        showBadge: entitlement.showBadge,
+        showEntitlementRow: entitlement.showEntitlementRow,
+        entitlementLabel: entitlement.label,
+        entitlementTheme: entitlement.theme,
+        entitlementIsActive: entitlement.isActive,
+        entitlementEndDate: entitlement.endDateFormatted,
+        entitlementDaysLeft: entitlement.daysLeft,
+        entitlementHoursLeft: entitlement.hoursLeft,
+        entitlementShowHours: entitlement.showHours,
+        entitlementExpiringSoon: entitlement.expiringSoon,
+        entitlementStatusText: entitlement.statusText
+      }
+    },
+
     toLogin() {
       let userInfo = wx.getStorageSync('userInfo')
-      let token = wx.getStorageSync('token')
       if (userInfo.openId || userInfo.appleId) {
         wx.navigateTo({
           url: '/pages/my/edit/edit',
@@ -98,7 +87,6 @@ Component({
           url: '/pages/android/login/login',
         })
         // #endif
-        
       }
     },
     showToast(event) {
@@ -130,29 +118,15 @@ Component({
       })
     },
     toMarkers(event) {
-      let userInfo = wx.getStorageSync('userInfo')
-      if (userInfo) {
-        const {
-          deleted
-        } = event.currentTarget.dataset
-        wx.navigateTo({
-          url: '/pages/my/markers/markers?deleted=' + deleted,
-        })
-      } else {
-        wx.showModal({
-          title: '登录提示',
-          content: '需要先登录才能进行操作',
-          success(res) {
-            if (res.confirm) {
-              wx.navigateTo({
-                url: '/pages/ios/login/login',
-              })
-            } else if (res.cancel) {
-              console.log('用户点击取消')
-            }
-          }
-        })
+      if (!checkLoginAndNavigate()) {
+        return
       }
+      const {
+        deleted
+      } = event.currentTarget.dataset
+      wx.navigateTo({
+        url: '/pages/my/markers/markers?deleted=' + deleted,
+      })
     },
     convertToWan(num) {
       if (num > 1000000) {
@@ -161,25 +135,6 @@ Component({
         return (num / 10000).toFixed(2) + "万";
       } else {
         return num || 0
-      }
-    },
-    formatDate(datetimeStr) {
-      if (datetimeStr) {
-        const dateObj = new Date(datetimeStr); // 解析为 Date 对象
-        // 检查是否是终身会员（2099/12/31 00:00:00）
-        const lifetimeDate = new Date('2099-12-31 00:00:00');
-        if (dateObj.getTime() === lifetimeDate.getTime()) {
-          return '终身会员';
-        }
-        const year = dateObj.getFullYear();
-        const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始，补零
-        const day = String(dateObj.getDate()).padStart(2, "0"); // 补零
-        const hours = String(dateObj.getHours()).padStart(2, "0"); // 小时，补零
-        const minutes = String(dateObj.getMinutes()).padStart(2, "0"); // 分钟，补零
-        const seconds = String(dateObj.getSeconds()).padStart(2, "0"); // 秒，补零
-        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-      } else {
-        return ''
       }
     }
   }

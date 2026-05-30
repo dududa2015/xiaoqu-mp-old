@@ -1,0 +1,17 @@
+<view wx:if="{{visible}}" class="location-guide">
+  <view
+    class="guide-anchor"
+    style="bottom: {{bottom + 36}}rpx; {{position}}: 24rpx;"
+  >
+    <view class="pulse-ring pulse-ring-1"></view>
+    <view class="pulse-ring pulse-ring-2"></view>
+
+    <view class="bubble-panel bubble-panel-{{position}}">
+      <view class="bubble shadow">
+        <view class="bubble-text">点击定位按钮，查看附近小区</view>
+        <view class="bubble-action" bind:tap="onClose">知道了</view>
+      </view>
+      <view class="arrow arrow-{{position}}"></view>
+    </view>
+  </view>
+</view>

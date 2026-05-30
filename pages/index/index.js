@@ -7,6 +7,10 @@ import {
   checkLoginAndNavigate
 } from '../../utils/util'
 import {
+  isRewardedAdActive,
+  setRewardedAdExpire
+} from '../../utils/rewarded-video'
+import {
   buildMarkers,
   buildPolyline,
   buildPolygon
@@ -34,6 +38,7 @@ import {
 } from '../../apis/community-apis'
 // 在页面中定义激励视频广告
 let videoAd = null
+let pendingRewardScene = null
 // 在页面中定义插屏广告
 let interstitialAd = null
 Page({
@@ -54,8 +59,8 @@ Page({
     showCommunityDetail: false, //是否显示小区边界和出入口
     topAddress: '搜索附近小区',
     showAddress: false,
-    latitude: 39.909188, //当前位置116.397478,39.909188
-    longitude: 116.397478, //当前位置
+    latitude: 36.0, // 全国视图默认中心
+    longitude: 104.0,
     showPOI: false, //是否显示底部的POI描述
     showCenterMarker: false, //是否显示中心标记点
     showChooseMarker: false, //是否显示选点按钮
@@ -75,7 +80,8 @@ Page({
     showChooseLocation: false,
     showNoAd: false, //显示广告弹窗
     showVipExpired: false, //显示会员过期弹窗
-    vipExpiredContent: '' //会员过期提示内容
+    vipExpiredContent: '', //会员过期提示内容
+    showLocationGuide: false // 首装定位引导
   },
   onLoad() {
     this.getWindowInfo()
@@ -114,13 +120,17 @@ Page({
 
     // 检查小区边界功能是否过期
     this.checkCommunityDetailExpired()
+    this.updateLocationGuide()
   },
   onShow() {
     this.amapSearch()
     // #if NATIVE
     this.initLocMarkerIcon()
-    // 无论 userInfo 就绪或超时（未登录），都需检查 VIP/试用状态
-    this.waitForUserInfo().finally(() => {
+    // 等待登录态与设备试用状态就绪后再检查，避免首装竞态误弹窗
+    Promise.all([
+      this.waitForUserInfo().catch(() => null),
+      this.waitForDeviceTrial()
+    ]).finally(() => {
       this.checkVip()
     })
     const childComp = this.selectComponent('#topTip');
@@ -131,6 +141,35 @@ Page({
 
     // 检查小区边界功能是否过期
     this.checkCommunityDetailExpired()
+    this.updateLocationGuide()
+  },
+  shouldShowLocationGuide() {
+    if (wx.getStorageSync('locationGuideDismissed')) {
+      return false
+    }
+    if (!this.data.showLocation) {
+      return false
+    }
+    if (this.hasStoredLocation()) {
+      return false
+    }
+    if (this.data.scale > 5) {
+      return false
+    }
+    return true
+  },
+  updateLocationGuide() {
+    const showLocationGuide = this.shouldShowLocationGuide()
+    if (this.data.showLocationGuide !== showLocationGuide) {
+      this.setData({ showLocationGuide })
+    }
+  },
+  dismissLocationGuide() {
+    wx.setStorageSync('locationGuideDismissed', true)
+    this.setData({ showLocationGuide: false })
+  },
+  onLocationGuideClose() {
+    this.dismissLocationGuide()
   },
   //用于处理搜索结果
   amapSearch() {
@@ -209,8 +248,39 @@ Page({
       }
     })
   },
+  waitForDeviceTrial(timeout = 10000) {
+    return new Promise((resolve) => {
+      const app = getApp()
+      if (app.globalData.deviceTrialReady) {
+        resolve()
+        return
+      }
+
+      if (app.globalData.deviceTrialReadyPromise) {
+        const timeoutId = setTimeout(() => {
+          console.log('等待 deviceTrial 超时')
+          resolve()
+        }, timeout)
+
+        app.globalData.deviceTrialReadyPromise.finally(() => {
+          clearTimeout(timeoutId)
+          resolve()
+        })
+        return
+      }
+
+      resolve()
+    })
+  },
   checkVip() {
+    const app = getApp()
+    if (!app.globalData.deviceTrialReady) {
+      return
+    }
+
     const userInfo = wx.getStorageSync('userInfo')
+    const userId = wx.getStorageSync('userId')
+    const deviceTrial = wx.getStorageSync('deviceTrial')
     console.log('checkVip', userInfo)
 
     // 公共：设备是否还有有效试用期（由 app.js 写入）
@@ -227,6 +297,8 @@ Page({
     vipExpiredDate = userInfo?.iosVipExpiredDate || null
     // #elif ANDROID
     vipExpiredDate = userInfo?.androidVipExpiredDate || null
+    // #else
+    vipExpiredDate = userInfo?.harmonyVipExpiredDate || null
     // #endif
 
     console.log('checkVip:vipExpiredDate', vipExpiredDate)
@@ -237,10 +309,16 @@ Page({
         // 已有会员但已过期
         this.toVip('会员在' + vipExpiredDate + '已过期，请续费')
       }
-    } else {
-      // 没有会员到期时间（未登录或从未开通过），且设备也没有有效试用 → 认为试用已结束
-      this.toVip('免费试用结束，请开启订阅')
+      return
     }
+
+    // 未登录且从未产生试用记录（插件/接口失败），不弹「试用结束」
+    if (!userId && !deviceTrial) {
+      return
+    }
+
+    // 已登录或曾有试用记录，且当前无有效试用、无会员 → 试用已结束
+    this.toVip('免费试用结束，请开启订阅')
   },
   toVip(content) {
     this.setData({
@@ -395,7 +473,6 @@ Page({
   },
   //视频广告
   initAd() {
-    // 在页面onLoad回调事件中创建激励视频广告实例
     if (wx.createRewardedVideoAd) {
       videoAd = wx.createRewardedVideoAd({
         adUnitId: 'adunit-af4d35726e774efb'
@@ -408,13 +485,31 @@ Page({
       })
       videoAd.onClose((res) => {
         const finished = (res && res.isEnded) || res === undefined
+        const scene = pendingRewardScene
+        pendingRewardScene = null
         wx.hideLoading()
+
         if (finished) {
-          const expireAt = Date.now() + 24 * 3 * 60 * 60 * 1000
-          wx.setStorageSync('communityDetailExpireAt', expireAt)
-          this.enableCommunityDetail()
-        } else {
-          // 放弃观看时，强制重置开关状态
+          if (scene === 'communityDetail') {
+            setRewardedAdExpire('communityDetail')
+            this.enableCommunityDetail()
+            return
+          }
+          if (scene === 'route') {
+            setRewardedAdExpire('route')
+            const poiDetail = this.selectComponent('#poiDetail')
+            if (poiDetail) {
+              poiDetail.fetchAndShowRoute()
+            }
+            wx.showToast({
+              title: '已解锁，72小时内无需重复观看',
+              icon: 'none'
+            })
+          }
+          return
+        }
+
+        if (scene === 'communityDetail') {
           this.setData({
             showCommunityDetail: false
           })
@@ -429,9 +524,54 @@ Page({
             icon: 'none'
           })
           this.disableCommunityDetail()
+          return
+        }
+
+        if (scene === 'route') {
+          wx.showToast({
+            title: '需完成观看才能查看路线',
+            icon: 'none'
+          })
         }
       })
     }
+  },
+  showRewardedVideoAd(scene, options = {}) {
+    if (!wx.createRewardedVideoAd || !videoAd) {
+      wx.showToast({
+        title: '广告未就绪，请稍后再试',
+        icon: 'none'
+      })
+      if (options.onFail) {
+        options.onFail()
+      }
+      return
+    }
+    pendingRewardScene = scene
+    wx.showLoading({
+      title: '加载广告，请稍候',
+      mask: true
+    })
+    videoAd.show().then(() => {
+      wx.hideLoading()
+    }).catch(() => {
+      videoAd.load().then(() => {
+        return videoAd.show().then(() => {
+          wx.hideLoading()
+        })
+      }).catch((err) => {
+        pendingRewardScene = null
+        wx.hideLoading()
+        console.error('激励视频展示失败', err)
+        wx.showToast({
+          title: '广告暂不可用，请稍后再试',
+          icon: 'none'
+        })
+        if (options.onFail) {
+          options.onFail()
+        }
+      })
+    })
   },
   //插屏广告
   initCPAd() {
@@ -547,6 +687,7 @@ Page({
         that.getAroundCommunityList(latitude, longitude)
         wx.setStorageSync('locationed', true)
         // #endif
+        that.dismissLocationGuide()
       },
       fail(res) {
         wx.showToast({
@@ -555,8 +696,8 @@ Page({
           duration: 3000
         })
         // 获取位置失败，引导用户开启权限
-        // #if MP
         console.log(res)
+        // #if MP
         that.showSettingDialog();
         // #else
         wx.setStorageSync('locationed', false)
@@ -651,6 +792,9 @@ Page({
       this.onMapTap()
       return
     }
+    if (!checkLoginAndNavigate()) {
+      return
+    }
     this.resetMap()
     this.hideTabBar()
     this.setData({
@@ -720,6 +864,9 @@ Page({
     if (markerId.toString().startsWith('999')) {
       return
     }
+    if (!checkLoginAndNavigate()) {
+      return
+    }
     this.hideTabBar()
     this.resetMarker()
     this.resetPolyline()
@@ -745,11 +892,11 @@ Page({
     this.setData({
       currentCommunityId: id
     })
-    // // #if MP
-    // if (!this.data.showCommunityDetail) {
-    //   return
-    // }
-    // // #endif
+    // #if MP
+    if (!this.data.showCommunityDetail) {
+      return
+    }
+    // #endif
     this.clearCommunityDetail()
     getCommunityFullDetail({
       id
@@ -845,6 +992,9 @@ Page({
     //如果grid显示，点击label关闭grid
     if (this.data.showGrid || this.data.showSetting) {
       this.onMapTap()
+      return
+    }
+    if (!checkLoginAndNavigate()) {
       return
     }
     this.hideTabBar()
@@ -1123,7 +1273,7 @@ Page({
   getAroundList(lat, lng) {
     const that = this
     const userInfo = wx.getStorageSync('userInfo')
-    const userId = userInfo.userId
+    const userId = userInfo.userId || ''
     const isPubMap = userInfo.isPubMap || false
     const mapType = wx.getStorageSync('mapType') || 1 //只有1和2，1为公共地图，2为个人地图。
     getAroundList({
@@ -1159,11 +1309,6 @@ Page({
   },
   //获取周围的小区
   getAroundCommunityList(lat, lng) {
-    // #if MP
-    // if (!this.data.showCommunityDetail) {
-    //   return
-    // }
-    // #endif
     getAroundCommunityList({
       lng,
       lat
@@ -1195,15 +1340,13 @@ Page({
           polygons: [],
           currentCommunityId: communityId
         })
-        // // #if MP
-        // if (this.data.showCommunityDetail) {
-        //   this.getCommunityFullDetail(communityId)
-        // }
-        // // #else
-        // // NATIVE 环境下直接调用，不判断 showCommunityDetail
-        // this.getCommunityFullDetail(communityId)
-        // // #endif
+        // #if MP
+        if (this.data.showCommunityDetail) {
+          this.getCommunityFullDetail(communityId)
+        }
+        // #else
         this.getCommunityFullDetail(communityId)
+        // #endif
         this.addAroundList2Map(poiList)
       }, 1);
     })
@@ -1668,8 +1811,15 @@ Page({
   },
   getPolyline(event) {
     const {
-      polyline
+      polyline: routePolyline
     } = event.detail
+    const polyline = this.data.polyline.filter(item => item.color !== '#E85827')
+    this.setData({
+      polyline: polyline.concat(routePolyline)
+    })
+  },
+  clearRoutePolyline() {
+    const polyline = this.data.polyline.filter(item => item.color !== '#E85827')
     this.setData({
       polyline
     })
@@ -2012,6 +2162,8 @@ Page({
     }
     if (this.data.currentCommunityId) {
       this.getCommunityFullDetail(this.data.currentCommunityId)
+    } else if (this.data.latitude && this.data.longitude) {
+      this.getAroundCommunityList(this.data.latitude, this.data.longitude)
     }
   },
   // 公共：关闭显示小区边界
@@ -2030,34 +2182,28 @@ Page({
   },
   // 激励视频：显示小区边界
   showCommunityDetailAd() {
-    if (!wx.createRewardedVideoAd || !videoAd) {
-      wx.showToast({
-        title: '广告未就绪，请稍后再试',
-        icon: 'none'
-      })
-      this.disableCommunityDetail()
+    this.showRewardedVideoAd('communityDetail', {
+      onFail: () => {
+        this.disableCommunityDetail()
+      }
+    })
+  },
+  onRequestRouteAd() {
+    if (isRewardedAdActive('route')) {
+      const poiDetail = this.selectComponent('#poiDetail')
+      if (poiDetail) {
+        poiDetail.fetchAndShowRoute()
+      }
       return
     }
-    wx.showLoading({
-      title: '加载广告，请稍候',
-      mask: true
-    })
-    videoAd.show().then(() => {
-      wx.hideLoading()
-    }).catch(() => {
-      videoAd.load().then(() => {
-        return videoAd.show().then(() => {
-          wx.hideLoading()
-        })
-      }).catch(err => {
-        wx.hideLoading()
-        console.error('小区边界广告展示失败', err)
-        wx.showToast({
-          title: '广告暂不可用，请稍后再试',
-          icon: 'none'
-        })
-        this.disableCommunityDetail()
-      })
+    wx.showModal({
+      title: '提示',
+      content: '观看广告后可查看路线，72小时内无需重复观看',
+      success: (res) => {
+        if (res.confirm) {
+          this.showRewardedVideoAd('route')
+        }
+      }
     })
   },
   //显示小区边界和出入口，事件来自设置页面
@@ -2068,8 +2214,7 @@ Page({
       return
     }
     // 有效期内直接开启，不弹广告
-    const expireAt = wx.getStorageSync('communityDetailExpireAt') || 0
-    if (Date.now() < expireAt) {
+    if (isRewardedAdActive('communityDetail')) {
       this.updateCommunityDetailRedDot(false)
       this.enableCommunityDetail()
       wx.showToast({

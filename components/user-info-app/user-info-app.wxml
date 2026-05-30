@@ -10,8 +10,9 @@
                 <view class="name-group">
                     <text class="user-name">{{nickName}}</text>
                     <view class="badge-group">
-                        <view class="badge-item badge-lifetime" wx:if="{{isLifetimeVip}}">终身会员</view>
-                        <view class="badge-item badge-vip" wx:elif="{{showVip}}">VIP</view>
+                        <view class="badge-item badge-lifetime" wx:if="{{showBadge === 'lifetime'}}">终身会员</view>
+                        <view class="badge-item badge-vip" wx:elif="{{showBadge === 'vip'}}">VIP</view>
+                        <view class="badge-item badge-trial" wx:elif="{{showBadge === 'trial'}}">试用中</view>
                     </view>
                 </view>
                 <view class="user-meta">
@@ -23,13 +24,13 @@
             </view>
         </view>
         <!-- #if NATIVE -->
-        <!-- 会员到期信息 -->
-        <view class="vip-info" wx:if="{{vipExpiredDate && !isLifetimeVip}}">
-            <view class="vip-badge-row">
-                <view class="vip-label-badge">{{showVip ? 'VIP' : '过期'}}</view>
-                <text class="vip-date-text">到期时间：{{vipExpiredDate}}</text>
-                <view class="vip-days-tag" wx:if="{{showVip && !isVipExpiringSoon}}">会员有效</view>
-                <view class="vip-days-tag vip-warning" wx:elif="{{showVip && isVipExpiringSoon}}">剩{{vipDaysLeft}}天</view>
+        <view class="entitlement-info entitlement-{{entitlementTheme}}" wx:if="{{showEntitlementRow}}">
+            <view class="entitlement-badge-row">
+                <view class="entitlement-label-badge">{{entitlementLabel}}</view>
+                <text class="entitlement-date-text">到期时间：{{entitlementEndDate}}</text>
+                <view class="entitlement-days-tag" wx:if="{{entitlementIsActive && !entitlementExpiringSoon}}">{{entitlementStatusText}}</view>
+                <view class="entitlement-days-tag entitlement-warning" wx:elif="{{entitlementIsActive && entitlementExpiringSoon}}">剩{{entitlementDaysLeft}}天</view>
+                <view class="entitlement-days-tag entitlement-expired-tag" wx:else>{{entitlementStatusText}}</view>
             </view>
         </view>
         <!-- #endif -->
