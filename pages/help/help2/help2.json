@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "t-image": "tdesign-miniprogram/image/image"
-  },
-  "navigationBarTitleText": "添加到我的小程序"
-}

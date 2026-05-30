@@ -2,9 +2,6 @@
   "pages": [
     "pages/index/index",
     "pages/my/index/index",
-    "pages/help/help2/help2",
-    "pages/help/help3/help3",
-    "pages/help/help4/help4",
     "pages/my/edit/edit",
     "pages/my/newUser/newUser",
     "pages/my/markers/markers",

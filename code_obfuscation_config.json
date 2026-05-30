@@ -257,6 +257,178 @@
 		{
 			"path": "utils/security.js",
 			"sub_switch": true
+		},
+		{
+			"path": "pages/my/places/places.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/admin/androidStats/androidStats.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/admin/auditApp/auditApp.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/admin/auditNot/auditNot.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/admin/auditNotNew/auditNotNew.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/android/refund/agreement/agreement.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/android/user-agreement/user-agreement.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/android/user-policy/user-policy.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/android/vip-agreement/vip-agreement.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/android/vip-daikou-agreement/vip-daikou-agreement.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/android/vip-daikou/vip-daikou.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/android/vip-manage/vip-manage.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/android/vip-renew/vip-renew.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/help/help/help.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/help/question/question.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/ios/vip-agreement/vip-agreement.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/ios/vip-renew/vip-renew.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/about/about.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/app/android/android.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/app/ios/ios.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/customerService/customerService.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/android-stats-apis.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/cos-upload-api.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/device-apis.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/place-api.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/building.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/buildingNeighbor.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/cos-image-url.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/device.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/entitlement.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/extend.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/image-compress.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/place-record.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/rewarded-video.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/wxcharts-min.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/add-tips/add-tips.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/choose-location/choose-location.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/location-guide/location-guide.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/louhao/louhao.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/marker-feedback/marker-feedback.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/no-ad-bar/no-ad-bar.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/no-ad/no-ad.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/vip-expired/vip-expired.js",
+			"sub_switch": true
 		}
 	]
 }
