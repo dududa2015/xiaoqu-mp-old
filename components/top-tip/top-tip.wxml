@@ -1,6 +1,42 @@
-<view class="top-tip" wx:if="{{show}}">
-    <t-notice-bar class="t-notice-bar_wrap" visible="{{true}}" direction="vertical" interval="{{5000}}" content="{{noticeList}}" prefixIcon="{{false}}" bind:click="onClick"></t-notice-bar>
-    <view class="img-wrap" bind:tap="onClose">
-        <image src="/images/controls/cross.png" class="img" mode="" />
+<view class="top-tip {{collapsed ? 'is-collapsed' : (isCollapsing ? 'is-collapsing' : 'is-expanded')}}" wx:if="{{show}}">
+  <view class="top-tip__content" bind:tap="onClick">
+    <block wx:if="{{isDownloadNotice}}">
+      <view class="top-tip__hero" wx:if="{{!collapsed}}">
+        <image class="top-tip__icon" src="/images/icon-83.5@2x.png" mode="aspectFit" />
+        <view class="top-tip__hero-text">
+          <view class="top-tip__title">{{downloadTitle}}</view>
+          <view class="top-tip__desc">{{downloadText}}</view>
+          <view class="top-tip__cta-row">
+            <view class="top-tip__cta">前往下载 →</view>
+            <view class="top-tip__countdown" wx:if="{{collapseCountdown > 0}}">{{collapseCountdown}}s后收起</view>
+          </view>
+        </view>
+      </view>
+      <view class="top-tip__bar top-tip__bar--compact" wx:if="{{collapsed}}">
+        <t-notice-bar
+          class="t-notice-bar_wrap"
+          visible="{{true}}"
+          direction="vertical"
+          interval="{{5000}}"
+          content="{{noticeList}}"
+          prefixIcon="{{false}}"
+          bind:click="onClick"
+        ></t-notice-bar>
+      </view>
+    </block>
+    <view class="top-tip__bar" wx:else>
+      <t-notice-bar
+        class="t-notice-bar_wrap"
+        visible="{{true}}"
+        direction="vertical"
+        interval="{{5000}}"
+        content="{{noticeList}}"
+        prefixIcon="{{false}}"
+        bind:click="onClick"
+      ></t-notice-bar>
     </view>
+  </view>
+  <view class="img-wrap" catch:tap="onClose">
+    <image src="/images/controls/cross.png" class="img" mode="" />
+  </view>
 </view>
