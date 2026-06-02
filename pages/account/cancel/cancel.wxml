@@ -1,0 +1,23 @@
+<view class="container">
+  <view class="card">
+    <view class="title">注销后将无法恢复</view>
+    <view class="desc">确认注销后，我们将立即清除您的个人信息与登录绑定，包括但不限于：</view>
+    <view class="list">
+      <view class="list-item">• 昵称、手机号、微信/Apple 登录绑定</view>
+      <view class="list-item">• 会员权益（如有）</view>
+    </view>
+    <view class="desc tip">您创建的地图标记、收藏、订单记录等业务数据将保留在系统中，但不再与您的身份关联。您仍可使用微信重新登录，但将注册为新账号。</view>
+  </view>
+
+  <view class="agree-row" bind:tap="toggleAgree">
+    <view class="checkbox {{agreed ? 'is-checked' : ''}}"></view>
+    <text class="agree-text">我已阅读并知晓注销后果</text>
+  </view>
+
+  <view class="actions">
+    <t-button class="back-btn" theme="light" block bind:tap="onBack">再想想</t-button>
+    <t-button theme="danger" block disabled="{{!agreed || submitting}}" bind:tap="onConfirmCancel">
+      确认注销
+    </t-button>
+  </view>
+</view>

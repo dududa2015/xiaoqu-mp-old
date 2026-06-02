@@ -101,7 +101,12 @@ Page({
       }
     } else {
       this.setData({
-        userInfo: null
+        userInfo: null,
+        markerStats: {
+          validCount: 0,
+          pendingAuditCount: 0,
+          deletedCount: 0
+        }
       })
       this.applyEntitlement(null)
     }

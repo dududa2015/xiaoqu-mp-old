@@ -141,7 +141,7 @@
 
     <view class="text bold">提供两种注销途径：</view>
     <view class="list">
-      <view class="list-item">• <text class="bold">自助注销流程：</text>打开 APP，进入「我的」-「昵称」-「页面底部」-「注销账号」页面。进入7天注销静默期，静默期结束后，账号将正式注销。</view>
+      <view class="list-item">• <text class="bold">自助注销流程：</text>打开 App 或小程序，进入「我的」-「昵称」-「注销账号」，阅读说明并确认后立即注销，账号数据不可恢复。</view>
       <view class="list-item">• <text class="bold">人工辅助注销：</text>发送邮件至 <text bind:longtap="onCopy" data-text="zsercenglou@163.com" class="text-blue">zsercenglou@163.com</text>，邮件标题注明“账号注销申请”，正文需包含个人中心截图、最近三次使用时间。客服将在48小时内回复确认函，用户需打印后手写签名，拍照回传完成验证。</view>
     </view>
   </view>

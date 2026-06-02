@@ -105,6 +105,15 @@ export const getRankByUserId = (params) => {
     })
 }
 
+// 即时注销当前账号（需登录 token）
+export const cancelAccount = () => {
+    return request({
+        url: '/users/cancelAccount',
+        data: {},
+        method: 'POST',
+    })
+}
+
 //获取个人地图列表
 export const changeIsPubMap = (params) => {
     return request({

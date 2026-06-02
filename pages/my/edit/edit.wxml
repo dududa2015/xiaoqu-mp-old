@@ -36,19 +36,15 @@
     </view>
   </t-cell-group>
 
-  <!-- #if NATIVE -->
-  <!-- 底部按钮区域 -->
   <view class="button-section">
-    <!-- 切换账号 -->
+    <!-- #if NATIVE -->
     <view class="switch-btn" bind:tap="toLogin">
       <text class="switch-text">切换账号</text>
     </view>
-
-    <!-- 注销账号 -->
+    <!-- #endif -->
     <view class="logout-btn" bind:tap="onLogout">
       <text class="logout-text">注销账号</text>
     </view>
   </view>
-  <!-- #endif -->
 
 </view>

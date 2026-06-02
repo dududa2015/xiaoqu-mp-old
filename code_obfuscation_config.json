@@ -51,6 +51,10 @@
 			"sub_switch": true
 		},
 		{
+			"path": "pages/account/cancel/cancel.js",
+			"sub_switch": true
+		},
+		{
 			"path": "components/poi-detail/poi-detail.js",
 			"sub_switch": true
 		},

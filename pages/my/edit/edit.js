@@ -187,34 +187,8 @@ Page({
     })
   },
   onLogout() {
-    wx.showModal({
-      title: '',
-      content: '确认要注销吗？',
-      complete: (res) => {
-        if (res.confirm) {
-          wx.clearStorage({
-            success: function () {
-              wx.showModal({
-                content: '注销成功',
-                showCancel: false,
-                complete: (res) => {
-                  if (res.confirm) {
-                    wx.switchTab({
-                      url: '/pages/my/index/index',
-                    })
-                  }
-                }
-              })
-            },
-            fail: function (res) {
-              console.log('清除本地存储失败:', res.errMsg);
-            },
-            complete: function () {
-              console.log('清除本地存储操作结束');
-            }
-          });
-        }
-      }
+    wx.navigateTo({
+      url: '/pages/account/cancel/cancel'
     })
   },
   /**
