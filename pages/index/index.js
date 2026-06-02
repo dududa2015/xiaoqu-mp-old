@@ -2184,6 +2184,7 @@ Page({
   },
   //设置关闭
   onSettingClose() {
+    this.updateCommunityDetailRedDot(false)
     this.disableMapTap()
     this.setData({
       showSetting: false
@@ -2313,6 +2314,7 @@ Page({
   },
   //显示小区边界和出入口，事件来自设置页面
   onCommunityDetailChange(event) {
+    this.updateCommunityDetailRedDot(false)
     const targetChecked = event.detail
     if (!targetChecked) {
       this.disableCommunityDetail()
@@ -2320,7 +2322,6 @@ Page({
     }
     // 有效期内直接开启，不弹广告
     if (isRewardedAdActive('communityDetail')) {
-      this.updateCommunityDetailRedDot(false)
       this.enableCommunityDetail()
       wx.showToast({
         title: '已开启，72小时内无需重复观看',
@@ -2346,8 +2347,7 @@ Page({
           this.disableCommunityDetail()
           return
         }
-        // 确认后清红点
-        this.updateCommunityDetailRedDot(false)
+        // 确认后播放广告
         this.showCommunityDetailAd()
       },
       fail: () => {

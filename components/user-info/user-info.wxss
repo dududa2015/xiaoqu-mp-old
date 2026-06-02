@@ -328,40 +328,44 @@
 /* 统计数据区域 */
 .stats-section {
     background: #ffffff;
-    padding: 16rpx 24rpx 24rpx;
+    padding: 16rpx 16rpx 24rpx;
 }
 
 .stats-grid {
     display: flex;
-    gap: 10rpx;
+    gap: 8rpx;
 }
 
 .stat-item {
     flex: 1;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    gap: 14rpx;
+    gap: 6rpx;
     background: #f9fafb;
-    border-radius: 20rpx;
-    padding: 16rpx 18rpx;
+    border-radius: 16rpx;
+    padding: 12rpx 4rpx 10rpx;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
-    border: 1rpx solid #f3f4f6;
+    /* border: 1rpx solid #f3f4f6; */
+    min-width: 0;
 }
 
-.stat-item:active {
-    transform: translateY(-1rpx);
-    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
-    background: #f3f4f6;
-    border-color: #e5e7eb;
+.stat-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4rpx;
+    width: 100%;
+    min-width: 0;
 }
 
 .stat-icon {
     flex-shrink: 0;
-    width: 52rpx;
-    height: 52rpx;
+    width: 40rpx;
+    height: 40rpx;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -385,23 +389,26 @@
     background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(239, 68, 68, 0.06) 100%);
 }
 
-.stat-info {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.stat-favorites .stat-icon {
+    color: #f97316;
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.12) 0%, rgba(249, 115, 22, 0.06) 100%);
+}
+
+.stat-item:active {
+    transform: translateY(-1rpx);
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+    background: #f3f4f6;
+    border-color: #e5e7eb;
 }
 
 .stat-value {
-    font-size: 30rpx;
+    font-size: 28rpx;
     font-weight: 700;
-    line-height: 42rpx;
+    line-height: 40rpx;
     color: #111827;
     white-space: nowrap;
-    margin-bottom: 2rpx;
+    flex-shrink: 1;
+    min-width: 0;
 }
 
 .stat-markers .stat-value {
@@ -416,10 +423,16 @@
     color: #ef4444;
 }
 
+.stat-favorites .stat-value {
+    color: #f97316;
+}
+
 .stat-title {
-    font-size: 20rpx;
+    font-size: 18rpx;
     font-weight: 500;
     color: #6b7280;
-    line-height: 28rpx;
+    line-height: 24rpx;
     white-space: nowrap;
+    text-align: center;
+    width: 100%;
 }

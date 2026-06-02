@@ -35,6 +35,10 @@ Component({
       observer(newVal) {
         console.log('deletedCount 变化:', newVal)
       }
+    },
+    favoriteCount: {
+      type: Number,
+      value: 0
     }
   },
 
@@ -149,6 +153,14 @@ Component({
       } = event.currentTarget.dataset
       wx.navigateTo({
         url: '/pages/my/markers/markers?deleted=' + deleted,
+      })
+    },
+    toPlaces() {
+      if (!checkLoginAndNavigate()) {
+        return
+      }
+      wx.navigateTo({
+        url: '/pages/my/places/places',
       })
     },
     convertToWan(num) {

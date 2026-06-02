@@ -306,8 +306,7 @@ Component({
     onCommunityDetailChange(e) {
       const value = e.detail.value
       this.setData({
-        showCommunityDetail: value,
-        showRedDot: false
+        showCommunityDetail: value
       })
       this.triggerEvent('onCommunityDetailChange', value)
     },

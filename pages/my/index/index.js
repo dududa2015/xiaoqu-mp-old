@@ -5,6 +5,7 @@ import {
 import {
   getUserMarkerStatistics
 } from '../../../apis/marker-apis'
+import { listFavorites } from '../../../apis/place-api'
 import { checkLoginAndNavigate } from '../../../utils/util'
 import { getEntitlementStatus } from '../../../utils/entitlement'
 Page({
@@ -33,7 +34,8 @@ Page({
     markerStats: {
       validCount: 0,
       pendingAuditCount: 0,
-      deletedCount: 0
+      deletedCount: 0,
+      favoriteCount: 0
     }
   },
 
@@ -105,7 +107,8 @@ Page({
         markerStats: {
           validCount: 0,
           pendingAuditCount: 0,
-          deletedCount: 0
+          deletedCount: 0,
+          favoriteCount: 0
         }
       })
       this.applyEntitlement(null)
@@ -144,18 +147,18 @@ Page({
     if (!userId) return
 
     try {
-      const res = await getUserMarkerStatistics({ userId })
-      console.log('标记统计数据返回:', res)
-      if (res) {
-        this.setData({
-          markerStats: {
-            validCount: res.validCount || 0,
-            pendingAuditCount: res.pendingAuditCount || 0,
-            deletedCount: res.deletedCount || 0
-          }
-        })
-        console.log('设置后的 markerStats:', this.data.markerStats)
-      }
+      const [res, favorites] = await Promise.all([
+        getUserMarkerStatistics({ userId }),
+        listFavorites({ userId }).catch(() => [])
+      ])
+      this.setData({
+        markerStats: {
+          validCount: res?.validCount || 0,
+          pendingAuditCount: res?.pendingAuditCount || 0,
+          deletedCount: res?.deletedCount || 0,
+          favoriteCount: (favorites || []).length
+        }
+      })
     } catch (error) {
       console.error('获取标记统计数据失败:', error)
     }
