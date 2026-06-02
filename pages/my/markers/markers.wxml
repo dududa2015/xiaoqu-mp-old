@@ -21,10 +21,3 @@
   <view hidden="{{!loading}}">正在加载...</view>
   <view hidden="{{hasMore}}">没有更多了</view>
 </view>
-<map-marker-popup item="{{item}}"></map-marker-popup>
-<!-- <t-popup visible="{{visible}}" prevent-scroll-through="{{false}}" bind:visible-change="onVisibleChange" placement="bottom">
-  <view class="block">
-    <map style="width: 100%; height: 100vh;" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" scale="{{17}}"></map>
-    <t-icon t-class="close-btn" name="close-circle" size="64rpx" color="#0074FE" bind:tap="onClose" />
-  </view>
-</t-popup> -->

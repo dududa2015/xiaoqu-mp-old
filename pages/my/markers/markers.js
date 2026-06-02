@@ -1,6 +1,7 @@
 import {
   getMarkerByUserId
 } from '../../../utils/apis'
+import { buildMarkerPlaceRecord, openPlaceOnMap } from '../../../utils/place-record'
 
 var app = getApp();
 Page({
@@ -10,8 +11,7 @@ Page({
     loading: false, // 是否正在加载中
     page: 0, // 当前页数
     deleted: 0,
-    typeList: ['楼号', '出入口', '公厕', '设施', '设施', '设施', '其他', '道路', '围墙'],
-    visible: false
+    typeList: ['楼号', '出入口', '公厕', '设施', '设施', '设施', '其他', '道路', '围墙']
   },
   onLoad: function (options) {
     this.data.deleted = options.deleted
@@ -65,22 +65,11 @@ Page({
     })
   },
   onMarkerTap(event) {
-    const {
-      item
-    } = event.currentTarget.dataset
-    this.setData({
-      item
-    })
-  },
-  onVisibleChange(e) {
-    this.setData({
-      visible: e.detail.visible
-    })
-  },
-  onClose() {
-    this.setData({
-      visible: false
-    })
+    const { item } = event.currentTarget.dataset
+    if (!item) {
+      return
+    }
+    openPlaceOnMap(buildMarkerPlaceRecord(item))
   },
   // 页面滚动时触发
   onReachBottom: function () {
