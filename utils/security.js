@@ -95,18 +95,19 @@ function parseAndSortQueryParams(url) {
 
 /**
  * 生成请求签名（HMAC-SHA256）
- * 签名算法：HMAC-SHA256(|timestamp|nonce|METHOD|path|queryParams)
+ * 签名算法：HMAC-SHA256(|timestamp|nonce|METHOD|path|queryParams|requestId)
  * @param {object} params 签名参数
  * @param {string} params.token 用户token（不参与签名）
  * @param {number} params.timestamp 时间戳
  * @param {string} params.nonce 随机字符串
+ * @param {string} params.requestId 请求唯一标识（与 X-Request-ID 一致）
  * @param {string} params.method HTTP方法
  * @param {string} params.url 请求URL
  * @param {object} params.data 请求数据
  * @returns {object} 签名信息对象
  */
 function generateSignature(params) {
-  const { token, timestamp, nonce, method, url, data } = params;
+  const { token, timestamp, nonce, requestId, method, url, data } = params;
 
   // 对URL中的查询参数进行排序（重要修复）
   const { path: sortedPath, queryString: sortedQueryString } = parseAndSortQueryParams(url);
@@ -121,8 +122,8 @@ function generateSignature(params) {
   const sortedParams = sortAndSerialize(data || {});
 
   // 构建签名字符串（不包含token）
-  // 格式：|timestamp|nonce|METHOD|path|queryParams
-  const signString = `|${timestamp}|${nonce}|${method.toUpperCase()}|${sortedPath}|${sortedQueryParams}`;
+  // 格式：|timestamp|nonce|METHOD|path|queryParams|requestId
+  const signString = `|${timestamp}|${nonce}|${method.toUpperCase()}|${sortedPath}|${sortedQueryParams}|${requestId}`;
 
   // 使用 HMAC-SHA256 加密
   const signature = CryptoJS.HmacSHA256(signString, HMAC_SECRET_KEY)
@@ -166,12 +167,14 @@ function generateSecurityHeaders(options) {
   // 生成时间戳和nonce
   const timestamp = getTimestamp();
   const nonce = generateNonce();
+  const requestId = `${timestamp}-${nonce}`;
 
   // 生成签名信息（包含 HMAC-SHA256 加密的签名）
   const signatureInfo = generateSignature({
     token,
     timestamp,
     nonce,
+    requestId,
     method,
     url,
     data
@@ -185,7 +188,7 @@ function generateSecurityHeaders(options) {
     'Content-Type': 'application/json',
     'X-Timestamp': timestamp.toString(),
     'X-Nonce': nonce,
-    'X-Request-ID': `${timestamp}-${nonce}`, // 请求唯一标识
+    'X-Request-ID': requestId,
   };
 
   // 如果有token，添加到Authorization头
