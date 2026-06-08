@@ -4,13 +4,13 @@
   <view class="content">
     <!-- #if IOS -->
     <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
-      <t-cell title="升级会员" hover arrow bind:tap="toVip">
+      <t-cell title="开通会员" hover arrow bind:tap="toVip">
         <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
     </t-cell-group>
     <!-- #elif ANDROID -->
     <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
-      <t-cell title="升级会员" hover arrow bind:tap="toVip">
+      <t-cell title="开通会员" hover arrow bind:tap="toVip">
         <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
         <!-- 权益即将到期：VIP 黄色 / 试用 蓝色 -->
         <view slot="note" wx:if="{{entitlementShowCellNote}}">
