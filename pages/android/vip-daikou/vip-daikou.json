@@ -1,7 +1,12 @@
 {
+  "navigationBarTitleText": "开通会员",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#F2F2F7",
+  "disableScroll": true,
   "usingComponents": {
     "t-checkbox": "tdesign-miniprogram/checkbox/checkbox",
-    "navigation-bar": "/components/navigation-bar/navigation-bar"
-  },
-  "navigationBarTitleText": "自动续费会员"
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-icon": "tdesign-miniprogram/icon/icon"
+  }
 }

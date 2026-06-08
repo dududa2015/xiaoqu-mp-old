@@ -184,22 +184,45 @@ export function getProductNameFromAttach(attach) {
  * @returns {Number} 已使用天数（不包含当天）
  */
 export function calculateUsedDays(successTime) {
+  return calculateUsedNaturalDays(successTime)
+}
+
+/**
+ * 按自然日计算已使用天数（退款协议）
+ * 扣款/支付成功当日计为 0 天；每跨越一个自然日加 1 天（不按小时折算）
+ * @param {String} successTime - 支付/扣款成功时间
+ * @returns {Number}
+ */
+export function calculateUsedNaturalDays(successTime) {
   if (!successTime) return 0
 
   const now = new Date()
   const payTime = new Date(successTime)
-
-  // 将时间设置为当天的 00:00:00，以便按天计算
   const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
   const payDate = new Date(payTime.getFullYear(), payTime.getMonth(), payTime.getDate())
-
-  // 计算天数差（不包含当天）
   const daysDiff = Math.floor((nowDate - payDate) / (24 * 60 * 60 * 1000))
 
-  // 不包含当天
-  // 如果订单是今天支付的，使用天数为0
-  // 如果订单是昨天支付的，使用天数为1
   return Math.max(0, daysDiff)
+}
+
+/** 退款协议：每天扣除 0.3 元（30 分） */
+export const REFUND_DEDUCTION_PER_DAY_FEN = 30
+
+/**
+ * 按退款协议计算可退金额（单位：分）
+ * 退款金额 = 订单金额 - (已使用自然日天数 × 0.3元)
+ */
+export function calculateRefundByAgreement(totalAmountFen, successTime) {
+  const amount = Number(totalAmountFen) || 0
+  const usedDays = calculateUsedNaturalDays(successTime)
+  const deductionAmount = usedDays * REFUND_DEDUCTION_PER_DAY_FEN
+  const refundAmount = Math.max(0, amount - deductionAmount)
+
+  return {
+    usedDays,
+    deductionAmount,
+    refundAmount
+  }
 }
 
 /**

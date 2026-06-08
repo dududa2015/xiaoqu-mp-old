@@ -1,11 +1,12 @@
 // api URL：仅开发者工具走测试；正式版、体验版均走生产
-const API_URL_PROD = 'https://mp.zhuzixi.cn/api'
+const API_URL_PROD = 'https://test.zhuzixi.cn/api'
 const API_URL_TEST = 'https://test.zhuzixi.cn/api'
 // const API_URL_TEST = 'http://localhost:5213/api'
 
 function resolveApiUrl() {
   try {
     const { miniProgram } = wx.getAccountInfoSync()
+    console.log('miniProgram.envVersion', miniProgram.envVersion)
     // develop: 开发者工具 → 测试；trial: 体验版、release: 正式版 → 生产
     if (miniProgram.envVersion === 'develop' || miniProgram.envVersion === 'trial') {
       return API_URL_TEST

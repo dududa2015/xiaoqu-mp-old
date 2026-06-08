@@ -1,0 +1,146 @@
+<scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+  <view class="page-content">
+    <view wx:if="{{loading}}" class="loading-wrap">
+      <t-loading theme="circular" size="40rpx" text="加载扣款记录..." />
+    </view>
+
+    <block wx:elif="{{!displayOrder}}">
+      <view class="card empty-card">
+        <text class="card-title">扣款记录</text>
+        <text class="empty-desc">暂无自动续费扣款记录</text>
+      </view>
+      <view class="legal-section">
+        <text class="legal-text">· 扣款成功后 7 天内可申请退款</text>
+        <text class="legal-text">· 退款金额 = 订单金额 - (已使用自然日天数 × 0.3元)</text>
+        <text class="legal-text">· 每月最多退款一次</text>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view class="card order-info-card">
+        <text class="card-title products-title">扣款信息</text>
+        <view class="plan-item plan-item-static">
+          <view class="plan-main">
+            <view class="plan-name-row">
+              <text class="plan-name">{{displayOrder.planName}}</text>
+              <view class="plan-badge" wx:if="{{displayOrder.status === 'REFUNDED'}}">已退款</view>
+            </view>
+            <text class="plan-note">扣款时间：{{displayOrder.successTime}}</text>
+            <text class="plan-note">单号：{{displayOrder.outTradeNo}}</text>
+            <text class="plan-note plan-note-warn" wx:if="{{!displayOrder.refundable && displayOrder.refundTip}}">{{displayOrder.refundTip}}</text>
+          </view>
+          <text class="plan-price">¥{{displayOrder.amountText}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{displayOrder.refundable}}" class="card summary-card">
+        <view class="summary-header">
+          <text class="summary-title">退款计算</text>
+        </view>
+        <view class="summary-content">
+          <view class="summary-row">
+            <text class="summary-label">订单金额</text>
+            <text class="summary-value-strong">¥{{displayOrder.amountText}}</text>
+          </view>
+          <view wx:if="{{displayOrder.usedDays > 0}}" class="deduction-box">
+            <view class="summary-row">
+              <view class="summary-label-col">
+                <text class="summary-label">已使用</text>
+                <text class="summary-label-sub">{{displayOrder.usedDays}}自然日</text>
+              </view>
+              <text class="summary-deduction">-¥{{displayOrder.deductionAmountText}}</text>
+            </view>
+            <view class="deduction-note-row">
+              <text class="deduction-note">按每天 0.3 元扣除</text>
+              <view class="deduction-help" bind:tap="onShowDeductionHelp">
+                <text class="deduction-help-icon">?</text>
+              </view>
+              <view class="deduction-tooltip" wx:if="{{showDeductionHelp}}">
+                <text>按 9 元/30 天折算，每天 0.3 元</text>
+              </view>
+            </view>
+          </view>
+          <view class="summary-divider"></view>
+          <view class="summary-row">
+            <view class="summary-label-col">
+              <text class="summary-label total-label">可退金额</text>
+              <text class="summary-label-sub green" wx:if="{{displayOrder.usedDays === 0}}">扣款当日可全额退</text>
+            </view>
+            <text class="summary-refund">¥{{displayOrder.maxRefundAmountText}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{displayOrder.refundable}}" class="card reasons-card">
+        <text class="card-title products-title">退款原因</text>
+        <view class="reason-chips">
+          <view
+            class="reason-chip {{selectedReasonIndex === index ? 'reason-chip-active' : ''}}"
+            wx:for="{{reasonList}}"
+            wx:key="*this"
+            bind:tap="onSelectReason"
+            data-index="{{index}}"
+          >
+            {{item}}
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{displayOrder.refundable && showCustomReason}}" class="card textarea-card">
+        <t-textarea
+          t-class="papay-refund-textarea"
+          t-class-textarea="papay-refund-textarea-inner"
+          value="{{customReason}}"
+          placeholder="请详细说明退款原因（至少2个字）"
+          maxlength="200"
+          bind:change="onCustomReasonInput"
+        />
+        <view class="custom-reason-meta">
+          <text wx:if="{{customReasonError}}" class="error-text">{{customReasonError}}</text>
+          <text class="custom-reason-count">{{customReason.length}}/200</text>
+        </view>
+      </view>
+
+      <view class="legal-section">
+        <text class="legal-text">· 退款金额按协议扣除已使用自然日费用（每天 0.3 元）</text>
+        <text class="legal-text">· 扣款成功后 7 天内可申请退款，每月最多一次</text>
+        <text class="legal-text">· 退款成功后会员权益将相应收回，自动续费协议不受影响</text>
+        <text class="legal-text">· 退款将在 1-3 个工作日内原路退回</text>
+      </view>
+
+      <view wx:if="{{displayOrder.refundable}}" class="agree-row">
+        <t-checkbox
+          t-class="agree-checkbox"
+          block="{{false}}"
+          borderless="{{true}}"
+          value="{{agreedToAgreement}}"
+          bind:change="onAgreedAgreementChange"
+        ></t-checkbox>
+        <view class="agree-text">
+          已阅读并同意
+          <text class="agree-link" catch:tap="onViewAgreement">《退款协议》</text>
+        </view>
+      </view>
+      <text wx:if="{{agreementError}}" class="error-text agree-error">{{agreementError}}</text>
+
+      <t-button
+        theme="primary"
+        size="large"
+        block
+        bind:tap="onSubmit"
+        disabled="{{submitting || !canSubmit}}"
+        loading="{{submitting}}"
+      >
+        {{submitting ? '提交中...' : (canSubmit ? '提交退款申请' : submitDisabledText)}}
+      </t-button>
+    </block>
+  </view>
+</scroll-view>
+
+<t-dialog
+  visible="{{showSuccessDialog}}"
+  title="{{successDialogTitle}}"
+  content="{{successDialogContent}}"
+  confirm-btn="知道了"
+  bind:confirm="onSuccessDialogConfirm"
+/>

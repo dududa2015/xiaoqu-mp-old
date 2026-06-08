@@ -1,88 +1,204 @@
 import {
-  createAppOrder
-} from '../../../apis/wechatpay-apis'
+  createContractOrder
+} from '../../../apis/wechatpay-papay-apis'
+import {
+  getProductList
+} from '../../../apis/product-api'
 import {
   getUserById
 } from '../../../apis/user-api'
 const { checkLoginAndNavigate } = require('../../../utils/util.js')
 
-const STATIC_PRODUCT_LIST = [{
-  productId: 'month-auto',
-  productIdentifier: 'com.louhao.xiaoqu.month.auto',
-  name: '连续包月',
-  localizedTitle: '连续包月',
-  description: '连续包月会员（自动续费）',
-  price: 6,
-  priceText: '6.00',
-  originalPrice: 9,
-  originalPriceText: '9.00',
-  note: '每月自动续费',
-  recommend: '推荐',
-  checked: true
-}, {
-  productId: 'season-auto',
-  productIdentifier: 'com.louhao.xiaoqu.season.auto',
-  name: '连续包季',
-  localizedTitle: '连续包季',
-  description: '连续包季会员（自动续费）',
-  price: 15,
-  priceText: '15.00',
-  originalPrice: 27,
-  originalPriceText: '27.00',
-  note: '每3个月自动续费',
-  recommend: '',
-  checked: false
-}, {
-  productId: 'year-auto',
-  productIdentifier: 'com.louhao.xiaoqu.year.auto',
-  name: '连续包年',
-  localizedTitle: '连续包年',
-  description: '连续包年会员（自动续费）',
-  price: 49.9,
-  priceText: '49.90',
-  originalPrice: 108,
-  originalPriceText: '108.00',
-  note: '每12个月自动续费',
-  recommend: '',
-  checked: false
-}]
+const PAPAY_PRODUCT_IDENTIFIERS = [
+  'com.louhao.xiaoqu.month',
+  'com.louhao.xiaoqu.season',
+  'com.louhao.xiaoqu.year'
+]
 
-const getPurchaseButtonText = (product) => {
-  if (!product) {
-    return '确认协议并开通'
+function buildPriceLabel(productIdentifier, price) {
+  const amount = Number(price || 0)
+  if (productIdentifier.endsWith('.month')) {
+    return `¥${amount % 1 === 0 ? amount.toFixed(0) : amount.toFixed(2)}/月`
   }
-  const price = product.priceText || product.price
-  return `确认协议并以￥${price}元开通`
+  if (productIdentifier.endsWith('.season')) {
+    return `¥${amount % 1 === 0 ? amount.toFixed(0) : amount.toFixed(2)}/季`
+  }
+  if (productIdentifier.endsWith('.year')) {
+    return `¥${amount % 1 === 0 ? amount.toFixed(0) : amount.toFixed(2)}/年`
+  }
+  return `¥${amount.toFixed(2)}`
+}
+
+function getWechatOpenId() {
+  const userInfo = wx.getStorageSync('userInfo') || {}
+  return (userInfo.appOpenId || userInfo.openId || '').trim()
+}
+
+function checkWechatInstalled() {
+  return new Promise((resolve) => {
+    if (!wx.miniapp || typeof wx.miniapp.hasWechatInstall !== 'function') {
+      resolve(true)
+      return
+    }
+
+    wx.miniapp.hasWechatInstall({
+      success: (res) => {
+        resolve(!!res.hasWechatInstall)
+      },
+      fail: () => {
+        resolve(false)
+      }
+    })
+  })
 }
 
 Page({
   data: {
     rightsList: [{
       name: '免广告',
-      icon: '🚫'
+      icon: 'sound-mute-filled'
     }, {
       name: '个人地图',
-      icon: '🗺️'
+      icon: 'map-information-2'
     }, {
       name: '跟随导航',
-      icon: '🧭'
+      icon: 'map-navigation-filled'
     }, {
       name: '3D地图',
-      icon: '🌐'
+      icon: 'map-3d-filled'
     }, {
       name: '定位图标',
-      icon: '📍'
+      icon: 'location-filled'
     }],
-    productList: STATIC_PRODUCT_LIST,
-    currentProduct: STATIC_PRODUCT_LIST[0],
-    purchaseButtonText: getPurchaseButtonText(STATIC_PRODUCT_LIST[0]),
+    productList: [],
+    currentProduct: null,
     agreedRenew: false,
-    paying: false
+    paying: false,
+    waitingSignResult: false,
+    loading: false
   },
 
   onLoad() {
     if (!checkLoginAndNavigate('redirectTo')) {
       return
+    }
+    this.loadProductList()
+  },
+
+  onShow(options) {
+    if (!this.data.waitingSignResult) {
+      return
+    }
+
+    this.clearLaunchWatchdog()
+
+    const extraData = options && options.referrerInfo && options.referrerInfo.extraData
+    if (extraData && extraData.return_code === 'FAIL') {
+      this.resetSigningState(true, extraData.return_msg || '签约已取消')
+      return
+    }
+
+    this.setData({
+      waitingSignResult: false,
+      paying: false
+    })
+    this.checkUserInfoAfterPayment()
+  },
+
+  onHide() {
+    this._didLeaveAppForWechat = true
+    this.clearLaunchWatchdog()
+  },
+
+  onUnload() {
+    this.clearLaunchWatchdog()
+  },
+
+  clearLaunchWatchdog() {
+    if (this._launchWatchdogTimer) {
+      clearTimeout(this._launchWatchdogTimer)
+      this._launchWatchdogTimer = null
+    }
+  },
+
+  resetSigningState(showToast, message) {
+    this.clearLaunchWatchdog()
+    this._didLeaveAppForWechat = false
+    this.setData({
+      waitingSignResult: false,
+      paying: false
+    })
+    if (showToast && message) {
+      wx.showToast({
+        title: message,
+        icon: 'none',
+        duration: 2000
+      })
+    }
+  },
+
+  async loadProductList() {
+    if (this.data.loading) {
+      return
+    }
+
+    this.setData({
+      loading: true
+    })
+
+    try {
+      const res = await getProductList()
+      const sourceList = Array.isArray(res) ? res : []
+      const filteredList = sourceList.filter(item =>
+        PAPAY_PRODUCT_IDENTIFIERS.includes(item.productIdentifier)
+      ).sort((a, b) => {
+        return PAPAY_PRODUCT_IDENTIFIERS.indexOf(a.productIdentifier) -
+          PAPAY_PRODUCT_IDENTIFIERS.indexOf(b.productIdentifier)
+      })
+
+      if (!filteredList.length) {
+        wx.showToast({
+          title: '暂无订阅产品',
+          icon: 'none'
+        })
+        return
+      }
+
+      const productList = filteredList.map((product, index) => {
+        const price = Number(product.price || 0)
+        const originalPrice = Number(product.originalPrice || 0)
+
+        return {
+          productId: product.productId,
+          productIdentifier: product.productIdentifier,
+          name: product.name,
+          localizedTitle: product.name,
+          description: product.name,
+          price,
+          priceText: price.toFixed(2),
+          priceLabel: buildPriceLabel(product.productIdentifier, price),
+          originalPrice: originalPrice > 0 ? originalPrice : null,
+          originalPriceText: originalPrice > 0 ? originalPrice.toFixed(2) : null,
+          note: product.note || '',
+          recommend: product.recommend || '',
+          checked: index === 0
+        }
+      })
+
+      this.setData({
+        productList,
+        currentProduct: productList[0]
+      })
+    } catch (error) {
+      console.error('获取订阅产品失败:', error)
+      wx.showToast({
+        title: '加载产品失败',
+        icon: 'none'
+      })
+    } finally {
+      this.setData({
+        loading: false
+      })
     }
   },
 
@@ -96,8 +212,7 @@ Page({
 
     this.setData({
       productList,
-      currentProduct,
-      purchaseButtonText: getPurchaseButtonText(currentProduct)
+      currentProduct
     })
   },
 
@@ -133,78 +248,140 @@ Page({
     })
 
     try {
-      const param = {
-        userId: wx.getStorageSync('userId'),
-        Amount: this.data.currentProduct.price * 100,
-        ProductId: this.data.currentProduct.productIdentifier,
-        Description: this.data.currentProduct.description,
+      const hasWechat = await checkWechatInstalled()
+      if (!hasWechat) {
+        this.setData({
+          paying: false
+        })
+        wx.showToast({
+          title: '请先安装微信后再订阅',
+          icon: 'none',
+          duration: 2000
+        })
+        return
       }
 
+      const openId = getWechatOpenId()
+      if (!openId) {
+        this.setData({
+          paying: false
+        })
+        wx.showModal({
+          title: '需要微信登录',
+          content: '开通自动续费需使用微信登录 App，请先完成微信授权登录。',
+          confirmText: '去登录',
+          success: (res) => {
+            if (res.confirm) {
+              wx.navigateTo({
+                url: '/pages/android/login/login',
+              })
+            }
+          }
+        })
+        return
+      }
+
+      const param = {
+        userId: wx.getStorageSync('userId'),
+        productId: this.data.currentProduct.productIdentifier,
+        openId,
+      }
+      console.log('创建签约', param)
       wx.showLoading({
-        title: '正在创建订单...',
+        title: '正在创建签约...',
         mask: true
       })
 
-      const data = await createAppOrder(param)
+      const data = await createContractOrder(param)
       wx.hideLoading()
-      this.requestPayment(data)
+      this.launchWechatSigning(data)
     } catch (error) {
-      console.error('创建订单失败:', error)
+      console.error('创建签约失败:', error)
       wx.hideLoading()
       this.setData({
         paying: false
       })
       wx.showToast({
-        title: error.message || '创建订单失败，请重试',
+        title: error.message || '创建签约失败，请重试',
         icon: 'none',
         duration: 2000
       })
     }
   },
 
-  requestPayment(data) {
-    if (!data || !data.prepayId) {
-      this.setData({
-        paying: false
-      })
-      wx.showToast({
-        title: '订单创建失败',
-        icon: 'none'
-      })
+  launchWechatSigning(data) {
+    const preEntrustwebId = data && (data.preEntrustwebId || data.PreEntrustwebId)
+    const miniprogramUsername = data && (data.miniprogramUsername || data.MiniprogramUsername)
+    const miniprogramPath = data && (data.miniprogramPath || data.MiniprogramPath)
+    if (!preEntrustwebId) {
+      this.resetSigningState(true, '签约参数获取失败')
       return
     }
 
-    wx.miniapp.requestPayment({
-      mchId: '1112580418',
-      prepayId: data.prepayId,
-      nonceStr: data.nonceStr,
-      package: 'Sign=WXPay',
-      timeStamp: data.timeStamp,
-      sign: data.paySign,
+    const launchData = {
+      preEntrustwebId,
+      miniprogramUsername,
+      miniprogramPath
+    }
+
+    if (miniprogramUsername && miniprogramPath) {
+      console.log('委托代扣签约调起: WXLaunchMiniProgram', miniprogramUsername, miniprogramPath)
+      this.launchSigningMiniProgram(launchData)
+      return
+    }
+
+    console.log('委托代扣签约调起: openBusinessWebview', preEntrustwebId)
+    this.launchSigningOpenBusinessWebview(launchData)
+  },
+
+  launchSigningOpenBusinessWebview(data) {
+    if (!wx.miniapp || typeof wx.miniapp.openBusinessWebview !== 'function') {
+      this.resetSigningState(true, '当前版本不支持微信签约，请更新 App')
+      return
+    }
+
+    this._didLeaveAppForWechat = false
+    this.clearLaunchWatchdog()
+    this.setData({
+      waitingSignResult: true
+    })
+
+    wx.miniapp.openBusinessWebview({
+      preEntrustwebId: data.preEntrustwebId,
       success: () => {
-        this.setData({
-          paying: false
-        })
-        this.checkUserInfoAfterPayment()
+        this._launchWatchdogTimer = setTimeout(() => {
+          if (!this._didLeaveAppForWechat && this.data.waitingSignResult) {
+            this.resetSigningState(true, '无法打开微信，请先安装微信')
+          }
+        }, 2500)
       },
       fail: (res) => {
-        console.error('wx.miniapp.requestPayment res:', res)
-        this.setData({
-          paying: false
-        })
-        if (res.errMsg && res.errMsg.includes('cancel')) {
-          wx.showToast({
-            title: '已取消支付',
-            icon: 'none'
-          })
-        } else {
-          const errorMsg = res.errMsg || '支付失败'
-          wx.showToast({
-            title: errorMsg.includes('fail') ? '支付失败，请重试' : errorMsg,
-            icon: 'none',
-            duration: 2000
-          })
-        }
+        console.error('openBusinessWebview fail:', res)
+        this.resetSigningState(true, '无法拉起微信签约，请确认已安装微信')
+      }
+    })
+  },
+
+  launchSigningMiniProgram(data) {
+    this._didLeaveAppForWechat = false
+    this.clearLaunchWatchdog()
+    this.setData({
+      waitingSignResult: true
+    })
+    wx.miniapp.launchMiniProgram({
+      userName: data.miniprogramUsername,
+      path: data.miniprogramPath,
+      miniprogramType: 0,
+      success: () => {
+        this._launchWatchdogTimer = setTimeout(() => {
+          if (!this._didLeaveAppForWechat && this.data.waitingSignResult) {
+            this.resetSigningState(true, '无法打开微信，请先安装微信')
+          }
+        }, 2500)
+      },
+      fail: (res) => {
+        console.error('launchMiniProgram fail:', res)
+        this.resetSigningState(true, '无法拉起微信签约，请确认已安装微信')
       }
     })
   },
@@ -215,7 +392,7 @@ Page({
     let attempts = 0
 
     wx.showLoading({
-      title: '支付成功，正在确认...',
+      title: '正在确认签约结果...',
       mask: true
     })
 
@@ -238,7 +415,7 @@ Page({
       const userId = wx.getStorageSync('userId')
       if (!userId) {
         if (attempts >= maxAttempts) {
-          jumpToHome('支付成功，会员权益可能稍后到账')
+          jumpToHome('签约成功，会员权益可能稍后到账')
           return
         }
         setTimeout(checkUserInfo, interval)
@@ -259,19 +436,21 @@ Page({
             wx.setStorageSync('userInfo', res)
             jumpToHome('开通成功')
           } else if (attempts >= maxAttempts) {
-            wx.setStorageSync('userInfo', res)
-            jumpToHome('支付成功，会员权益可能稍后到账')
+            if (res) {
+              wx.setStorageSync('userInfo', res)
+            }
+            jumpToHome('签约处理中，请稍后在会员管理查看')
           } else {
             setTimeout(checkUserInfo, interval)
           }
         } else if (attempts >= maxAttempts) {
-          jumpToHome('支付成功，会员权益可能稍后到账')
+          jumpToHome('签约成功，会员权益可能稍后到账')
         } else {
           setTimeout(checkUserInfo, interval)
         }
       }).catch(() => {
         if (attempts >= maxAttempts) {
-          jumpToHome('支付成功，会员权益可能稍后到账')
+          jumpToHome('签约成功，会员权益可能稍后到账')
         } else {
           setTimeout(checkUserInfo, interval)
         }
@@ -290,6 +469,12 @@ Page({
   toDaikouAgreement() {
     wx.navigateTo({
       url: '/pages/android/vip-daikou-agreement/vip-daikou-agreement',
+    })
+  },
+
+  toFaq() {
+    wx.navigateTo({
+      url: '/pages/help/question/question',
     })
   }
 })

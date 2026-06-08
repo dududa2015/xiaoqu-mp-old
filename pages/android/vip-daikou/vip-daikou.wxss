@@ -1,24 +1,203 @@
-@import "../vip/vip.wxss";
-
-.agree-checkbox-wrap {
-  margin-bottom: 16rpx;
-  padding: 0 8rpx;
-  text-align: left;
+page {
+  background-color: #F2F2F7;
+  height: 100vh;
 }
 
-.agree-checkbox-row {
+.page-scroll {
+  height: 100vh;
+}
+
+.page-content {
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 48rpx;
+  padding: 32rpx 36rpx;
+  margin-bottom: 24rpx;
+}
+
+.card-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+  margin-bottom: 20rpx;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #1D2129;
+}
+
+.card-subtitle {
+  font-size: 26rpx;
+  color: #6B7280;
+}
+
+.benefits-card {
+  padding: 28rpx 32rpx 20rpx;
+}
+
+.benefits-card .card-title-row {
+  margin-bottom: 14rpx;
+}
+
+.benefits-card .card-title {
+  font-size: 30rpx;
+}
+
+.benefits-card .card-subtitle {
+  font-size: 24rpx;
+}
+
+.benefits-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.benefit-item {
+  width: 50%;
+  padding: 9rpx 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.benefit-icon {
+  flex-shrink: 0;
+}
+
+.benefit-name {
+  font-size: 26rpx;
+  color: #1D2129;
+  line-height: 1.35;
+}
+
+.products-card {
+  padding-top: 32rpx;
+  padding-bottom: 8rpx;
+}
+
+.products-title {
+  display: block;
+  padding: 0;
+}
+
+.plan-item {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 28rpx 0;
+}
+
+.plan-item-divider {
+  border-bottom: 1rpx solid #E5E5EA;
+}
+
+.plan-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.plan-name-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.plan-name {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #1D2129;
+}
+
+.plan-badge {
+  padding: 4rpx 12rpx;
+  border-radius: 16rpx;
+  background-color: #EFEFF4;
+  color: #0074FE;
+  font-size: 22rpx;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.plan-note {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: #6B7280;
+}
+
+.plan-price {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #1D2129;
+  flex-shrink: 0;
+}
+
+.plan-check {
+  width: 40rpx;
+  height: 40rpx;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radio-empty {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 3rpx solid #E5E5EA;
+  box-sizing: border-box;
+}
+
+.legal-section {
+  padding: 8rpx;
+  margin-bottom: 24rpx;
+}
+
+.legal-text {
+  display: block;
+  font-size: 24rpx;
+  color: #6B7280;
+  line-height: 1.6;
+  margin-bottom: 8rpx;
+}
+
+.legal-link {
+  display: inline-block;
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: #0074FE;
+}
+
+.agree-row {
   display: flex;
   align-items: flex-start;
   gap: 8rpx;
+  margin-bottom: 24rpx;
 }
 
-.agree-checkbox-text {
+.agree-checkbox {
+  background: transparent !important;
+}
+
+.agree-text {
   flex: 1;
   font-size: 24rpx;
   line-height: 36rpx;
-  color: rgba(50, 50, 51, 1);
+  color: #6B7280;
 }
 
 .agree-link {
-  color: rgba(22, 93, 255, 1);
+  color: #0074FE;
+}
+
+.t-checkbox__icon--left {
+  margin-right: 0 !important;
 }

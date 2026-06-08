@@ -1,13 +1,15 @@
 {
-  "navigationBarTitleText": "会员管理",
+  "navigationBarTitleText": "自动续费退款",
   "navigationBarBackgroundColor": "#ffffff",
   "navigationBarTextStyle": "black",
   "backgroundColor": "#F2F2F7",
   "disableScroll": true,
   "usingComponents": {
-    "t-switch": "tdesign-miniprogram/switch/switch",
     "t-button": "tdesign-miniprogram/button/button",
+    "t-checkbox": "tdesign-miniprogram/checkbox/checkbox",
     "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-textarea": "tdesign-miniprogram/textarea/textarea",
+    "t-dialog": "tdesign-miniprogram/dialog/dialog",
     "t-loading": "tdesign-miniprogram/loading/loading"
   }
 }

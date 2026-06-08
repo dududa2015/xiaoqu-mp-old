@@ -311,6 +311,10 @@
 			"sub_switch": true
 		},
 		{
+			"path": "pages/android/papay-refund/papay-refund.js",
+			"sub_switch": true
+		},
+		{
 			"path": "pages/android/vip-renew/vip-renew.js",
 			"sub_switch": true
 		},
