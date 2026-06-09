@@ -21,9 +21,9 @@
       </t-cell>
       <t-cell title="会员管理" hover arrow left-icon="/images/my/vip-management.png" bind:tap="toVipManage">
       </t-cell>
-      <t-cell title="缴费记录" hover arrow bind:tap="toOrderList">
+      <!-- <t-cell title="缴费记录" hover arrow bind:tap="toOrderList">
         <image src="/images/my/pay.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
+      </t-cell> -->
     </t-cell-group>
     <!-- #endif -->
 

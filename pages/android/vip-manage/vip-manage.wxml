@@ -62,18 +62,18 @@
 
       <view class="card services-card">
         <text class="card-title block-title">相关服务</text>
+        <view class="service-item service-item-divider" bind:tap="toDeductList">
+          <text class="service-name">扣费记录</text>
+          <t-icon name="chevron-right" size="40rpx" color="#C7C7CC" />
+        </view>
         <view class="service-item service-item-divider" bind:tap="toPapayRefund">
-          <text class="service-name">自动续费退款</text>
+          <text class="service-name">发起退款</text>
           <t-icon name="chevron-right" size="40rpx" color="#C7C7CC" />
         </view>
         <view class="service-item service-item-divider" bind:tap="toChangePlan">
           <text class="service-name">变更订阅方案</text>
           <t-icon name="chevron-right" size="40rpx" color="#C7C7CC" />
-        </view>
-        <view class="service-item service-item-divider" bind:tap="toDeductList">
-          <text class="service-name">扣费记录</text>
-          <t-icon name="chevron-right" size="40rpx" color="#C7C7CC" />
-        </view>
+        </view>        
         <view class="service-item" bind:tap="toDaikouAgreement">
           <text class="service-name">自动续费协议</text>
           <t-icon name="chevron-right" size="40rpx" color="#C7C7CC" />

@@ -214,16 +214,8 @@ Page({
       wx.setStorageSync('token', res.token)
       wx.setStorageSync('appleId', res.appleId)
       wx.setStorageSync('userInfo', res)
-      wx.showModal({
-        content: '登录成功',
-        showCancel: false,
-        complete: (res) => {
-          if (res.confirm) {
-            wx.reLaunch({
-              url: '/pages/index/index',
-            })
-          }
-        }
+      wx.switchTab({
+        url: '/pages/my/index/index',
       })
     } else {
       wx.showToast({
