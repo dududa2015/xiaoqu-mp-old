@@ -1,5 +1,7 @@
 import {
-  createContractOrder
+  cancelContract,
+  createContractOrder,
+  getSubscription
 } from '../../../apis/wechatpay-papay-apis'
 import {
   getProductList
@@ -32,6 +34,102 @@ function buildPriceLabel(productIdentifier, price) {
 function getWechatOpenId() {
   const userInfo = wx.getStorageSync('userInfo') || {}
   return (userInfo.appOpenId || userInfo.openId || '').trim()
+}
+
+function resolveSubscriptionProductId(subscription) {
+  if (!subscription) {
+    return ''
+  }
+  return (
+    subscription.productId ||
+    subscription.ProductId ||
+    subscription.productIdentifier ||
+    subscription.ProductIdentifier ||
+    ''
+  ).trim()
+}
+
+function resolvePlanPeriodKey(value) {
+  const text = (value || '').toLowerCase()
+  if (!text) {
+    return ''
+  }
+  if (text.includes('month') || text.includes('月度') || text.includes('包月')) {
+    return 'month'
+  }
+  if (text.includes('season') || text.includes('季度') || text.includes('包季')) {
+    return 'season'
+  }
+  if (text.includes('year') || text.includes('年度') || text.includes('包年')) {
+    return 'year'
+  }
+  return ''
+}
+
+function isSameSubscriptionPlan(product, subscription) {
+  if (!product || !subscription) {
+    return false
+  }
+
+  const subscriptionProductId = resolveSubscriptionProductId(subscription)
+  if (subscriptionProductId) {
+    if (
+      product.productIdentifier === subscriptionProductId ||
+      String(product.productId) === subscriptionProductId
+    ) {
+      return true
+    }
+
+    const productKey = resolvePlanPeriodKey(product.productIdentifier)
+    const subscriptionKey = resolvePlanPeriodKey(subscriptionProductId)
+    if (productKey && subscriptionKey) {
+      return productKey === subscriptionKey
+    }
+  }
+
+  const planName = (subscription.planName || '').trim()
+  if (!planName) {
+    return false
+  }
+
+  if (product.name === planName || product.localizedTitle === planName) {
+    return true
+  }
+
+  const productKey = resolvePlanPeriodKey(product.productIdentifier || product.name)
+  const planKey = resolvePlanPeriodKey(planName)
+  return !!(productKey && planKey && productKey === planKey)
+}
+
+function buildSubscribeButtonText({
+  paying,
+  alreadySubscribed,
+  selectedIsCurrentPlan
+}) {
+  if (paying) {
+    return alreadySubscribed && !selectedIsCurrentPlan ? '更换中...' : '支付中...'
+  }
+  if (!alreadySubscribed) {
+    return '立即订阅'
+  }
+  if (selectedIsCurrentPlan) {
+    return '当前方案'
+  }
+  return '更换为此方案'
+}
+
+function buildSubscriptionHint({
+  alreadySubscribed,
+  subscriptionPlanName,
+  isChangeMode
+}) {
+  if (!alreadySubscribed) {
+    return ''
+  }
+  if (isChangeMode) {
+    return `当前为「${subscriptionPlanName}」，选择其他方案后可一键更换，当前会员权益不受影响。`
+  }
+  return `当前已开通「${subscriptionPlanName}」自动续费。如需更换方案，请选择其他套餐。`
 }
 
 function checkWechatInstalled() {
@@ -75,18 +173,30 @@ Page({
     agreedRenew: false,
     paying: false,
     waitingSignResult: false,
-    loading: false
+    loading: false,
+    alreadySubscribed: false,
+    subscriptionPlanName: '',
+    currentProductIdentifier: '',
+    selectedIsCurrentPlan: false,
+    isChangeMode: false,
+    subscriptionHint: '',
+    subscribeButtonText: '立即订阅'
   },
 
-  onLoad() {
+  onLoad(options) {
     if (!checkLoginAndNavigate('redirectTo')) {
       return
     }
+    this.setData({
+      isChangeMode: options && options.from === 'change'
+    })
     this.loadProductList()
+    this.loadSubscription()
   },
 
   onShow(options) {
     if (!this.data.waitingSignResult) {
+      this.loadSubscription()
       return
     }
 
@@ -126,11 +236,230 @@ Page({
     this._didLeaveAppForWechat = false
     this.setData({
       waitingSignResult: false,
-      paying: false
+      paying: false,
+      subscribeButtonText: buildSubscribeButtonText({
+        paying: false,
+        alreadySubscribed: this.data.alreadySubscribed,
+        selectedIsCurrentPlan: this.data.selectedIsCurrentPlan
+      })
     })
     if (showToast && message) {
       wx.showToast({
         title: message,
+        icon: 'none',
+        duration: 2000
+      })
+    }
+  },
+
+  async loadSubscription() {
+    const userId = wx.getStorageSync('userId')
+    if (!userId) {
+      this._subscriptionRes = null
+      this.syncProductSelection({
+        alreadySubscribed: false,
+        subscriptionPlanName: '',
+        currentProductIdentifier: '',
+        subscriptionHint: ''
+      })
+      return
+    }
+
+    try {
+      const res = await getSubscription(userId)
+      const autoRenewEnabled = !!res.autoRenewEnabled
+      const subscriptionPlanName = res.planName || 'VIP 会员'
+      this._subscriptionRes = res
+      this.syncProductSelection({
+        alreadySubscribed: autoRenewEnabled,
+        subscriptionPlanName,
+        currentProductIdentifier: resolveSubscriptionProductId(res),
+        subscriptionHint: buildSubscriptionHint({
+          alreadySubscribed: autoRenewEnabled,
+          subscriptionPlanName,
+          isChangeMode: this.data.isChangeMode
+        })
+      })
+    } catch (error) {
+      console.error('获取订阅状态失败:', error)
+    }
+  },
+
+  isSelectedCurrentPlan() {
+    const {
+      currentProduct,
+      alreadySubscribed
+    } = this.data
+    if (!alreadySubscribed || !currentProduct) {
+      return false
+    }
+    if (currentProduct.isCurrent) {
+      return true
+    }
+    const subscriptionRes = this._subscriptionRes
+    return !!(subscriptionRes && isSameSubscriptionPlan(currentProduct, subscriptionRes))
+  },
+
+  syncProductSelection(overrides = {}) {
+    const preserveSelection = !!overrides.preserveSelection
+    const productList = overrides.productList || this.data.productList
+    const subscriptionRes = overrides.subscriptionRes !== undefined
+      ? overrides.subscriptionRes
+      : this._subscriptionRes
+    const alreadySubscribed = overrides.alreadySubscribed !== undefined
+      ? overrides.alreadySubscribed
+      : this.data.alreadySubscribed
+    const paying = overrides.paying !== undefined
+      ? overrides.paying
+      : this.data.paying
+
+    const nextData = {}
+    if (overrides.subscriptionPlanName !== undefined) {
+      nextData.subscriptionPlanName = overrides.subscriptionPlanName
+    }
+    if (overrides.currentProductIdentifier !== undefined) {
+      nextData.currentProductIdentifier = overrides.currentProductIdentifier
+    }
+    if (overrides.subscriptionHint !== undefined) {
+      nextData.subscriptionHint = overrides.subscriptionHint
+    }
+    if (overrides.alreadySubscribed !== undefined) {
+      nextData.alreadySubscribed = overrides.alreadySubscribed
+    }
+
+    if (!productList.length) {
+      if (Object.keys(nextData).length) {
+        this.setData(nextData)
+      }
+      return
+    }
+
+    let selectedIndex = productList.findIndex((item) => item.checked)
+    if (selectedIndex < 0) {
+      selectedIndex = 0
+    }
+
+    if (!preserveSelection && alreadySubscribed && subscriptionRes) {
+      const currentIndex = productList.findIndex((item) =>
+        isSameSubscriptionPlan(item, subscriptionRes)
+      )
+      if (currentIndex >= 0) {
+        selectedIndex = currentIndex
+      }
+    }
+
+    const updatedList = productList.map((item, index) => {
+      const isCurrent = alreadySubscribed && subscriptionRes
+        ? isSameSubscriptionPlan(item, subscriptionRes)
+        : false
+      return {
+        ...item,
+        isCurrent,
+        checked: index === selectedIndex
+      }
+    })
+
+    const currentProduct = updatedList[selectedIndex] || updatedList[0]
+    const selectedIsCurrentPlan = !!(
+      alreadySubscribed &&
+      subscriptionRes &&
+      currentProduct &&
+      isSameSubscriptionPlan(currentProduct, subscriptionRes)
+    )
+
+    this.setData({
+      ...nextData,
+      productList: updatedList,
+      currentProduct,
+      selectedIsCurrentPlan,
+      subscribeButtonText: buildSubscribeButtonText({
+        paying,
+        alreadySubscribed,
+        selectedIsCurrentPlan
+      })
+    })
+  },
+
+  showCurrentPlanToast() {
+    wx.showToast({
+      title: '已是当前方案，无需重复订阅',
+      icon: 'none',
+      duration: 2500
+    })
+  },
+
+  onCurrentPlanTap() {
+    if (!this.data.agreedRenew) {
+      wx.showToast({
+        title: '请先阅读并同意自动续费协议',
+        icon: 'none'
+      })
+      return
+    }
+    this.showCurrentPlanToast()
+  },
+
+  confirmChangePlan() {
+    const nextPlanName = this.data.currentProduct
+      ? (this.data.currentProduct.localizedTitle || this.data.currentProduct.name)
+      : '新方案'
+
+    wx.showModal({
+      title: '更换订阅方案',
+      content: `将关闭「${this.data.subscriptionPlanName}」并签约「${nextPlanName}」。当前会员权益不受影响，下一周期起按新方案扣费。`,
+      confirmText: '确认更换',
+      cancelText: '取消',
+      success: async (res) => {
+        if (res.confirm) {
+          await this.changePlanAndSubscribe()
+        }
+      }
+    })
+  },
+
+  async changePlanAndSubscribe() {
+    const userId = wx.getStorageSync('userId')
+    if (!userId) {
+      return
+    }
+
+    this.setData({
+      paying: true,
+      subscribeButtonText: buildSubscribeButtonText({
+        paying: true,
+        alreadySubscribed: true,
+        selectedIsCurrentPlan: false
+      })
+    })
+
+    try {
+      wx.showLoading({
+        title: '正在更换方案...',
+        mask: true
+      })
+      await cancelContract(userId)
+      wx.hideLoading()
+      this._subscriptionRes = null
+      this.setData({
+        alreadySubscribed: false,
+        selectedIsCurrentPlan: false,
+        subscriptionHint: '',
+        currentProductIdentifier: ''
+      })
+      await this.proceedWithPurchase()
+    } catch (error) {
+      console.error('更换订阅方案失败:', error)
+      wx.hideLoading()
+      this.setData({
+        paying: false,
+        subscribeButtonText: buildSubscribeButtonText({
+          paying: false,
+          alreadySubscribed: this.data.alreadySubscribed,
+          selectedIsCurrentPlan: this.data.selectedIsCurrentPlan
+        })
+      })
+      wx.showToast({
+        title: error.message || '更换失败，请重试',
         icon: 'none',
         duration: 2000
       })
@@ -185,9 +514,8 @@ Page({
         }
       })
 
-      this.setData({
-        productList,
-        currentProduct: productList[0]
+      this.syncProductSelection({
+        productList
       })
     } catch (error) {
       console.error('获取订阅产品失败:', error)
@@ -204,30 +532,26 @@ Page({
 
   onVipChange(event) {
     const index = event.currentTarget.dataset.index
-    const currentProduct = this.data.productList[index]
-    const productList = this.data.productList.map((item, i) => {
-      item.checked = i === index
-      return item
-    })
+    const productList = this.data.productList.map((item, i) => ({
+      ...item,
+      checked: i === index
+    }))
 
-    this.setData({
+    this.syncProductSelection({
       productList,
-      currentProduct
+      preserveSelection: true
     })
   },
 
   onAgreedRenewChange(event) {
+    const checked = !!(event.detail && (event.detail.checked ?? event.detail.value))
     this.setData({
-      agreedRenew: event.detail.checked
+      agreedRenew: checked
     })
   },
 
   async onPurchase() {
-    if (!this.data.agreedRenew) {
-      wx.showToast({
-        title: '请先阅读并同意自动续费协议',
-        icon: 'none'
-      })
+    if (this.data.paying) {
       return
     }
 
@@ -239,19 +563,47 @@ Page({
       return
     }
 
-    if (this.data.paying) {
+    if (this.isSelectedCurrentPlan() || this.data.subscribeButtonText === '当前方案') {
+      this.showCurrentPlanToast()
       return
     }
 
+    if (!this.data.agreedRenew) {
+      wx.showToast({
+        title: '请先阅读并同意自动续费协议',
+        icon: 'none'
+      })
+      return
+    }
+
+    if (this.data.alreadySubscribed) {
+      this.confirmChangePlan()
+      return
+    }
+
+    await this.proceedWithPurchase()
+  },
+
+  async proceedWithPurchase() {
     this.setData({
-      paying: true
+      paying: true,
+      subscribeButtonText: buildSubscribeButtonText({
+        paying: true,
+        alreadySubscribed: this.data.alreadySubscribed,
+        selectedIsCurrentPlan: this.data.selectedIsCurrentPlan
+      })
     })
 
     try {
       const hasWechat = await checkWechatInstalled()
       if (!hasWechat) {
         this.setData({
-          paying: false
+          paying: false,
+          subscribeButtonText: buildSubscribeButtonText({
+            paying: false,
+            alreadySubscribed: this.data.alreadySubscribed,
+            selectedIsCurrentPlan: this.data.selectedIsCurrentPlan
+          })
         })
         wx.showToast({
           title: '请先安装微信后再订阅',
@@ -264,7 +616,12 @@ Page({
       const openId = getWechatOpenId()
       if (!openId) {
         this.setData({
-          paying: false
+          paying: false,
+          subscribeButtonText: buildSubscribeButtonText({
+            paying: false,
+            alreadySubscribed: this.data.alreadySubscribed,
+            selectedIsCurrentPlan: this.data.selectedIsCurrentPlan
+          })
         })
         wx.showModal({
           title: '需要微信登录',
@@ -301,6 +658,7 @@ Page({
       this.setData({
         paying: false
       })
+      await this.loadSubscription()
       wx.showToast({
         title: error.message || '创建签约失败，请重试',
         icon: 'none',

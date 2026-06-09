@@ -66,8 +66,12 @@
           <text class="service-name">自动续费退款</text>
           <t-icon name="chevron-right" size="40rpx" color="#C7C7CC" />
         </view>
-        <view class="service-item service-item-divider" bind:tap="toVipDaikou">
+        <view class="service-item service-item-divider" bind:tap="toChangePlan">
           <text class="service-name">变更订阅方案</text>
+          <t-icon name="chevron-right" size="40rpx" color="#C7C7CC" />
+        </view>
+        <view class="service-item service-item-divider" bind:tap="toDeductList">
+          <text class="service-name">扣费记录</text>
           <t-icon name="chevron-right" size="40rpx" color="#C7C7CC" />
         </view>
         <view class="service-item" bind:tap="toDaikouAgreement">

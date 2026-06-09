@@ -152,6 +152,12 @@ Page({
     })
   },
 
+  toDeductList() {
+    wx.navigateTo({
+      url: '/pages/android/papay-deduct-list/papay-deduct-list'
+    })
+  },
+
   toPapayRefund() {
     wx.navigateTo({
       url: '/pages/android/papay-refund/papay-refund'
@@ -161,6 +167,12 @@ Page({
   toVipDaikou() {
     wx.navigateTo({
       url: '/pages/android/vip-daikou/vip-daikou'
+    })
+  },
+
+  toChangePlan() {
+    wx.navigateTo({
+      url: '/pages/android/vip-daikou/vip-daikou?from=change'
     })
   }
 })

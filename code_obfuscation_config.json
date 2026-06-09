@@ -315,6 +315,10 @@
 			"sub_switch": true
 		},
 		{
+			"path": "pages/android/papay-deduct-list/papay-deduct-list.js",
+			"sub_switch": true
+		},
+		{
 			"path": "pages/android/vip-renew/vip-renew.js",
 			"sub_switch": true
 		},

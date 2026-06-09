@@ -1,0 +1,35 @@
+<scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+  <view class="page-content">
+    <view wx:if="{{loading}}" class="loading-wrap">
+      <t-loading theme="circular" size="40rpx" text="加载中..." />
+    </view>
+
+    <block wx:elif="{{!orderList.length}}">
+      <view class="card empty-card">
+        <text class="card-title">扣费记录</text>
+        <text class="empty-desc">暂无自动续费扣费记录</text>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view class="card list-card">
+        <text class="card-title list-title">共 {{orderList.length}} 条</text>
+        <view
+          class="record-item {{index < orderList.length - 1 ? 'record-item-divider' : ''}}"
+          wx:for="{{orderList}}"
+          wx:key="outTradeNo"
+        >
+          <view class="record-main">
+            <view class="record-name-row">
+              <text class="record-name">{{item.planName}}</text>
+              <view class="record-badge {{item.isRefunded ? 'record-badge-refunded' : ''}}">{{item.statusText}}</view>
+            </view>
+            <text class="record-note" wx:if="{{item.successTime}}">扣费时间：{{item.successTime}}</text>
+            <text class="record-note record-note-muted">单号：{{item.outTradeNo}}</text>
+          </view>
+          <text class="record-amount">¥{{item.amountText}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+</scroll-view>
