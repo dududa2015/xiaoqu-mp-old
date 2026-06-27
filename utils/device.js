@@ -1,12 +1,12 @@
 // 获取设备信息的工具函数
+const { readDeviceInfo, readAppBaseInfo } = require('./system-info')
 
 /**
  * 获取设备类型
  * @returns {string} 设备类型: 'iOS', 'Android', 'HarmonyOS'
  */
 function getDeviceType() {
-  const systemInfo = wx.getSystemInfoSync();
-  const { platform, brand, model } = systemInfo;
+  const { platform, brand, model, system } = readDeviceInfo();
 
   // 判断是否为苹果设备
   if (platform === 'ios' || (model && model.includes('iPhone'))) {
@@ -20,7 +20,7 @@ function getDeviceType() {
     // 进一步判断是否为鸿蒙系统
     // 注意：鸿蒙系统在微信小程序中可能仍显示为android
     // 这里可以根据实际需要进一步优化判断逻辑
-    if (systemInfo.system && systemInfo.system.includes('HarmonyOS')) {
+    if (system && system.includes('HarmonyOS')) {
       return 'HarmonyOS';
     }
     // 如果无法确定是鸿蒙，但品牌是华为/荣耀，可以返回HarmonyOS或Android
@@ -71,14 +71,15 @@ function generateDeviceId() {
  * @returns {object} 设备信息对象
  */
 function getDeviceInfo() {
-  const systemInfo = wx.getSystemInfoSync();
-  
+  const deviceInfo = readDeviceInfo();
+  const appBaseInfo = readAppBaseInfo();
+
   return {
     userId: '', // 将在app.js中设置
     platform: getDeviceType(),
-    systemVersion: systemInfo.system || '',
-    appVersion: systemInfo.version || '',
-    deviceModel: systemInfo.model || ''
+    systemVersion: deviceInfo.system || '',
+    appVersion: appBaseInfo.version || '',
+    deviceModel: deviceInfo.model || ''
   };
 }
 

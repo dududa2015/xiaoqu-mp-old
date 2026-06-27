@@ -14,6 +14,11 @@ function isRewardedAdActive(scene) {
   return Date.now() < expireAt
 }
 
+/** 边界广告未在有效期内时显示设置红点（含从未观看、已过期） */
+function shouldShowCommunityDetailRedDot() {
+  return !isRewardedAdActive('communityDetail')
+}
+
 function setRewardedAdExpire(scene) {
   const key = STORAGE_KEYS[scene]
   if (!key) {
@@ -25,5 +30,6 @@ function setRewardedAdExpire(scene) {
 module.exports = {
   REWARDED_AD_VALID_MS,
   isRewardedAdActive,
-  setRewardedAdExpire
+  setRewardedAdExpire,
+  shouldShowCommunityDetailRedDot
 }

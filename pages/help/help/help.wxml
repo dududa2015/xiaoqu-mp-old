@@ -216,7 +216,7 @@
 
       <view class="sub-subsection" id="map-type">
         <view class="sub-subsection-title">2.6 公共地图与个人地图切换</view>
-        <view class="content">App支持两种地图模式，满足不同使用场景，可通过界面底部切换按钮切换：</view>
+    <view class="content">小程序支持两种地图模式，满足不同使用场景，可通过界面底部切换按钮切换：</view>
         <view class="table-wrapper">
           <view class="table-row table-header">
             <view class="table-cell">地图类型</view>

@@ -1,6 +1,7 @@
 import {
   changeIsPubMap as requestPubMapMerge
 } from '../../apis/user-api'
+const { shouldShowCommunityDetailRedDot } = require('../../utils/rewarded-video')
 
 // components/map-layer/map-layer.js
 Component({
@@ -30,7 +31,7 @@ Component({
     isShowBorder: false,
     count: 0,
     showCommunityDetail: false,
-    showRedDot: true,
+    showRedDot: false,
     showLocIconHelp: false, // 显示定位图标帮助提示
     locIconList: [{
       url: '/images/loc-marker/0.png',
@@ -62,8 +63,6 @@ Component({
       const enable3D = wx.getStorageSync('enable3D')
       //显示小区边界和出入口
       const showCommunityDetail = wx.getStorageSync('showCommunityDetail')
-      //红点（统一控制设置入口和小区边界红点）
-      const showRedDot = wx.getStorageSync('showRedDot')
       this.setData({
         position: position ? position : 'right',
         markerShape: markerShape ? markerShape : 'label'
@@ -94,7 +93,7 @@ Component({
         })
       }
       this.setData({
-        showRedDot: typeof showRedDot === 'boolean' ? showRedDot : true
+        showRedDot: shouldShowCommunityDetailRedDot()
       })
       const mapType = parseInt(wx.getStorageSync('mapType'), 10) || 1
       const userInfo = wx.getStorageSync('userInfo') || {}

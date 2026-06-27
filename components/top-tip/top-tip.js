@@ -2,6 +2,7 @@ import {
   formatTime
 } from '../../utils/util'
 import { getEntitlementStatus, getEntitlementNotice } from '../../utils/entitlement'
+import { getDeviceContext } from '../../utils/system-info'
 
 const COLLAPSE_DELAY_MS = 10000
 const COLLAPSE_ANIM_MS = 450
@@ -44,12 +45,7 @@ Component({
       let notices = []
 
       if (this.isMpEnvironment()) {
-        const systemInfo = wx.getSystemInfoSync()
-        const deviceInfo = wx.getDeviceInfo ? wx.getDeviceInfo() : {}
-        const downloadCopy = this.getMpDownloadCopy({
-          ...systemInfo,
-          brand: deviceInfo.brand || systemInfo.brand
-        })
+        const downloadCopy = this.getMpDownloadCopy(getDeviceContext())
         const showExpandedCard = this.isUserRegisteredOverOneMonth(userInfo)
 
         this.clearExpandTimer()
@@ -69,8 +65,7 @@ Component({
         return
       }
 
-      const systemInfo = wx.getSystemInfoSync()
-      const platform = this.getPlatform(systemInfo)
+      const platform = this.getPlatform(getDeviceContext())
       notices = this.getAppNotices(userInfo, platform)
       this.clearExpandTimer()
       this.setData({
@@ -248,15 +243,14 @@ Component({
       const userInfo = wx.getStorageSync('userInfo')
 
       if (this.isMpEnvironment()) {
-        const systemInfo = wx.getSystemInfoSync()
-        const isIphone = systemInfo.platform === 'ios' || systemInfo.model.indexOf('iPhone') > -1
+        const { platform, model } = getDeviceContext()
+        const isIphone = platform === 'ios' || model.indexOf('iPhone') > -1
         const url = isIphone ? '/pages/my/app/ios/ios' : '/pages/my/app/android/android'
         wx.navigateTo({ url })
         return
       }
 
-      const systemInfo = wx.getSystemInfoSync()
-      const platform = this.getPlatform(systemInfo)
+      const platform = this.getPlatform(getDeviceContext())
       const status = getEntitlementStatus(userInfo)
       if (status.type !== 'lifetime_vip' && status.type !== 'vip') {
         wx.navigateTo({ url: platform === 'IOS' ? '/pages/ios/vip/vip' : '/pages/android/vip/vip' })

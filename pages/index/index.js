@@ -8,7 +8,8 @@ import {
 } from '../../utils/util'
 import {
   isRewardedAdActive,
-  setRewardedAdExpire
+  setRewardedAdExpire,
+  shouldShowCommunityDetailRedDot
 } from '../../utils/rewarded-video'
 import {
   buildMarkers,
@@ -50,7 +51,7 @@ Page({
     rect: {},
     tips: '', //顶部的提示语
     position: 'right', //地图控件的展示位置，左和右
-    showRedDot: true, //红点（统一控制设置入口和小区边界红点）
+    showRedDot: false, // 边界广告过期时亮（见 syncCommunityDetailRedDot）
     enableRotate: false, //是否开启旋转
     isVip: false, //是否vip
     scale: 3,
@@ -121,6 +122,7 @@ Page({
 
     // 检查小区边界功能是否过期
     this.checkCommunityDetailExpired()
+    this.syncCommunityDetailRedDot()
     this.updateLocationGuide()
   },
   onShow() {
@@ -143,6 +145,7 @@ Page({
 
     // 检查小区边界功能是否过期
     this.checkCommunityDetailExpired()
+    this.syncCommunityDetailRedDot()
     this.updateLocationGuide()
   },
   shouldShowLocationGuide() {
@@ -273,8 +276,7 @@ Page({
     // 如果功能已开启且已过期，则关闭功能
     if (showCommunityDetail && Date.now() >= expireAt) {
       this.disableCommunityDetail()
-      // 更新红点状态，提示用户需要重新观看广告
-      this.updateCommunityDetailRedDot(true)
+      this.syncCommunityDetailRedDot()
     }
   },
   // 等待 userInfo 就绪（事件驱动 + 超时兜底）
@@ -410,7 +412,6 @@ Page({
     const enable3D = wx.getStorageSync('enable3D')
     const enableScreenOn = wx.getStorageSync('enableScreenOn')
     const showCommunityDetail = wx.getStorageSync('showCommunityDetail')
-    const showRedDot = wx.getStorageSync('showRedDot')
 
     if (position) {
       this.setData({
@@ -456,11 +457,7 @@ Page({
     }
     // #endif
 
-    // 初始化红点（统一控制设置入口和小区边界红点）
-    const finalShowRedDot = typeof showRedDot === 'boolean' ? showRedDot : true
-    this.setData({
-      showRedDot: finalShowRedDot
-    })
+    this.syncCommunityDetailRedDot()
 
     wx.setKeepScreenOn({
       keepScreenOn: !!enableScreenOn
@@ -520,19 +517,11 @@ Page({
     })
   },
   getWindowInfo() {
-    if (wx.getWindowInfo) {
-      const windowInfo = wx.getWindowInfo()
-      console.log('windowInfo', windowInfo)
-      this.setData({
-        mapHeight: windowInfo.windowHeight
-      })
-    } else {
-      const systemInfo = wx.getSystemInfoSync();
-      console.log('systemInfo', systemInfo)
-      this.setData({
-        mapHeight: systemInfo.windowHeight
-      })
-    }
+    const windowInfo = wx.getWindowInfo()
+    console.log('windowInfo', windowInfo)
+    this.setData({
+      mapHeight: windowInfo.windowHeight
+    })
   },
   //获取callout的padding，android和iphone的padding不一样
   getPadding() {
@@ -567,6 +556,7 @@ Page({
           if (scene === 'communityDetail') {
             setRewardedAdExpire('communityDetail')
             this.enableCommunityDetail()
+            this.syncCommunityDetailRedDot()
             return
           }
           if (scene === 'route') {
@@ -2195,7 +2185,7 @@ Page({
   },
   //设置关闭
   onSettingClose() {
-    this.updateCommunityDetailRedDot(false)
+    this.syncCommunityDetailRedDot()
     this.disableMapTap()
     this.setData({
       showSetting: false
@@ -2252,17 +2242,13 @@ Page({
       skew: event.detail ? 20 : 0
     })
   },
-  // 公共：更新红点状态，并同步组件（统一控制设置入口和小区边界红点）
-  updateCommunityDetailRedDot(show) {
-    this.setData({
-      showRedDot: show
-    })
-    wx.setStorageSync('showRedDot', show)
+  // 边界广告：有效不亮，过期才亮（统一设置入口与设置项旁红点）
+  syncCommunityDetailRedDot() {
+    const showRedDot = shouldShowCommunityDetailRedDot()
+    this.setData({ showRedDot })
     const mapSetting = this.selectComponent('#mapSetting')
     if (mapSetting) {
-      mapSetting.setData({
-        showRedDot: show
-      })
+      mapSetting.setData({ showRedDot })
     }
   },
   // 公共：开启显示小区边界
@@ -2325,7 +2311,6 @@ Page({
   },
   //显示小区边界和出入口，事件来自设置页面
   onCommunityDetailChange(event) {
-    this.updateCommunityDetailRedDot(false)
     const targetChecked = event.detail
     if (!targetChecked) {
       this.disableCommunityDetail()
@@ -2334,6 +2319,7 @@ Page({
     // 有效期内直接开启，不弹广告
     if (isRewardedAdActive('communityDetail')) {
       this.enableCommunityDetail()
+      this.syncCommunityDetailRedDot()
       wx.showToast({
         title: '已开启，72小时内无需重复观看',
         icon: 'none'
@@ -2345,7 +2331,7 @@ Page({
       content: '观看广告后可显示小区边界和出入口72小时内无需重复观看',
       success: (res) => {
         if (!res.confirm) {
-          // 恢复开关为关闭，不动红点
+          // 恢复开关为关闭
           this.setData({
             showCommunityDetail: false
           })

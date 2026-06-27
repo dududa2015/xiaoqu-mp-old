@@ -68,7 +68,7 @@ Page({
   data: buildPageData('default'),
 
   onLoad() {
-    const deviceInfo = wx.getDeviceInfo ? wx.getDeviceInfo() : wx.getSystemInfoSync()
+    const deviceInfo = wx.getDeviceInfo()
     const storeType = getAndroidStoreType(deviceInfo.brand)
     const pageData = buildPageData(storeType)
     this.setData(pageData)

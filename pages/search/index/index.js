@@ -43,11 +43,11 @@ Page({
     this.getAroundByLocation(longitude, latitude)
   },
   initNavBar() {
-    // 获取系统信息
-    const systemInfo = wx.getSystemInfoSync()
+    const windowInfo = wx.getWindowInfo()
+    const deviceInfo = wx.getDeviceInfo()
     this.setData({
-      statusBarHeight: systemInfo.statusBarHeight,
-      navHeight: systemInfo.platform === 'android' ? 48 : 44
+      statusBarHeight: windowInfo.statusBarHeight,
+      navHeight: deviceInfo.platform === 'android' ? 48 : 44
     })
   },
   onPoiChange(e) {
