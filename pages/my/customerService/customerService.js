@@ -11,7 +11,7 @@ Page({
   // 处理快捷服务点击
   handleServiceClick(e) {
     const type = e.currentTarget.dataset.type;
-    
+
     switch (type) {
       case 'faq':
         // 跳转到常见问题页面

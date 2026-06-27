@@ -12,7 +12,7 @@ function getDeviceType() {
   if (platform === 'ios' || (model && model.includes('iPhone'))) {
     return 'iOS';
   }
-  
+
   // 判断是否为鸿蒙设备
   // 鸿蒙设备在微信小程序中可能会被识别为安卓设备
   // 通过品牌判断是否为荣耀或华为设备
@@ -27,12 +27,12 @@ function getDeviceType() {
     // 根据实际业务需求决定
     return 'HarmonyOS';
   }
-  
+
   // 判断是否为安卓设备
   if (platform === 'android') {
     return 'Android';
   }
-  
+
   // 其他情况
   return 'Unknown';
 }
@@ -44,14 +44,14 @@ function getDeviceType() {
 function getDeviceId() {
   // 尝试获取已存储的设备ID
   let deviceId = wx.getStorageSync('deviceId');
-  
+
   if (!deviceId) {
     // 生成新的设备ID
     deviceId = generateDeviceId();
     // 存储设备ID到本地
     wx.setStorageSync('deviceId', deviceId);
   }
-  
+
   return deviceId;
 }
 

@@ -98,7 +98,7 @@ Page({
    */
   scrollToSection(e) {
     const sectionId = e.currentTarget.dataset.id;
-    
+
     // 关闭导航菜单
     this.setData({
       showNavMenu: false
@@ -115,18 +115,18 @@ Page({
         console.error('selector方式滚动失败，尝试计算方式:', err);
         // 备用方案：使用计算方式
         const query = wx.createSelectorQuery().in(this);
-        
+
         query.select(`#${sectionId}`).boundingClientRect();
         query.selectViewport().scrollOffset();
-        
+
         query.exec((res) => {
           if (res && res[0] && res[1]) {
             const rect = res[0];
             const scrollInfo = res[1];
-            
+
             if (rect) {
               const targetScrollTop = scrollInfo.scrollTop + rect.top - 40;
-              
+
               wx.pageScrollTo({
                 scrollTop: Math.max(0, targetScrollTop),
                 duration: 300
