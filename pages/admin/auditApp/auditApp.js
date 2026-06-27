@@ -1,136 +1,53 @@
-import {
-  getMarkerUpdateList,
-  auditPassed,
-  auditPassed2
-} from '../../../apis/marker-update-api'
-
+// pages/admin/auditApp/auditApp.js
 Page({
 
   /**
    * 页面的初始数据
    */
-    data: {
-    auditList: [],
-    right: [{
-        text: '编辑',
-        icon: {
-          name: 'edit',
-          size: 16,
-        },
-        className: 'btn edit-btn',
-      },
-      {
-        text: '删除',
-        icon: {
-          name: 'delete',
-          size: 16,
-        },
-        className: 'btn delete-btn',
-      },
-    ],
-    typeList: ['楼号', '出入口', '公厕', '设施', '设施', '设施', '其他', '道路', '围墙'],
+  data: {
+
   },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad(options) {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady() {
+
+  },
+
   /**
    * 生命周期函数--监听页面显示
    */
-  onLoad() {
-    let userId = wx.getStorageSync('userId')
-    if (userId !== '92918a62b30c' && userId !== 'f55b972720be') {
-      wx.navigateBack()
-      return
-    }
-    this.getMarkerUpdateList()
-  },
-  //单个审核不通过且扣分
-  onAuditNot(e) {
-    const that = this
-    const item = e.currentTarget.dataset.item
-    const points = e.currentTarget.dataset.points
+  onShow() {
 
-    auditPassed2({
-      xId: item.xId
-    }).then(res => {
-      if (res) {
-        wx.showToast({
-          title: '删除成功',
-        })
-        let auditList = this.data.auditList
-        auditList = auditList.filter(el => el.xId !== item.xId)
-        that.setData({
-          auditList
-        })
-      } else {
-        wx.showToast({
-          title: '删除失败，请稍后重试',
-          icon: 'error'
-        })
-      }
-    })
   },
-  //恢复
-  async recover(e) {
-    const that = this
-    const item = e.currentTarget.dataset.item
-    const points = e.currentTarget.dataset.points
-    console.log(item)
-    const res = await recover(JSON.stringify(item.xId))
-    this.getMarkerUpdateList()
+
+  /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide() {
+
   },
-  //审核删除
-  onAudit() {
-    const that = this
-    let xIdList = this.data.auditList.map(item => item.xId)
-    auditPassed(xIdList).then(res => {
-      wx.showToast({
-        title: res ? '审核成功' : '审核失败'
-      })
-      that.setData({
-        auditList: []
-      })
-      setTimeout(() => {
-        that.getMarkerUpdateList()
-      }, 1000);
-    })
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload() {
+
   },
-  //获取审核列表
-  getMarkerUpdateList() {
-    const that = this
-    getMarkerUpdateList().then(res => {
-      if (res && res.length > 0) {
-        that.setData({
-          auditList: res.map(item => {
-            return {
-              ...item,
-              typeName: that.data.typeList[item.type]
-            };
-          })
-        })
-      }
-    })
-  },
-  onNewUser() {
-    wx.navigateTo({
-      url: '/pages/my/newUser/newUser',
-    })
-  },
-  onVisibleChange() {
-    this.setData({
-      visible: false
-    })
-  },
-  onMarkerTap(event) {
-    const {
-      item
-    } = event.currentTarget.dataset
-    this.setData({
-      item
-    })
-  },
+
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-    this.getAuditList()
+
   },
 
   /**

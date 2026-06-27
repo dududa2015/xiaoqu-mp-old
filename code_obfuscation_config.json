@@ -175,22 +175,6 @@
 			"sub_switch": true
 		},
 		{
-			"path": "pages/admin/stats/stats.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/admin/audit/audit.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/admin/index/index.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/admin/notice/notice.js",
-			"sub_switch": true
-		},
-		{
 			"path": "apis/amap-apis.js",
 			"sub_switch": true
 		},
@@ -264,22 +248,6 @@
 		},
 		{
 			"path": "pages/my/places/places.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/admin/androidStats/androidStats.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/admin/auditApp/auditApp.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/admin/auditNot/auditNot.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/admin/auditNotNew/auditNotNew.js",
 			"sub_switch": true
 		},
 		{

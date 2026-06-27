@@ -1,3 +1,21 @@
+function resolveImageCount(imageCount, images) {
+  if (typeof imageCount === 'number' && imageCount > 0) {
+    return imageCount
+  }
+  if (Array.isArray(images) && images.length > 0) {
+    return images.length
+  }
+  return 0
+}
+
+function formatMarkerDisplayName(name, imageCount, images) {
+  const count = resolveImageCount(imageCount, images)
+  if (count > 0) {
+    return `${name}·图×${count}`
+  }
+  return name
+}
+
 const MARKER_LABEL_FONT_SIZE = 11
 const MARKER_LABEL_FONT_SIZE_SELECTED = 14
 const MARKER_LABEL_PADDING = 3
@@ -29,12 +47,13 @@ function applyMarkerSelectedStyle(marker, selected) {
   return marker
 }
 
-const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted, selected = false) => {
+const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted, selected = false, imageCount = 0, images = null) => {
   let bgColor = getBgColorByType(type)
-  let anchorX = getAnchorX(name)
   if (deleted === -1) {
     name = name.substring(0, 2) + '***（审核中）'
   }
+  const displayName = formatMarkerDisplayName(name, imageCount, images)
+  let anchorX = getAnchorX(displayName)
   let markers = {
     id: parseInt(uid),
     iconPath: '/images/marker-0.png',
@@ -48,7 +67,7 @@ const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted, sel
   if (markerShape === 'label' || !markerShape) {
     markers.callout = null
     markers.label = {
-      content: name,
+      content: displayName,
       borderWidth: MARKER_LABEL_BORDER_WIDTH,
       borderColor: MARKER_LABEL_BORDER_COLOR,
       borderRadius: 8,
@@ -62,7 +81,7 @@ const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted, sel
     }
   } else {
     markers.callout = {
-      content: name,
+      content: displayName,
       color: '#fff',
       bgColor,
       padding: getApp().globalData.padding,
@@ -175,5 +194,7 @@ module.exports = {
   buildMarkers,
   buildPolyline,
   buildPolygon,
-  applyMarkerSelectedStyle
+  applyMarkerSelectedStyle,
+  formatMarkerDisplayName,
+  resolveImageCount
 }

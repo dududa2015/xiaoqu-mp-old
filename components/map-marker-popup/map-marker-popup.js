@@ -80,7 +80,7 @@ Component({
     initMarkerPolyline(item) {
       if (item.type < 7) {
         let markers = []
-        let marker = buildMarkers(item.lat, item.lng, parseInt(item.xId), item.name, item.type, item.userId, item.deleted)
+        let marker = buildMarkers(item.lat, item.lng, parseInt(item.xId), item.name, item.type, item.userId, item.deleted, false, item.imageCount, item.images)
         markers.push(marker)
         this.setData({
           markers

@@ -699,7 +699,8 @@ Component({
             uid,
             name: that.data.name,
             markerTypeIndex: that.data.markerTypeIndex,
-            deleted
+            deleted,
+            imageCount: that.getImageObjectKeys().length
           })
 
           let name = that.data.name
@@ -758,7 +759,9 @@ Component({
           name: that.data.name,
           longitude,
           latitude,
-          deleted
+          deleted,
+          markerTypeIndex: that.data.markerTypeIndex,
+          imageCount: that.getImageObjectKeys().length
         })
 
         //改变子组件的属性，从而重新生成你想输入的词

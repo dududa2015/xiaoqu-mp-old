@@ -71,12 +71,6 @@
     </t-cell-group>
     <!-- #endif -->
 
-    <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;" wx:if="{{isAdministator}}">
-      <t-cell title="管理员" hover arrow url="/pages/admin/index/index">
-        <image src="/images/my/admin.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
-    </t-cell-group>
-
     <!-- #if ANDROID -->
     <!-- <view class="footer flex f-x-center f-y-center">
       <navigator class="margin8 text-underline" url="/pages/android/user-agreement/user-agreement">用户协议</navigator>

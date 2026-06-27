@@ -1,22 +1,2 @@
-<view class="container">
-<view class="content">
-  <t-cell-group wx:if="{{auditList.length > 0}}">
-    <t-swipe-cell wx:for="{{auditList}}" wx:key="index">
-      <t-cell title="{{index+1}}、 {{item.name}}" hover arrow bordered="{{index !== auditList.length-1}}" note="{{item.feedbackTypeText}}" bind:tap="onMarkerTap" data-item="{{item}}" />
-      <view slot="right" class="btn-wrapper">
-        <view class="btn delete-btn-2" bind:tap="recover" data-points="1" data-item="{{item}}">
-          恢复
-        </view>
-      </view>
-    </t-swipe-cell>
-  </t-cell-group>
-  <view wx:else>
-    <image src="https://img01.yzcdn.cn/vant/empty-image-default.png" class="img" mode="" />
-    <view class="empty-text">列表为空</view>
-  </view>
-</view>
-</view>
-<t-fab wx:if="{{auditList.length > 0}}" icon="close" bind:click="onAudit" draggable text="删除" aria-label="删除"></t-fab>
-
-
-<map-marker-popup item="{{item}}"></map-marker-popup>
+<!--pages/admin/auditNotNew/auditNotNew.wxml-->
+<text>pages/admin/auditNotNew/auditNotNew.wxml</text>

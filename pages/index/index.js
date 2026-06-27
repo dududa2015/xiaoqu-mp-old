@@ -1197,18 +1197,18 @@ Page({
       wx.setStorageSync('lastLatitude', currentLat);
       wx.setStorageSync('lastLongitude', currentLng);
     }
-    //将视野范围扩大0.001度
-    const expand = 0.01;
-    // 按经纬度筛选可视范围内标记
-    const markers = this.data.markers.filter(marker => {
-      return marker.latitude <= northeast.latitude + expand &&
-        marker.latitude >= southwest.latitude - expand &&
-        marker.longitude <= northeast.longitude + expand &&
-        marker.longitude >= southwest.longitude - expand;
-    });
-    this.setData({
-      markers
-    });
+    //将视野范围扩大0.001度 2026/06/15注释，有性能问题再开放：）
+    // const expand = 0.01;
+    // // 按经纬度筛选可视范围内标记
+    // const markers = this.data.markers.filter(marker => {
+    //   return marker.latitude <= northeast.latitude + expand &&
+    //     marker.latitude >= southwest.latitude - expand &&
+    //     marker.longitude <= northeast.longitude + expand &&
+    //     marker.longitude >= southwest.longitude - expand;
+    // });
+    // this.setData({
+    //   markers
+    // });
   },
   //显示选点按钮
   onAdd() {
@@ -1521,7 +1521,9 @@ Page({
     let markers = this.data.markers
     let polyline = this.data.polyline
     for (const item of list) {
-      let marker = buildMarkers(item.lat, item.lng, parseInt(item.xId), item.name, item.type, item.userId, item.deleted)
+      const selectedId = this.data.showPOI && this.data.xId > 0 ? parseInt(this.data.xId, 10) : 0
+      const isSelected = selectedId > 0 && parseInt(item.xId, 10) === selectedId
+      let marker = buildMarkers(item.lat, item.lng, parseInt(item.xId), item.name, item.type, item.userId, item.deleted, isSelected, item.imageCount, item.images)
       let points = JSON.parse(item.points || null)
       let m = markers.findIndex(item => item.id === marker.id)
       if (m === -1) {
@@ -1535,6 +1537,8 @@ Page({
         } else {
           markers.push(marker)
         }
+      } else if (!points || points.length <= 1) {
+        markers[m] = marker
       }
     }
     this.setData({
@@ -1652,7 +1656,7 @@ Page({
   addUserMarkerByUser(event) {
     const marker = event.detail
     const userId = wx.getStorageSync('userId')
-    let markers = buildMarkers(marker.latitude, marker.longitude, marker.uid, marker.name, marker.markerTypeIndex, userId, marker.deleted)
+    let markers = buildMarkers(marker.latitude, marker.longitude, marker.uid, marker.name, marker.markerTypeIndex, userId, marker.deleted, false, marker.imageCount, marker.images)
     this.data.markers.push(markers)
 
     markers = this.data.markers.filter(item => {
@@ -1674,17 +1678,24 @@ Page({
     let index = markers.findIndex(item => {
       return item.id === parseInt(marker.xId)
     })
-    let name = marker.name
-    if (marker.deleted === -1) {
-      name = name.substring(0, 2) + '***（审核中）'
+    if (index === -1) {
+      return
     }
-    if (markers[index].label) {
-      markers[index].label.content = name
-    } else {
-      markers[index].callout.content = name
-    }
-    markers[index].latitude = marker.latitude
-    markers[index].longitude = marker.longitude
+    const selectedId = this.data.showPOI && this.data.xId > 0 ? parseInt(this.data.xId, 10) : 0
+    const isSelected = selectedId > 0 && markers[index].id === selectedId
+    const updated = buildMarkers(
+      marker.latitude,
+      marker.longitude,
+      parseInt(marker.xId, 10),
+      marker.name,
+      marker.markerTypeIndex,
+      markers[index].userId,
+      marker.deleted,
+      isSelected,
+      marker.imageCount,
+      marker.images
+    )
+    markers[index] = updated
     this.setData({
       showGrid: false,
       showCenterMarker: false,

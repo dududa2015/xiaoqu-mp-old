@@ -1,8 +1,0 @@
-.container{
-    padding: 24rpx;
-}
-
-.left-icon {
-    width: 40rpx;
-    height: 40rpx;
-}
