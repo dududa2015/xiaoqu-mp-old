@@ -7,6 +7,7 @@ const { readDeviceInfo, readAppBaseInfo } = require('./system-info')
  */
 function getDeviceType() {
   const { platform, brand, model, system } = readDeviceInfo();
+  console.log('getDeviceType system', system)
 
   // 判断是否为苹果设备
   if (platform === 'ios' || (model && model.includes('iPhone'))) {
@@ -83,9 +84,25 @@ function getDeviceInfo() {
   };
 }
 
+/**
+ * 是否为华为/荣耀/鸿蒙设备（微信小程序中鸿蒙常被识别为 android）
+ */
+function isHarmonyDevice(deviceInfo = {}) {
+  const { platform = '', brand = '', system = '' } = deviceInfo
+  const brandLower = String(brand).toLowerCase()
+  const systemLower = String(system).toLowerCase()
+
+  if (systemLower.includes('harmonyos')) {
+    return true
+  }
+
+  return brandLower.includes('huawei') || brandLower.includes('honor')
+}
+
 module.exports = {
   getDeviceType,
   getDeviceId,
   generateDeviceId,
-  getDeviceInfo
+  getDeviceInfo,
+  isHarmonyDevice
 };

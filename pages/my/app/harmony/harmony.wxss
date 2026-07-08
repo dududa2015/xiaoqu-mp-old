@@ -1,0 +1,17 @@
+@import '../android/android.wxss';
+
+.app-meta-highlight {
+  color: #CF0A2C;
+}
+
+.copy-row--harmony {
+  background-color: rgba(207, 10, 44, 0.08);
+}
+
+.copy-row--harmony .copy-text {
+  color: #CF0A2C;
+}
+
+.step-index--harmony {
+  background-color: #CF0A2C;
+}

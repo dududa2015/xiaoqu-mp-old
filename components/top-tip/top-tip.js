@@ -3,6 +3,7 @@ import {
 } from '../../utils/util'
 import { getEntitlementStatus, getEntitlementNotice } from '../../utils/entitlement'
 import { getDeviceContext } from '../../utils/system-info'
+import { isHarmonyDevice } from '../../utils/device'
 
 const COLLAPSE_DELAY_MS = 10000
 const COLLAPSE_ANIM_MS = 450
@@ -190,6 +191,14 @@ Component({
       const brandLower = brand.toLowerCase()
       const title = '小区楼号 App'
 
+      if (isHarmonyDevice(systemInfo)) {
+        return {
+          title,
+          desc: '可在华为应用市场搜索下载，功能更完整',
+          notice: '鸿蒙 App 已上线，欢迎下载 →'
+        }
+      }
+
       if (platform === 'ios' || modelLower.includes('iphone')) {
         return {
           title,
@@ -243,9 +252,14 @@ Component({
       const userInfo = wx.getStorageSync('userInfo')
 
       if (this.isMpEnvironment()) {
-        const { platform, model } = getDeviceContext()
-        const isIphone = platform === 'ios' || model.indexOf('iPhone') > -1
-        const url = isIphone ? '/pages/my/app/ios/ios' : '/pages/my/app/android/android'
+        const deviceContext = getDeviceContext()
+        const { platform, model } = deviceContext
+        let url = '/pages/my/app/android/android'
+        if (isHarmonyDevice(deviceContext)) {
+          url = '/pages/my/app/harmony/harmony'
+        } else if (platform === 'ios' || model.indexOf('iPhone') > -1) {
+          url = '/pages/my/app/ios/ios'
+        }
         wx.navigateTo({ url })
         return
       }

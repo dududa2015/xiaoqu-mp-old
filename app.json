@@ -9,6 +9,7 @@
     "pages/my/places/places",
     "pages/my/app/ios/ios",
     "pages/my/app/android/android",
+    "pages/my/app/harmony/harmony",
     "pages/my/customerService/customerService",
     "pages/help/help/help",
     "pages/help/question/question"

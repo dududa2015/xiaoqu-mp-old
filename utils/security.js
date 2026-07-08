@@ -79,7 +79,11 @@ function parseAndSortQueryParams(url) {
     if (queryStringRaw) {
       queryStringRaw.split('&').forEach(param => {
         const [key, value = ''] = param.split('=');
-        params[key] = value;
+        try {
+          params[key] = decodeURIComponent(value);
+        } catch (e) {
+          params[key] = value;
+        }
       });
     }
 

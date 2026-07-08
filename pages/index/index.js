@@ -17,6 +17,9 @@ import {
   buildPolygon,
   applyMarkerSelectedStyle
 } from '../../utils/map'
+// #if MP
+import { tryShowHarmonyDownloadPrompt } from '../../utils/harmony-download-prompt'
+// #endif
 
 import {
   addMarker,
@@ -124,6 +127,11 @@ Page({
     this.checkCommunityDetailExpired()
     this.syncCommunityDetailRedDot()
     this.updateLocationGuide()
+    // #if MP
+    setTimeout(() => {
+      tryShowHarmonyDownloadPrompt()
+    }, 800)
+    // #endif
   },
   onShow() {
     this.amapSearch()

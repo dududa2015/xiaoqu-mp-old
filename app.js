@@ -39,7 +39,7 @@ App({
 
     // #if MP
     this.tryTimes = MAX_RETRY_TIMES
-    this.autoUpdate()
+    // this.autoUpdate()
     this.login()
     // #else
     this.initDeviceTrialReady()
@@ -93,19 +93,16 @@ App({
 
     try {
       const userId = wx.getStorageSync('userId')
-      const userInfo = wx.getStorageSync('userInfo')
 
-      //迁移后只判断!userId
-      // if (!userId || !userInfo || !userInfo.openId || !userInfo.unionId) {
+      // 老用户冷启动只拉资料换 JWT，不触发 wx.login，避免后端签发新 refreshToken / 登记设备会话
+      // if (!userId) {
       //   const code = await this.wxLogin()
       //   await this.getMPUserInfo(code, '')
       // } else {
       //   await this.getMPUserInfo('', userId)
       // }
-      // 现在走下面这2行，以后注释掉，把上面这一段去掉注释 20260512
-      const code = await this.wxLogin()
-      await this.getMPUserInfo(code, userId)
-      
+        const code = await this.wxLogin()
+        await this.getMPUserInfo(code, userId)
       // 仅在微信小程序环境下保存设备信息
       // #if MP
       await this.saveDeviceInfo()

@@ -1,0 +1,42 @@
+<view class="download-wrap">
+  <view class="card">
+    <view class="app-row">
+      <image src="/images/icon-83.5@2x.png" class="logo" mode="aspectFit" />
+      <view class="app-info">
+        <view class="app-name">{{appName}}</view>
+        <view class="app-meta app-meta-highlight">推荐使用微信登录</view>
+      </view>
+    </view>
+
+    <view class="section-title">{{searchSectionTitle}}</view>
+    <view class="search-row">
+      <view class="search-chip">
+        <t-icon name="search" size="32rpx" color="#CF0A2C" />
+        <text class="search-text">{{searchName}}</text>
+      </view>
+      <view class="copy-row copy-row--harmony" bind:tap="onCopy">
+        <t-icon name="copy" size="32rpx" color="#CF0A2C" />
+        <text class="copy-text">复制名称</text>
+      </view>
+    </view>
+    <view class="tip">{{searchTip}}</view>
+
+    <view class="section-title">下载步骤</view>
+    <view class="steps">
+      <view class="step-item" wx:for="{{installSteps}}" wx:key="index">
+        <text class="step-index step-index--harmony">{{index + 1}}</text>
+        <text class="step-text">{{item}}</text>
+      </view>
+    </view>
+
+    <view class="section-title section-title-secondary">备用：复制下载链接</view>
+    <view class="search-row link-row">
+      <text class="link-text">{{downloadUrl}}</text>
+      <view class="copy-row copy-row--harmony" bind:tap="onCopyLink">
+        <t-icon name="copy" size="32rpx" color="#CF0A2C" />
+        <text class="copy-text">复制链接</text>
+      </view>
+    </view>
+    <view class="tip">{{linkTip}}</view>
+  </view>
+</view>

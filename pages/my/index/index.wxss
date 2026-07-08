@@ -66,6 +66,11 @@
   color: #E85827;
 }
 
+.download-title-harmony {
+  font-weight: 600;
+  color: #CF0A2C;
+}
+
 .ad-wrap {
   margin-top: 32rpx;
   background-color: #fff;

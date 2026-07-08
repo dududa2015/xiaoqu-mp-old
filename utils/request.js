@@ -86,6 +86,7 @@ const request = (params) => {
             icon: 'none'
           })
           // #else
+          console.log('401:' + apiUrl + url+ JSON.stringify(header))
           wx.showModal({
             title: '登录提示',
             content: '需要先登录才能进行操作',
