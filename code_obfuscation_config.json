@@ -291,10 +291,6 @@
 			"sub_switch": true
 		},
 		{
-			"path": "pages/ios/vip-agreement/vip-agreement.js",
-			"sub_switch": true
-		},
-		{
 			"path": "pages/ios/vip-renew/vip-renew.js",
 			"sub_switch": true
 		},
