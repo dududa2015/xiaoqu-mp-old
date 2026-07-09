@@ -1,0 +1,102 @@
+<t-popup visible="{{visible}}" show-overlay="{{false}}" placement="bottom" bind:visible-change="onVisibleChange" style="height:96vh;width:100%;">
+  <view class="sheet">
+    <view class="form-header">
+      <view class="form-header-slot form-header-slot--start">
+        <view class="ios-toolbar-btn ios-toolbar-btn--glass" bind:tap="onClose" hover-class="ios-toolbar-btn--pressed" hover-stay-time="80">
+          <text class="ios-toolbar-btn__label">关闭</text>
+        </view>
+      </view>
+      <view class="form-header-slot form-header-slot--center">
+        <text class="form-header-title">{{displayTitle}}</text>
+      </view>
+      <view class="form-header-slot form-header-slot--end">
+        <view wx:if="{{showDeleteAction}}" class="ios-toolbar-btn ios-toolbar-btn--glass" bind:tap="onDeleteTap" hover-class="ios-toolbar-btn--pressed" hover-stay-time="80">
+          <text class="ios-toolbar-btn__label ios-toolbar-btn__label--danger">删除</text>
+        </view>
+        <view wx:elif="{{showUnfavoriteAction}}" class="ios-toolbar-btn ios-toolbar-btn--glass" bind:tap="onUnfavoriteTap" hover-class="ios-toolbar-btn--pressed" hover-stay-time="80">
+          <text class="ios-toolbar-btn__label ios-toolbar-btn__label--danger">取消收藏</text>
+        </view>
+        <view wx:else class="form-header-slot-placeholder"></view>
+      </view>
+    </view>
+
+    <scroll-view class="sheet-scroll" scroll-y>
+      <view class="loading-box" wx:if="{{loading}}">
+        <t-loading theme="circular" size="40rpx" text="加载标记详情…" />
+      </view>
+
+      <block wx:else>
+        <view class="section">
+          <view class="section-title">类型</view>
+          <view class="section-card">
+            <view class="type-row">
+              <t-icon name="location" size="32rpx" color="#007aff" />
+              <text class="type-text">{{typeName}}</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="section map-section">
+          <view class="section-title">位置预览</view>
+          <map
+            wx:if="{{hasRenderableMap}}"
+            class="map-preview"
+            latitude="{{latitude}}"
+            longitude="{{longitude}}"
+            markers="{{markers}}"
+            polyline="{{polyline}}"
+            scale="16"
+            show-location="{{false}}"
+          />
+          <view class="empty-map" wx:else>
+            <view class="empty-map-title">暂无位置信息</view>
+            <view class="empty-map-desc">该记录缺少坐标或折线数据</view>
+          </view>
+        </view>
+
+        <view class="section" wx:if="{{markerImages.length}}">
+          <view class="section-title">照片 · {{markerImages.length}}张</view>
+          <scroll-view class="photo-scroll" scroll-x enable-flex>
+            <view class="photo-row">
+              <image
+                wx:for="{{markerImages}}"
+                wx:key="full"
+                class="photo-thumb"
+                mode="aspectFill"
+                src="{{item.thumb}}"
+                data-index="{{index}}"
+                bind:tap="onPreviewImage"
+              />
+            </view>
+          </scroll-view>
+        </view>
+
+        <view class="section">
+          <view class="section-title">坐标与时间</view>
+          <view class="section-card info-card">
+            <view class="info-row">
+              <text class="info-label">经度</text>
+              <text class="info-value">{{lngText}}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">纬度</text>
+              <text class="info-value">{{latText}}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">创建时间</text>
+              <text class="info-value info-value-date">{{createdDateText}}</text>
+            </view>
+            <view class="info-row" wx:if="{{deletedDateText}}">
+              <text class="info-label">删除时间</text>
+              <text class="info-value info-value-date">{{deletedDateText}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
+
+    <view class="action-bar" wx:if="{{showMapActionBar}}">
+      <button class="map-btn" disabled="{{!canOpenOnMap}}" bind:tap="onOpenOnMap">在地图上查看</button>
+    </view>
+  </view>
+</t-popup>

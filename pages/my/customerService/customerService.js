@@ -1,32 +1,59 @@
 // pages/my/customerService/customerService.js
+const ANDROID_DOWNLOAD_URL = 'https://a.app.qq.com/o/simple.jsp?pkgname=com.louhao.xiaoqu'
+const HARMONY_DOWNLOAD_URL = 'https://appgallery.huawei.com/app/detail?id=com.louhao.xiaoqu&channelId=SHARE&source=appshare'
+
+const DOWNLOAD_PAGES = {
+  ios: '/pages/my/app/ios/ios',
+  android: '/pages/my/app/android/android',
+  harmony: '/pages/my/app/harmony/harmony'
+}
+
 Page({
   data: {
-
+    downloadLinks: [{
+        key: 'android',
+        label: '安卓（应用宝）',
+        url: ANDROID_DOWNLOAD_URL,
+        tip: '复制链接后，请在手机浏览器中打开',
+        copyToast: '链接已复制，请在浏览器中打开'
+      },
+      {
+        key: 'harmony',
+        label: '鸿蒙（华为应用市场）',
+        url: HARMONY_DOWNLOAD_URL,
+        tip: '复制链接后，可在浏览器中打开跳转应用市场',
+        copyToast: '链接已复制，请在浏览器中打开'
+      }
+    ]
   },
 
-  onLoad(options) {
-    // 页面加载
-  },
+  onLoad() {},
 
-  // 处理快捷服务点击
-  handleServiceClick(e) {
-    const type = e.currentTarget.dataset.type;
-
-    switch (type) {
-      case 'faq':
-        // 跳转到常见问题页面
-        wx.navigateTo({
-          url: '/pages/help/question/question'
-        });
-        break;
-      case 'help':
-        // 显示使用帮助
-        wx.navigateTo({
-          url: '/pages/help/help/help'
-        });
-        break;
-      default:
-        break;
+  handleDownloadClick(e) {
+    const platform = e.currentTarget.dataset.platform
+    const url = DOWNLOAD_PAGES[platform]
+    if (!url) {
+      return
     }
+    wx.navigateTo({
+      url: url
+    })
+  },
+
+  onCopyLink(e) {
+    const url = e.currentTarget.dataset.url
+    const toast = e.currentTarget.dataset.toast || '链接已复制'
+    if (!url) {
+      return
+    }
+    wx.setClipboardData({
+      data: url,
+      success() {
+        wx.showToast({
+          title: toast,
+          icon: 'none'
+        })
+      }
+    })
   }
 })

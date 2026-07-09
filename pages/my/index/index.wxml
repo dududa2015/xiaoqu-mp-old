@@ -1,5 +1,5 @@
 <view class="container" style="margin-top:{{top}}px;">
-  <user-info userInfo="{{userInfo}}" validCount="{{markerStats.validCount}}" pendingAuditCount="{{markerStats.pendingAuditCount}}" deletedCount="{{markerStats.deletedCount}}" favoriteCount="{{markerStats.favoriteCount}}"></user-info>
+  <user-info userInfo="{{userInfo}}" validCount="{{markerStats.validCount}}" pendingAuditCount="{{markerStats.pendingAuditCount}}" favoriteCount="{{markerStats.favoriteCount}}"></user-info>
 
   <view class="content">
     <!-- #if IOS -->

@@ -22,121 +22,71 @@ page {
   padding: 0;
   border: none;
   background-color: transparent;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  line-height: normal;
+  text-align: left;
 }
 
 .main-contact-button::after {
   border: none;
 }
 
-.main-contact-button:active {
-  transform: scale(0.98);
-}
-
-.main-contact-card {
-  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
-  border-radius: 24rpx;
-  overflow: hidden;
-  box-shadow: 0 8rpx 24rpx rgba(24, 144, 255, 0.3);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-}
-
-.main-contact-button:active .main-contact-card {
-  box-shadow: 0 4rpx 16rpx rgba(24, 144, 255, 0.25);
-  transform: translateY(2rpx);
-}
-
-.main-card-content {
-  padding: 40rpx 32rpx;
+.contact-card {
   display: flex;
   align-items: center;
-  gap: 24rpx;
+  justify-content: space-between;
+  padding: 28rpx 24rpx;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
 }
 
-.main-icon-wrapper {
-  width: 96rpx;
-  height: 96rpx;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10rpx);
-  border-radius: 24rpx;
+.main-contact-button:active .contact-card {
+  background-color: #f9fafb;
+}
+
+.contact-main {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
-}
-
-.main-icon {
-  font-size: 52rpx;
-  line-height: 1;
-  display: block;
-  filter: drop-shadow(0 2rpx 4rpx rgba(0, 0, 0, 0.1));
-}
-
-.main-text-wrapper {
+  align-items: flex-start;
+  gap: 20rpx;
   flex: 1;
+  min-width: 0;
+}
+
+.contact-text {
   display: flex;
   flex-direction: column;
-  gap: 8rpx;
+  align-items: flex-start;
+  gap: 6rpx;
+  flex: 1;
+  min-width: 0;
 }
 
-.main-title {
+.contact-title {
   display: block;
-  font-size: 36rpx;
-  font-weight: 600;
-  color: #ffffff;
-  letter-spacing: 0.5rpx;
-  line-height: 1.4;
-}
-
-.main-subtitle {
-  display: block;
-  font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.9);
-  letter-spacing: 0.5rpx;
-  line-height: 1.5;
-  font-weight: 400;
-}
-
-.main-arrow {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48rpx;
-  height: 48rpx;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10rpx);
-  border-radius: 50%;
-}
-
-.arrow-icon {
-  font-size: 40rpx;
-  color: #ffffff;
-  font-weight: 300;
-  line-height: 1;
-}
-
-.main-card-footer {
-  padding: 20rpx 32rpx;
-  background: rgba(255, 255, 255, 0.1);
-  border-top: 1rpx solid rgba(255, 255, 255, 0.2);
-}
-
-.footer-hint {
-  font-size: 24rpx;
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.6;
-  display: block;
-}
-
-/* 快捷服务入口 */
-.quick-service-section {
   width: 100%;
-  margin-bottom: 24rpx;
+  text-align: left;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1a1a1a;
 }
 
+.contact-desc {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-size: 24rpx;
+  color: #888888;
+}
+
+.contact-arrow {
+  flex-shrink: 0;
+  font-size: 40rpx;
+  color: #c0c4cc;
+  line-height: 1;
+  margin-left: 12rpx;
+}
+
+/* App 下载 */
 .section-title {
   font-size: 30rpx;
   font-weight: 600;
@@ -145,59 +95,140 @@ page {
   letter-spacing: 0.5rpx;
 }
 
-.quick-service-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+.info-icon-wrapper--app {
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+}
+
+.download-section {
+  width: 100%;
+  margin-bottom: 24rpx;
+}
+
+.download-list {
+  display: flex;
+  flex-direction: column;
   gap: 16rpx;
 }
 
-.service-item {
+.download-item {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 20rpx;
-  padding: 24rpx 32rpx;
+  justify-content: space-between;
+  padding: 28rpx 24rpx;
   background-color: #ffffff;
   border-radius: 16rpx;
   box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
-  transition: all 0.2s ease;
 }
 
-.service-item:active {
-  background-color: #f5f5f5;
-  transform: scale(0.98);
+.download-item:active {
+  background-color: #f9fafb;
+  transform: scale(0.99);
 }
 
-.service-icon-wrapper {
-  width: 64rpx;
-  height: 64rpx;
-  border-radius: 12rpx;
+.download-item-main {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.service-icon-help {
-  background-color: #f0f9ff;
-}
-
-.service-icon-faq {
-  background-color: #fff7ed;
-}
-
-.service-icon {
-  width: 36rpx;
-  height: 36rpx;
-  display: block;
-}
-
-.service-label {
+  gap: 20rpx;
   flex: 1;
-  font-size: 28rpx;
+  min-width: 0;
+}
+
+.download-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  min-width: 0;
+}
+
+.download-item-title {
+  font-size: 30rpx;
+  font-weight: 600;
   color: #1a1a1a;
+}
+
+.download-item-desc {
+  font-size: 24rpx;
+  color: #666666;
+  line-height: 1.5;
+}
+
+.download-item-arrow {
+  flex-shrink: 0;
+  font-size: 40rpx;
+  color: #c0c4cc;
+  line-height: 1;
+  margin-left: 12rpx;
+}
+
+.link-card {
+  margin-top: 16rpx;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+}
+
+.link-card-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 16rpx;
+}
+
+.link-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16rpx;
+  padding: 16rpx 0;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.link-row:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.link-row-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.link-row-label {
+  display: block;
+  font-size: 24rpx;
+  color: #666666;
+  margin-bottom: 8rpx;
+}
+
+.link-row-url {
+  display: block;
+  font-size: 22rpx;
+  color: #1890ff;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.link-row-tip {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #e34d59;
+  line-height: 1.5;
+}
+
+.link-copy-btn {
+  flex-shrink: 0;
+  padding: 8rpx 20rpx;
+  border-radius: 999rpx;
+  background: #f0f9ff;
+  color: #1890ff;
+  font-size: 24rpx;
   font-weight: 500;
-  letter-spacing: 0.5rpx;
+}
+
+.link-copy-btn:active {
+  opacity: 0.75;
 }
 
 /* 服务说明卡片 */
@@ -271,6 +302,22 @@ page {
   color: #666666;
   line-height: 1.8;
   letter-spacing: 0.5rpx;
+}
+
+.alert-tip {
+  margin-top: 8rpx;
+  padding: 20rpx 24rpx;
+  background: #fff1f0;
+  border: 1rpx solid #ffccc7;
+  border-radius: 12rpx;
+}
+
+.alert-tip-text {
+  display: block;
+  font-size: 24rpx;
+  color: #cf1322;
+  line-height: 1.8;
+  font-weight: 500;
 }
 
 /* 联系方式 */

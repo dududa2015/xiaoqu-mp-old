@@ -1,23 +1,51 @@
-<view class="content">
-  <t-cell-group wx:if="{{list.length > 0}}">
-    <t-cell wx:for="{{list}}" wx:key="index" title="{{index+1}}、 {{item.name}}" hover arrow note="{{item.typeName}}" bind:tap="onMarkerTap" data-item="{{item}}">
-      <!-- <text slot="title" wx:if="{{item.deleted === 0}}">{{index+1}}、 {{item.name}}</text>
-      <span slot="title" wx:if="{{item.deleted === -1}}">
-        <text>{{index+1}}、 {{item.name}}</text>
-        <t-tag class="margin-16" variant="light" theme="warning" size="small">审核中</t-tag>
-      </span>
-      <span slot="title" wx:if="{{item.deleted === 1}}">
-        <text>{{index+1}}、 {{item.name}}</text>
-        <t-tag class="margin-16" variant="light" theme="danger" size="small">已删除</t-tag>
-      </span> -->
-    </t-cell>
-  </t-cell-group>
-  <view wx:else>
-    <image src="https://img01.yzcdn.cn/vant/empty-image-default.png" class="img" mode="" />
-    <view class="empty-text">列表为空</view>
+<view class="page">
+  <view class="tab-bar">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="key"
+      class="tab-item {{activeTab === item.key ? 'tab-item-active' : ''}}"
+      bind:tap="onTabTap"
+      data-tab="{{item.key}}"
+    >
+      {{item.label}}
+    </view>
   </view>
-</view>
-<view class="bomTxt">
-  <view hidden="{{!loading}}">正在加载...</view>
-  <view hidden="{{hasMore}}">没有更多了</view>
+
+  <view class="content">
+    <view class="marker-card" wx:if="{{list.length > 0}}">
+      <view
+        class="marker-row"
+        wx:for="{{list}}"
+        wx:key="rowKey"
+        hover-class="marker-row-hover"
+        bind:tap="onMarkerTap"
+        data-index="{{index}}"
+      >
+        <view class="index-badge">{{item.indexNumber}}</view>
+        <view class="row-body">
+          <view class="title-row">
+            <text class="row-title {{item.deletedStyle ? 'row-title-deleted' : ''}}">{{item.displayTitle}}</text>
+            <text class="type-tag" wx:if="{{item.typeName}}">{{item.typeName}}</text>
+          </view>
+          <text class="row-subtitle" wx:if="{{item.showSubtitle}}">{{item.subtitle}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty" wx:elif="{{initialized && !loading}}">
+      <view class="empty-title">{{emptyTitle}}</view>
+      <view class="empty-desc">{{emptyDesc}}</view>
+    </view>
+
+    <view class="loading-wrap" wx:if="{{loading && list.length === 0}}">
+      <view class="loading-text">加载中...</view>
+    </view>
+  </view>
+
+  <view class="footer-text" wx:if="{{list.length > 0}}">
+    <view wx:if="{{loading}}">正在加载...</view>
+    <view wx:elif="{{showEndTip && !hasMore}}">没有更多了</view>
+  </view>
+
+  <my-marker-detail id="myMarkerDetail" bind:changed="onDetailChanged" />
 </view>

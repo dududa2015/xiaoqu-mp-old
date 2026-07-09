@@ -45,7 +45,7 @@
     <!-- 统计数据区域 -->
     <view class="stats-section">
         <view class="stats-grid">
-            <view class="stat-item stat-markers" bind:tap="toMarkers" data-deleted="{{0}}">
+            <view class="stat-item stat-markers" bind:tap="toMarkers" data-tab="valid">
                 <view class="stat-row">
                     <view class="stat-icon">
                         <t-icon name="location" size="28rpx" />
@@ -55,7 +55,7 @@
                 <view class="stat-title">有效标记</view>
             </view>
             
-            <view class="stat-item stat-pending" bind:tap="toMarkers" data-deleted="{{-1}}">
+            <view class="stat-item stat-pending" bind:tap="toMarkers" data-tab="pending">
                 <view class="stat-row">
                     <view class="stat-icon">
                         <t-icon name="time" size="28rpx" />
@@ -65,17 +65,7 @@
                 <view class="stat-title">待审核</view>
             </view>
             
-            <view class="stat-item stat-deleted" bind:tap="toMarkers" data-deleted="{{1}}">
-                <view class="stat-row">
-                    <view class="stat-icon">
-                        <t-icon name="delete" size="28rpx" />
-                    </view>
-                    <view class="stat-value">{{deletedCount || 0}}</view>
-                </view>
-                <view class="stat-title">被删除</view>
-            </view>
-
-            <view class="stat-item stat-favorites" bind:tap="toPlaces">
+            <view class="stat-item stat-favorites" bind:tap="toMarkers" data-tab="favorites">
                 <view class="stat-row">
                     <view class="stat-icon">
                         <t-icon name="star" size="28rpx" />

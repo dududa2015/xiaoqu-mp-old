@@ -29,13 +29,6 @@ Component({
         console.log('pendingAuditCount 变化:', newVal)
       }
     },
-    deletedCount: {
-      type: Number,
-      value: 0,
-      observer(newVal) {
-        console.log('deletedCount 变化:', newVal)
-      }
-    },
     favoriteCount: {
       type: Number,
       value: 0
@@ -148,19 +141,9 @@ Component({
       if (!checkLoginAndNavigate()) {
         return
       }
-      const {
-        deleted
-      } = event.currentTarget.dataset
+      const tab = event.currentTarget.dataset.tab || 'valid'
       wx.navigateTo({
-        url: '/pages/my/markers/markers?deleted=' + deleted,
-      })
-    },
-    toPlaces() {
-      if (!checkLoginAndNavigate()) {
-        return
-      }
-      wx.navigateTo({
-        url: '/pages/my/places/places',
+        url: `/pages/my/markers/markers?tab=${tab}`,
       })
     },
     convertToWan(num) {
