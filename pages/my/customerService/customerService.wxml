@@ -60,7 +60,7 @@
       </view>
       <view class="download-item download-item-android" bindtap="handleDownloadClick" data-platform="android">
         <view class="download-item-main">
-          <t-icon name="download" size="40rpx" color="#E85827" />
+          <t-icon name="logo-android" size="40rpx" color="#E85827" />
           <view class="download-item-text">
             <text class="download-item-title">安卓 App 下载</text>
             <text class="download-item-desc">应用宝 / 小米 / OPPO 等应用商店</text>
