@@ -32,9 +32,5 @@
     ],
     "include": []
   },
-  "appid": "wx41e901a3427cc9af",
-  "projectArchitecture": "multiPlatform",
-  "simulatorPluginLibVersion": {
-    "wxext14566970e7e9f62": "3.6.5-39"
-  }
+  "appid": "wx41e901a3427cc9af"
 }

@@ -61,16 +61,10 @@ Component({
     onChoose(event) {
       let userId = wx.getStorageSync('userId')
       if (!userId) {
-        // #if IOS
-        wx.navigateTo({
-          url: '/pages/ios/login/login',
+        wx.showToast({
+          title: '请先登录',
+          icon: 'none'
         })
-        // #else
-        wx.navigateTo({
-          url: '/pages/android/login/login',
-        })
-        // #endif
-        
         return
       }
       const index = event.currentTarget.dataset.index

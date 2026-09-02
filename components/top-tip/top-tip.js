@@ -1,7 +1,6 @@
 import {
   formatTime
 } from '../../utils/util'
-import { getEntitlementStatus, getEntitlementNotice } from '../../utils/entitlement'
 import { getDeviceContext } from '../../utils/system-info'
 import { isHarmonyDevice } from '../../utils/device'
 
@@ -43,39 +42,23 @@ Component({
 
     initNotices() {
       const userInfo = wx.getStorageSync('userInfo') || {}
-      let notices = []
+      const downloadCopy = this.getMpDownloadCopy(getDeviceContext())
+      const showExpandedCard = this.isUserRegisteredOverOneMonth(userInfo)
 
-      if (this.isMpEnvironment()) {
-        const downloadCopy = this.getMpDownloadCopy(getDeviceContext())
-        const showExpandedCard = this.isUserRegisteredOverOneMonth(userInfo)
-
-        this.clearExpandTimer()
-        this.setData({
-          noticeList: [downloadCopy.notice],
-          isDownloadNotice: true,
-          downloadTitle: downloadCopy.title,
-          downloadText: downloadCopy.desc,
-          collapsed: !showExpandedCard,
-          isCollapsing: false,
-          collapseCountdown: 0
-        })
-
-        if (showExpandedCard && this.data.show) {
-          this.scheduleCollapse()
-        }
-        return
-      }
-
-      const platform = this.getPlatform(getDeviceContext())
-      notices = this.getAppNotices(userInfo, platform)
       this.clearExpandTimer()
       this.setData({
-        noticeList: notices,
-        isDownloadNotice: false,
-        downloadTitle: '',
-        downloadText: '',
-        collapsed: true
+        noticeList: [downloadCopy.notice],
+        isDownloadNotice: true,
+        downloadTitle: downloadCopy.title,
+        downloadText: downloadCopy.desc,
+        collapsed: !showExpandedCard,
+        isCollapsing: false,
+        collapseCountdown: 0
       })
+
+      if (showExpandedCard && this.data.show) {
+        this.scheduleCollapse()
+      }
     },
 
     scheduleCollapse() {
@@ -149,14 +132,6 @@ Component({
       this.setData({ collapseCountdown: 0 })
     },
 
-    isMpEnvironment() {
-      // #if MP
-      return true
-      // #else
-      return false
-      // #endif
-    },
-
     parseUserCreatedDate(dateStr) {
       if (!dateStr) {
         return null
@@ -176,13 +151,6 @@ Component({
         return false
       }
       return Date.now() - created.getTime() > ONE_MONTH_MS
-    },
-
-    getPlatform(systemInfo) {
-      const { platform = '', model = '' } = systemInfo
-      if (platform === 'ios' || model.indexOf('iPhone') > -1) return 'IOS'
-      if (platform === 'android' || model.indexOf('Android') > -1) return 'ANDROID'
-      return 'MP'
     },
 
     getMpDownloadCopy(systemInfo) {
@@ -230,50 +198,16 @@ Component({
       }
     },
 
-    getMpNotices(systemInfo) {
-      return [this.getMpDownloadCopy(systemInfo).notice]
-    },
-
-    getAppNotices(userInfo, platform) {
-      const notice = getEntitlementNotice()
-      if (notice) {
-        return [notice]
-      }
-
-      const status = getEntitlementStatus(userInfo)
-      if (status.type === 'lifetime_vip' || status.type === 'vip') {
-        return ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
-      }
-
-      return ['请勿标记门禁密码，违者停用账号', '已开通抖音：小区楼号分布图，欢迎关注']
-    },
-
     onClick() {
-      const userInfo = wx.getStorageSync('userInfo')
-
-      if (this.isMpEnvironment()) {
-        const deviceContext = getDeviceContext()
-        const { platform, model } = deviceContext
-        let url = '/pages/my/app/android/android'
-        if (isHarmonyDevice(deviceContext)) {
-          url = '/pages/my/app/harmony/harmony'
-        } else if (platform === 'ios' || model.indexOf('iPhone') > -1) {
-          url = '/pages/my/app/ios/ios'
-        }
-        wx.navigateTo({ url })
-        return
+      const deviceContext = getDeviceContext()
+      const { platform, model } = deviceContext
+      let url = '/pages/my/app/android/android'
+      if (isHarmonyDevice(deviceContext)) {
+        url = '/pages/my/app/harmony/harmony'
+      } else if (platform === 'ios' || model.indexOf('iPhone') > -1) {
+        url = '/pages/my/app/ios/ios'
       }
-
-      const platform = this.getPlatform(getDeviceContext())
-      const status = getEntitlementStatus(userInfo)
-      if (status.type !== 'lifetime_vip' && status.type !== 'vip') {
-        wx.navigateTo({ url: platform === 'IOS' ? '/pages/ios/vip/vip' : '/pages/android/vip/vip' })
-        return
-      }
-
-      if (status.type === 'vip' && status.expiringSoon) {
-        wx.navigateTo({ url: platform === 'IOS' ? '/pages/ios/vip/vip' : '/pages/android/vip/vip' })
-      }
+      wx.navigateTo({ url })
     },
 
     onClose() {

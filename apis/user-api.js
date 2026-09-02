@@ -45,57 +45,6 @@ export const updateNickName = (params) => {
         method: 'POST',
     })
 }
-//app登录，通过小程序用户编号和小程序用户密码
-export const getUserInfoByAppLogin = (params) => {
-    return request({
-        url: '/users/appLogin',
-        data: params,
-        method: 'GET',
-    })
-}
-//d1f84a0863微信登录e92817962f
-export const getUserInfoByWxLogin = (params) => {
-    return request({
-        url: '/users/getUserInfoByWxLogin',
-        data: params,
-        method: 'GET',
-    })
-}
-//苹果登录，通过code获取用户信息-用于多端应用的苹果登录
-export const getAppleUserInfo = (params) => {
-    return request({
-        url: '/users/getAppleUserInfo',
-        data: params,
-        method: 'GET',
-    })
-}
-//通过deviceId创建日志表--用于进入app时根据userId和deviceId创建日志表
-export const addUserDeviceLog = (params) => {
-  return request({
-    url: '/users/addUserDeviceLog',
-    data: params,
-    method: 'GET',
-  })
-}
-
-// 查询设备当前试用状态
-export const getDeviceTrial = (params) => {
-  return request({
-    url: '/users/getDeviceTrial',
-    data: params,
-    method: 'GET',
-  })
-}
-
-// 创建或更新设备试用期（默认不覆盖已有记录）
-export const setDeviceTrial = (data) => {
-  return request({
-    url: '/users/setDeviceTrial',
-    data,
-    method: 'POST',
-  })
-}
-
 //获取我的个人排名
 export const getRankByUserId = (params) => {
     return request({

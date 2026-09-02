@@ -13,45 +13,8 @@
             <view class="{{enableSatellite   ? 'text text-checked' : 'text'}}">卫星地图</view>
         </view>
     </view>
-    <!-- #if NATIVE-->
-    <view class="setting map-mode-setting">
-        <view class="row flex f-x-sb">
-            <view class="row-title">个人地图</view>
-            <view class="row-title">
-                <t-switch value="{{mapType === 2}}" slot="note" size="small" bind:change="onPersonalMapSwitch" />
-            </view>
-        </view>
-        <view class="row flex f-x-sb" wx:if="{{mapType === 2}}">
-            <view class="row-title row-title-stack">
-                <text>合并公共地图</text>
-                <text class="row-sub">在个人地图中显示公共地图数据</text>
-            </view>
-            <view class="row-title">
-                <t-switch value="{{isPubMap}}" slot="note" size="small" bind:change="onMergePubMapSwitch" />
-            </view>
-        </view>
-    </view>
-    <!-- #endif -->
     <!-- 位置、形状、旋转设置 -->
     <view class="setting">
-        <!-- #if NATIVE-->
-        <view class="row flex f-x-sb" style="padding: 16rpx 24rpx">
-            <view class="row-title" style="padding-top: 8rpx;">定位图标
-                <view class="loc-icon-help-icon-wrapper">
-                    <view class="loc-icon-help-icon" bind:tap="onShowLocIconHelp">
-                        <text class="loc-icon-help-icon-text">?</text>
-                    </view>
-                    <view class="loc-icon-tooltip" wx:if="{{showLocIconHelp}}">
-                        <text class="loc-icon-tooltip-text">使用默认图标需要双击其中一个图标并重启应用</text>
-                        <view class="loc-icon-tooltip-arrow"></view>
-                    </view>
-                </view>
-            </view>
-            <view class="row-title flex f-y-center">
-                <image wx:for="{{locIconList}}" wx:key="index" src="{{item.url}}" class="{{ locIconIndex===index ? 'row-icon row-icon-selected' : 'row-icon' }}" mode="" bind:tap="onLocIcon" data-index="{{index}}" />
-            </view>
-        </view>
-        <!-- #endif -->
         <view class="row flex f-x-sb">
             <view class="row-title">地图控件位置</view>
             <view class="row-title">
@@ -70,7 +33,6 @@
                 </t-radio-group>
             </view>
         </view>
-        <!-- #if MP -->
         <view class="row flex f-x-sb">
             <view class="row-title row-title-stack">
                 <view class="row-title">
@@ -83,27 +45,12 @@
                 <t-switch value="{{showCommunityDetail}}" slot="note" size="small" bind:change="onCommunityDetailChange" />
             </view>
         </view>
-        <!-- #endif -->
         <view class="row flex f-x-sb">
             <view class="row-title">开启旋转</view>
             <view class="row-title">
                 <t-switch value="{{enableRotate}}" slot="note" size="small" bind:change="onRotateChange" />
             </view>
         </view>
-        <!-- #if NATIVE-->
-        <view class="row flex f-x-sb">
-            <view class="row-title">3D楼块</view>
-            <view class="row-title">
-                <t-switch value="{{enable3D}}" slot="note" size="small" bind:change="on3DChange" />
-            </view>
-        </view>
-        <view class="last-row flex f-x-sb">
-            <view class="row-title">屏幕常亮</view>
-            <view class="row-title">
-                <t-switch value="{{enableScreenOn}}" slot="note" size="small" bind:change="onScreenOnChange" />
-            </view>
-        </view>
-        <!-- #endif -->
     </view>
 
     <t-dialog visible="{{showMapConfirm}}" content="创建专属于您的楼号地图，他人将无法查看、修改和删除您的个人地图" confirm-btn="确定" bind:confirm="closeDialog" />

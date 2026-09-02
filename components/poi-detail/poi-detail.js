@@ -165,15 +165,9 @@ Component({
         })
         let userInfo = wx.getStorageSync('userInfo')
         let showFeedback = wx.getStorageSync('userId') !== result.userId
-        // #if MP
         let canEditUserMarker = wx.getStorageSync('userId') === result.userId
         //小程序能删除但要看广告
         let canDeleteUserMarker = wx.getStorageSync('userId') === result.userId
-        // #else
-        let canEditUserMarker = wx.getStorageSync('userId') === result.userId || wx.getStorageSync('mapType') === 2
-        //app的权限和编辑一样
-        let canDeleteUserMarker = canEditUserMarker
-        // #endif
         // 有现场图的标记点：仅创建者可修改/删除；他人不可编辑、删除、报错
         if (hasMarkerImages && !isOwner) {
           canEditUserMarker = false
@@ -308,13 +302,11 @@ Component({
         this.resetRouteState()
         return
       }
-      // #if MP
       const { isRewardedAdActive } = require('../../utils/rewarded-video')
       if (!isRewardedAdActive('route')) {
         this.triggerEvent('requestRouteAd')
         return
       }
-      // #endif
       this.fetchAndShowRoute()
     },
 

@@ -168,24 +168,6 @@ Page({
       })
     })
   },
-  toLogin() {
-    wx.showModal({
-      content: '确认要切换当前账号吗？',
-      complete: (res) => {
-        if (res.confirm) {
-          // #if IOS
-          wx.navigateTo({
-            url: '/pages/ios/login/login',
-          })
-          // #else
-          wx.navigateTo({
-            url: '/pages/android/login/login',
-          })
-          // #endif          
-        }
-      }
-    })
-  },
   onLogout() {
     wx.navigateTo({
       url: '/pages/account/cancel/cancel'

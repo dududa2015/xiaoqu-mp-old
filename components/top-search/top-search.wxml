@@ -1,9 +1,1 @@
-<!-- #if NATIVE -->
-<view class="top-search-wrap" style="top:{{rect.top}}px;" bind:tap="onSettingTap">
-    <view class="top-wrap">
-        <view class="map-name-wrap">
-            <text class="name">{{ mapName || '公共地图'}}</text>
-        </view>
-    </view>
-</view>
-<!-- #endif -->
+<!-- 小程序不使用此组件 -->

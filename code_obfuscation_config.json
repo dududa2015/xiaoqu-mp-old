@@ -87,23 +87,7 @@
 			"sub_switch": true
 		},
 		{
-			"path": "pages/ios/login/login.js",
-			"sub_switch": true
-		},
-		{
 			"path": "pages/my/newUser/newUser.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/ios/relate/relate.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/ios/user-agreement/user-agreement.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/ios/vip/vip.js",
 			"sub_switch": true
 		},
 		{
@@ -111,15 +95,7 @@
 			"sub_switch": true
 		},
 		{
-			"path": "utils/apple-iap-manager2.js",
-			"sub_switch": true
-		},
-		{
 			"path": "utils/map.js",
-			"sub_switch": true
-		},
-		{
-			"path": "apis/map-apis.js",
 			"sub_switch": true
 		},
 		{
@@ -143,10 +119,6 @@
 			"sub_switch": true
 		},
 		{
-			"path": "components/middle-bar/middle-bar.js",
-			"sub_switch": true
-		},
-		{
 			"path": "components/navigation-bar/navigation-bar.js",
 			"sub_switch": true
 		},
@@ -156,22 +128,6 @@
 		},
 		{
 			"path": "components/user-info/user-info.js",
-			"sub_switch": true
-		},
-		{
-			"path": "components/user-info-app/user-info-app.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/search/index/index.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/search/search/search.js",
-			"sub_switch": true
-		},
-		{
-			"path": "components/version-update/version-update.js",
 			"sub_switch": true
 		},
 		{
@@ -196,26 +152,6 @@
 		},
 		{
 			"path": "apis/tmap-apis.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/android/login/login.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/android/vip/vip.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/android/order/detail/detail.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/android/order/list/list.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/android/refund/refund.js",
 			"sub_switch": true
 		},
 		{
@@ -251,51 +187,11 @@
 			"sub_switch": true
 		},
 		{
-			"path": "pages/android/refund/agreement/agreement.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/android/user-agreement/user-agreement.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/android/user-policy/user-policy.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/android/vip-daikou-agreement/vip-daikou-agreement.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/android/vip-daikou/vip-daikou.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/android/vip-manage/vip-manage.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/android/papay-refund/papay-refund.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/android/papay-deduct-list/papay-deduct-list.js",
-			"sub_switch": true
-		},
-		{
 			"path": "pages/help/help/help.js",
 			"sub_switch": true
 		},
 		{
 			"path": "pages/help/question/question.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/ios/vip-renew/vip-renew.js",
-			"sub_switch": true
-		},
-		{
-			"path": "pages/my/about/about.js",
 			"sub_switch": true
 		},
 		{
@@ -343,10 +239,6 @@
 			"sub_switch": true
 		},
 		{
-			"path": "utils/entitlement.js",
-			"sub_switch": true
-		},
-		{
 			"path": "utils/extend.js",
 			"sub_switch": true
 		},
@@ -371,10 +263,6 @@
 			"sub_switch": true
 		},
 		{
-			"path": "components/choose-location/choose-location.js",
-			"sub_switch": true
-		},
-		{
 			"path": "components/location-guide/location-guide.js",
 			"sub_switch": true
 		},
@@ -392,10 +280,6 @@
 		},
 		{
 			"path": "components/no-ad/no-ad.js",
-			"sub_switch": true
-		},
-		{
-			"path": "components/vip-expired/vip-expired.js",
 			"sub_switch": true
 		}
 	]

@@ -1,6 +1,5 @@
 // components/user-info/user-info.js
 const { checkLoginAndNavigate } = require('../../utils/util.js')
-const { getEntitlementStatus } = require('../../utils/entitlement.js')
 
 Component({
 
@@ -47,11 +46,9 @@ Component({
    */
   methods: {
     applyUserInfo(newVal) {
-      const entitlement = getEntitlementStatus(newVal || null)
-
       if (newVal) {
         const userId = newVal.userId.slice(-8)
-        this.setData(Object.assign({
+        this.setData({
           userId,
           isVip: newVal.isVip,
           isAdmin: newVal.isAdmin,
@@ -60,11 +57,11 @@ Component({
           friends: this.convertToWan(newVal.friends),
           deleted: this.convertToWan(newVal.deleted),
           showRank: newVal.points > 0
-        }, this.mapEntitlementData(entitlement)))
+        })
         return
       }
 
-      this.setData(Object.assign({
+      this.setData({
         userId: '',
         isVip: false,
         isAdmin: false,
@@ -73,25 +70,7 @@ Component({
         friends: 0,
         deleted: 0,
         showRank: false
-      }, this.mapEntitlementData(entitlement)))
-    },
-
-    mapEntitlementData(entitlement) {
-      return {
-        isLifetimeVip: entitlement.isLifetimeVip,
-        showVip: entitlement.showVip,
-        showBadge: entitlement.showBadge,
-        showEntitlementRow: entitlement.showEntitlementRow,
-        entitlementLabel: entitlement.label,
-        entitlementTheme: entitlement.theme,
-        entitlementIsActive: entitlement.isActive,
-        entitlementEndDate: entitlement.endDateFormatted,
-        entitlementDaysLeft: entitlement.daysLeft,
-        entitlementHoursLeft: entitlement.hoursLeft,
-        entitlementShowHours: entitlement.showHours,
-        entitlementExpiringSoon: entitlement.expiringSoon,
-        entitlementStatusText: entitlement.statusText
-      }
+      })
     },
 
     onChooseAvatar(e) {

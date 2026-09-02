@@ -2,31 +2,6 @@
   <user-info userInfo="{{userInfo}}" validCount="{{markerStats.validCount}}" pendingAuditCount="{{markerStats.pendingAuditCount}}" favoriteCount="{{markerStats.favoriteCount}}"></user-info>
 
   <view class="content">
-    <!-- #if IOS -->
-    <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
-      <t-cell title="开通会员" hover arrow bind:tap="toVip">
-        <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
-    </t-cell-group>
-    <!-- #elif ANDROID -->
-    <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
-      <t-cell title="开通会员" hover arrow bind:tap="toVip">
-        <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
-        <!-- 权益即将到期：VIP 黄色 / 试用 蓝色 -->
-        <view slot="note" wx:if="{{entitlementShowCellNote}}">
-          <t-tag size="small" variant="light" theme="{{entitlementCellNoteTheme}}">
-            {{entitlementCellNoteText}}
-          </t-tag>
-        </view>
-      </t-cell>
-      <t-cell title="会员管理" hover arrow left-icon="/images/my/vip-management.png" bind:tap="toVipManage">
-      </t-cell>
-      <!-- <t-cell title="缴费记录" hover arrow bind:tap="toOrderList">
-        <image src="/images/my/pay.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell> -->
-    </t-cell-group>
-    <!-- #endif -->
-
     <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
       <t-cell title="使用帮助" hover arrow url="/pages/help/help/help">
         <image src="/images/my/help.png" class="left-icon" mode="" slot="left-icon" />
@@ -34,32 +9,8 @@
       <t-cell title="常见问题" hover arrow url="/pages/help/question/question">
         <image src="/images/my/question.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
-      <!-- #if NATIVE -->
-      <!-- <t-cell title="客户服务" hover arrow bind:tap="toCS">
-        <image src="/images/my/customer-service.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell> -->
-      <!--#else-->
-      <!-- <t-cell title="客户服务" hover arrow url="/pages/my/customerService/customerService">
-        <image src="/images/my/cs.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell> -->
-      <!-- #endif -->
     </t-cell-group>
-    <!-- #if ANDROID -->
     <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
-      <t-cell title="关于" hover arrow url="/pages/my/about/about">
-        <image src="/images/my/about.png" class="left-icon" mode="" slot="left-icon" />
-      </t-cell>
-    </t-cell-group>
-    <!-- #endif -->
-    <!-- #if MP -->
-    <t-cell-group style="margin-top: 24rpx;border-radius: 24rpx; overflow: hidden;">
-      <!-- <t-cell title="意见反馈" hover arrow>
-                <image src="/images/my/feedback.png" class="left-icon" mode="" slot="left-icon" />
-            </t-cell>
-            <button openType="feedback" class="feedback-btn"></button> -->
-      <!-- <t-cell title="去评价" hover arrow bind:tap="onEvaluate" note="五星好评激励作者">
-                <image src="/images/my/star.png" class="left-icon" mode="" slot="left-icon" />
-            </t-cell> logo-apple-->
       <t-cell hover arrow url="/pages/my/app/ios/ios">
         <text slot="title" class="download-title-ios">苹果App下载</text>
         <t-icon name="logo-apple" size="40rpx" color="#007AFF" class="left-icon" slot="left-icon" />
@@ -73,14 +24,5 @@
         <t-icon name="download" size="40rpx" color="#CF0A2C" class="left-icon" slot="left-icon" />
       </t-cell>
     </t-cell-group>
-    <!-- #endif -->
-
-    <!-- #if ANDROID -->
-    <!-- <view class="footer flex f-x-center f-y-center">
-      <navigator class="margin8 text-underline" url="/pages/android/user-agreement/user-agreement">用户协议</navigator>
-      <view class="margin8">|</view>
-      <navigator class="margin8 text-underline" url="/pages/android/user-policy/user-policy">隐私政策</navigator>
-    </view> -->
-    <!-- #endif -->
   </view>
 </view>

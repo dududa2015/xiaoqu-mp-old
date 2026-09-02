@@ -9,16 +9,10 @@
             <view class="user-details">
                 <view class="name-group">
                     <text class="user-name">{{userInfo ? (userInfo.nickName || '小区楼号') : '请登录'}}</text>
-                    <!-- #if MP-->
                     <view class="badge-group">                        
                         <view class="badge-item badge-vip" wx:if="{{isVip}}">VIP</view>
                         <view class="badge-item badge-admin" wx:if="{{isAdmin}}">管理员</view>
                     </view>
-                    <!-- #else -->
-                    <view class="badge-item badge-lifetime" wx:if="{{showBadge === 'lifetime'}}">终身会员</view>
-                    <view class="badge-item badge-vip" wx:elif="{{showBadge === 'vip'}}">VIP</view>
-                    <view class="badge-item badge-trial" wx:elif="{{showBadge === 'trial'}}">试用中</view>
-                    <!-- #endif -->
                 </view>
                 <view class="user-meta">
                     <text class="user-id">ID: {{userId}}</text>
@@ -26,21 +20,8 @@
             </view>
             <view class="action-btn">
               <image src="/images/poi-detail/edit.png" class="img" mode="" />
-                <!-- <t-icon name="edit" size="32rpx" color="#4b5563" /> -->
             </view>
         </view>
-        <!-- #if NATIVE -->
-        <view class="entitlement-info entitlement-{{entitlementTheme}}" wx:if="{{showEntitlementRow}}">
-            <view class="entitlement-badge-row">
-                <view class="entitlement-label-badge">{{entitlementLabel}}</view>
-                <text class="entitlement-date-text">到期时间：{{entitlementEndDate}}</text>
-                <view class="entitlement-days-tag" wx:if="{{entitlementIsActive && !entitlementExpiringSoon}}">{{entitlementStatusText}}</view>
-                <view class="entitlement-days-tag entitlement-warning" wx:elif="{{entitlementIsActive && entitlementExpiringSoon && entitlementShowHours}}">剩{{entitlementHoursLeft}}小时</view>
-                <view class="entitlement-days-tag entitlement-warning" wx:elif="{{entitlementIsActive && entitlementExpiringSoon}}">剩{{entitlementDaysLeft}}天</view>
-                <view class="entitlement-days-tag entitlement-expired-tag" wx:else>{{entitlementStatusText}}</view>
-            </view>
-        </view>
-        <!-- #endif -->
     </view>
     <!-- 统计数据区域 -->
     <view class="stats-section">

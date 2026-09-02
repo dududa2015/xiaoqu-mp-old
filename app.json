@@ -14,80 +14,6 @@
     "pages/help/help/help",
     "pages/help/question/question"
   ],
-  "static": [
-    {
-      "pattern": "pages/ios/*",
-      "platforms": [
-        "mini-ios"
-      ]
-    },
-    {
-      "pattern": "pages/android/*",
-      "platforms": [
-        "mini-android"
-      ]
-    },
-    {
-      "pattern": "pages/native/*",
-      "platforms": [
-        "mini-ios",
-        "mini-android"
-      ]
-    }
-  ],
-  "mini-ios": {
-    "pages": [
-      "pages/index/index",
-      "pages/my/index/index",
-      "pages/my/edit/edit",
-      "pages/account/cancel/cancel",
-      "pages/my/newUser/newUser",
-      "pages/my/markers/markers",
-      "pages/my/places/places",
-      "pages/my/app/ios/ios",
-      "pages/help/help/help",
-      "pages/help/question/question",
-      "pages/ios/vip/vip",
-      "pages/ios/login/login",
-      "pages/ios/user-agreement/user-agreement",
-      "pages/ios/vip-agreement/vip-agreement",
-      "pages/ios/vip-renew/vip-renew",
-      "pages/search/index/index",
-      "pages/search/search/search"
-    ]
-  },
-  "mini-android": {
-    "pages": [
-      "pages/index/index",
-      "pages/my/index/index",
-      "pages/my/edit/edit",
-      "pages/account/cancel/cancel",
-      "pages/my/newUser/newUser",
-      "pages/my/markers/markers",
-    "pages/my/places/places",
-      "pages/my/app/ios/ios",
-      "pages/help/help/help",
-      "pages/help/question/question",
-      "pages/android/vip/vip",
-      "pages/android/vip-daikou/vip-daikou",
-      "pages/android/vip-daikou-agreement/vip-daikou-agreement",
-      "pages/android/vip-manage/vip-manage",
-      "pages/android/papay-refund/papay-refund",
-      "pages/android/papay-deduct-list/papay-deduct-list",
-      "pages/android/login/login",
-      "pages/android/user-agreement/user-agreement",
-      "pages/android/user-policy/user-policy",
-      "pages/android/vip-agreement/vip-agreement",
-      "pages/android/vip-renew/vip-renew",
-      "pages/android/order/list/list",
-      "pages/android/order/detail/detail",
-      "pages/android/refund/refund",
-      "pages/android/refund/agreement/agreement",
-      "pages/search/index/index",
-      "pages/search/search/search",
-      "pages/my/about/about"
-    ]
-  },
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "Weixin",
@@ -104,9 +30,7 @@
   },
   "requiredPrivateInfos": [
     "getLocation",
-    "chooseLocation",
-    "startLocationUpdate",
-    "onLocationChange"
+    "chooseLocation"
   ],
   "tabBar": {
     "color": "#000000",

@@ -279,28 +279,14 @@ const getStorageWithExpire = (key) => {
   return cacheData.data
 }
 
-// 检查登录状态，如果未登录则跳转到登录页
-// @param {string} navigateType - 跳转方式：'navigateTo'（默认）或 'redirectTo'
-// 返回 true 表示已登录，false 表示未登录（已跳转）
-const checkLoginAndNavigate = (navigateType = 'navigateTo') => {
+// 检查登录状态；小程序启动已静默 wx.login，未登录时仅提示
+const checkLoginAndNavigate = () => {
   const userInfo = wx.getStorageSync('userInfo')
   if (!userInfo || !userInfo.userId) {
-    const loginUrl =
-      // #if IOS
-      '/pages/ios/login/login'
-    // #else
-    '/pages/android/login/login'
-    // #endif
-
-    if (navigateType === 'redirectTo') {
-      wx.redirectTo({
-        url: loginUrl,
-      })
-    } else {
-      wx.navigateTo({
-        url: loginUrl,
-      })
-    }
+    wx.showToast({
+      title: '请先登录',
+      icon: 'none'
+    })
     return false
   }
   return true

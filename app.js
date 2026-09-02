@@ -1,19 +1,12 @@
 import {
-  getUserInfo,
-  getAppleUserInfo,
-  addUserDeviceLog,
-  getDeviceTrial,
-  setDeviceTrial
+  getUserInfo
 } from './apis/user-api'
 import { getDeviceInfo } from './utils/device'
 import { saveDeviceInfo } from './apis/device-apis'
 
-// 常量定义
 const MAX_RETRY_TIMES = 3
-const TRIAL_PERIOD_DAYS = 3
 
 App({
-  // 全局数据
   globalData: {
     userInfo: null,
     mapCtx: null,
@@ -21,99 +14,47 @@ App({
     isAndroid: false,
     padding: 3,
     mapType: 'amap',
-    // userInfo 就绪 Promise
-    userInfoReady: null,
-    // 设备试用状态是否已初始化完成
-    deviceTrialReady: false,
-    deviceTrialReadyPromise: null
+    userInfoReady: null
   },
 
   onLaunch(options) {
     this.init(options)
   },
 
-  // 初始化
-  init(options) {
-    // 初始化 userInfo 就绪 Promise
+  init() {
     this.initUserInfoReady()
-
-    // #if MP
     this.tryTimes = MAX_RETRY_TIMES
-    // this.autoUpdate()
     this.login()
-    // #else
-    this.initDeviceTrialReady()
-    this.appleLogin()
-    this.getDeviceId()
-    // #endif
   },
 
-  initDeviceTrialReady() {
-    if (this.globalData.deviceTrialReady) {
-      this.globalData.deviceTrialReadyPromise = Promise.resolve()
-      return
-    }
-
-    let resolveDeviceTrialReady = null
-    this.globalData.deviceTrialReadyPromise = new Promise((resolve) => {
-      resolveDeviceTrialReady = resolve
-    })
-    this._resolveDeviceTrialReady = resolveDeviceTrialReady
-  },
-
-  markDeviceTrialReady() {
-    this.globalData.deviceTrialReady = true
-    if (this._resolveDeviceTrialReady) {
-      this._resolveDeviceTrialReady()
-      this._resolveDeviceTrialReady = null
-    }
-  },
-
-  // 初始化 userInfo 就绪 Promise
   initUserInfoReady() {
-    // 如果已有 userInfo，直接 resolve
     const existingUserInfo = wx.getStorageSync('userInfo')
     if (existingUserInfo) {
       this.globalData.userInfoReady = Promise.resolve(existingUserInfo)
       return
     }
-    
-    // 否则创建一个新的 Promise
+
     let resolveUserInfo = null
     this.globalData.userInfoReady = new Promise((resolve) => {
       resolveUserInfo = resolve
     })
-    // 保存 resolve 函数供 cacheUserData 使用
     this._resolveUserInfo = resolveUserInfo
   },
 
-  // 登录逻辑
   async login() {
     if (this.tryTimes-- <= 0) return
 
     try {
       const userId = wx.getStorageSync('userId')
-
-      // 老用户冷启动只拉资料换 JWT，不触发 wx.login，避免后端签发新 refreshToken / 登记设备会话
-      // if (!userId) {
-      //   const code = await this.wxLogin()
-      //   await this.getMPUserInfo(code, '')
-      // } else {
-      //   await this.getMPUserInfo('', userId)
-      // }
-        const code = await this.wxLogin()
-        await this.getMPUserInfo(code, userId)
-      // 仅在微信小程序环境下保存设备信息
-      // #if MP
+      const code = await this.wxLogin()
+      await this.getMPUserInfo(code, userId)
       await this.saveDeviceInfo()
-      // #endif
     } catch (error) {
       console.error('登录失败:', error)
       this.handleLoginError(error)
     }
   },
 
-  // 微信登录
   wxLogin() {
     return new Promise((resolve, reject) => {
       wx.login({
@@ -123,7 +64,6 @@ App({
     })
   },
 
-  // 获取用户信息
   async getMPUserInfo(code = '', userId = '') {
     try {
       const res = await getUserInfo({
@@ -136,136 +76,6 @@ App({
     }
   },
 
-  // Apple登录
-  async appleLogin() {
-    const userId = wx.getStorageSync('userId')
-    if (!userId) {
-      if (this._resolveUserInfo) {
-        this._resolveUserInfo(null)
-        this._resolveUserInfo = null
-      }
-      return
-    }
-
-    try {
-      const res = await getAppleUserInfo({
-        userId
-      })
-      this.cacheUserData(res)
-    } catch (error) {
-      console.error('Apple登录失败:', error)
-      if (this._resolveUserInfo) {
-        this._resolveUserInfo(null)
-        this._resolveUserInfo = null
-      }
-    }
-  },
-  //获取设备id==>每次卸载重装后的deviceId都不一样，这个方法没有存在的意义
-  getDeviceId() {
-    const start = Date.now();
-    const deviceId = wx.getStorageSync('deviceId')
-    console.log('getDeviceId', deviceId)
-    if (!deviceId) {
-      const that = this
-      wx.miniapp.loadNativePlugin({
-        pluginId: "wx033a6b34f2c7ea15",
-        success(myPlugin) {
-          console.log('启动插件成功', myPlugin)
-          let deviceId = ''
-          // 调用插件接口
-          // #if IOS
-          deviceId = myPlugin.getIdentifierForVendor() //IDFV
-          wx.setStorageSync('deviceId', deviceId)
-          console.log('ios plugin', deviceId)
-          // #elif ANDROID
-          deviceId = myPlugin.getAndroidId({})
-          wx.setStorageSync('deviceId', deviceId)
-          console.log('android plugin', deviceId)
-          // #endif
-          const end = Date.now();
-          console.log(`getDeviceId 耗时：${end - start}ms`);
-          if (!deviceId) {
-            that.markDeviceTrialReady()
-            return
-          }
-          that.addUserDeviceLog()
-          that.initDeviceTrial(deviceId)
-        },
-        fail(err) {
-          console.log('启动getDeviceId插件失败')
-          const end = Date.now();
-          console.log(`getDeviceId 耗时：${end - start}ms`);
-          that.markDeviceTrialReady()
-        }
-      })
-    } else {
-      this.addUserDeviceLog(deviceId)
-      this.initDeviceTrial(deviceId)
-    }
-  },
-  //添加deviceId日志
-  addUserDeviceLog(deviceId) {
-    const userId = wx.getStorageSync('userId')
-    if (userId && deviceId) {
-      try {
-        addUserDeviceLog({
-          userId,
-          deviceId
-        })
-      } catch (error) {
-        console.log(error)
-      }
-    }
-  },
-
-  // 初始化设备试用期：Native App 一机一次 3 天试用
-  async initDeviceTrial(deviceId) {
-    if (!deviceId) {
-      this.markDeviceTrialReady()
-      return
-    }
-
-    try {
-      // 1. 查询当前设备是否已有试用记录
-      const res = await getDeviceTrial({ deviceId })
-      if (res) {
-        // 把试用信息和是否在有效期内写入缓存，供前端判断
-        wx.setStorageSync('deviceTrial', res.data || null)
-        wx.setStorageSync('deviceTrialIsActive', !!res.isActive)
-        if (res.hasRecord) {
-          // 已经创建过试用记录（无论是否过期），不再自动创建新的
-          console.log('device trial exists:', res)
-          return
-        }
-      }
-
-      // 2. 没有记录时，为该设备自动创建一次 3 天试用
-      const now = new Date()
-      const trialStart = now.toISOString()
-      const trialEnd = new Date(now.getTime() + TRIAL_PERIOD_DAYS * 24 * 60 * 60 * 1000).toISOString()
-
-      await setDeviceTrial({
-        deviceId,
-        trialStart,
-        trialEnd
-      })
-      console.log('device trial created:', deviceId, trialStart, trialEnd)
-
-      // 再查一次，更新本地缓存
-      const saved = await getDeviceTrial({ deviceId })
-      if (saved) {
-        wx.setStorageSync('deviceTrial', saved.data || null)
-        wx.setStorageSync('deviceTrialIsActive', !!saved.isActive)
-      }
-    } catch (error) {
-      console.error('initDeviceTrial error:', error)
-      // 出错时不影响正常使用，只是不再自动开试用
-    } finally {
-      this.markDeviceTrialReady()
-    }
-  },
-
-  // 自动更新
   autoUpdate() {
     const updateManager = wx.getUpdateManager()
 
@@ -286,14 +96,12 @@ App({
     })
   },
 
-  // 工具方法
   cacheUserData(data) {
     wx.setStorageSync('userId', data.userId)
     wx.setStorageSync('token', data.token)
     wx.setStorageSync('userInfo', data)
     this.globalData.userInfo = data
-    
-    // 触发 userInfo 就绪事件
+
     if (this._resolveUserInfo) {
       this._resolveUserInfo(data)
       this._resolveUserInfo = null
@@ -308,7 +116,6 @@ App({
     })
   },
 
-  // 保存设备信息
   async saveDeviceInfo() {
     try {
       const userId = wx.getStorageSync('userId')
@@ -316,23 +123,19 @@ App({
         console.log('用户未登录，跳过设备信息保存')
         return
       }
-      
-      // 检查是否已经保存过设备信息
+
       const hasSaved = wx.getStorageSync('deviceInfoSaved')
       if (hasSaved) {
         console.log('设备信息已保存，跳过')
         return
       }
-      
-      // 获取设备信息（仅包含后端需要的字段）
+
       const deviceInfo = getDeviceInfo()
       deviceInfo.userId = userId
-      
-      // 发送到后端
+
       const res = await saveDeviceInfo(deviceInfo)
-      
+
       if (res && res.success) {
-        // 标记设备信息已保存
         wx.setStorageSync('deviceInfoSaved', true)
         console.log('设备信息保存成功')
       } else {

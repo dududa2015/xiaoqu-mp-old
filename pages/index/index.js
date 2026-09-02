@@ -17,9 +17,7 @@ import {
   buildPolygon,
   applyMarkerSelectedStyle
 } from '../../utils/map'
-// #if MP
 import { tryShowHarmonyDownloadPrompt } from '../../utils/harmony-download-prompt'
-// #endif
 
 import {
   addMarker,
@@ -30,8 +28,7 @@ import {
   deleteNearMarkers
 } from '../../utils/apis'
 import {
-  deleteMarker,
-  getMarkerListUpdate
+  deleteMarker
 } from '../../apis/marker-apis'
 import {
   getPolylineByCommunity
@@ -90,66 +87,31 @@ Page({
   },
   onLoad() {
     this.getWindowInfo()
-    // 仅首次安装（无历史定位缓存）时不自动定位，避免启动即读取位置；用户可点底部定位按钮
-    // #if MP || IOS
     this.getLocation()
-    // #else
-    if (this.hasStoredLocation()) {
-      this.getLocation()
-    }
-    // #endif
     this.getPadding()
     this.getStatusBar()
 
     //初始化配置
     this.initStorage()
-    //插屏广告
-    // #if MP
     setTimeout(() => {
-      //初始化插屏和激励视频广告
       this.initCPAd()
       this.initAd()
     }, 1000);
     setTimeout(() => {
-      //显示插屏广告
       this.showCPAd()
     }, 15000);
-    // #else
-    //获取设备id
-    // this.getDeviceId()
-    this.checkAppOpenId()
-    this.appUpdate()
-    this.setLocMarkerIcon()
-    this.getMarkerListUpdate()
-    // #endif
 
     // 检查小区边界功能是否过期
     this.checkCommunityDetailExpired()
     this.syncCommunityDetailRedDot()
     this.updateLocationGuide()
-    // #if MP
     setTimeout(() => {
       tryShowHarmonyDownloadPrompt()
     }, 800)
-    // #endif
   },
   onShow() {
     this.amapSearch()
     this.openPlaceFromStorage()
-    // #if NATIVE
-    this.initLocMarkerIcon()
-    // 等待登录态与设备试用状态就绪后再检查，避免首装竞态误弹窗
-    Promise.all([
-      this.waitForUserInfo().catch(() => null),
-      this.waitForDeviceTrial()
-    ]).finally(() => {
-      this.checkVip()
-    })
-    const childComp = this.selectComponent('#topTip');
-    if (childComp) {
-      childComp.initNotices()
-    }
-    // #endif
 
     // 检查小区边界功能是否过期
     this.checkCommunityDetailExpired()
@@ -332,84 +294,6 @@ Page({
       }
     })
   },
-  waitForDeviceTrial(timeout = 10000) {
-    return new Promise((resolve) => {
-      const app = getApp()
-      if (app.globalData.deviceTrialReady) {
-        resolve()
-        return
-      }
-
-      if (app.globalData.deviceTrialReadyPromise) {
-        const timeoutId = setTimeout(() => {
-          console.log('等待 deviceTrial 超时')
-          resolve()
-        }, timeout)
-
-        app.globalData.deviceTrialReadyPromise.finally(() => {
-          clearTimeout(timeoutId)
-          resolve()
-        })
-        return
-      }
-
-      resolve()
-    })
-  },
-  checkVip() {
-    const app = getApp()
-    if (!app.globalData.deviceTrialReady) {
-      return
-    }
-
-    const userInfo = wx.getStorageSync('userInfo')
-    const userId = wx.getStorageSync('userId')
-    const deviceTrial = wx.getStorageSync('deviceTrial')
-    console.log('checkVip', userInfo)
-
-    // 公共：设备是否还有有效试用期（由 app.js 写入）
-    const isDeviceTrialActive = !!wx.getStorageSync('deviceTrialIsActive')
-
-    // 设备还在试用期内，直接返回，不弹任何会员/试用提示
-    if (isDeviceTrialActive) {
-      return
-    }
-
-    // 统一取出当前平台的会员到期时间
-    let vipExpiredDate = null
-    // #if IOS
-    vipExpiredDate = userInfo?.iosVipExpiredDate || null
-    // #elif ANDROID
-    vipExpiredDate = userInfo?.androidVipExpiredDate || null
-    // #else
-    vipExpiredDate = userInfo?.harmonyVipExpiredDate || null
-    // #endif
-
-    console.log('checkVip:vipExpiredDate', vipExpiredDate)
-    if (vipExpiredDate) {
-      const targetDate = new Date(vipExpiredDate)
-      const currentDate = new Date()
-      if (targetDate < currentDate) {
-        // 已有会员但已过期
-        this.toVip('会员在' + vipExpiredDate + '已过期，请续费')
-      }
-      return
-    }
-
-    // 未登录且从未产生试用记录（插件/接口失败），不弹「试用结束」
-    if (!userId && !deviceTrial) {
-      return
-    }
-
-    // 已登录或曾有试用记录，且当前无有效试用、无会员 → 试用已结束
-    this.toVip('免费试用结束，请开启订阅')
-  },
-  toVip(content) {
-    this.setData({
-      showVipExpired: true,
-      vipExpiredContent: content
-    })
-  },
   //设置
   initStorage() {
     this.getMapContext()
@@ -442,7 +326,6 @@ Page({
         skew: enable3D ? 20 : 0
       })
     }
-    // #if MP
     if (typeof showCommunityDetail === 'boolean') {
       this.setData({
         showCommunityDetail
@@ -452,18 +335,6 @@ Page({
         showCommunityDetail: false
       })
     }
-    // #else
-    // NATIVE 环境下也需要初始化 showCommunityDetail
-    if (typeof showCommunityDetail === 'boolean') {
-      this.setData({
-        showCommunityDetail
-      })
-    } else {
-      this.setData({
-        showCommunityDetail: false
-      })
-    }
-    // #endif
 
     this.syncCommunityDetailRedDot()
 
@@ -696,13 +567,6 @@ Page({
   getLocation() {
     const that = this
     this.disableMapTap()
-    // #if NATIVE
-    let locationed = wx.getStorageSync('locationed')
-    //这里一定要是false
-    if (locationed === false) {
-      this.openNativeSetting()
-    }
-    // #endif
     wx.getLocation({
       type: 'gcj02',
       isHighAccuracy: true,
@@ -726,8 +590,6 @@ Page({
         wx.setStorageSync('longitude', longitude)
         wx.setStorageSync('lastLatitude', latitude)
         wx.setStorageSync('lastLongitude', longitude)
-        //确保获取到用户信息后再请求
-        // #if MP
         that.waitForUserInfo().then((userInfo) => {
           if (userInfo) {
             that.getAroundList(latitude, longitude)
@@ -741,7 +603,6 @@ Page({
           }
         }).catch((err) => {
           console.error('等待 userInfo 超时或失败:', err)
-          // 超时后仍尝试使用 storage 中的数据
           const userInfo = wx.getStorageSync('userInfo')
           if (userInfo) {
             that.getAroundList(latitude, longitude)
@@ -754,11 +615,6 @@ Page({
             })
           }
         })
-        // #else
-        that.getAroundList(latitude, longitude)
-        that.getAroundCommunityList(latitude, longitude)
-        wx.setStorageSync('locationed', true)
-        // #endif
         that.dismissLocationGuide()
       },
       fail(res) {
@@ -767,13 +623,8 @@ Page({
           icon: 'none',
           duration: 3000
         })
-        // 获取位置失败，引导用户开启权限
         console.log(res)
-        // #if MP
         that.showSettingDialog();
-        // #else
-        wx.setStorageSync('locationed', false)
-        // #endif
       }
     })
   },
@@ -966,11 +817,9 @@ Page({
     this.setData({
       currentCommunityId: id
     })
-    // #if MP
     if (!this.data.showCommunityDetail) {
       return
     }
-    // #endif
     this.clearCommunityDetail()
     getCommunityFullDetail({
       id
@@ -1318,9 +1167,6 @@ Page({
           title: '删除成功',
         })
         that.deleteOneMarker(that.selectedMarker)
-        // #if NATIVE
-        that.getMarkerListUpdate()
-        // #endif
         that.showTabBar()
         that.resetMap()
       } else {
@@ -1363,24 +1209,13 @@ Page({
       let list = res
       //如果db中没有，则请求bd-api数据
       if (Array.isArray(list) && list.length > 0) {
-        // #if MP
         that.deleteNearMarkers(list)
-        // #else
-        let mapType = wx.getStorageSync('mapType')
-        //只有当前地图为个人地图时才根据louhao_update表更新aroundList
-        if (mapType === 2) {
-          let list2 = wx.getStorageSync('markerListUpdate')
-          list = that.updateAroundList(list, list2)
-        }
-        // #endif
         that.addAroundList2Map(list)
         //小于{{数量}}也调用接口，{{数量}}在缓存caches.json里配置
-        // #if MP
         //注释百度接口 2025-03-22,打开接口2025-06-12，注释于2025-08-06
         // if (list.length < (that.bdCount || 5)) {
         //   that.addBdAroundList(lng, lat)
         // }
-        // #endif
       }
     })
   },
@@ -1417,48 +1252,12 @@ Page({
           polygons: [],
           currentCommunityId: communityId
         })
-        // #if MP
         if (this.data.showCommunityDetail) {
           this.getCommunityFullDetail(communityId)
         }
-        // #else
-        this.getCommunityFullDetail(communityId)
-        // #endif
         this.addAroundList2Map(poiList)
       }, 1);
     })
-  },
-  getMarkerListUpdate() {
-    let userId = wx.getStorageSync('userId')
-    if (userId) {
-      getMarkerListUpdate({
-        userId
-      }).then(res => {
-        if (Array.isArray(res)) {
-          wx.setStorageSync('markerListUpdate', res)
-        }
-      })
-    }
-  },
-  //根据louhao_update修改aroundList
-  updateAroundList(a1, a2) {
-    // 创建一个映射以便快速查找a1中的元素
-    const a1Map = new Map(a1.map(item => [item.xId, item]));
-    // 遍历a2数组
-    for (const item of a2) {
-      const existingItem = a1Map.get(item.xId);
-      if (existingItem) {
-        if (item.deleted === 1) {
-          // 如果deleted=1，从a1中删除
-          a1Map.delete(item.xId);
-        } else {
-          // 否则更新a1中的对象
-          Object.assign(existingItem, item);
-        }
-      }
-    }
-    // 将Map转换回数组
-    return Array.from(a1Map.values());
   },
   //删除lat相差为0.0001且lng相差未0.0001且名字相同的数据
   deleteNearMarkers(data) {
@@ -2009,131 +1808,12 @@ Page({
       }
 
     } else {
-      // #if IOS
-      wx.navigateTo({
-        url: '/pages/ios/login/login',
-      })
-      // #else
-      wx.navigateTo({
-        url: '/pages/android/login/login',
-      })
-      // #endif
-    }
-  },
-  // #if NATIVE
-  //步行导航
-  onFoot(e) {
-    if (e.detail) {
-      this.lastUpdateTime = 0 //安卓罗盘1秒钟会变化65次，这个时间用于手动实现节流
-      this.getWxLocation()
-      this.getWxCompass()
-      //保持屏幕常亮
-      wx.setKeepScreenOn({
-        keepScreenOn: true
-      })
-    } else {
-      //关闭屏幕常亮
-      wx.setKeepScreenOn({
-        keepScreenOn: false
-      })
-      const {
-        locationChangeHandler,
-        compassChangeHandler
-      } = this.data;
-      //停止位置变化
-      if (locationChangeHandler) {
-        wx.offLocationChange(locationChangeHandler)
-      }
-      wx.stopLocationUpdate()
-      //停止罗盘
-      if (compassChangeHandler) {
-        wx.offCompassChange(compassChangeHandler)
-      }
-      wx.stopCompass()
-      this.setData({
-        rotate: 0
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
       })
     }
-    this.disableMapTap()
-    this.resetMap()
-    this.showTabBar()
-    this.setData({
-      showForm: false
-    })
   },
-
-  getWxLocation() {
-    let that = this;
-    try {
-      wx.startLocationUpdate({
-        success: (res) => {
-          const locationChangeHandler = res => {
-            console.log('onLocationChange', res)
-            this.getMapContext().moveToLocation({
-              longitude: res.longitude,
-              latitude: res.latitude,
-              success: function () {
-                console.log('地图中心已成功移动到指定位置');
-              },
-              fail: function (err) {
-                console.error('移动地图中心时出错:', err);
-              },
-              complete: function () {
-                console.log('移动地图中心操作完成');
-              }
-            })
-          }
-          // 监听位置信息
-          wx.onLocationChange(locationChangeHandler)
-          that.setData({
-            locationChangeHandler
-          });
-        },
-        fail: (err) => {
-          console.log('update fail', err)
-        }
-      })
-    } catch (error) {
-
-    }
-  },
-  getWxCompass() {
-    let that = this;
-    try {
-      // 开启罗盘功能
-      wx.startCompass({
-        success: (res) => {
-          const compassChangeHandler = res => {
-            // #if ANDROID
-            // android设置rotate比较迟钝，需要至少1000ms设置一次，ios则不必
-            const now = Date.now()
-            if (now - this.lastUpdateTime > 1000) { // 1000ms 更新一次
-              that.setData({
-                rotate: 360 - res.direction
-              })
-              this.lastUpdateTime = now
-            }
-            // #else
-            that.setData({
-              rotate: 360 - res.direction
-            })
-            // #endif
-          }
-          // 监听位置信息
-          wx.onCompassChange(compassChangeHandler)
-          that.setData({
-            compassChangeHandler
-          })
-        },
-        fail: (err) => {
-          console.log('update fail', err)
-        }
-      })
-    } catch (error) {
-
-    }
-  },
-  // #endif
   //个人地图关闭
   onMapClose() {
     this.disableMapTap()
@@ -2200,15 +1880,6 @@ Page({
     })
     this.resetMap()
     this.showTabBar()
-  },
-  onShowChooseLocation() {
-    // this.hideTabBar()
-    // this.setData({
-    //     showChooseLocation: true
-    // })
-    wx.navigateTo({
-      url: '/pages/search/index/index',
-    })
   },
   //更改图层
   onSatellite(event) {
@@ -2407,10 +2078,6 @@ Page({
       if (typeIndex === 0) bottom = 520
       else if (typeIndex === 1 || typeIndex === 3 || typeIndex === 4) bottom = 400
       else bottom = 305
-      // #if ANDROID
-      //安卓得加48，不然会和弹窗重叠
-      bottom = bottom + 48
-      // #endif
       this.setData({
         bottom: bottom,
         showGrid: false,
@@ -2465,65 +2132,6 @@ Page({
     setTimeout(() => {
       this.disableTap = false
     }, 100);
-  },
-  //app更新
-  appUpdate() {
-    const that = this
-    getNotice().then(res => {
-      getApp().globalData.mapType = res.mapType || 'amap'
-      that.setData({
-        noticeList: res.noticeList,
-        androidContent: res.androidContent
-      })
-      that.bdCount = res.bdCount
-
-      // #if IOS
-      let iosVersion = res.iosVersion //从服务端取来的版本号
-      const appBaseInfo = wx.getAppBaseInfo();
-      let appVersion = appBaseInfo.host.appVersion //api获取到的app当前版本
-      console.log('版本号：', appVersion, iosVersion)
-      let needUpdate = this.compareVersions(appVersion, iosVersion)
-      that.setData({
-        showVersionUpdate: needUpdate,
-        iosContent: res.iosContent,
-        iosForceUpdate: res.iosForceUpdate,
-      })
-      // #elif ANDROID
-      let androidVersion = res.androidVersion
-      const appBaseInfo = wx.getAppBaseInfo();
-      let appVersion = appBaseInfo.host.appVersion //api获取到的app当前版本
-      console.log('版本号：', appVersion, androidVersion)
-      let needUpdate = this.compareVersions(appVersion, androidVersion)
-      that.setData({
-        showVersionUpdate: needUpdate,
-        androidContent: res.androidContent,
-        androidForceUpdate: res.androidForceUpdate,
-      })
-
-      // #endif
-    })
-  },
-  //因为微信开放平台迁移会导致unionId发生变化，无法使用unionId来关联移动应用和小程序，
-  //这里增加一个功能，如果是微信登录且appOpenId为空，提示用户重新登录
-  checkAppOpenId() {
-    let userInfo = wx.getStorageSync('userInfo')
-    if (userInfo && !userInfo.appleId && !userInfo.appOpenId) {
-      console.log('-----------need login------------')
-    }
-  },
-  //版本号比较
-  compareVersions(current, latest) {
-    const currentParts = current.split('.').map(Number);
-    const latestParts = latest.split('.').map(Number);
-
-    for (let i = 0; i < Math.max(currentParts.length, latestParts.length); i++) {
-      const currentPart = currentParts[i] || 0;
-      const latestPart = latestParts[i] || 0;
-
-      if (currentPart < latestPart) return true;
-      if (currentPart > latestPart) return false;
-    }
-    return false;
   },
   //保留6位小数，后面的截断，而非四舍五入
   truncateToSixDecimals(num) {

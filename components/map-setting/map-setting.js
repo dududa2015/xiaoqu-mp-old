@@ -107,15 +107,10 @@ Component({
       if (userInfo) {
         return true
       }
-      // #if IOS
-      wx.navigateTo({
-        url: '/pages/ios/login/login',
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
       })
-      // #else
-      wx.navigateTo({
-        url: '/pages/android/login/login',
-      })
-      // #endif
       return false
     },
     onPersonalMapSwitch(e) {

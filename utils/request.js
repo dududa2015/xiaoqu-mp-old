@@ -79,36 +79,10 @@ const request = (params) => {
       success(res) {
         // 处理安全相关错误
         if (res.statusCode === 401) {
-          // Token无效或过期
-          // #if MP
           wx.showToast({
             title: 'invalid token',
             icon: 'none'
           })
-          // #else
-          console.log('401:' + apiUrl + url+ JSON.stringify(header))
-          wx.showModal({
-            title: '登录提示',
-            content: '需要先登录才能进行操作',
-            showCancel: false,
-            success(res) {
-              if (res.confirm) {
-                let path = ''
-                // #if IOS
-                wx.navigateTo({
-                  url: '/pages/ios/login/login'
-                })
-                // #elif ANDROID
-                wx.navigateTo({
-                  url: '/pages/android/login/login'
-                })
-                // #endif
-              } else if (res.cancel) {
-                console.log('用户点击取消')
-              }
-            }
-          })
-          // #endif
           reject('')
         } else if (res.statusCode === 498) {
           // Token过期（自定义状态码，后端需要实现）
