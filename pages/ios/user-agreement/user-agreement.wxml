@@ -1,7 +1,0 @@
-<view class="container">
-    <!-- <view class="title">用户协议</view> -->
-    <view class="section" wx:for="{{sections}}" wx:key="index">
-        <view class="section-title">{{item.title}}</view>
-        <view class="section-desc" wx:for="{{item.desc}}" wx:for-item="el">{{el.text}}</view>
-    </view>
-</view>
