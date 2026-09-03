@@ -7,7 +7,7 @@
 .add-wrap {
   background-color: #fff;
   padding: 12rpx 16rpx;
-  border-radius: 24rpx;
+  border-radius: 48rpx;
   margin-bottom: 16rpx;
 }
 

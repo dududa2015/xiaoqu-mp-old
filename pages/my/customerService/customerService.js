@@ -1,4 +1,3 @@
-// pages/my/customerService/customerService.js
 const ANDROID_DOWNLOAD_URL = 'https://a.app.qq.com/o/simple.jsp?pkgname=com.louhao.xiaoqu'
 const HARMONY_DOWNLOAD_URL = 'https://appgallery.huawei.com/app/detail?id=com.louhao.xiaoqu&channelId=SHARE&source=appshare'
 
@@ -10,24 +9,23 @@ const DOWNLOAD_PAGES = {
 
 Page({
   data: {
-    downloadLinks: [{
+    downloadLinks: [
+      {
         key: 'android',
         label: '安卓（应用宝）',
         url: ANDROID_DOWNLOAD_URL,
-        tip: '复制链接后，请在手机浏览器中打开',
+        tip: '复制后请在手机浏览器中打开',
         copyToast: '链接已复制，请在浏览器中打开'
       },
       {
         key: 'harmony',
         label: '鸿蒙（华为应用市场）',
         url: HARMONY_DOWNLOAD_URL,
-        tip: '复制链接后，可在浏览器中打开跳转应用市场',
+        tip: '复制后可在浏览器中打开并跳转应用市场',
         copyToast: '链接已复制，请在浏览器中打开'
       }
     ]
   },
-
-  onLoad() {},
 
   handleDownloadClick(e) {
     const platform = e.currentTarget.dataset.platform
@@ -36,7 +34,7 @@ Page({
       return
     }
     wx.navigateTo({
-      url: url
+      url
     })
   },
 

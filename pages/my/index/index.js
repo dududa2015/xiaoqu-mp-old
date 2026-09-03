@@ -6,6 +6,10 @@ import {
   getUserMarkerStatistics
 } from '../../../apis/marker-apis'
 import { listFavorites } from '../../../apis/place-api'
+import {
+  refresh as refreshEntitlement
+} from '../../../utils/entitlement'
+
 Page({
 
   /**
@@ -14,7 +18,6 @@ Page({
   data: {
     top: 50,
     userInfo: null,
-    isVip: false,
     isAdmin: false,
     points: 0,
     markers: 0,
@@ -51,6 +54,7 @@ Page({
             userInfo: res,
             isAdministator: res.userId === '92918a62b30c' || res.userId === 'f55b972720be'
           })
+          refreshEntitlement()
 
           this.getMarkerStatistics(userId)
           this.updateUserMarkersAndDeleted(userId)

@@ -7,17 +7,23 @@ import {
   checkLoginAndNavigate
 } from '../../utils/util'
 import {
-  isRewardedAdActive,
-  setRewardedAdExpire,
-  shouldShowCommunityDetailRedDot
-} from '../../utils/rewarded-video'
-import {
   buildMarkers,
   buildPolyline,
   buildPolygon,
   applyMarkerSelectedStyle
 } from '../../utils/map'
 import { tryShowHarmonyDownloadPrompt } from '../../utils/harmony-download-prompt'
+import {
+  subscribe as subscribeEntitlement,
+  ensureEntitlement,
+  canUseCoreFeatures,
+  setAdUnlockedToday,
+  isMpVip,
+  getSnapshot,
+  startDailyFreeWindow,
+  isFreeWindowNoticeDismissed,
+  dismissFreeWindowNotice
+} from '../../utils/entitlement'
 
 import {
   addMarker,
@@ -38,11 +44,11 @@ import {
   getAroundCommunityList,
   getCommunityFullDetail
 } from '../../apis/community-apis'
+
+const AD_MODEL_NOTICE_KEY = 'adModelNoticeV1'
 // 在页面中定义激励视频广告
 let videoAd = null
 let pendingRewardScene = null
-// 在页面中定义插屏广告
-let interstitialAd = null
 Page({
   data: {
     mapName: '', //地图名称
@@ -51,14 +57,15 @@ Page({
     rect: {},
     tips: '', //顶部的提示语
     position: 'right', //地图控件的展示位置，左和右
-    showRedDot: false, // 边界广告过期时亮（见 syncCommunityDetailRedDot）
+    showRedDot: false,
     enableRotate: false, //是否开启旋转
-    isVip: false, //是否vip
+    isVip: false, //兼容旧字段
+    isMpVip: false,
     scale: 3,
     rotate: 0,
     skew: 0, //倾斜角度，范围 0 ~ 40 , 关于 z 轴的倾角
     enable3D: false,
-    showCommunityDetail: false, //是否显示小区边界和出入口
+    showCommunityDetail: true, //是否显示小区边界和出入口
     topAddress: '搜索附近小区',
     showAddress: false,
     latitude: 36.0, // 全国视图默认中心
@@ -83,7 +90,12 @@ Page({
     showNoAd: false, //显示广告弹窗
     showVipExpired: false, //显示会员过期弹窗
     vipExpiredContent: '', //会员过期提示内容
-    showLocationGuide: false // 首装定位引导
+    showLocationGuide: false, // 首装定位引导
+    showQuotaTips: false,
+    quotaTipsExpanded: false,
+    quotaTipsLocked: false,
+    quotaTipsUnlocked: false,
+    freeUntilText: ''
   },
   onLoad() {
     this.getWindowInfo()
@@ -93,18 +105,13 @@ Page({
 
     //初始化配置
     this.initStorage()
+    this.bindEntitlement()
     setTimeout(() => {
-      this.initCPAd()
       this.initAd()
     }, 1000);
-    setTimeout(() => {
-      this.showCPAd()
-    }, 15000);
 
-    // 检查小区边界功能是否过期
-    this.checkCommunityDetailExpired()
-    this.syncCommunityDetailRedDot()
     this.updateLocationGuide()
+    this.scheduleQuotaTips()
     setTimeout(() => {
       tryShowHarmonyDownloadPrompt()
     }, 800)
@@ -112,11 +119,14 @@ Page({
   onShow() {
     this.amapSearch()
     this.openPlaceFromStorage()
-
-    // 检查小区边界功能是否过期
-    this.checkCommunityDetailExpired()
-    this.syncCommunityDetailRedDot()
     this.updateLocationGuide()
+    this.syncEntitlementView(getSnapshot())
+  },
+  onUnload() {
+    if (this.unbindEntitlement) {
+      this.unbindEntitlement()
+      this.unbindEntitlement = null
+    }
   },
   shouldShowLocationGuide() {
     if (wx.getStorageSync('locationGuideDismissed')) {
@@ -145,7 +155,55 @@ Page({
   },
   onLocationGuideClose() {
     this.dismissLocationGuide()
+    this.applyOverlayState()
   },
+  scheduleQuotaTips() {
+    const show = () => {
+      setTimeout(() => {
+        this.applyOverlayState()
+      }, 600)
+    }
+    this.waitForUserInfo(4000).then(show).catch(show)
+  },
+  applyOverlayState(snapshot) {
+    const next = snapshot || startDailyFreeWindow() || getSnapshot()
+    const exhausted = next.status === 'exhausted'
+    const quota = next.status === 'quota' && !!next.freeUntil
+    const noticeDismissed = isFreeWindowNoticeDismissed(next.serverNow)
+    const unlocked = next.status === 'adUnlocked'
+    const showQuotaTips = (quota || exhausted || unlocked) && !this.data.showLocationGuide
+    const quotaTipsLocked = exhausted && !unlocked && !this.data.showLocationGuide
+    const quotaTipsUnlocked = unlocked
+    const quotaTipsExpanded = showQuotaTips && !unlocked && (quotaTipsLocked || !noticeDismissed)
+    if (quotaTipsExpanded || isMpVip(wx.getStorageSync('userInfo') || {})) {
+      wx.setStorageSync(AD_MODEL_NOTICE_KEY, 1)
+    }
+    this.setData({
+      showQuotaTips,
+      quotaTipsExpanded,
+      quotaTipsLocked,
+      quotaTipsUnlocked,
+      freeUntilText: next.freeUntilText || ''
+    })
+  },
+  finishQuotaTipsNotice() {
+    wx.setStorageSync(AD_MODEL_NOTICE_KEY, 1)
+    dismissFreeWindowNotice()
+    this.applyOverlayState()
+  },
+  onQuotaTipsCollapse() {
+    this.finishQuotaTipsNotice()
+  },
+  onQuotaTipsVip() {
+    this.finishQuotaTipsNotice()
+    wx.navigateTo({
+      url: '/pages/my/vip/vip'
+    })
+  },
+  onQuotaTipsPlay() {
+    this.showRewardedVideoAd('unlockToday')
+  },
+  preventMapMove() {},
   //用于处理搜索结果
   amapSearch() {
     let poi = wx.getStorageSync('poi')
@@ -238,16 +296,34 @@ Page({
       this.getAroundCommunityList(latitude, longitude)
     }
   },
-  //检查小区边界功能是否过期
-  checkCommunityDetailExpired() {
-    const expireAt = wx.getStorageSync('communityDetailExpireAt') || 0
-    const showCommunityDetail = wx.getStorageSync('showCommunityDetail') || false
-
-    // 如果功能已开启且已过期，则关闭功能
-    if (showCommunityDetail && Date.now() >= expireAt) {
-      this.disableCommunityDetail()
-      this.syncCommunityDetailRedDot()
+  bindEntitlement() {
+    if (this.unbindEntitlement) {
+      this.unbindEntitlement()
     }
+    this.unbindEntitlement = subscribeEntitlement((snapshot) => {
+      this.syncEntitlementView(snapshot)
+    })
+  },
+  syncEntitlementView(snapshot) {
+    const userInfo = wx.getStorageSync('userInfo') || {}
+    if (!userInfo.userId) {
+      return
+    }
+    const next = startDailyFreeWindow()
+    const mpVip = isMpVip(userInfo, next.serverNow)
+    this.setData({
+      isMpVip: mpVip,
+      isVip: mpVip
+    })
+    this.applyOverlayState(next)
+  },
+  ensureCoreAccess() {
+    return ensureEntitlement(() => {
+      this.applyOverlayState()
+    })
+  },
+  onRequestRouteAd() {
+    this.ensureCoreAccess()
   },
   // 等待 userInfo 就绪（事件驱动 + 超时兜底）
   waitForUserInfo(timeout = 5000) {
@@ -332,11 +408,10 @@ Page({
       })
     } else {
       this.setData({
-        showCommunityDetail: false
+        showCommunityDetail: true
       })
+      wx.setStorageSync('showCommunityDetail', true)
     }
-
-    this.syncCommunityDetailRedDot()
 
     wx.setKeepScreenOn({
       keepScreenOn: !!enableScreenOn
@@ -431,48 +506,17 @@ Page({
         pendingRewardScene = null
         wx.hideLoading()
 
-        if (finished) {
-          if (scene === 'communityDetail') {
-            setRewardedAdExpire('communityDetail')
-            this.enableCommunityDetail()
-            this.syncCommunityDetailRedDot()
+        if (scene === 'unlockToday') {
+          if (finished) {
+            setAdUnlockedToday()
+            wx.showToast({
+              title: '今日已解锁',
+              icon: 'success'
+            })
             return
           }
-          if (scene === 'route') {
-            setRewardedAdExpire('route')
-            const poiDetail = this.selectComponent('#poiDetail')
-            if (poiDetail) {
-              poiDetail.fetchAndShowRoute()
-            }
-            wx.showToast({
-              title: '已解锁，72小时内无需重复观看',
-              icon: 'none'
-            })
-          }
-          return
-        }
-
-        if (scene === 'communityDetail') {
-          this.setData({
-            showCommunityDetail: false
-          })
-          const mapSetting = this.selectComponent('#mapSetting')
-          if (mapSetting) {
-            mapSetting.setData({
-              showCommunityDetail: false
-            })
-          }
           wx.showToast({
-            title: '需完成观看才能开启',
-            icon: 'none'
-          })
-          this.disableCommunityDetail()
-          return
-        }
-
-        if (scene === 'route') {
-          wx.showToast({
-            title: '需完成观看才能查看路线',
+            title: '需完成观看才能解锁今天',
             icon: 'none'
           })
         }
@@ -498,7 +542,7 @@ Page({
     videoAd.show().then(() => {
       wx.hideLoading()
     }).catch(() => {
-      videoAd.load().then(() => {
+    videoAd.load().then(() => {
         return videoAd.show().then(() => {
           wx.hideLoading()
         })
@@ -515,43 +559,6 @@ Page({
         }
       })
     })
-  },
-  //插屏广告
-  initCPAd() {
-    if (wx.createInterstitialAd) {
-      interstitialAd = wx.createInterstitialAd({
-        adUnitId: 'adunit-6449f8b32a1844a8'
-      })
-      interstitialAd.onLoad(() => {
-        console.log('插屏广告加载成功')
-      })
-      interstitialAd.onError((err) => {
-        console.error('插屏广告加载失败', err)
-      })
-      interstitialAd.onClose(() => {
-        console.log('插屏广告关闭')
-      })
-    }
-  },
-  //显示插屏广告
-  showCPAd() {
-    //如果不是vip展示插屏广告
-    let userInfo = wx.getStorageSync('userInfo')
-    console.log('showCPAd调用 - userInfo:', userInfo, 'interstitialAd:', !!interstitialAd)
-
-    if (!(userInfo && userInfo.isVip)) {
-      if (interstitialAd) {
-        interstitialAd.show().then(() => {
-          console.log('插屏广告显示成功')
-        }).catch((err) => {
-          console.error('插屏广告显示失败', err)
-        })
-      } else {
-        console.log('插屏广告未初始化')
-      }
-    } else {
-      console.log('用户是VIP，不显示插屏广告')
-    }
   },
   hasStoredLocation() {
     const latitude = wx.getStorageSync('latitude')
@@ -597,7 +604,8 @@ Page({
             that.getNotice()
             that.setData({
               tips: userInfo.remark,
-              isVip: userInfo.isVip,
+              isVip: isMpVip(userInfo),
+              isMpVip: isMpVip(userInfo),
               points: userInfo.points
             })
           }
@@ -610,7 +618,8 @@ Page({
             that.getNotice()
             that.setData({
               tips: userInfo.remark,
-              isVip: userInfo.isVip,
+              isVip: isMpVip(userInfo),
+              isMpVip: isMpVip(userInfo),
               points: userInfo.points
             })
           }
@@ -693,6 +702,9 @@ Page({
     });
   },
   onChooseLocation(event) {
+    if (!this.ensureCoreAccess()) {
+      return
+    }
     let {
       latitude,
       longitude
@@ -707,7 +719,7 @@ Page({
   },
   onPoiTap(e) {
     console.log(e)
-    if (this.data.showForm || this.disableTap || this.data.showChooseMarker || this.data.showFeedback || this.data.showVipExpired) {
+    if (this.data.showForm || this.disableTap || this.data.showChooseMarker || this.data.showFeedback || this.data.showVipExpired || this.data.quotaTipsLocked) {
       return
     }
     //如果grid显示，点击poi关闭grid
@@ -716,6 +728,9 @@ Page({
       return
     }
     if (!checkLoginAndNavigate()) {
+      return
+    }
+    if (!this.ensureCoreAccess()) {
       return
     }
     this.resetMap()
@@ -761,7 +776,7 @@ Page({
   onLabelTap(e) {
     console.log(e)
     let markerId = e.detail.markerId
-    if (this.data.showForm || this.disableTap || this.data.showChooseMarker || this.data.showFeedback || this.data.showVipExpired) {
+    if (this.data.showForm || this.disableTap || this.data.showChooseMarker || this.data.showFeedback || this.data.showVipExpired || this.data.quotaTipsLocked) {
       return
     }
     //如果grid显示，点击label关闭grid
@@ -771,6 +786,9 @@ Page({
     }
     //如果为888开头，说明是小区的标记
     if (markerId.toString().startsWith('888')) {
+      if (!this.ensureCoreAccess()) {
+        return
+      }
       const communityId = markerId.toString()
       this.setData({
         currentCommunityId: communityId
@@ -788,6 +806,9 @@ Page({
       return
     }
     if (!checkLoginAndNavigate()) {
+      return
+    }
+    if (!this.ensureCoreAccess()) {
       return
     }
     this.hideTabBar()
@@ -1001,7 +1022,7 @@ Page({
     } = e.detail.centerLocation;
 
     // 2026年1月30日添加。为了获取更多的小区边界和出入口
-    if (new Date().getSeconds() % 5 === 0) {
+    if (new Date().getSeconds() % 5 === 0 && canUseCoreFeatures()) {
       this.addCommunity(latitude, longitude)
     }
 
@@ -1059,6 +1080,9 @@ Page({
   },
   //显示选点按钮
   onAdd() {
+    if (!this.ensureCoreAccess()) {
+      return
+    }
     this.disableMapTap()
     this.resetMap()
     this.hideTabBar()
@@ -1194,8 +1218,11 @@ Page({
     })
   },
   getAroundList(lat, lng) {
+    if (!canUseCoreFeatures()) {
+      return
+    }
     const that = this
-    const userInfo = wx.getStorageSync('userInfo')
+    const userInfo = wx.getStorageSync('userInfo') || {}
     const userId = userInfo.userId || ''
     const isPubMap = userInfo.isPubMap || false
     const mapType = wx.getStorageSync('mapType') || 1 //只有1和2，1为公共地图，2为个人地图。
@@ -1221,6 +1248,9 @@ Page({
   },
   //获取周围的小区
   getAroundCommunityList(lat, lng) {
+    if (!canUseCoreFeatures()) {
+      return
+    }
     getAroundCommunityList({
       lng,
       lat
@@ -1873,7 +1903,6 @@ Page({
   },
   //设置关闭
   onSettingClose() {
-    this.syncCommunityDetailRedDot()
     this.disableMapTap()
     this.setData({
       showSetting: false
@@ -1921,15 +1950,6 @@ Page({
       skew: event.detail ? 20 : 0
     })
   },
-  // 边界广告：有效不亮，过期才亮（统一设置入口与设置项旁红点）
-  syncCommunityDetailRedDot() {
-    const showRedDot = shouldShowCommunityDetailRedDot()
-    this.setData({ showRedDot })
-    const mapSetting = this.selectComponent('#mapSetting')
-    if (mapSetting) {
-      mapSetting.setData({ showRedDot })
-    }
-  },
   // 公共：开启显示小区边界
   enableCommunityDetail() {
     this.setData({
@@ -1962,83 +1982,23 @@ Page({
     }
     this.clearCommunityDetail()
   },
-  // 激励视频：显示小区边界
-  showCommunityDetailAd() {
-    this.showRewardedVideoAd('communityDetail', {
-      onFail: () => {
-        this.disableCommunityDetail()
-      }
-    })
-  },
-  onRequestRouteAd() {
-    if (isRewardedAdActive('route')) {
-      const poiDetail = this.selectComponent('#poiDetail')
-      if (poiDetail) {
-        poiDetail.fetchAndShowRoute()
-      }
-      return
-    }
-    wx.showModal({
-      title: '提示',
-      content: '观看广告后可查看路线，72小时内无需重复观看',
-      success: (res) => {
-        if (res.confirm) {
-          this.showRewardedVideoAd('route')
-        }
-      }
-    })
-  },
-  //显示小区边界和出入口，事件来自设置页面
   onCommunityDetailChange(event) {
     const targetChecked = event.detail
     if (!targetChecked) {
       this.disableCommunityDetail()
       return
     }
-    // 有效期内直接开启，不弹广告
-    if (isRewardedAdActive('communityDetail')) {
-      this.enableCommunityDetail()
-      this.syncCommunityDetailRedDot()
-      wx.showToast({
-        title: '已开启，72小时内无需重复观看',
-        icon: 'none'
-      })
-      return
-    }
-    wx.showModal({
-      title: '提示',
-      content: '观看广告后可显示小区边界和出入口72小时内无需重复观看',
-      success: (res) => {
-        if (!res.confirm) {
-          // 恢复开关为关闭
-          this.setData({
-            showCommunityDetail: false
-          })
-          const mapSetting = this.selectComponent('#mapSetting')
-          if (mapSetting) {
-            mapSetting.setData({
-              showCommunityDetail: false
-            })
-          }
-          this.disableCommunityDetail()
-          return
-        }
-        // 确认后播放广告
-        this.showCommunityDetailAd()
-      },
-      fail: () => {
-        this.setData({
+    if (!this.ensureCoreAccess()) {
+      const mapSetting = this.selectComponent('#mapSetting')
+      if (mapSetting) {
+        mapSetting.setData({
           showCommunityDetail: false
         })
-        const mapSetting = this.selectComponent('#mapSetting')
-        if (mapSetting) {
-          mapSetting.setData({
-            showCommunityDetail: false
-          })
-        }
-        this.disableCommunityDetail()
       }
-    })
+      this.disableCommunityDetail()
+      return
+    }
+    this.enableCommunityDetail()
   },
   //添加，从marker-add-grid组件的点击事件
   getMarkerTypeIndex(event) {

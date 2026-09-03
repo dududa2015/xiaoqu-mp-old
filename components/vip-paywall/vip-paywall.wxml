@@ -1,0 +1,34 @@
+<t-popup visible="{{visible}}" placement="bottom" close-on-overlay-click="{{false}}" style="--td-popup-bg-color: transparent; --td-popup-border-radius: 0;">
+  <view class="paywall">
+    <view class="handle"></view>
+    <view class="head">
+      <view class="head-icon">
+        <t-icon name="time" size="40rpx" color="#0074FE" />
+      </view>
+      <text class="head-title">免费时段已结束</text>
+      <view wx:if="{{deadlineText}}" class="time-chip">至 {{deadlineText}}</view>
+    </view>
+    <text class="desc">看完视频可继续用今天，或开通会员，不再限时。</text>
+    <view class="actions">
+      <view class="action action-primary" bind:tap="onWatchAd">
+        <view class="action-icon">
+          <t-icon name="play-circle-filled" size="40rpx" color="#fff" />
+        </view>
+        <view class="action-copy">
+          <text class="action-name">看视频解锁今天</text>
+          <text class="action-sub">看完即可继续查找楼号</text>
+        </view>
+      </view>
+      <view class="action action-vip" bind:tap="onBuyVip">
+        <view class="action-icon action-icon-vip">
+          <t-icon name="star-filled" size="36rpx" color="#0074FE" />
+        </view>
+        <view class="action-copy">
+          <text class="action-name action-name-dark">开通会员</text>
+          <text class="action-sub">全天不限，不用再看视频</text>
+        </view>
+        <t-icon name="chevron-right" size="36rpx" color="#C7C7CC" />
+      </view>
+    </view>
+  </view>
+</t-popup>

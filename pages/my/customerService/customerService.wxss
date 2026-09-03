@@ -1,375 +1,206 @@
 page {
-  background-color: #f5f5f5;
+  background-color: #F2F2F7;
   min-height: 100vh;
 }
 
-.customer-service-container {
-  padding: 24rpx;
-  padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
-  min-height: 100vh;
-  background-color: #f5f5f5;
+.page {
+  padding: 16rpx 32rpx calc(48rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 
-/* 主要客服入口 */
-.main-contact-section {
-  width: 100%;
-  margin-bottom: 24rpx;
-}
-
-.main-contact-button {
+.contact-btn {
   width: 100%;
   padding: 0;
+  margin: 0;
   border: none;
-  background-color: transparent;
+  background: transparent;
   line-height: normal;
   text-align: left;
 }
 
-.main-contact-button::after {
+.contact-btn::after {
   border: none;
+}
+
+.contact-card,
+.card {
+  background: #ffffff;
+  border-radius: 48rpx;
+  overflow: hidden;
 }
 
 .contact-card {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 28rpx 24rpx;
-  background-color: #ffffff;
-  border-radius: 16rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+  padding: 28rpx 36rpx;
 }
 
-.main-contact-button:active .contact-card {
-  background-color: #f9fafb;
+.contact-btn:active .contact-card,
+.row:active {
+  background-color: #F7F7F8;
 }
 
-.contact-main {
-  display: flex;
-  align-items: flex-start;
-  gap: 20rpx;
-  flex: 1;
-  min-width: 0;
+.card {
+  margin-top: 24rpx;
 }
 
-.contact-text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 6rpx;
-  flex: 1;
-  min-width: 0;
+.card.pad {
+  padding: 32rpx 36rpx;
 }
 
-.contact-title {
+.group-label {
   display: block;
-  width: 100%;
-  text-align: left;
-  font-size: 30rpx;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-.contact-desc {
-  display: block;
-  width: 100%;
-  text-align: left;
-  font-size: 24rpx;
-  color: #888888;
-}
-
-.contact-arrow {
-  flex-shrink: 0;
-  font-size: 40rpx;
-  color: #c0c4cc;
-  line-height: 1;
-  margin-left: 12rpx;
-}
-
-/* App 下载 */
-.section-title {
-  font-size: 30rpx;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 20rpx;
-  letter-spacing: 0.5rpx;
-}
-
-.info-icon-wrapper--app {
-  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
-}
-
-.download-section {
-  width: 100%;
-  margin-bottom: 24rpx;
-}
-
-.download-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
-}
-
-.download-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 28rpx 24rpx;
-  background-color: #ffffff;
-  border-radius: 16rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
-}
-
-.download-item:active {
-  background-color: #f9fafb;
-  transform: scale(0.99);
-}
-
-.download-item-main {
-  display: flex;
-  align-items: center;
-  gap: 20rpx;
-  flex: 1;
-  min-width: 0;
-}
-
-.download-item-text {
-  display: flex;
-  flex-direction: column;
-  gap: 8rpx;
-  min-width: 0;
-}
-
-.download-item-title {
-  font-size: 30rpx;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-.download-item-desc {
-  font-size: 24rpx;
-  color: #666666;
-  line-height: 1.5;
-}
-
-.download-item-arrow {
-  flex-shrink: 0;
-  font-size: 40rpx;
-  color: #c0c4cc;
-  line-height: 1;
-  margin-left: 12rpx;
-}
-
-.link-card {
-  margin-top: 16rpx;
-  background-color: #ffffff;
-  border-radius: 16rpx;
-  padding: 24rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
-}
-
-.link-card-title {
-  font-size: 26rpx;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 16rpx;
-}
-
-.link-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16rpx;
-  padding: 16rpx 0;
-  border-top: 1rpx solid #f0f0f0;
-}
-
-.link-row:first-of-type {
-  border-top: none;
-  padding-top: 0;
-}
-
-.link-row-main {
-  flex: 1;
-  min-width: 0;
-}
-
-.link-row-label {
-  display: block;
-  font-size: 24rpx;
-  color: #666666;
-  margin-bottom: 8rpx;
-}
-
-.link-row-url {
-  display: block;
-  font-size: 22rpx;
-  color: #1890ff;
-  line-height: 1.5;
-  word-break: break-all;
-}
-
-.link-row-tip {
-  display: block;
-  margin-top: 8rpx;
-  font-size: 22rpx;
-  color: #e34d59;
-  line-height: 1.5;
-}
-
-.link-copy-btn {
-  flex-shrink: 0;
-  padding: 8rpx 20rpx;
-  border-radius: 999rpx;
-  background: #f0f9ff;
-  color: #1890ff;
-  font-size: 24rpx;
+  margin: 32rpx 8rpx 16rpx;
+  font-size: 28rpx;
   font-weight: 500;
+  color: #8E8E93;
 }
 
-.link-copy-btn:active {
-  opacity: 0.75;
+.card-title {
+  display: block;
+  margin-bottom: 20rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #1D2129;
 }
 
-/* 服务说明卡片 */
-.info-section {
-  width: 100%;
-  margin-bottom: 24rpx;
-}
-
-.info-card {
-  background-color: #ffffff;
-  border-radius: 24rpx;
-  padding: 32rpx;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
-}
-
-.info-header {
+.row {
   display: flex;
   align-items: center;
-  gap: 12rpx;
-  margin-bottom: 24rpx;
+  padding: 28rpx 36rpx;
 }
 
-.info-icon-wrapper {
-  width: 48rpx;
-  height: 48rpx;
-  background: linear-gradient(135deg, #ffd93d 0%, #ff6b6b 100%);
-  border-radius: 12rpx;
+.row-divider,
+.link-row-divider {
+  border-bottom: 1rpx solid #E5E5EA;
+}
+
+.contact-icon,
+.row-icon {
+  width: 64rpx;
+  height: 64rpx;
+  margin-right: 20rpx;
+  border-radius: 20rpx;
+  background: rgba(0, 116, 254, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.info-icon {
-  font-size: 28rpx;
-  line-height: 1;
+.row-main {
+  flex: 1;
+  min-width: 0;
+  padding-right: 16rpx;
+}
+
+.row-title {
   display: block;
-}
-
-.info-title {
   font-size: 32rpx;
-  font-weight: 600;
-  color: #1a1a1a;
-  letter-spacing: 0.5rpx;
+  line-height: 44rpx;
+  color: #1D2129;
 }
 
-.info-content {
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
+.row-summary {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  line-height: 36rpx;
+  color: #8E8E93;
 }
 
-.info-item {
+.row-arrow {
+  flex-shrink: 0;
+  font-size: 40rpx;
+  color: #C7C7CC;
+  line-height: 1;
+}
+
+.bullet {
   display: flex;
   align-items: flex-start;
-  gap: 12rpx;
+  margin-bottom: 16rpx;
 }
 
-.info-dot {
-  width: 8rpx;
-  height: 8rpx;
-  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+.bullet:last-child {
+  margin-bottom: 0;
+}
+
+.dot {
+  width: 10rpx;
+  height: 10rpx;
+  margin-top: 14rpx;
+  margin-right: 16rpx;
   border-radius: 50%;
-  margin-top: 12rpx;
+  background: #0074FE;
   flex-shrink: 0;
 }
 
-.info-text {
+.bullet-text {
   flex: 1;
-  font-size: 24rpx;
-  color: #666666;
-  line-height: 1.8;
-  letter-spacing: 0.5rpx;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  color: #4E5969;
 }
 
-.alert-tip {
-  margin-top: 8rpx;
+.note {
+  margin-top: 20rpx;
   padding: 20rpx 24rpx;
-  background: #fff1f0;
-  border: 1rpx solid #ffccc7;
-  border-radius: 12rpx;
+  background: #FFF8E8;
+  border-radius: 24rpx;
+  font-size: 26rpx;
+  line-height: 40rpx;
+  color: #92400E;
 }
 
-.alert-tip-text {
+.link-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 24rpx 0;
+}
+
+.link-row:first-of-type {
+  padding-top: 0;
+}
+
+.link-row:last-child {
+  padding-bottom: 0;
+}
+
+.link-label {
+  display: block;
+  font-size: 26rpx;
+  color: #4E5969;
+  margin-bottom: 8rpx;
+}
+
+.link-url {
   display: block;
   font-size: 24rpx;
-  color: #cf1322;
-  line-height: 1.8;
-  font-weight: 500;
-}
-
-/* 联系方式 */
-.contact-info-section {
-  width: 100%;
-}
-
-.contact-info-card {
-  background-color: #ffffff;
-  border-radius: 24rpx;
-  padding: 32rpx;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
-}
-
-.contact-info-header {
-  margin-bottom: 24rpx;
-}
-
-.contact-info-title {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #1a1a1a;
-  letter-spacing: 0.5rpx;
-}
-
-.contact-info-content {
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
-}
-
-.contact-info-item {
-  display: flex;
-  align-items: center;
-  gap: 12rpx;
-}
-
-.contact-info-label {
-  font-size: 28rpx;
-  color: #666666;
-  font-weight: 500;
-  letter-spacing: 0.5rpx;
-  flex-shrink: 0;
-}
-
-.contact-info-value {
-  font-size: 28rpx;
-  color: #1890ff;
-  letter-spacing: 0.5rpx;
+  color: #0074FE;
+  line-height: 1.5;
   word-break: break-all;
 }
 
-.contact-info-value:active {
+.link-tip {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  line-height: 1.5;
+  color: #8E8E93;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+  margin-left: 16rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 999rpx;
+  background: rgba(0, 116, 254, 0.1);
+  color: #0074FE;
+  font-size: 24rpx;
+  font-weight: 500;
+}
+
+.copy-btn:active {
   opacity: 0.7;
 }

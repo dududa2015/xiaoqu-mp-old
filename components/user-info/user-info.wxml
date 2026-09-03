@@ -22,6 +22,10 @@
               <image src="/images/poi-detail/edit.png" class="img" mode="" />
             </view>
         </view>
+        <view class="vip-expiry-row" wx:if="{{vipExpiry.visible}}">
+          <text class="vip-expiry-text">{{vipExpiry.primaryText}}</text>
+          <view class="vip-expiry-badge {{vipExpiry.badgeMuted ? 'vip-expiry-badge-muted' : (vipExpiry.badgeUrgent ? 'vip-expiry-badge-urgent' : 'vip-expiry-badge-ok')}}">{{vipExpiry.badgeText}}</view>
+        </view>
     </view>
     <!-- 统计数据区域 -->
     <view class="stats-section">
@@ -49,7 +53,7 @@
             <view class="stat-item stat-favorites" bind:tap="toMarkers" data-tab="favorites">
                 <view class="stat-row">
                     <view class="stat-icon">
-                        <t-icon name="star" size="28rpx" />
+                        <t-icon name="star-filled" size="28rpx" />
                     </view>
                     <view class="stat-value">{{favoriteCount || 0}}</view>
                 </view>

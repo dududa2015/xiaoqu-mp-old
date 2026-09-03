@@ -2,6 +2,11 @@
   "pages": [
     "pages/index/index",
     "pages/my/index/index",
+    "pages/my/vip/vip",
+    "pages/my/vip-agreement/vip-agreement",
+    "pages/my/vip-manage/vip-manage",
+    "pages/my/vip-records/vip-records",
+    "pages/my/vip-refund/vip-refund",
     "pages/my/edit/edit",
     "pages/account/cancel/cancel",
     "pages/my/newUser/newUser",
@@ -12,6 +17,7 @@
     "pages/my/app/harmony/harmony",
     "pages/my/customerService/customerService",
     "pages/help/help/help",
+    "pages/help/help-detail/help-detail",
     "pages/help/question/question"
   ],
   "window": {

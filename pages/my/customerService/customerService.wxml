@@ -1,95 +1,94 @@
-<view class="customer-service-container">
-  <!-- 主要客服入口 -->
-  <view class="main-contact-section">
-    <button class="main-contact-button" openType="contact">
-      <view class="contact-card">
-        <view class="contact-main">
-          <t-icon name="chat" size="40rpx" color="#1890ff" />
-          <view class="contact-text">
-            <text class="contact-title">在线客服</text>
-            <text class="contact-desc">工作日 9:00-18:00</text>
-          </view>
-        </view>
-        <text class="contact-arrow">›</text>
+<view class="page">
+  <button class="contact-btn" openType="contact">
+    <view class="contact-card">
+      <view class="contact-icon">
+        <t-icon name="chat" size="40rpx" color="#0074FE" />
       </view>
-    </button>
-  </view>
+      <view class="row-main">
+        <text class="row-title">在线客服</text>
+        <text class="row-summary">工作日 9:00-18:00 · 小程序与 App 均可咨询</text>
+      </view>
+      <text class="row-arrow">›</text>
+    </view>
+  </button>
 
-  <!-- App 更新说明 -->
-  <view class="info-section">
-    <view class="info-card">
-      <view class="info-header">
-        <view class="info-icon-wrapper info-icon-wrapper--app">
-          <text class="info-icon">📱</text>
-        </view>
-        <text class="info-title">App 无法正常使用？</text>
-      </view>
-      <view class="info-content">
-        <view class="info-item">
-          <view class="info-dot"></view>
-          <text class="info-text">若您使用的是小区楼号 App，出现闪退、无法登录、地图空白、功能异常等情况，请先前往应用商店将 App 更新到最新版本。</text>
-        </view>
-        <view class="info-item">
-          <view class="info-dot"></view>
-          <text class="info-text">更新后仍无法使用，可尝试卸载后重新安装；安装时建议使用微信登录。</text>
-        </view>
-        <view class="info-item">
-          <view class="info-dot"></view>
-          <text class="info-text">完成上述操作后问题依旧存在，再通过上方「在线客服」联系我们，并说明手机型号、系统版本与 App 版本。</text>
-        </view>
-        <view class="alert-tip">
-          <text class="alert-tip-text">若重新登录后发现会员权益不见了，可以换其他微信账号登录试试。</text>
-        </view>
-      </view>
+  <text class="group-label">使用说明</text>
+  <view class="card pad">
+    <text class="card-title">小程序</text>
+    <view class="bullet">
+      <view class="dot"></view>
+      <text class="bullet-text">使用当前微信授权登录后，标记、收藏会同步到该账号。</text>
+    </view>
+    <view class="bullet">
+      <view class="dot"></view>
+      <text class="bullet-text">小程序会员仅在微信小程序内有效，不能用于 App。</text>
+    </view>
+    <view class="bullet">
+      <view class="dot"></view>
+      <text class="bullet-text">浏览时不再弹出封面、插屏、格子广告。每天第一次打开后免费半小时；到点后可看激励视频解锁当天，或开通会员。</text>
     </view>
   </view>
 
-  <!-- App 下载 -->
-  <view class="download-section">
-    <view class="section-title">App 下载</view>
-    <view class="download-list">
-      <view class="download-item download-item-ios" bindtap="handleDownloadClick" data-platform="ios">
-        <view class="download-item-main">
-          <t-icon name="logo-apple" size="40rpx" color="#007AFF" />
-          <view class="download-item-text">
-            <text class="download-item-title">苹果 App 下载</text>
-            <text class="download-item-desc">App Store 搜索「小区楼号地图-快递外卖极速导航」</text>
-          </view>
-        </view>
-        <text class="download-item-arrow">›</text>
-      </view>
-      <view class="download-item download-item-android" bindtap="handleDownloadClick" data-platform="android">
-        <view class="download-item-main">
-          <t-icon name="logo-android" size="40rpx" color="#E85827" />
-          <view class="download-item-text">
-            <text class="download-item-title">安卓 App 下载</text>
-            <text class="download-item-desc">应用宝 / 小米 / OPPO 等应用商店</text>
-          </view>
-        </view>
-        <text class="download-item-arrow">›</text>
-      </view>
-      <view class="download-item download-item-harmony" bindtap="handleDownloadClick" data-platform="harmony">
-        <view class="download-item-main">
-          <t-icon name="download" size="40rpx" color="#CF0A2C" />
-          <view class="download-item-text">
-            <text class="download-item-title">鸿蒙 App 下载</text>
-            <text class="download-item-desc">华为应用市场搜索「小区楼号」</text>
-          </view>
-        </view>
-        <text class="download-item-arrow">›</text>
-      </view>
+  <view class="card pad">
+    <text class="card-title">App</text>
+    <view class="bullet">
+      <view class="dot"></view>
+      <text class="bullet-text">出现闪退、无法登录、地图空白或功能异常时，请先到应用商店更新到最新版本。</text>
     </view>
+    <view class="bullet">
+      <view class="dot"></view>
+      <text class="bullet-text">更新后仍无法使用，可卸载后重新安装；安装时建议使用微信登录。</text>
+    </view>
+    <view class="bullet">
+      <view class="dot"></view>
+      <text class="bullet-text">仍有问题请通过上方「在线客服」联系，并说明手机型号、系统版本与 App 版本。</text>
+    </view>
+    <view class="note">若重新登录后会员权益不见了，可以换其他微信账号登录试试。App 会员与小程序会员相互独立。</view>
+  </view>
 
-    <view class="link-card">
-      <view class="link-card-title">备用下载链接（可复制）</view>
-      <view class="link-row" wx:for="{{downloadLinks}}" wx:key="key">
-        <view class="link-row-main">
-          <text class="link-row-label">{{item.label}}</text>
-          <text class="link-row-url">{{item.url}}</text>
-          <text class="link-row-tip" wx:if="{{item.tip}}">{{item.tip}}</text>
-        </view>
-        <view class="link-copy-btn" bindtap="onCopyLink" data-url="{{item.url}}" data-toast="{{item.copyToast}}">复制</view>
+  <text class="group-label">App 下载</text>
+  <view class="card">
+    <view class="row row-divider" bindtap="handleDownloadClick" data-platform="ios">
+      <view class="row-icon">
+        <t-icon name="logo-apple" size="40rpx" color="#007AFF" />
       </view>
+      <view class="row-main">
+        <text class="row-title">苹果 App</text>
+        <text class="row-summary">App Store 搜索「小区楼号地图-快递外卖极速导航」</text>
+      </view>
+      <text class="row-arrow">›</text>
+    </view>
+    <view class="row row-divider" bindtap="handleDownloadClick" data-platform="android">
+      <view class="row-icon">
+        <t-icon name="logo-android" size="40rpx" color="#E85827" />
+      </view>
+      <view class="row-main">
+        <text class="row-title">安卓 App</text>
+        <text class="row-summary">应用宝 / 小米 / OPPO / VIVO</text>
+      </view>
+      <text class="row-arrow">›</text>
+    </view>
+    <view class="row" bindtap="handleDownloadClick" data-platform="harmony">
+      <view class="row-icon">
+        <t-icon name="download" size="40rpx" color="#CF0A2C" />
+      </view>
+      <view class="row-main">
+        <text class="row-title">鸿蒙 App</text>
+        <text class="row-summary">华为应用市场搜索「小区楼号」</text>
+      </view>
+      <text class="row-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="card pad">
+    <text class="card-title">备用下载链接</text>
+    <view class="link-row {{index < downloadLinks.length - 1 ? 'link-row-divider' : ''}}" wx:for="{{downloadLinks}}" wx:key="key">
+      <view class="row-main">
+        <text class="link-label">{{item.label}}</text>
+        <text class="link-url">{{item.url}}</text>
+        <text class="link-tip" wx:if="{{item.tip}}">{{item.tip}}</text>
+      </view>
+      <view class="copy-btn" bindtap="onCopyLink" data-url="{{item.url}}" data-toast="{{item.copyToast}}">复制</view>
     </view>
   </view>
 </view>

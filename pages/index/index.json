@@ -17,7 +17,8 @@
     "marker-feedback": "/components/marker-feedback/marker-feedback",
     "marker-add": "/components/marker-add/marker-add",
     "marker-add-grid": "/components/marker-add-grid/marker-add-grid",
-    "map-setting": "/components/map-setting/map-setting"
+    "map-setting": "/components/map-setting/map-setting",
+    "quota-tips": "/components/quota-tips/quota-tips"
   },
   "navigationBarTitleText": "小区楼号",
   "disableScroll": true,

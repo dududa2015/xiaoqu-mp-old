@@ -1,6 +1,6 @@
 // api URL：仅开发者工具走测试；正式版、体验版均走生产
 const API_URL_PROD = 'https://mp.zhuzixi.cn/api'
-const API_URL_TEST = 'https://mp.zhuzixi.cn/api'
+const API_URL_TEST = 'https://test.zhuzixi.cn/api'
 // const API_URL_TEST = 'http://localhost:5213/api'
 
 function resolveApiUrl() {
@@ -79,42 +79,50 @@ const request = (params) => {
       success(res) {
         // 处理安全相关错误
         if (res.statusCode === 401) {
-          wx.showToast({
-            title: 'invalid token',
-            icon: 'none'
-          })
+          if (!params.quiet) {
+            wx.showToast({
+              title: 'invalid token',
+              icon: 'none'
+            })
+          }
           reject('')
         } else if (res.statusCode === 498) {
-          // Token过期（自定义状态码，后端需要实现）
-          wx.showToast({
-            title: '登录已过期，请重新登录',
-            icon: 'none',
-            duration: 2000
-          })
-          // 清除本地token
+          if (!params.quiet) {
+            wx.showToast({
+              title: '登录已过期，请重新登录',
+              icon: 'none',
+              duration: 2000
+            })
+          }
           wx.removeStorageSync('token')
           reject(res.data)
         } else if (res.statusCode === 499) {
-          // 时间戳无效（自定义状态码，后端需要实现）
-          wx.showToast({
-            title: '请求时间戳无效',
-            icon: 'none',
-            duration: 2000
-          })
+          if (!params.quiet) {
+            wx.showToast({
+              title: '请求时间戳无效',
+              icon: 'none',
+              duration: 2000
+            })
+          }
           reject(res.data)
         } else if (res.statusCode === 497) {
-          // 签名验证失败（自定义状态码，后端需要实现）
-          wx.showToast({
-            title: '请求签名验证失败',
-            icon: 'none',
-            duration: 2000
-          })
+          if (!params.quiet) {
+            wx.showToast({
+              title: '请求签名验证失败',
+              icon: 'none',
+              duration: 2000
+            })
+          }
           reject(res.data)
         } else if (res.statusCode === 500 || res.statusCode === 403 || res.statusCode === 400) {
-          wx.showModal({
-            content: res.data.message || res.data.error || '请求失败',
-            showCancel: false
-          })
+          if (!params.quiet) {
+            wx.showModal({
+              content: res.data.message || res.data.error || '请求失败',
+              showCancel: false
+            })
+          }
+          reject(res.data)
+        } else if (res.statusCode >= 400) {
           reject(res.data)
         } else {
           resolve(res.data)
@@ -122,20 +130,21 @@ const request = (params) => {
       },
       fail(err) {
         console.log('request error:', err)
-        // 更详细的错误处理
-        let errorMsg = '网络请求失败'
-        if (err.errMsg) {
-          if (err.errMsg.includes('timeout')) {
-            errorMsg = '请求超时，请检查网络连接'
-          } else if (err.errMsg.includes('fail')) {
-            errorMsg = '网络连接失败，请检查网络设置'
+        if (!params.quiet) {
+          let errorMsg = '网络请求失败'
+          if (err.errMsg) {
+            if (err.errMsg.includes('timeout')) {
+              errorMsg = '请求超时，请检查网络连接'
+            } else if (err.errMsg.includes('fail')) {
+              errorMsg = '网络连接失败，请检查网络设置'
+            }
           }
+          wx.showToast({
+            title: errorMsg,
+            icon: 'none',
+            duration: 3000
+          })
         }
-        wx.showToast({
-          title: errorMsg,
-          icon: 'none',
-          duration: 3000
-        })
         reject(err);
       },
       complete() {

@@ -191,6 +191,10 @@
 			"sub_switch": true
 		},
 		{
+			"path": "pages/help/help-detail/help-detail.js",
+			"sub_switch": true
+		},
+		{
 			"path": "pages/help/question/question.js",
 			"sub_switch": true
 		},
@@ -280,6 +284,58 @@
 		},
 		{
 			"path": "components/no-ad/no-ad.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/entitlement.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/xpay.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/help-catalog.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/entitlement-api.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/xpay-api.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/vip/vip.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/vip-manage/vip-manage.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/vip-records/vip-records.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my/vip-refund/vip-refund.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/vip-paywall/vip-paywall.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/ad-model-notice/ad-model-notice.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/free-window-notice/free-window-notice.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/quota-tips/quota-tips.js",
 			"sub_switch": true
 		}
 	]

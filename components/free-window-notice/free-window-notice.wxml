@@ -1,0 +1,26 @@
+<t-popup visible="{{visible}}" placement="center" bind:visible-change="onVisibleChange" style="--td-popup-bg-color: transparent; --td-popup-border-radius: 0;">
+  <view class="sheet">
+    <view class="hero">
+      <view class="hero-icon">
+        <t-icon name="time" size="44rpx" color="#0074FE" />
+      </view>
+      <text class="hero-label">今日免费至</text>
+      <text class="hero-time">{{deadlineText || '--:--'}}</text>
+    </view>
+    <view class="body">
+      <text class="lead">现在起到该时间，可自由查找楼号。</text>
+      <view class="points">
+        <view class="point">
+          <view class="dot"></view>
+          <text class="point-text">到点后看一条视频，即可继续用今天</text>
+        </view>
+        <view class="point">
+          <view class="dot"></view>
+          <text class="point-text">开通会员后全天不限，不用看视频</text>
+        </view>
+      </view>
+      <view class="btn-primary" bind:tap="onKnow">知道了</view>
+      <view class="btn-text" bind:tap="onOpenVip">开通会员</view>
+    </view>
+  </view>
+</t-popup>

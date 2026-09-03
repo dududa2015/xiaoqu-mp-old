@@ -1,7 +1,6 @@
 import {
   changeIsPubMap as requestPubMapMerge
 } from '../../apis/user-api'
-const { shouldShowCommunityDetailRedDot } = require('../../utils/rewarded-video')
 
 // components/map-layer/map-layer.js
 Component({
@@ -30,7 +29,7 @@ Component({
     checkedIndex: 0,
     isShowBorder: false,
     count: 0,
-    showCommunityDetail: false,
+    showCommunityDetail: true,
     showRedDot: false,
     showLocIconHelp: false, // 显示定位图标帮助提示
     locIconList: [{
@@ -89,12 +88,10 @@ Component({
         })
       } else {
         this.setData({
-          showCommunityDetail: false
+          showCommunityDetail: true
         })
+        wx.setStorageSync('showCommunityDetail', true)
       }
-      this.setData({
-        showRedDot: shouldShowCommunityDetailRedDot()
-      })
       const mapType = parseInt(wx.getStorageSync('mapType'), 10) || 1
       const userInfo = wx.getStorageSync('userInfo') || {}
       this.setData({

@@ -1,0 +1,81 @@
+<scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+  <view class="page-content">
+    <view wx:if="{{loading}}" class="loading-wrap">
+      <t-loading theme="circular" size="40rpx" text="加载中..." />
+    </view>
+
+    <block wx:elif="{{!displayOrder}}">
+      <view class="card empty-card">
+        <text class="card-title">退款</text>
+        <text class="empty-desc">暂无小程序会员付款记录</text>
+      </view>
+      <view class="legal-section">
+        <text class="legal-text">· 支付后可随时申请退款，每使用 1 个自然日少退 0.1 元</text>
+        <text class="legal-text">· 退款成功后将扣回对应会员时长</text>
+        <text class="legal-text">· iOS 订单须前往 App Store 申请退款</text>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view class="card order-card">
+        <text class="card-title">订单信息</text>
+        <view class="order-row">
+          <view class="order-main">
+            <view class="order-name-row">
+              <text class="order-name">{{displayOrder.name}}{{displayOrder.unit ? ' · ' + displayOrder.unit : ''}}</text>
+              <view class="order-badge" wx:if="{{!displayOrder.refundable}}">{{displayOrder.statusText || '不可退'}}</view>
+            </view>
+            <text class="order-note" wx:if="{{displayOrder.timeText}}">开通时间：{{displayOrder.timeText}}</text>
+            <text class="order-note">单号：{{displayOrder.outTradeNo}}</text>
+            <text class="order-note order-note-warn" wx:if="{{!displayOrder.refundable && displayOrder.refundTip}}">{{displayOrder.refundTip}}</text>
+          </view>
+          <text class="order-price">¥{{displayOrder.priceText}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{displayOrder.refundable}}" class="card summary-card">
+        <text class="card-title">退款计算</text>
+        <view class="summary-row">
+          <text class="summary-label">订单金额</text>
+          <text class="summary-value-strong">¥{{displayOrder.priceText}}</text>
+        </view>
+        <view wx:if="{{displayOrder.usedDays > 0}}" class="deduction-box">
+          <view class="summary-row summary-row-compact">
+            <view class="summary-label-col">
+              <text class="summary-label">已使用</text>
+              <text class="summary-label-sub">{{displayOrder.usedDays}}自然日</text>
+            </view>
+            <text class="summary-deduction">-¥{{displayOrder.deductionAmountText}}</text>
+          </view>
+          <text class="deduction-note">按每天 0.1 元扣除</text>
+        </view>
+        <view class="summary-divider"></view>
+        <view class="summary-row">
+          <view class="summary-label-col">
+            <text class="summary-label total-label">可退金额</text>
+            <text class="summary-label-sub green" wx:if="{{displayOrder.usedDays === 0}}">支付当日可全额退</text>
+          </view>
+          <text class="summary-refund">¥{{displayOrder.refundAmountText}}</text>
+        </view>
+      </view>
+
+      <view class="legal-section">
+        <text class="legal-text">· 支付后可随时申请退款，每使用 1 个自然日少退 0.1 元</text>
+        <text class="legal-text">· 支付当日不计使用天数，可全额退</text>
+        <text class="legal-text">· 退款成功后将扣回对应会员时长</text>
+        <text class="legal-text">· 退款将原路退回，到账时间以微信为准</text>
+        <text class="legal-text">· iOS 订单须前往 App Store 申请退款</text>
+      </view>
+
+      <t-button
+        wx:if="{{displayOrder.refundable}}"
+        theme="primary"
+        size="large"
+        block
+        loading="{{submitting}}"
+        disabled="{{submitting}}"
+        bind:tap="onSubmit"
+      >提交退款申请</t-button>
+    </block>
+  </view>
+</scroll-view>

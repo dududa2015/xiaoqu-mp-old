@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "付款记录",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#F2F2F7",
+  "usingComponents": {
+    "t-loading": "tdesign-miniprogram/loading/loading"
+  }
+}

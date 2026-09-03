@@ -1,0 +1,50 @@
+<view class="detail-page" wx:if="{{section}}">
+  <view class="card">
+    <text class="detail-title">{{section.title}}</text>
+    <text class="detail-summary" wx:if="{{section.summary}}">{{section.summary}}</text>
+    <view class="blocks">
+      <block wx:for="{{section.blocks}}" wx:key="key">
+        <text wx:if="{{item.type === 'h3'}}" class="h3">{{item.title}}</text>
+        <text wx:elif="{{item.type === 'p'}}" class="p">{{item.text}}</text>
+        <view wx:elif="{{item.type === 'note'}}" class="note">{{item.text}}</view>
+        <block wx:elif="{{item.type === 'bullets'}}">
+          <text class="li" wx:for="{{item.items}}" wx:for-item="li" wx:key="*this">• {{li}}</text>
+        </block>
+        <block wx:elif="{{item.type === 'numbered'}}">
+          <text class="li" wx:for="{{item.items}}" wx:for-item="li" wx:for-index="nIndex" wx:key="*this">{{nIndex + 1}}. {{li}}</text>
+        </block>
+        <view wx:elif="{{item.type === 'table'}}" class="table">
+          <view class="table-row table-header">
+            <text class="table-cell" wx:for="{{item.headers}}" wx:for-item="header" wx:key="*this">{{header}}</text>
+          </view>
+          <view class="table-row" wx:for="{{item.rows}}" wx:for-item="row">
+            <text class="table-cell" wx:for="{{row}}" wx:for-item="cell" wx:key="*this">{{cell}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="related" wx:if="{{related.length}}">
+    <text class="group-label">相关主题</text>
+    <view class="card related-card">
+      <view
+        class="row {{index < related.length - 1 ? 'row-divider' : ''}}"
+        wx:for="{{related}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onOpenRelated"
+      >
+        <view class="row-main">
+          <text class="row-title">{{item.title}}</text>
+          <text class="row-summary">{{item.summary}}</text>
+        </view>
+        <t-icon name="chevron-right" size="40rpx" color="#C7C7CC" />
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="detail-page" wx:else>
+  <text class="empty-text">未找到该主题，请返回重试。</text>
+</view>

@@ -1,5 +1,6 @@
 // components/user-info/user-info.js
 const { checkLoginAndNavigate } = require('../../utils/util.js')
+const { isMpVip, buildMineVipExpiry } = require('../../utils/entitlement')
 
 Component({
 
@@ -38,7 +39,13 @@ Component({
    * 组件的初始数据
    */
   data: {
-
+    vipExpiry: {
+      visible: false,
+      primaryText: '',
+      badgeText: '',
+      badgeUrgent: false,
+      badgeMuted: false
+    }
   },
 
   /**
@@ -46,11 +53,12 @@ Component({
    */
   methods: {
     applyUserInfo(newVal) {
-      if (newVal) {
+      if (newVal && newVal.userId) {
         const userId = newVal.userId.slice(-8)
         this.setData({
           userId,
-          isVip: newVal.isVip,
+          isVip: isMpVip(newVal),
+          vipExpiry: buildMineVipExpiry(newVal),
           isAdmin: newVal.isAdmin,
           points: this.convertToWan(newVal.points),
           markers: this.convertToWan(newVal.markers),
@@ -64,6 +72,7 @@ Component({
       this.setData({
         userId: '',
         isVip: false,
+        vipExpiry: buildMineVipExpiry(null),
         isAdmin: false,
         points: 0,
         markers: 0,

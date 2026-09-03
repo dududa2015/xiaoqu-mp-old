@@ -1,243 +1,70 @@
-<view class="container">
-  <!-- 快速导航按钮 -->
-  <view class="nav-button" bindtap="toggleNavMenu">
-    <text class="nav-button-icon">📑</text>
-    <text class="nav-button-text">快速导航</text>
+<view class="help-page">
+  <view class="search-bar">
+    <t-icon name="search" size="34rpx" color="#8E8E93" />
+    <input
+      class="search-input"
+      placeholder="搜索使用帮助"
+      placeholder-class="search-placeholder"
+      value="{{query}}"
+      confirm-type="search"
+      bindinput="onSearchInput"
+    />
+    <view class="search-clear" wx:if="{{query}}" bindtap="onClearSearch">
+      <t-icon name="close-circle-filled" size="36rpx" color="#C7C7CC" />
+    </view>
   </view>
 
-  <!-- 导航菜单 -->
-  <view class="nav-menu {{showNavMenu ? 'show' : ''}}" catchtap="toggleNavMenu">
-    <view class="nav-menu-content" catchtap="">
-      <view class="nav-menu-header">
-        <text class="nav-menu-title">快速导航</text>
-        <text class="nav-menu-close" bindtap="toggleNavMenu">✕</text>
-      </view>
-      <view class="nav-menu-list">
-        <view 
-          class="nav-menu-item"
-          wx:for="{{navItems}}"
+  <scroll-view class="chip-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="chip-row">
+      <view
+        class="chip {{category === item.id ? 'chip-active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onSelectCategory"
+      >{{item.label}}</view>
+    </view>
+  </scroll-view>
+
+  <view wx:if="{{emptyText}}" class="empty-text">{{emptyText}}</view>
+
+  <block wx:elif="{{showGrouped}}">
+    <view class="group" wx:for="{{grouped}}" wx:key="id">
+      <text class="group-label">{{item.label}}</text>
+      <view class="card">
+        <view
+          class="row {{sIndex < item.sections.length - 1 ? 'row-divider' : ''}}"
+          wx:for="{{item.sections}}"
+          wx:for-item="section"
+          wx:for-index="sIndex"
           wx:key="id"
-          data-id="{{item.id}}"
-          bindtap="scrollToSection"
+          data-id="{{section.id}}"
+          bindtap="onOpenDetail"
         >
-          <text class="nav-menu-icon">{{item.icon}}</text>
-          <text class="nav-menu-name">{{item.name}}</text>
+          <view class="row-main">
+            <text class="row-title">{{section.title}}</text>
+            <text class="row-summary">{{section.summary}}</text>
+          </view>
+          <t-icon name="chevron-right" size="40rpx" color="#C7C7CC" />
         </view>
       </view>
     </view>
-  </view>
+  </block>
 
-  <!-- 一、文档说明 -->
-  <view class="section" id="intro">
-    <view class="section-title">一、文档说明</view>
-
-    <view class="subsection">
-      <view class="subsection-title">1. 适用对象</view>
-      <view class="content">本帮助文档专为外卖骑手、快递员等配送人员设计，同时也适用于需要在小区内快速查找楼号、公共设施的各类用户，旨在帮助用户快速掌握小程序核心功能与操作流程，提升出行及配送效率。</view>
-    </view>
-
-    <view class="subsection">
-      <view class="subsection-title">2. 文档目的</view>
-      <view class="content">详细介绍小区楼号的功能模块、操作步骤及注意事项，解答用户在使用过程中可能遇到的常见问题，确保用户能够轻松上手、熟练运用小程序各项功能。</view>
-    </view>
-  </view>
-
-  <!-- 二、核心功能概述 -->
-  <view class="section" id="overview">
-    <view class="section-title">二、核心功能概述</view>
-    <view class="content">小区楼号是一款专注于小区内导航与信息查询的工具类应用，整合了楼号标注、设施定位、路线导航等核心功能，具体包括：</view>
-    <view class="feature-list">
-      <view class="feature-item">精准标注小区内所有楼号及单元、楼层信息，区分易混淆楼栋；</view>
-      <view class="feature-item">全面展示小区出入口、公厕、各类设施等关键地点；</view>
-      <view class="feature-item">支持地图缩放、平移、类型切换等基础操作；</view>
-      <view class="feature-item">提供搜索、分享、标记添加 / 编辑 / 删除等实用功能；</view>
-      <view class="feature-item">具备步行导航能力，规划最优路线；</view>
-      <view class="feature-item">分为公共地图与个人地图，满足不同使用场景需求。</view>
-    </view>
-  </view>
-
-  <!-- 三、详细操作指南 -->
-  <view class="section">
-    <view class="section-title">三、详细操作指南</view>
-
-    <view class="subsection" id="basic">
-      <view class="subsection-title">1. 基础操作</view>
-
-      <view class="sub-subsection">
-        <view class="sub-subsection-title">1.1 界面认识</view>
-        <view class="content">打开小程序后，界面布局清晰直观：</view>
-        <view class="feature-list">
-          <view class="feature-item">上方：地图类型切换框，可切换标准地图与卫星地图；</view>
-          <view class="feature-item">右侧：功能菜单区，包含分享、搜索、设置、步行导航、添加标记、定位等核心功能按钮；</view>
-          <view class="feature-item">中间：地图展示主区域，呈现小区楼号、道路、设施等各类信息。</view>
-        </view>
+  <view class="card" wx:else>
+    <view
+      class="row {{index < filtered.length - 1 ? 'row-divider' : ''}}"
+      wx:for="{{filtered}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onOpenDetail"
+    >
+      <view class="row-main">
+        <text class="row-cat" wx:if="{{query}}">{{item.categoryLabel}}</text>
+        <text class="row-title">{{item.title}}</text>
+        <text class="row-summary">{{item.summary}}</text>
       </view>
-
-      <view class="sub-subsection">
-        <view class="sub-subsection-title">1.2 核心基础操作</view>
-        <view class="feature-list">
-          <view class="feature-item">缩放：双指捏合屏幕可缩小地图，双指展开可放大地图，便于查看整体布局或细节信息；</view>
-          <view class="feature-item">平移：手指在屏幕上拖动，可切换地图显示区域，浏览不同位置的楼号与设施；</view>
-          <view class="feature-item">定位：点击右侧定位按钮，小程序将自动定位您当前所在位置，方便快速规划路线。</view>
-        </view>
-      </view>
-
-      <view class="sub-subsection">
-        <view class="sub-subsection-title">1.3 添加到我的小程序</view>
-        <view class="content">为了方便下次快速访问，建议将小程序添加到"我的小程序"中，操作步骤如下：</view>
-        <view class="step-list">
-          <view class="step-item">轻触小程序右上角的"···"或箭头图标；</view>
-          <view class="step-item">在弹出的菜单中选择"添加到我的小程序"选项；</view>
-          <view class="step-item">添加成功后，您可以在微信首页下拉时快速找到并使用本小程序。</view>
-        </view>
-      </view>
-    </view>
-
-    <view class="subsection">
-      <view class="subsection-title">2. 核心功能使用</view>
-
-      <view class="sub-subsection" id="search">
-        <view class="sub-subsection-title">2.1 搜索功能</view>
-        <view class="content">小程序提供两种搜索方式，满足不同查找需求：</view>
-        <view class="feature-list">
-          <view class="feature-item">直接搜索：点击右侧搜索框，输入小区名称、楼号（如 "A1 栋""3 号楼"）或设施名称（如 "东门公厕"），点击搜索按钮或确认键，地图将自动定位目标位置并显示详细标识；</view>
-          <view class="feature-item">手动浏览查找：若不确定目标名称，可通过平移、缩放地图，结合楼号排列规律或周边地标，逐步定位目标楼号或设施，易混淆楼栋将标注独特识别标识。</view>
-        </view>
-      </view>
-
-      <view class="sub-subsection" id="share">
-        <view class="sub-subsection-title">2.2 分享功能</view>
-        <view class="content">如需向他人共享地图信息，操作步骤如下：</view>
-        <view class="step-list">
-          <view class="step-item">点击右侧 "分享" 按钮，系统将自动跳转至微信；</view>
-          <view class="step-item">选择需分享的微信好友或群聊；</view>
-          <view class="step-item">可在文本框中添加备注（如 "配送目标楼栋位置"），点击 "发送"；</view>
-          <view class="step-item">收到 "已发送" 提示后，将自动返回小程序地图界面。</view>
-        </view>
-      </view>
-
-      <view class="sub-subsection" id="settings">
-        <view class="sub-subsection-title">2.3 设置功能</view>
-        <view class="content">点击右侧 "设置" 按钮（图标为 "⚙️"），可自定义小程序显示与操作模式，具体设置项如下：</view>
-        <view class="feature-list">
-          <view class="feature-item">地图类型：切换 "标准地图"（简洁平面视图，适合快速浏览）或 "卫星地图"（高清卫星影像，查看真实地形与建筑）；</view>
-          <view class="feature-item">定位图标：更换定位图标的样式（如箭头、圆点等）；</view>
-          <view class="feature-item">控件位置：调整缩放、定位等功能按钮的显示位置（顶部、底部、右侧等）；</view>
-          <view class="feature-item">标记形状：选择标记显示形式，"气泡"（圆形 / 椭圆形气泡）或 "标签"（文本直接贴合地图）；</view>
-          <view class="feature-item">地图旋转：开启后，可通过双指旋转或手机陀螺仪调整地图视角（适合 3D 查看）；</view>
-          <view class="feature-item">3D 楼块：开启后将展示建筑物三维立体模型（需卫星地图或高精度地图支持）。</view>
-          <view class="feature-item">显示小区边界和出入口：首次开启需观看一次广告，72 小时内再次开启无需重复观看。</view>
-        </view>
-      </view>
-
-      <view class="sub-subsection" id="marker">
-        <view class="sub-subsection-title">2.4 标记管理（添加 / 编辑 / 删除）</view>
-        <view class="content">小程序支持用户自主添加、编辑和删除各类标记，所有操作提交后需经审核，审核通过后实时同步至地图。</view>
-
-        <view class="sub-subsection">
-          <view class="sub-subsection-title">2.4.1 添加标记</view>
-          <view class="content">点击地图右下角 "添加" 按钮，可选择以下标记类型，按提示填写信息即可：</view>
-          <view class="table-wrapper">
-            <view class="table-row table-header">
-              <view class="table-cell">标记类型</view>
-              <view class="table-cell">填写信息</view>
-              <view class="table-cell">可选标签</view>
-            </view>
-            <view class="table-row">
-              <view class="table-cell">楼号</view>
-              <view class="table-cell">楼号编号（必填）、大门朝向（选填）</view>
-              <view class="table-cell">有门禁、大门常开、有电梯、无电梯</view>
-            </view>
-            <view class="table-row">
-              <view class="table-cell">出入口</view>
-              <view class="table-cell">名称（选填，最多 10 字）</view>
-              <view class="table-cell">需要登记、禁止骑行、可以骑行、需要刷卡</view>
-            </view>
-            <view class="table-row">
-              <view class="table-cell">公厕</view>
-              <view class="table-cell">名称（选填，最多 10 字）</view>
-              <view class="table-cell">比较干净、有纸巾、24 小时开放</view>
-            </view>
-            <view class="table-row">
-              <view class="table-cell">设施</view>
-              <view class="table-cell">名称（选填，最多 10 字，如维修点、换电站、外卖柜等）</view>
-              <view class="table-cell">服务周到、价格公道、高效便捷、便捷高效、安全可靠、安全存放</view>
-            </view>
-            <view class="table-row">
-              <view class="table-cell">其他</view>
-              <view class="table-cell">名称（选填，最多 10 字，如便利店、自助饮水机）</view>
-              <view class="table-cell">经济实惠、安全卫生</view>
-            </view>
-            <view class="table-row">
-              <view class="table-cell">道路</view>
-              <view class="table-cell">通过 "定点" 标记道路关键节点</view>
-              <view class="table-cell">无</view>
-            </view>
-            <view class="table-row">
-              <view class="table-cell">围墙</view>
-              <view class="table-cell">通过 "定点" 标记围墙关键节点</view>
-              <view class="table-cell">无</view>
-            </view>
-          </view>
-          <view class="note">注：添加道路 / 围墙时，进入绘制模式后，可使用 "定点"（标记节点）、"撤销"（取消上一节点）、"完成"（提交绘制）、"退出"（取消绘制）功能按钮。</view>
-        </view>
-
-        <view class="sub-subsection">
-          <view class="sub-subsection-title">2.4.2 编辑标记</view>
-          <view class="step-list">
-            <view class="step-item">在地图上找到自己添加的标记，点击进入详情页；</view>
-            <view class="step-item">点击 "编辑" 按钮，可修改标记名称、位置、标签等信息；</view>
-            <view class="step-item">修改完成后点击 "保存"，提交审核，审核通过后更新显示。</view>
-          </view>
-        </view>
-
-        <view class="sub-subsection">
-          <view class="sub-subsection-title">2.4.3 删除标记</view>
-          <view class="step-list">
-            <view class="step-item">找到自己添加的标记，点击进入详情页；</view>
-            <view class="step-item">点击 "删除" 按钮，在弹出的确认提示框中选择 "确定"；</view>
-            <view class="step-item">标记将从地图上永久移除，无法恢复，请谨慎操作。</view>
-          </view>
-        </view>
-      </view>
-
-      <view class="sub-subsection" id="navigation">
-        <view class="sub-subsection-title">2.5 步行导航功能</view>
-        <view class="content">小程序可规划从当前位置到目标地点的最优步行路线，操作步骤如下：</view>
-        <view class="step-list">
-          <view class="step-item">在地图上找到目标楼号或设施（可通过搜索或手动查找）；</view>
-          <view class="step-item">点击目标标记，选择 "路线规划" 按钮；</view>
-          <view class="step-item">确认当前位置（若未自动定位，可手动输入或选择当前位置）；</view>
-          <view class="step-item">地图将生成最佳路线，显示预计步行时间和距离，路线将以特殊颜色 / 线条标注；</view>
-          <view class="step-item">点击右侧 "步行导航" 按钮，进入实时导航模式，定位图标（如蓝色箭头）将随移动实时调整方向，始终指向目标方向；</view>
-          <view class="step-item">到达目的地后，可点击 "停止" 按钮结束导航。</view>
-        </view>
-      </view>
-
-      <view class="sub-subsection" id="map-type">
-        <view class="sub-subsection-title">2.6 公共地图与个人地图切换</view>
-    <view class="content">小程序支持两种地图模式，满足不同使用场景，可通过界面底部切换按钮切换：</view>
-        <view class="table-wrapper">
-          <view class="table-row table-header">
-            <view class="table-cell">地图类型</view>
-            <view class="table-cell">定义</view>
-            <view class="table-cell">权限说明</view>
-            <view class="table-cell">适用场景</view>
-          </view>
-          <view class="table-row">
-            <view class="table-cell">公共地图</view>
-            <view class="table-cell">所有用户共同维护的共享地图</view>
-            <view class="table-cell">查看：所有用户可自由浏览；添加：所有用户可新增标记；编辑 / 删除：仅能操作本人添加的标记，不可修改他人标记</view>
-            <view class="table-cell">共享小区楼号信息、公共设施标注、多人协作场景</view>
-          </view>
-          <view class="table-row">
-            <view class="table-cell">个人地图</view>
-            <view class="table-cell">用户专属的私人地图空间</view>
-            <view class="table-cell">全权限操作：可编辑、删除、移动所有标记（含导入的公共数据）；数据隔离：仅创建者可见，他人无权访问</view>
-            <view class="table-cell">个人行程规划、私有地点收藏、临时标记记录</view>
-          </view>
-        </view>
-      </view>
+      <t-icon name="chevron-right" size="40rpx" color="#C7C7CC" />
     </view>
   </view>
 </view>

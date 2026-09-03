@@ -28,6 +28,19 @@ const STORE_CONFIG = {
     downloadUrl: `https://store.oppomobile.com/product?pkgName=${PACKAGE_NAME}`,
     linkTip: '若搜索不到，可复制链接到浏览器打开，跳转 OPPO 软件商店安装。'
   },
+  vivo: {
+    navTitle: 'vivo 应用商店下载',
+    searchSectionTitle: '在 vivo 应用商店中搜索',
+    searchName: APP_NAME,
+    searchTip: '点击复制后，在 vivo 应用商店搜索框长按粘贴上述名称即可。',
+    installSteps: [
+      '打开手机「应用商店」',
+      '点击搜索框，粘贴已复制的「小区楼号」',
+      '在搜索结果中点击「安装」，按提示完成下载'
+    ],
+    downloadUrl: 'https://h5.appstore.vivo.com.cn/#/search?keyword=小区楼号',
+    linkTip: '若搜索不到，可复制链接到浏览器打开。建议在 vivo / iQOO 手机上打开。'
+  },
   default: {
     navTitle: '应用宝下载',
     searchSectionTitle: '在应用宝中搜索',
@@ -54,6 +67,10 @@ function getAndroidStoreType(brand = '') {
     return 'oppo'
   }
 
+  if (brandLower.includes('vivo') || brandLower.includes('iqoo')) {
+    return 'vivo'
+  }
+
   return 'default'
 }
 
@@ -67,9 +84,10 @@ function buildPageData(storeType) {
 Page({
   data: buildPageData('default'),
 
-  onLoad() {
-    const deviceInfo = wx.getDeviceInfo()
-    const storeType = getAndroidStoreType(deviceInfo.brand)
+  onLoad(options) {
+    const storeFromQuery = options && options.store
+    const deviceInfo = wx.getDeviceInfo ? wx.getDeviceInfo() : wx.getSystemInfoSync()
+    const storeType = STORE_CONFIG[storeFromQuery] ? storeFromQuery : getAndroidStoreType(deviceInfo.brand)
     const pageData = buildPageData(storeType)
     this.setData(pageData)
     wx.setNavigationBarTitle({ title: pageData.navTitle })

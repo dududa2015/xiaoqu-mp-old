@@ -2,5 +2,8 @@
   "usingComponents": {
     "t-icon": "tdesign-miniprogram/icon/icon"
   },
-  "navigationBarTitleText": "客户服务"
+  "navigationBarTitleText": "客户服务",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#F2F2F7"
 }

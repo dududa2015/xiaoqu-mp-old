@@ -1,0 +1,26 @@
+.notice {
+  width: 600rpx;
+  padding: 48rpx 40rpx 40rpx;
+  background: #fff;
+  border-radius: 32rpx;
+}
+
+.notice-title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #111827;
+  text-align: center;
+}
+
+.notice-body {
+  display: block;
+  margin: 24rpx 0 40rpx;
+  font-size: 28rpx;
+  line-height: 1.65;
+  color: #4b5563;
+}
+
+.notice-vip-btn {
+  margin-top: 20rpx;
+}

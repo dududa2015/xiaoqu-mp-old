@@ -33,7 +33,7 @@
 .location-wrap {
   background-color: #fff;
   padding: 16rpx;
-  border-radius: 24rpx;
+  border-radius: 48rpx;
 }
 
 .location-wrap-highlight {

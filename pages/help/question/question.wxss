@@ -341,3 +341,27 @@ page {
   line-height: 1.6;
 }
 
+.footer-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24rpx;
+  padding: 24rpx 32rpx;
+  background: #0074FE;
+  border-radius: 48rpx;
+}
+
+.footer-button-text {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #ffffff;
+  margin-right: 8rpx;
+}
+
+.footer-button-arrow {
+  font-size: 36rpx;
+  color: #ffffff;
+  font-weight: 300;
+  line-height: 1;
+}
+

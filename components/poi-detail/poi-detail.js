@@ -213,6 +213,11 @@ Component({
       if (!checkLoginAndNavigate()) {
         return
       }
+      const { canUseCoreFeatures } = require('../../utils/entitlement')
+      if (!canUseCoreFeatures()) {
+        this.triggerEvent('requestRouteAd')
+        return
+      }
       const record = withUserId(buildMarkerPlaceRecord(this.poiInfo))
       if (!record) {
         return
@@ -302,8 +307,8 @@ Component({
         this.resetRouteState()
         return
       }
-      const { isRewardedAdActive } = require('../../utils/rewarded-video')
-      if (!isRewardedAdActive('route')) {
+      const { canUseCoreFeatures } = require('../../utils/entitlement')
+      if (!canUseCoreFeatures()) {
         this.triggerEvent('requestRouteAd')
         return
       }

@@ -1,4 +1,9 @@
 {
-  "usingComponents": {},
-  "navigationBarTitleText": "使用帮助"
+  "navigationBarTitleText": "使用帮助",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#F2F2F7",
+  "usingComponents": {
+    "t-icon": "tdesign-miniprogram/icon/icon"
+  }
 }

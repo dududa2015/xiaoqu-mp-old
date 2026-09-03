@@ -1,0 +1,61 @@
+page {
+  background-color: #F2F2F7;
+  height: 100%;
+}
+
+.page-scroll {
+  height: 100vh;
+}
+
+.page-content {
+  padding: 16rpx 32rpx calc(48rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.doc-card {
+  background: #fff;
+  border-radius: 48rpx;
+  padding: 40rpx;
+}
+
+.doc-title {
+  display: block;
+  margin-bottom: 32rpx;
+  font-size: 44rpx;
+  font-weight: 600;
+  color: #1D2129;
+  line-height: 1.4;
+}
+
+.doc-divider {
+  height: 1rpx;
+  background: #E5E5EA;
+}
+
+.section-heading {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #1D2129;
+  line-height: 1.4;
+  margin-bottom: 20rpx;
+}
+
+.section-heading-first {
+  margin-top: 40rpx;
+}
+
+.section-heading-rest {
+  margin-top: 56rpx;
+}
+
+.paragraph {
+  display: block;
+  font-size: 32rpx;
+  color: #1D2129;
+  line-height: 48rpx;
+}
+
+.paragraph-gap {
+  margin-bottom: 24rpx;
+}

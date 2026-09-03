@@ -1,0 +1,18 @@
+<scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+  <view class="page-content">
+    <view class="doc-card">
+      <text class="doc-title">{{documentTitle}}</text>
+      <view class="doc-divider"></view>
+      <view wx:for="{{sections}}" wx:key="heading">
+        <text class="section-heading {{index === 0 ? 'section-heading-first' : 'section-heading-rest'}}">{{item.heading}}</text>
+        <text
+          class="paragraph {{pIndex < item.paragraphs.length - 1 ? 'paragraph-gap' : ''}}"
+          wx:for="{{item.paragraphs}}"
+          wx:for-item="paragraph"
+          wx:for-index="pIndex"
+          wx:key="*this"
+        >{{paragraph}}</text>
+      </view>
+    </view>
+  </view>
+</scroll-view>

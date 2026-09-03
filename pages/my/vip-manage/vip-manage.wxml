@@ -1,0 +1,64 @@
+<scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+  <view class="page-content">
+    <view wx:if="{{loading}}" class="loading-wrap">
+      <t-loading theme="circular" size="40rpx" text="加载中..." />
+    </view>
+
+    <block wx:elif="{{isVip || hasRecords}}">
+      <view class="card status-card">
+        <view class="status-top">
+          <view class="status-main">
+            <text class="card-title">小程序会员</text>
+            <text class="status-expire" wx:if="{{isVip}}">{{expireText}} 到期 · 剩余 {{daysLeft}} 天</text>
+            <text class="status-expire" wx:else>{{expireText ? expireText + ' 已到期' : '会员已过期'}}</text>
+          </view>
+          <view class="status-badge" wx:if="{{isVip}}">生效中</view>
+          <view class="status-badge status-badge-expired" wx:else>已过期</view>
+        </view>
+        <view class="expire-hint" wx:if="{{expireSoon}}">
+          <t-icon name="info-circle" size="28rpx" color="#0074FE" />
+          <text class="expire-hint-text">会员即将到期，可购买套餐续费</text>
+        </view>
+      </view>
+
+      <view class="card services-card">
+        <text class="card-title block-title">相关服务</text>
+        <view class="service-item service-item-divider" bind:tap="toRecords">
+          <text class="service-name">付款记录</text>
+          <t-icon name="chevron-right" size="40rpx" color="#C7C7CC" />
+        </view>
+        <view class="service-item service-item-divider" bind:tap="toRefund">
+          <text class="service-name">发起退款</text>
+          <t-icon name="chevron-right" size="40rpx" color="#C7C7CC" />
+        </view>
+        <view class="service-item" bind:tap="toVip">
+          <text class="service-name">{{isVip ? '续费会员' : '开通会员'}}</text>
+          <t-icon name="chevron-right" size="40rpx" color="#C7C7CC" />
+        </view>
+      </view>
+
+      <view class="legal-section">
+        <text class="legal-text">· 开通的会员仅适用于微信小程序，不适用于 App</text>
+        <text class="legal-text">· 小程序会员为一次性购买，到期后需手动续费</text>
+        <text class="legal-text">· 支付后可随时申请退款，每使用 1 个自然日少退 0.1 元；退款后将扣回对应会员时长</text>
+        <text class="legal-text">· iOS 订单须前往 App Store 申请退款</text>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view class="card empty-card">
+        <view class="empty-icon-wrap">
+          <t-icon name="star-filled" size="64rpx" color="#0074FE" />
+        </view>
+        <text class="empty-title">暂未开通会员</text>
+        <text class="empty-desc">开通后可无限使用全部功能，免广告、不受每日时长限制</text>
+        <t-button theme="primary" size="large" block bind:tap="toVip">立即开通</t-button>
+      </view>
+      <view class="legal-section">
+        <text class="legal-text">· 开通的会员仅适用于微信小程序，不适用于 App</text>
+        <text class="legal-text">· 小程序会员为一次性购买，没有自动续费</text>
+        <text class="legal-text">· 开通成功后即时生效，到期后可再次购买续费</text>
+      </view>
+    </block>
+  </view>
+</scroll-view>

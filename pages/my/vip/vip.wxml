@@ -1,0 +1,68 @@
+<view class="vip-page">
+  <scroll-view class="page-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+    <view class="page-content">
+      <view class="card benefits-card">
+        <view class="benefits-title-row">
+          <text class="card-title benefits-title">会员权益</text>
+          <text class="benefits-subtitle">（仅限微信小程序）</text>
+        </view>
+        <view class="benefits-row" wx:for="{{benefitRows}}" wx:key="id">
+          <view class="benefit-item" wx:for="{{item.items}}" wx:for-item="benefit" wx:key="title">
+            <t-icon name="{{benefit.icon}}" size="36rpx" color="#0074FE" />
+            <text class="benefit-name">{{benefit.title}}</text>
+          </view>
+          <view class="benefit-item" wx:if="{{item.items.length === 1}}"></view>
+        </view>
+      </view>
+
+      <view class="card products-card">
+        <text class="card-title">会员选择</text>
+        <view
+          class="product-row {{index < goodsList.length - 1 ? 'product-row-divider' : ''}}"
+          wx:for="{{goodsList}}"
+          wx:key="productId"
+          bind:tap="onSelect"
+          data-index="{{index}}"
+        >
+          <view class="product-main">
+            <view class="product-name-row">
+              <text class="product-name">{{item.name}}</text>
+              <view class="product-badge" wx:if="{{item.badge}}">{{item.badge}}</view>
+            </view>
+            <view class="product-note-row">
+              <text class="product-original" wx:if="{{item.originalPriceText}}">{{item.originalPriceText}}</text>
+              <text class="product-note" wx:if="{{item.note}}">{{item.note}}</text>
+            </view>
+          </view>
+          <text class="product-price">{{item.priceLabel}}</text>
+          <view class="plan-check">
+            <t-icon wx:if="{{index === selectedIndex}}" name="check-circle-filled" size="44rpx" color="#0074FE" />
+            <view wx:else class="plan-check-empty"></view>
+          </view>
+        </view>
+      </view>
+
+      <view class="legal-section">
+        <text class="legal-text">· 开通的会员仅适用于微信小程序，不适用于 App</text>
+        <text class="legal-text">· 开通后立即生效，到期后需手动续费</text>
+        <text class="legal-text">· 支付后可随时申请退款，每使用 1 个自然日少退 0.1 元</text>
+        <text class="legal-text">· 每月至多退一次款</text>
+        <text class="legal-text">· iOS 订单须前往 App Store 申请退款</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="footer">
+    <view class="agree-row">
+      <view class="plan-check agree-check" bind:tap="onToggleAgree">
+        <t-icon wx:if="{{agreed}}" name="check-circle-filled" size="44rpx" color="#0074FE" />
+        <view wx:else class="plan-check-empty"></view>
+      </view>
+      <view class="agree-text">
+        <text>已阅读并同意</text>
+        <text class="agree-link" catch:tap="onOpenAgreement">《会员服务协议》</text>
+      </view>
+    </view>
+    <t-button theme="primary" size="large" block loading="{{paying}}" bind:tap="onBuy">立即开通</t-button>
+  </view>
+</view>

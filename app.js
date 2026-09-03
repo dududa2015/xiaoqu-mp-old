@@ -3,6 +3,10 @@ import {
 } from './apis/user-api'
 import { getDeviceInfo } from './utils/device'
 import { saveDeviceInfo } from './apis/device-apis'
+import {
+  onAppShow as onEntitlementShow,
+  onAppHide as onEntitlementHide
+} from './utils/entitlement'
 
 const MAX_RETRY_TIMES = 3
 
@@ -14,11 +18,24 @@ App({
     isAndroid: false,
     padding: 3,
     mapType: 'amap',
-    userInfoReady: null
+    userInfoReady: null,
+    entitlement: null
   },
 
   onLaunch(options) {
+    this._loginPending = true
     this.init(options)
+  },
+
+  onShow() {
+    if (this._loginPending) {
+      return
+    }
+    onEntitlementShow()
+  },
+
+  onHide() {
+    onEntitlementHide()
   },
 
   init() {
@@ -42,17 +59,29 @@ App({
   },
 
   async login() {
-    if (this.tryTimes-- <= 0) return
+    if (this.tryTimes-- <= 0) {
+      this.finishLogin()
+      return
+    }
 
     try {
       const userId = wx.getStorageSync('userId')
       const code = await this.wxLogin()
       await this.getMPUserInfo(code, userId)
       await this.saveDeviceInfo()
+      this.finishLogin()
     } catch (error) {
       console.error('登录失败:', error)
       this.handleLoginError(error)
     }
+  },
+
+  finishLogin() {
+    if (!this._loginPending) {
+      return
+    }
+    this._loginPending = false
+    onEntitlementShow()
   },
 
   wxLogin() {
@@ -150,6 +179,8 @@ App({
     console.error('登录错误:', error)
     if (this.tryTimes > 0) {
       setTimeout(() => this.login(), 1000)
+      return
     }
+    this.finishLogin()
   }
 })

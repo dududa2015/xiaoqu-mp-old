@@ -1,0 +1,113 @@
+page {
+  background-color: #F2F2F7;
+  height: 100vh;
+}
+
+.page-scroll {
+  height: 100vh;
+}
+
+.page-content {
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+
+.loading-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 48rpx;
+  padding: 32rpx 36rpx;
+  margin-bottom: 24rpx;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #1D2129;
+}
+
+.list-card {
+  padding-bottom: 8rpx;
+}
+
+.list-title {
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.record-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding: 28rpx 0;
+}
+
+.record-item-divider {
+  border-bottom: 1rpx solid #E5E5EA;
+}
+
+.record-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.record-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.record-name {
+  font-size: 30rpx;
+  color: #1D2129;
+}
+
+.record-badge {
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  background: #E8F3FF;
+  color: #0074FE;
+  font-size: 20rpx;
+  flex-shrink: 0;
+}
+
+.record-badge-refunded {
+  background: #F2F2F7;
+  color: #6B7280;
+}
+
+.record-note {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #6B7280;
+}
+
+.record-note-muted {
+  color: #9CA3AF;
+}
+
+.record-amount {
+  flex-shrink: 0;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1D2129;
+}
+
+.empty-card {
+  padding: 64rpx 36rpx 48rpx;
+}
+
+.empty-desc {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  color: #6B7280;
+  line-height: 1.6;
+}

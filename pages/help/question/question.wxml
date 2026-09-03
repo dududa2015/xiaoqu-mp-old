@@ -121,6 +121,10 @@
   <!-- 三、反馈与支持 -->
   <view class="section">
     <view class="section-title">三、反馈与支持</view>
-    <view class="content">若在使用过程中遇到问题、有功能建议或需要技术支持，请通过小程序内「客户服务」入口反馈，我们将及时为您处理。</view>
+    <view class="content">若在使用过程中遇到问题、有功能建议或需要技术支持，请通过「客户服务」反馈，我们将及时为您处理。</view>
+    <view class="footer-button" bindtap="onOpenService">
+      <text class="footer-button-text">客户服务</text>
+      <text class="footer-button-arrow">›</text>
+    </view>
   </view>
 </view>

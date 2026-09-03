@@ -34,13 +34,7 @@
             </view>
         </view>
         <view class="row flex f-x-sb">
-            <view class="row-title row-title-stack">
-                <view class="row-title">
-                    显示小区边界和出入口
-                    <view class="red-dot" wx:if="{{showRedDot}}"></view>
-                </view>
-                <text class="row-sub">观看广告后72小时内有效</text>
-            </view>
+            <view class="row-title">显示小区边界和出入口</view>
             <view class="row-title">
                 <t-switch value="{{showCommunityDetail}}" slot="note" size="small" bind:change="onCommunityDetailChange" />
             </view>

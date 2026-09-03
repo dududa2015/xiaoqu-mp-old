@@ -1,0 +1,182 @@
+page {
+  background-color: #F2F2F7;
+  height: 100vh;
+}
+
+.page-scroll {
+  height: 100vh;
+}
+
+.page-content {
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+
+.loading-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 48rpx;
+  padding: 32rpx 36rpx;
+  margin-bottom: 24rpx;
+}
+
+.card-title {
+  display: block;
+  margin-bottom: 20rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #1D2129;
+}
+
+.order-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.order-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.order-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.order-name {
+  font-size: 30rpx;
+  color: #1D2129;
+}
+
+.order-badge {
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  background: #F2F2F7;
+  color: #6B7280;
+  font-size: 20rpx;
+  flex-shrink: 0;
+}
+
+.order-note {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #6B7280;
+}
+
+.order-note-warn {
+  color: #E37318;
+}
+
+.order-price {
+  flex-shrink: 0;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1D2129;
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.summary-row-compact {
+  margin-bottom: 8rpx;
+}
+
+.summary-label {
+  font-size: 28rpx;
+  color: #6B7280;
+}
+
+.summary-label-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.summary-label-sub {
+  font-size: 24rpx;
+  color: #9CA3AF;
+}
+
+.summary-label-sub.green {
+  color: #16a34a;
+}
+
+.summary-value-strong {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #1D2129;
+}
+
+.deduction-box {
+  background: #F2F2F7;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin: 8rpx 0 16rpx;
+}
+
+.summary-deduction {
+  font-size: 28rpx;
+  color: #e37318;
+  font-weight: 500;
+}
+
+.deduction-note {
+  display: block;
+  font-size: 24rpx;
+  color: #9CA3AF;
+}
+
+.summary-divider {
+  height: 1rpx;
+  background: #E5E5EA;
+  margin: 8rpx 0 16rpx;
+}
+
+.total-label {
+  color: #1D2129;
+  font-weight: 500;
+}
+
+.summary-refund {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #0074FE;
+}
+
+.legal-section {
+  padding: 8rpx;
+  margin-bottom: 24rpx;
+}
+
+.legal-text {
+  display: block;
+  font-size: 24rpx;
+  color: #6B7280;
+  line-height: 1.6;
+  margin-bottom: 8rpx;
+}
+
+.empty-card {
+  padding: 64rpx 36rpx 48rpx;
+}
+
+.empty-desc {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  color: #6B7280;
+  line-height: 1.6;
+}

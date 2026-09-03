@@ -10,7 +10,8 @@ page {
   --td-cell-right-icon-color: rgba(0, 0, 0, 0.28);
   --td-cell-title-font-size: 32rpx;
   --td-cell-vertical-padding: 24rpx 32rpx;
-  --td-popup-border-radius: 32rpx;
+  --td-popup-border-radius: 48rpx;
+  --td-radius-extra-large: 48rpx;
   /* --td-font-size-m: 28rpx; */
   --td-cell-title-font-size: 28rpx;
   --td-input-prefix-icon-color: rgba(150, 151, 153, 1);
