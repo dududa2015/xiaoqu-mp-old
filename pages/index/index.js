@@ -17,6 +17,7 @@ import {
   subscribe as subscribeEntitlement,
   ensureEntitlement,
   canUseCoreFeatures,
+  isDailyFreeLimitEnabled,
   setAdUnlockedToday,
   isMpVip,
   getSnapshot,
@@ -27,7 +28,7 @@ import {
 
 import {
   addMarker,
-  getAroundList,
+  getSystemAroundList,
   addMarkerList,
   getBdRecordCount,
   getNotice,
@@ -106,9 +107,11 @@ Page({
     //初始化配置
     this.initStorage()
     this.bindEntitlement()
-    setTimeout(() => {
-      this.initAd()
-    }, 1000);
+    if (isDailyFreeLimitEnabled()) {
+      setTimeout(() => {
+        this.initAd()
+      }, 1000)
+    }
 
     this.updateLocationGuide()
     this.scheduleQuotaTips()
@@ -167,6 +170,16 @@ Page({
   },
   applyOverlayState(snapshot) {
     const next = snapshot || startDailyFreeWindow() || getSnapshot()
+    if (!isDailyFreeLimitEnabled()) {
+      this.setData({
+        showQuotaTips: false,
+        quotaTipsExpanded: false,
+        quotaTipsLocked: false,
+        quotaTipsUnlocked: false,
+        freeUntilText: ''
+      })
+      return
+    }
     const exhausted = next.status === 'exhausted'
     const quota = next.status === 'quota' && !!next.freeUntil
     const noticeDismissed = isFreeWindowNoticeDismissed(next.serverNow)
@@ -1222,16 +1235,9 @@ Page({
       return
     }
     const that = this
-    const userInfo = wx.getStorageSync('userInfo') || {}
-    const userId = userInfo.userId || ''
-    const isPubMap = userInfo.isPubMap || false
-    const mapType = wx.getStorageSync('mapType') || 1 //只有1和2，1为公共地图，2为个人地图。
-    getAroundList({
+    getSystemAroundList({
       lng,
-      lat,
-      userId,
-      isPubMap,
-      mapType
+      lat
     }).then(res => {
       let list = res
       //如果db中没有，则请求bd-api数据

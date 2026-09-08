@@ -10,6 +10,14 @@ export const getAroundList = (params) => {
         method: 'GET',
     })
 }
+// 获取周围由系统账号维护的有效公共标记（小程序临时只读模式）
+export const getSystemAroundList = (params) => {
+    return request({
+        url: '/marker/getSystemAroundList',
+        data: params,
+        method: 'GET',
+    })
+}
 // 向db中写一条楼号数据
 export const addMarker = (params) => {
     return request({

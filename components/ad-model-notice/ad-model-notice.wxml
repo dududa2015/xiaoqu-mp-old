@@ -1,7 +1,7 @@
 <t-popup visible="{{visible}}" placement="center" bind:visible-change="onVisibleChange">
   <view class="notice">
     <text class="notice-title">浏览不再弹广告</text>
-    <text class="notice-body">封面、插屏、格子广告已取消。试用结束后，每天第一次打开可免费使用半小时；到点后看一条视频即可继续用今天，也可开通会员，不再限时。</text>
+    <text class="notice-body">封面、插屏、格子广告已取消，核心功能也已取消每日使用时长限制，无需观看激励视频解锁。</text>
     <t-button theme="primary" size="large" block bind:tap="onKnow">知道了</t-button>
     <t-button class="notice-vip-btn" theme="light" size="large" block bind:tap="onOpenVip">了解会员</t-button>
   </view>

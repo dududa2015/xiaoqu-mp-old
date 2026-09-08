@@ -12,10 +12,8 @@ Page({
       { id: 'hot', name: '热门', icon: '🔥' },
       { id: 'basic', name: '基础操作', icon: '📱' },
       { id: 'search', name: '搜索定位', icon: '🔍' },
-      { id: 'marker', name: '标记管理', icon: '📍' },
       { id: 'navigation', name: '导航功能', icon: '🧭' },
       { id: 'map', name: '地图类型', icon: '🗺️' },
-      { id: 'permission', name: '权限审核', icon: '🔐' },
       { id: 'tech', name: '技术故障', icon: '⚙️' }
     ],
     allQuestions: [],
@@ -79,8 +77,8 @@ Page({
       {
         id: 47,
         category: 'hot',
-        question: '为什么以前老弹广告，现在又限时长？',
-        answer: '小程序已取消封面广告、插屏广告和格子广告，浏览地图时不再弹出这类广告。试用结束后，每天第一次打开可免费使用半小时；到点后可看一条激励视频解锁当天，也可开通会员，不再限时、不用看广告。到期前也可在地图顶部提示旁点「看视频」提前解锁当天。'
+        question: '小程序现在还有使用时长限制吗？',
+        answer: '没有。小程序已取消每日免费半小时的限制，楼号查询、收藏和路线等核心功能可全天使用，也不需要观看激励视频解锁。封面广告、插屏广告和格子广告也已取消。'
       },
       // 基础操作类
       {
@@ -337,9 +335,16 @@ Page({
       }
     ];
 
+    const hiddenQuestionIds = [2, 4, 5, 34, 35, 36]
+    const visibleQuestions = questions.filter((item) =>
+      item.category !== 'marker' &&
+      item.category !== 'permission' &&
+      !hiddenQuestionIds.includes(item.id)
+    )
+
     this.setData(
       {
-        allQuestions: questions,
+        allQuestions: visibleQuestions,
       },
       () => {
         // 默认：全部分类时展开“热门”，其他折叠；问题默认全部折叠

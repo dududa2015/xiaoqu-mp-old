@@ -22,13 +22,13 @@
               <image src="/images/poi-detail/edit.png" class="img" mode="" />
             </view>
         </view>
-        <view class="vip-expiry-row" wx:if="{{vipExpiry.visible}}">
+        <!-- <view class="vip-expiry-row" wx:if="{{vipExpiry.visible}}">
           <text class="vip-expiry-text">{{vipExpiry.primaryText}}</text>
           <view class="vip-expiry-badge {{vipExpiry.badgeMuted ? 'vip-expiry-badge-muted' : (vipExpiry.badgeUrgent ? 'vip-expiry-badge-urgent' : 'vip-expiry-badge-ok')}}">{{vipExpiry.badgeText}}</view>
-        </view>
+        </view> -->
     </view>
     <!-- 统计数据区域 -->
-    <view class="stats-section">
+    <!-- <view class="stats-section">
         <view class="stats-grid">
             <view class="stat-item stat-markers" bind:tap="toMarkers" data-tab="valid">
                 <view class="stat-row">
@@ -60,5 +60,5 @@
                 <view class="stat-title">收藏</view>
             </view>
         </view>
-    </view>
+    </view> -->
 </view>

@@ -5,29 +5,18 @@
       <view class="head-icon">
         <t-icon name="time" size="40rpx" color="#0074FE" />
       </view>
-      <text class="head-title">免费时段已结束</text>
-      <view wx:if="{{deadlineText}}" class="time-chip">至 {{deadlineText}}</view>
+      <text class="head-title">核心功能不限时</text>
     </view>
-    <text class="desc">看完视频可继续用今天，或开通会员，不再限时。</text>
+    <text class="desc">每日使用时长限制已取消，无需观看视频解锁。</text>
     <view class="actions">
-      <view class="action action-primary" bind:tap="onWatchAd">
+      <view class="action action-primary" bind:tap="onContinue">
         <view class="action-icon">
-          <t-icon name="play-circle-filled" size="40rpx" color="#fff" />
+          <t-icon name="check-circle-filled" size="40rpx" color="#fff" />
         </view>
         <view class="action-copy">
-          <text class="action-name">看视频解锁今天</text>
-          <text class="action-sub">看完即可继续查找楼号</text>
+          <text class="action-name">继续使用</text>
+          <text class="action-sub">楼号查询、收藏和路线等功能全天可用</text>
         </view>
-      </view>
-      <view class="action action-vip" bind:tap="onBuyVip">
-        <view class="action-icon action-icon-vip">
-          <t-icon name="star-filled" size="36rpx" color="#0074FE" />
-        </view>
-        <view class="action-copy">
-          <text class="action-name action-name-dark">开通会员</text>
-          <text class="action-sub">全天不限，不用再看视频</text>
-        </view>
-        <t-icon name="chevron-right" size="36rpx" color="#C7C7CC" />
       </view>
     </view>
   </view>

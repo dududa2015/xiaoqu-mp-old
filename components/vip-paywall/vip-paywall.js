@@ -11,6 +11,9 @@ Component({
   },
 
   methods: {
+    onContinue() {
+      this.triggerEvent('continue')
+    },
     onWatchAd() {
       this.triggerEvent('watchad')
     },

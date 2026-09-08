@@ -131,6 +131,12 @@ Component({
         mapType
       }).then(res => {
         let result = res
+        if (!result ||
+          result.userId !== '92918a62b30c' ||
+          Number(result.deleted) !== 0) {
+          that.onClose()
+          return
+        }
         let remarkTagList = []
         let nickName = ''
         if (result.remark) {
@@ -182,7 +188,8 @@ Component({
           userMarker: result,
           remarkTagList,
           // nickName,
-          nickName: result.userId === wx.getStorageSync('userId') ? '您' : nickName,
+          // nickName: result.userId === wx.getStorageSync('userId') ? '您' : nickName,
+          nickName: '系统',
           createdDate: this.convertDate(result.createdDate),
           markerImages,
           showFavoriteButton: !!wx.getStorageSync('userId'),

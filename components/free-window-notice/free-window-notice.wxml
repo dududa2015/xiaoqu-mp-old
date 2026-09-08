@@ -4,23 +4,22 @@
       <view class="hero-icon">
         <t-icon name="time" size="44rpx" color="#0074FE" />
       </view>
-      <text class="hero-label">今日免费至</text>
-      <text class="hero-time">{{deadlineText || '--:--'}}</text>
+      <text class="hero-label">核心功能</text>
+      <text class="hero-time">全天可用</text>
     </view>
     <view class="body">
-      <text class="lead">现在起到该时间，可自由查找楼号。</text>
+      <text class="lead">每日使用时长限制已取消。</text>
       <view class="points">
         <view class="point">
           <view class="dot"></view>
-          <text class="point-text">到点后看一条视频，即可继续用今天</text>
+          <text class="point-text">楼号查询、收藏和路线等功能不限时</text>
         </view>
         <view class="point">
           <view class="dot"></view>
-          <text class="point-text">开通会员后全天不限，不用看视频</text>
+          <text class="point-text">无需观看激励视频解锁</text>
         </view>
       </view>
       <view class="btn-primary" bind:tap="onKnow">知道了</view>
-      <view class="btn-text" bind:tap="onOpenVip">开通会员</view>
     </view>
   </view>
 </t-popup>

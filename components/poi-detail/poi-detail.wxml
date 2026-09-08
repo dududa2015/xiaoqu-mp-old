@@ -46,23 +46,23 @@
         <image src="/images/poi-detail/thumb-down-grey.png" class="img" mode="" />
         <view class="b-text-grey">{{bad}}</view>
       </view> -->
-      <view class="thumb-wrap" wx:if="{{showFavoriteButton}}" bind:tap="onToggleFavorite">
+      <!-- <view class="thumb-wrap" wx:if="{{showFavoriteButton}}" bind:tap="onToggleFavorite">
         <t-icon wx:if="{{isFavorite}}" name="star-filled" size="38rpx" color="#0074FE"/>
         <t-icon wx:else name="star" size="38rpx" />
         <view class="b-text">{{isFavorite ? '已收藏' : '收藏'}}</view>
-      </view>
-      <view class="thumb-wrap" wx:if="{{canEditUserMarker && markerType<6}}" bind:tap="onEdit">
+      </view> -->
+      <!-- <view class="thumb-wrap" wx:if="{{canEditUserMarker && markerType<6}}" bind:tap="onEdit">
         <image src="/images/poi-detail/edit.png" class="img" mode="" />
         <view class="b-text">修改</view>
-      </view>
-      <view class="thumb-wrap" wx:if="{{canDeleteUserMarker}}" bind:tap="onDelete">
+      </view> -->
+      <!-- <view class="thumb-wrap" wx:if="{{canDeleteUserMarker}}" bind:tap="onDelete">
         <image src="/images/poi-detail/delete.png" class="img" mode="" />
         <view class="b-text">删除</view>
-      </view>
-      <view class="thumb-wrap" wx:if="{{showFeedback}}" bind:tap="onFeedback">
+      </view> -->
+      <!-- <view class="thumb-wrap" wx:if="{{showFeedback}}" bind:tap="onFeedback">
         <image src="/images/poi-detail/feedback.png" class="img" mode="" />
         <view class="b-text">报错</view>
-      </view>
+      </view> -->
     </view>
     <view class="right">
       <t-button  size="small" shape="round" variant="outline" style="width:120rpx;margin-right: 16rpx;" bindtap="openLocation" data-name="{{poiCommunity}}{{poiText}}" data-address="{{poiAddress}}">导航</t-button>

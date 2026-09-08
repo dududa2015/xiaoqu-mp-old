@@ -2,7 +2,6 @@ const CATEGORIES = [
   { id: 'all', label: '全部' },
   { id: 'intro', label: '入门' },
   { id: 'map', label: '地图' },
-  { id: 'marker', label: '标记' },
   { id: 'vip', label: '会员' },
   { id: 'account', label: '账号' },
   { id: 'tips', label: '须知' }
@@ -105,17 +104,16 @@ const SECTIONS = [
     id: 2,
     category: 'intro',
     title: '核心功能一览',
-    summary: '地图浏览、标记、收藏、路线与会员',
+    summary: '地图浏览、搜索、路线与会员',
     blocks: [
       p('「小区楼号」微信小程序是一款专注于小区内楼号查询与地图标注的工具，主要能力包括：'),
       bullets([
         '在地图上查看小区楼号及出入口、设施等标记；',
         '支持标准地图与卫星地图切换，可缩放、平移；开启旋转后可用双指旋转地图；',
-        '支持添加楼号、出入口、公厕、设施、其他、道路、围墙等多类标记（提交后需审核）；',
-        '支持收藏标记，在「我的 → 有效标记 / 待审核 / 收藏」中管理；',
+        '查看由系统维护的小区楼号、出入口及公共设施等地图信息；',
         '点击标记可查看详情，使用「路线」预览步行路径，或「导航」打开微信内置地图；',
         '支持分享给微信好友或群聊；',
-        '注册后有试用期；试用结束后每天第一次打开可免费使用半小时，也可看激励视频解锁当天，或开通仅限小程序的会员。'
+        '微信小程序内的楼号查询、收藏和路线等核心功能现已取消每日时长限制，无需观看激励视频解锁。'
       ]),
       note('小程序会员仅适用于微信小程序，不能用于小区楼号 App。')
     ]
@@ -142,11 +140,11 @@ const SECTIONS = [
     summary: '微信授权登录、标记同步与换机恢复',
     blocks: [
       h3('登录方式'),
-      p('进入底部「我的」，按提示完成微信授权登录。登录后，您添加的标记、收藏等会与当前微信账号绑定并同步到服务器。'),
+      p('进入底部「我的」，按提示完成微信授权登录。登录后，账号信息会与当前微信账号绑定并同步到服务器。'),
       h3('与 App 的关系'),
-      p('使用同一微信账号登录小区楼号 App 后，标记等业务数据可以互通。会员权益相互独立：在小程序开通的会员只在小程序内有效，不能用于 App。'),
+      p('使用同一微信账号登录小区楼号 App 后，可继续使用对应账号。会员权益相互独立：在小程序开通的会员只在小程序内有效，不能用于 App。'),
       h3('换机后'),
-      p('只要仍使用同一微信账号打开本小程序，标记、收藏与小程序会员状态会从服务器同步，一般无需重新添加。')
+      p('只要仍使用同一微信账号打开本小程序，账号与小程序会员状态会从服务器同步。')
     ]
   },
   {
@@ -158,10 +156,10 @@ const SECTIONS = [
       h3('界面布局'),
       p('小程序底部为两个主 Tab：'),
       bullets([
-        '地图：浏览楼号、添加标记、搜索、分享与设置；',
-        '我的：查看账号、标记统计、会员、使用帮助与客户服务。'
+        '地图：浏览楼号、搜索、分享与设置；',
+        '我的：查看账号、使用帮助与客户服务。'
       ]),
-      p('地图页顶部为分享、搜索、设置；右下角（或左下角，取决于控件位置）为添加标记与定位。'),
+      p('地图页顶部为分享、搜索、设置；右下角（或左下角，取决于控件位置）为定位。'),
       h3('缩放与平移'),
       bullets([
         '缩放：双指捏合缩小、双指展开放大；',
@@ -311,7 +309,7 @@ const SECTIONS = [
     summary: '开通、续费、退款与仅限小程序',
     blocks: [
       h3('会员能做什么'),
-      p('开通后可在微信小程序内无限使用全部功能，不再受每日半小时免费时段限制，也不用观看激励视频。会员权益仅限本小程序，不能用于小区楼号 App。'),
+      p('微信小程序目前已取消每日免费时长限制，未开通会员也可不限时使用核心功能。会员权益仅限本小程序，不能用于小区楼号 App。'),
       h3('如何开通'),
       p('进入「我的 → 开通会员」，选择月卡、季卡或年卡，勾选并阅读《会员服务协议》，点击「立即开通」，按微信提示完成支付。开通成功后即时生效。'),
       bullets([
@@ -334,17 +332,13 @@ const SECTIONS = [
   {
     id: 13,
     category: 'vip',
-    title: '免费时长与激励视频',
-    summary: '试用、每天半小时与看视频解锁',
+    title: '免费使用说明',
+    summary: '核心功能不限时使用',
     blocks: [
-      h3('试用'),
-      p('新注册用户在注册后 7 天内可试用全部功能。试用结束后，按下方规则使用。'),
-      h3('每日免费时长'),
-      p('未开通小程序会员时，每天第一次打开小程序后可免费使用半小时。打开时会提示免费截止钟点（例如 09:00 打开则免费至 09:30）。时长在次日 0 点重新计算。'),
-      h3('看视频解锁当天'),
-      p('免费时段内，可在地图顶部提示旁点击「看视频」，提前解锁当天剩余时间。到点后会出现提示；选择「看视频解锁今天」，完整看完一条激励视频后，当天剩余时间可继续使用。也可选择开通会员，不再限时、不用看广告。'),
+      h3('不限时使用'),
+      p('微信小程序已取消每日免费半小时的限制。楼号查询、收藏和路线等核心功能可全天使用，不再显示免费截止时间。'),
       h3('广告说明'),
-      p('小程序已取消封面广告、插屏广告和格子广告，浏览地图时不会弹出这类广告。免费半小时结束后，才需要看激励视频或开通会员。')
+      p('小程序已取消封面广告、插屏广告和格子广告，也不再要求观看激励视频来解锁当天使用权限。')
     ]
   },
   {
@@ -358,7 +352,6 @@ const SECTIONS = [
       h3('注销账号'),
       p('在编辑资料页底部选择「注销账号」。注销后将清除昵称、手机号、微信绑定及小程序会员权益，且无法恢复。'),
       bullets([
-        '您创建的地图标记、收藏等业务数据会保留在系统中，但不再与您的身份关联；',
         '注销后如再次使用微信打开本小程序，将注册为新账号。'
       ]),
       note('小程序通过当前微信账号登录。若需更换身份，请使用其他微信打开本小程序，或先注销后再用新微信号登录。')
@@ -399,9 +392,9 @@ const SECTIONS = [
       p('请先查看本帮助「定位与权限」。'),
       h3('分享失败'),
       p('请确认微信版本较新，并尝试使用右上角「···」转发。'),
-      h3('会员或标记「不见了」'),
+      h3('会员状态不见了'),
       bullets([
-        '确认是否使用开通会员、添加标记时的同一微信账号；',
+        '确认是否使用开通会员时的同一微信账号；',
         '小程序会员不会出现在 App 中，请在本小程序「我的」查看；',
         '仍异常可通过「我的 → 客户服务」联系我们。'
       ])
@@ -424,23 +417,25 @@ const SECTIONS = [
   }
 ]
 
+const VISIBLE_SECTIONS = SECTIONS.filter((item) => item.id !== 11 && item.id !== 15)
+
 function getCategories() {
   return CATEGORIES.slice()
 }
 
 function getSections() {
-  return SECTIONS
+  return VISIBLE_SECTIONS
 }
 
 function sectionById(id) {
   const num = Number(id)
-  return SECTIONS.find((item) => item.id === num) || null
+  return VISIBLE_SECTIONS.find((item) => item.id === num) || null
 }
 
 function filter(category, query) {
   const byCategory = category && category !== 'all'
-    ? SECTIONS.filter((item) => item.category === category)
-    : SECTIONS
+    ? VISIBLE_SECTIONS.filter((item) => item.category === category)
+    : VISIBLE_SECTIONS
   return byCategory.filter((item) => matchesQuery(item, query)).map(toListItem)
 }
 
@@ -449,7 +444,7 @@ function group(category, query) {
     return []
   }
   return BROWSABLE.map((sectionCategory) => {
-    const sections = SECTIONS.filter((item) => item.category === sectionCategory.id).map(toListItem)
+    const sections = VISIBLE_SECTIONS.filter((item) => item.category === sectionCategory.id).map(toListItem)
     return sections.length ? { id: sectionCategory.id, label: sectionCategory.label, sections } : null
   }).filter(Boolean)
 }
@@ -459,7 +454,7 @@ function relatedSections(sectionId) {
   if (!current) {
     return []
   }
-  return SECTIONS.filter((item) => item.id !== current.id && item.category === current.category)
+  return VISIBLE_SECTIONS.filter((item) => item.id !== current.id && item.category === current.category)
     .slice(0, 3)
     .map(toListItem)
 }
