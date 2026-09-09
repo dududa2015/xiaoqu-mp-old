@@ -5,6 +5,8 @@ const {
 
 const TRIAL_DAYS = 7
 const FREE_WINDOW_MS = 30 * 60 * 1000
+// 临时关闭每日限时与会员门槛，核心功能可直接使用
+const DAILY_FREE_LIMIT_ENABLED = false
 const HEARTBEAT_MS = 10000
 const AD_UNLOCK_KEY = 'todayAdUnlockDate'
 const LOCAL_FREE_WINDOW_KEY = 'mpDailyFreeWindow'
@@ -31,8 +33,8 @@ function createEmptySnapshot() {
     status: STATUS.quota,
     mpVipExpiredDate: '',
     trialExpireAt: '',
-    dailyLimitSeconds: Math.round(FREE_WINDOW_MS / 1000),
-    todayRemainingSeconds: Math.round(FREE_WINDOW_MS / 1000),
+    dailyLimitSeconds: DAILY_FREE_LIMIT_ENABLED ? Math.round(FREE_WINDOW_MS / 1000) : 0,
+    todayRemainingSeconds: DAILY_FREE_LIMIT_ENABLED ? Math.round(FREE_WINDOW_MS / 1000) : 0,
     freeUntil: 0,
     freeUntilText: '',
     serverNow: Date.now(),
@@ -177,6 +179,9 @@ function isPayloadAdUnlocked(payload) {
 }
 
 function cacheServerWindow(payload, serverNow) {
+  if (!DAILY_FREE_LIMIT_ENABLED) {
+    return
+  }
   const today = formatShanghaiDate(serverNow || Date.now())
   const freeUntil = parseFreeUntilMs(payload)
   if (freeUntil) {
@@ -265,6 +270,9 @@ function startDailyFreeWindow(serverNow) {
 }
 
 function buildHintText(snapshot) {
+  if (!DAILY_FREE_LIMIT_ENABLED) {
+    return '核心功能不限时使用'
+  }
   if (snapshot.status === STATUS.vip) {
     const expired = parseDate(snapshot.mpVipExpiredDate)
     return expired ? `会员有效至 ${formatDateTime(expired)}` : '会员有效期内'
@@ -294,6 +302,9 @@ function pickStatus(payload, userInfo, serverNow) {
   if (payload.status === STATUS.trial || isNewUser(userInfo, serverNow)) {
     return STATUS.trial
   }
+  if (!DAILY_FREE_LIMIT_ENABLED) {
+    return STATUS.quota
+  }
   if (isAdUnlockedToday(serverNow) || isPayloadAdUnlocked(payload)) {
     return STATUS.adUnlocked
   }
@@ -313,9 +324,11 @@ function rebuildSnapshot(payload, source) {
   const mpVipExpiredDate = payload.mpVipExpiredDate || payload.MpVipExpiredDate || getMpVipExpiredDate(userInfo)
   const trialExpireAt = payload.trialExpireAt || getTrialExpireAt(userInfo)
   const rec = getFreeWindow(serverNow)
-  const freeUntil = parseFreeUntilMs(payload) || (rec && rec.freeUntil ? rec.freeUntil : 0)
+  const freeUntil = DAILY_FREE_LIMIT_ENABLED
+    ? (parseFreeUntilMs(payload) || (rec && rec.freeUntil ? rec.freeUntil : 0))
+    : 0
   const freeUntilText = formatShanghaiClock(freeUntil)
-  const dailyLimitSeconds = Math.round(FREE_WINDOW_MS / 1000)
+  const dailyLimitSeconds = DAILY_FREE_LIMIT_ENABLED ? Math.round(FREE_WINDOW_MS / 1000) : 0
   let todayRemainingSeconds = dailyLimitSeconds
   if (status === STATUS.quota && freeUntil) {
     todayRemainingSeconds = Math.max(0, Math.round((freeUntil - serverNow) / 1000))
@@ -355,8 +368,15 @@ function getSnapshot() {
 }
 
 function canUseCoreFeatures() {
+  if (!DAILY_FREE_LIMIT_ENABLED) {
+    return true
+  }
   const status = current.status
   return status === STATUS.vip || status === STATUS.trial || status === STATUS.quota || status === STATUS.adUnlocked
+}
+
+function isDailyFreeLimitEnabled() {
+  return DAILY_FREE_LIMIT_ENABLED
 }
 
 function subscribe(listener) {
@@ -414,7 +434,7 @@ async function doRefresh() {
     console.warn('getEntitlement fallback to local', e)
   }
   const now = Date.now()
-  if (!getFreeWindow(now) && !isMpVip(userInfo, now) && !isNewUser(userInfo, now) && !isAdUnlockedToday(now)) {
+  if (DAILY_FREE_LIMIT_ENABLED && !getFreeWindow(now) && !isMpVip(userInfo, now) && !isNewUser(userInfo, now) && !isAdUnlockedToday(now)) {
     wx.setStorageSync(LOCAL_FREE_WINDOW_KEY, {
       date: formatShanghaiDate(now),
       freeUntil: Math.min(now + FREE_WINDOW_MS, getShanghaiDayEnd(now))
@@ -462,6 +482,10 @@ function scheduleFreeWindowTimer() {
 }
 
 function syncHeartbeat() {
+  if (!DAILY_FREE_LIMIT_ENABLED) {
+    stopHeartbeat()
+    return
+  }
   if (current.status === STATUS.quota) {
     startHeartbeat()
     scheduleFreeWindowTimer()
@@ -626,6 +650,7 @@ module.exports = {
   dismissFreeWindowNotice,
   getSnapshot,
   canUseCoreFeatures,
+  isDailyFreeLimitEnabled,
   subscribe,
   refresh,
   onAppShow,

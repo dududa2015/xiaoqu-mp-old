@@ -17,6 +17,7 @@ import {
   subscribe as subscribeEntitlement,
   ensureEntitlement,
   canUseCoreFeatures,
+  isDailyFreeLimitEnabled,
   setAdUnlockedToday,
   isMpVip,
   getSnapshot,
@@ -106,9 +107,10 @@ Page({
     //初始化配置
     this.initStorage()
     this.bindEntitlement()
-    setTimeout(() => {
-      this.initAd()
-    }, 1000);
+    // 看视频解锁今天：临时关闭
+    // setTimeout(() => {
+    //   this.initAd()
+    // }, 1000);
 
     this.updateLocationGuide()
     this.scheduleQuotaTips()
@@ -167,6 +169,16 @@ Page({
   },
   applyOverlayState(snapshot) {
     const next = snapshot || startDailyFreeWindow() || getSnapshot()
+    if (!isDailyFreeLimitEnabled()) {
+      this.setData({
+        showQuotaTips: false,
+        quotaTipsExpanded: false,
+        quotaTipsLocked: false,
+        quotaTipsUnlocked: false,
+        freeUntilText: ''
+      })
+      return
+    }
     const exhausted = next.status === 'exhausted'
     const quota = next.status === 'quota' && !!next.freeUntil
     const noticeDismissed = isFreeWindowNoticeDismissed(next.serverNow)
@@ -201,7 +213,8 @@ Page({
     })
   },
   onQuotaTipsPlay() {
-    this.showRewardedVideoAd('unlockToday')
+    // 看视频解锁今天：临时关闭
+    // this.showRewardedVideoAd('unlockToday')
   },
   preventMapMove() {},
   //用于处理搜索结果

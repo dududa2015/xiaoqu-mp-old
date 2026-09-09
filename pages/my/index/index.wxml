@@ -2,6 +2,7 @@
   <user-info userInfo="{{userInfo}}" validCount="{{markerStats.validCount}}" pendingAuditCount="{{markerStats.pendingAuditCount}}" favoriteCount="{{markerStats.favoriteCount}}"></user-info>
 
   <view class="content">
+      <!-- 开通会员入口：临时关闭
       <t-cell-group style="margin-top: 24rpx;border-radius: 48rpx; overflow: hidden;">
       <t-cell title="开通会员" hover arrow url="/pages/my/vip/vip">
         <image src="/images/my/v.png" class="left-icon" mode="" slot="left-icon" />
@@ -10,6 +11,7 @@
         <image src="/images/my/vip-management.png" class="left-icon" mode="" slot="left-icon" />
       </t-cell>
     </t-cell-group>
+      -->
       <t-cell-group style="margin-top: 24rpx;border-radius: 48rpx; overflow: hidden;">
       <t-cell title="使用帮助" hover arrow url="/pages/help/help/help">
         <t-icon name="help-circle" size="44rpx" color="#E85827" class="left-icon" slot="left-icon" />

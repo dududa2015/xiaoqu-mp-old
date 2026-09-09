@@ -10,13 +10,19 @@
     <view class="body">
       <text class="lead">现在起到该时间，可自由查找楼号。</text>
       <view class="points">
+        <!-- 看视频解锁今天：临时关闭
         <view class="point">
           <view class="dot"></view>
           <text class="point-text">到点后看一条视频，即可继续用今天</text>
         </view>
+        -->
         <view class="point">
           <view class="dot"></view>
-          <text class="point-text">开通会员后全天不限，不用看视频</text>
+          <text class="point-text">到点后可开通会员继续使用</text>
+        </view>
+        <view class="point">
+          <view class="dot"></view>
+          <text class="point-text">开通会员后全天不限</text>
         </view>
       </view>
       <view class="btn-primary" bind:tap="onKnow">知道了</view>

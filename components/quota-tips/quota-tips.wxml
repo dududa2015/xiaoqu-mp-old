@@ -13,10 +13,12 @@
   </view>
   <view class="quota-tips-extra">
     <text class="quota-tips-title">{{unlocked ? '今日已解锁全部功能' : (locked ? '免费时段已结束' : '浏览不再弹广告')}}</text>
-    <text class="quota-tips-desc">{{unlocked ? '看视频后当天可继续查找楼号。开通会员后全天不限，不用再看视频。' : (locked ? '看完视频可继续用今天，或开通会员，不再限时。' : '封面、插屏、格子广告已取消。每天第一次打开可免费使用半小时；到点后看一条视频即可继续用今天，也可开通会员。')}}</text>
+    <text class="quota-tips-desc">{{unlocked ? '今日已解锁全部功能。开通会员后全天不限。' : (locked ? '免费时段已结束，可开通会员继续使用。' : '封面、插屏、格子广告已取消。每天第一次打开可免费使用半小时；到点后可开通会员继续使用。')}}</text>
     <view class="quota-tips-actions">
+      <!-- 看视频解锁今天：临时关闭
       <view wx:if="{{!unlocked}}" class="quota-tips-btn quota-tips-btn-primary" catch:tap="onPlay">看视频解锁今天</view>
-      <view class="quota-tips-btn quota-tips-btn-vip {{unlocked ? 'quota-tips-btn-vip-solo' : ''}}" catch:tap="onOpenVip">开通会员</view>
+      -->
+      <view class="quota-tips-btn quota-tips-btn-vip quota-tips-btn-vip-solo" catch:tap="onOpenVip">开通会员</view>
     </view>
     <text class="quota-tips-count" wx:if="{{countdown > 0}}">{{countdown}}s 后收起</text>
   </view>

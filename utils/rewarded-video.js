@@ -1,3 +1,3 @@
-// 边界/路线不再用激励视频解锁。激励视频仅用于时长用尽后解锁当天，逻辑在 pages/index 与 utils/entitlement。
+// 每日时长与会员门槛已临时关闭，核心功能可直接使用。
 
 module.exports = {}
