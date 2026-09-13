@@ -1,1 +1,7 @@
-<!-- 小程序不使用此组件 -->
+<view class="top-search-wrap" style="top: {{rect.top}}px; height: {{rect.height}}px;">
+  <view class="top-wrap top-search" bind:tap="onSettingTap">
+    <view class="map-name-wrap">
+      <view class="name">{{mapName}}</view>
+    </view>
+  </view>
+</view>

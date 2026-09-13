@@ -28,12 +28,16 @@ import {
 
 import {
   addMarker,
-  getAroundList,
   addMarkerList,
   getBdRecordCount,
   getNotice,
   deleteNearMarkers
 } from '../../utils/apis'
+import {
+  getPublicAroundList,
+  getPersonalAroundList,
+  getPublicMapSetting
+} from '../../apis/marker-v2-api'
 import {
   deleteMarker
 } from '../../apis/marker-apis'
@@ -52,7 +56,6 @@ let videoAd = null
 let pendingRewardScene = null
 Page({
   data: {
-    mapName: '', //地图名称
     currentCommunityId: '',
     // isSetLocMarkerIcon: false, //是否设置了定位点图标
     rect: {},
@@ -62,7 +65,7 @@ Page({
     enableRotate: false, //是否开启旋转
     isVip: false, //兼容旧字段
     isMpVip: false,
-    scale: 3,
+    scale: 17,
     rotate: 0,
     skew: 0, //倾斜角度，范围 0 ~ 40 , 关于 z 轴的倾角
     enable3D: false,
@@ -78,6 +81,8 @@ Page({
     markerBounce: false, //标记点弹跳动画状态
     showLocation: true,
     showMapLocation: false,
+    locationFollowMode: 0, // 0 未跟随 1 跟随 2 机头向上
+    headingFollowActive: false,
     bottom: 0,
     showAdd: true,
     markers: [],
@@ -106,6 +111,7 @@ Page({
 
     //初始化配置
     this.initStorage()
+    this.syncMapModeView()
     this.bindEntitlement()
     // 看视频解锁今天：临时关闭
     // setTimeout(() => {
@@ -119,15 +125,35 @@ Page({
     }, 800)
   },
   onShow() {
+    this.syncMapModeView()
     this.amapSearch()
     this.openPlaceFromStorage()
     this.updateLocationGuide()
     this.syncEntitlementView(getSnapshot())
   },
+  syncMapModeView() {
+    const mapType = parseInt(wx.getStorageSync('mapType'), 10) || 1
+    const mapName = mapType === 2 ? '个人地图' : '公共地图'
+    wx.setStorageSync('mapName', mapName)
+    this.setTabBarName(mapName)
+  },
+  setTabBarName(mapName) {
+    const text = mapName || wx.getStorageSync('mapName') || '公共地图'
+    wx.setTabBarItem({
+      index: 0,
+      text
+    })
+  },
   onUnload() {
+    this.stopLocationFollow()
     if (this.unbindEntitlement) {
       this.unbindEntitlement()
       this.unbindEntitlement = null
+    }
+  },
+  onHide() {
+    if (this.data.locationFollowMode > 0) {
+      this.setLocationFollowMode(0)
     }
   },
   shouldShowLocationGuide() {
@@ -431,6 +457,9 @@ Page({
     })
   },
   initLocMarkerIcon() {
+    if (this.data.locationFollowMode === 2) {
+      return
+    }
     if (!this.isSetLocMarkerIcon) {
       const locIconIndex = wx.getStorageSync('locIconIndex')
       if (locIconIndex) {
@@ -451,6 +480,9 @@ Page({
     }
   },
   setLocMarkerIcon() {
+    if (this.data.locationFollowMode === 2) {
+      return
+    }
     this.getMapContext().setLocMarkerIcon({
       iconPath: '/images/loc-marker/-1.png',
       success(res) {
@@ -583,6 +615,158 @@ Page({
     const lng = parseFloat(longitude)
     return !isNaN(lat) && !isNaN(lng)
   },
+  onLocationButtonTap() {
+    if (!this.ensureCoreAccess()) {
+      return
+    }
+    // 暂关机头向上（mode 2），定位按钮只在 未跟随 / 跟随 间切换
+    // const nextMode = (this.data.locationFollowMode + 1) % 3
+    const nextMode = (this.data.locationFollowMode + 1) % 2
+    this.setLocationFollowMode(nextMode)
+  },
+  setLocationFollowMode(mode, options = {}) {
+    // 暂关机头向上：若缓存或其它入口仍传入 2，回退到跟随
+    if (mode === 2) {
+      mode = 1
+    }
+    this.stopLocationFollow()
+    const headingFollowActive = mode === 2
+    this.setData({
+      locationFollowMode: mode,
+      headingFollowActive,
+      rotate: headingFollowActive ? this.data.rotate : 0
+    }, () => {
+      this.applyLocationPresentationForFollowMode(mode)
+    })
+    wx.setStorageSync('locationFollowMode', mode)
+
+    if (mode === 0) {
+      return
+    }
+
+    this.startLocationFollow()
+    // 启动时 getLocation 已把地图中心设好，避免再 getLocation + moveToLocation
+    if (!options.skipCenter) {
+      this.centerMapOnUser()
+    }
+  },
+  applyLocationPresentationForFollowMode(mode) {
+    if (mode === 2) {
+      // 机头模式：隐藏系统定位点（箭头会随地图/罗盘自转），改用屏幕固定 cover-image
+      this.setData({
+        showMapLocation: false
+      })
+      this.startCompassForHeading()
+      return
+    }
+
+    this.setData({
+      showMapLocation: true
+    })
+  },
+  startCompassForHeading() {
+    if (this.compassChangeHandler) {
+      return
+    }
+    const that = this
+    wx.startCompass({
+      fail(err) {
+        console.log('startCompass fail', err)
+      }
+    })
+    that.compassChangeHandler = (res) => {
+      if (that.data.locationFollowMode !== 2) {
+        return
+      }
+      that.setData({
+        rotate: res.direction
+      })
+    }
+    wx.onCompassChange(that.compassChangeHandler)
+  },
+  centerMapOnUser() {
+    const that = this
+    wx.getLocation({
+      type: 'gcj02',
+      isHighAccuracy: true,
+      success(res) {
+        const {
+          latitude,
+          longitude
+        } = res
+        that.setData({
+          latitude,
+          longitude,
+          scale: Math.max(that.data.scale || 17, 17),
+          showMapLocation: that.data.locationFollowMode !== 2
+        })
+        wx.setStorageSync('latitude', latitude)
+        wx.setStorageSync('longitude', longitude)
+        that.getMapContext().moveToLocation({
+          latitude,
+          longitude
+        })
+      },
+      fail() {
+        that.showSettingDialog()
+      }
+    })
+  },
+  startLocationFollow() {
+    const that = this
+    wx.startLocationUpdate({
+      success() {
+        that.locationChangeHandler = (res) => {
+          if (that.data.locationFollowMode === 0) {
+            return
+          }
+          const {
+            latitude,
+            longitude
+          } = res
+          wx.setStorageSync('latitude', latitude)
+          wx.setStorageSync('longitude', longitude)
+          that.getMapContext().moveToLocation({
+            latitude,
+            longitude
+          })
+        }
+        wx.onLocationChange(that.locationChangeHandler)
+      },
+      fail(err) {
+        console.log('startLocationUpdate fail', err)
+        wx.showToast({
+          title: '无法开启定位跟随',
+          icon: 'none'
+        })
+        if (that.data.locationFollowMode === 2) {
+          return
+        }
+        that.setData({
+          locationFollowMode: 0,
+          headingFollowActive: false,
+          rotate: 0,
+          showMapLocation: true
+        })
+      }
+    })
+  },
+  stopLocationFollow() {
+    if (this.locationChangeHandler) {
+      wx.offLocationChange(this.locationChangeHandler)
+      this.locationChangeHandler = null
+    }
+    if (this.compassChangeHandler) {
+      wx.offCompassChange(this.compassChangeHandler)
+      this.compassChangeHandler = null
+    }
+    wx.stopLocationUpdate({
+      fail() {}
+    })
+    wx.stopCompass({
+      fail() {}
+    })
+  },
   //获取当前位置
   getLocation() {
     const that = this
@@ -603,8 +787,8 @@ Page({
           latitude,
           longitude,
           scale: 17,
-          rotate: 0,
-          showMapLocation: true
+          rotate: that.data.locationFollowMode === 2 ? that.data.rotate : 0,
+          showMapLocation: that.data.locationFollowMode !== 2
         })
         wx.setStorageSync('latitude', latitude)
         wx.setStorageSync('longitude', longitude)
@@ -612,8 +796,7 @@ Page({
         wx.setStorageSync('lastLongitude', longitude)
         that.waitForUserInfo().then((userInfo) => {
           if (userInfo) {
-            that.getAroundList(latitude, longitude)
-            that.getAroundCommunityList(latitude, longitude)
+            that.syncPublicMapSetting()
             that.getNotice()
             that.setData({
               tips: userInfo.remark,
@@ -622,12 +805,13 @@ Page({
               points: userInfo.points
             })
           }
+          that.getAroundList(latitude, longitude)
+          that.getAroundCommunityList(latitude, longitude)
         }).catch((err) => {
           console.error('等待 userInfo 超时或失败:', err)
           const userInfo = wx.getStorageSync('userInfo')
           if (userInfo) {
-            that.getAroundList(latitude, longitude)
-            that.getAroundCommunityList(latitude, longitude)
+            that.syncPublicMapSetting()
             that.getNotice()
             that.setData({
               tips: userInfo.remark,
@@ -636,8 +820,13 @@ Page({
               points: userInfo.points
             })
           }
+          that.getAroundList(latitude, longitude)
+          that.getAroundCommunityList(latitude, longitude)
         })
         that.dismissLocationGuide()
+        if (that.data.locationFollowMode === 0) {
+          that.setLocationFollowMode(1, { skipCenter: true })
+        }
       },
       fail(res) {
         wx.showToast({
@@ -818,7 +1007,8 @@ Page({
     if (markerId.toString().startsWith('999')) {
       return
     }
-    if (!checkLoginAndNavigate()) {
+    const mapType = wx.getStorageSync('mapType') || 1
+    if (mapType === 2 && !checkLoginAndNavigate()) {
       return
     }
     if (!this.ensureCoreAccess()) {
@@ -1023,6 +1213,10 @@ Page({
       }, 600); // 动画持续时间
     }
 
+    if (e.type === 'end' && e.causedBy === 'drag' && this.data.locationFollowMode > 0) {
+      this.setLocationFollowMode(0)
+    }
+
     // 2. 提前返回条件判断
     if (!e.detail?.centerLocation || e.type !== 'end' || e.causedBy !== 'drag') {
       return;
@@ -1196,8 +1390,7 @@ Page({
     const that = this
     deleteMarker({
       xId: that.selectedMarker.xId,
-      userId: wx.getStorageSync('userId'),
-      mapType: wx.getStorageSync('mapType') || 1
+      userId: wx.getStorageSync('userId')
     }).then(res => {
       if (res) {
         wx.showToast({
@@ -1235,29 +1428,21 @@ Page({
       return
     }
     const that = this
-    const userInfo = wx.getStorageSync('userInfo') || {}
-    const userId = userInfo.userId || ''
-    const isPubMap = userInfo.isPubMap || false
-    const mapType = wx.getStorageSync('mapType') || 1 //只有1和2，1为公共地图，2为个人地图。
-    getAroundList({
+    const mapType = wx.getStorageSync('mapType') || 1
+    if (mapType === 2 && !wx.getStorageSync('userInfo')) {
+      return
+    }
+    const fetchList = mapType === 2 ? getPersonalAroundList : getPublicAroundList
+    fetchList({
       lng,
-      lat,
-      userId,
-      isPubMap,
-      mapType
+      lat
     }).then(res => {
       let list = res
-      //如果db中没有，则请求bd-api数据
       if (Array.isArray(list) && list.length > 0) {
         that.deleteNearMarkers(list)
         that.addAroundList2Map(list)
-        //小于{{数量}}也调用接口，{{数量}}在缓存caches.json里配置
-        //注释百度接口 2025-03-22,打开接口2025-06-12，注释于2025-08-06
-        // if (list.length < (that.bdCount || 5)) {
-        //   that.addBdAroundList(lng, lat)
-        // }
       }
-    })
+    }).catch(() => {})
   },
   //获取周围的小区
   getAroundCommunityList(lat, lng) {
@@ -1363,7 +1548,11 @@ Page({
     for (const item of list) {
       const selectedId = this.data.showPOI && this.data.xId > 0 ? parseInt(this.data.xId, 10) : 0
       const isSelected = selectedId > 0 && parseInt(item.xId, 10) === selectedId
-      let marker = buildMarkers(item.lat, item.lng, parseInt(item.xId), item.name, item.type, item.userId, item.deleted, isSelected, item.imageCount, item.images)
+      let marker = buildMarkers(item.lat, item.lng, parseInt(item.xId), item.name, item.type, item.userId, item.deleted, isSelected, item.imageCount, item.images, item.reviewStatus, item.isPersonalOverride)
+      marker.markerScope = item.markerScope
+      marker.reviewStatus = item.reviewStatus
+      marker.isPersonalOverride = item.isPersonalOverride
+      marker.operation = item.operation
       let points = JSON.parse(item.points || null)
       let m = markers.findIndex(item => item.id === marker.id)
       if (m === -1) {
@@ -1533,7 +1722,9 @@ Page({
       marker.deleted,
       isSelected,
       marker.imageCount,
-      marker.images
+      marker.images,
+      marker.reviewStatus,
+      marker.isPersonalOverride
     )
     markers[index] = updated
     this.setData({
@@ -1690,12 +1881,10 @@ Page({
     let longitude = points[index].longitude
     let uid = generateXId(latitude, longitude)
     let userId = wx.getStorageSync('userId')
-    let mapType = wx.getStorageSync('mapType') || null
     let param = {
       xId: uid,
       userId,
       type: this.data.markerTypeIndex,
-      mapType,
       name: this.data.markerTypeIndex === 7 ? '可通行' : '围墙',
       remark: '',
       lat: latitude,
@@ -1870,36 +2059,71 @@ Page({
   onMapChange(e) {
     let mapType = e.detail.mapType
     let mapName = e.detail.mapName
-    console.log(mapType)
+    wx.setStorageSync('mapType', mapType)
+    wx.setStorageSync('mapName', mapName)
     this.setData({
       showUp: false,
-      mapName,
       markers: [],
       polyline: [],
       showMap: false
     })
+    this.setTabBarName(mapName)
     this.showTabBar()
     this.resetMap()
-    this.getLocation()
-    this.setTabBarName()
+    const latitude = wx.getStorageSync('latitude')
+    const longitude = wx.getStorageSync('longitude')
+    if (latitude && longitude) {
+      this.getAroundList(latitude, longitude)
+    } else {
+      this.getLocation()
+    }
+  },
+  onRevokeOverride(event) {
+    const poi = event.detail
+    const latitude = wx.getStorageSync('latitude')
+    const longitude = wx.getStorageSync('longitude')
+    this.onClosePoi()
+    if (latitude && longitude) {
+      this.getAroundList(latitude, longitude)
+    }
+    if (poi && poi.xId) {
+      setTimeout(() => {
+        this.setData({
+          xId: parseInt(poi.xId, 10),
+          showPOI: true
+        })
+      }, 300)
+    }
   },
   //个人地图开关
   onMapTypeChange(e) {
     let mapType = e.detail.mapType
     let mapName = e.detail.mapName
+    wx.setStorageSync('mapType', mapType)
+    wx.setStorageSync('mapName', mapName)
     this.setData({
-      mapName
+      markers: [],
+      polyline: []
     })
-    this.setTabBarName()
+    this.setTabBarName(mapName)
+    const latitude = wx.getStorageSync('latitude')
+    const longitude = wx.getStorageSync('longitude')
+    if (latitude && longitude) {
+      this.getAroundList(latitude, longitude)
+    }
   },
-  setTabBarName() {
-    let mapName = wx.getStorageSync('mapName')
-    setTimeout(() => {
-      wx.setTabBarItem({
-        index: 0,
-        text: mapName || '小区楼号' // 新的 tabBar 名称
-      });
-    }, 500);
+  syncPublicMapSetting() {
+    const userInfo = wx.getStorageSync('userInfo')
+    if (!userInfo) {
+      return
+    }
+    getPublicMapSetting().then(res => {
+      if (res && typeof res.includePublicMap === 'boolean') {
+        userInfo.includePublicMap = res.includePublicMap
+        userInfo.isPubMap = res.includePublicMap
+        wx.setStorageSync('userInfo', userInfo)
+      }
+    }).catch(() => {})
   },
   //打开设置
   onSetting() {
@@ -1931,6 +2155,13 @@ Page({
   },
   //更改定位图标
   onLocIcon(event) {
+    if (this.data.locationFollowMode === 2) {
+      wx.showToast({
+        title: '请先退出机头向上模式',
+        icon: 'none'
+      })
+      return
+    }
     console.log(event.detail)
     this.getMapContext().setLocMarkerIcon({
       iconPath: `/images/loc-marker/${event.detail}.png`
@@ -1951,6 +2182,9 @@ Page({
   },
   //开启旋转，事件来自设置页面
   onRotate(event) {
+    if (this.data.locationFollowMode === 2) {
+      this.setLocationFollowMode(1)
+    }
     this.setData({
       enableRotate: event.detail,
       rotate: 0

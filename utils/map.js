@@ -47,10 +47,12 @@ function applyMarkerSelectedStyle(marker, selected) {
   return marker
 }
 
-const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted, selected = false, imageCount = 0, images = null) => {
+const buildMarkers = (latitude, longitude, uid, name, type, userId, deleted, selected = false, imageCount = 0, images = null, reviewStatus = null, isPersonalOverride = false) => {
   let bgColor = getBgColorByType(type)
   if (deleted === -1) {
     name = name.substring(0, 2) + '***（审核中）'
+  } else if (reviewStatus === 'pending' && isPersonalOverride) {
+    name = name + '（待审核）'
   }
   const displayName = formatMarkerDisplayName(name, imageCount, images)
   let anchorX = getAnchorX(displayName)

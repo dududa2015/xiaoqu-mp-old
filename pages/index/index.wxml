@@ -1,20 +1,23 @@
 <wxs module="tools" src="../../utils/wxs/includes.wxs"></wxs>
 
 <view class="container">
-  <map id="myMap" style="width: 100%; height: {{ mapHeight || 730}}px;" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" polygons="{{polygons}}" scale="{{scale}}" enable-rotate="{{enableRotate && !quotaTipsLocked}}" rotate="{{rotate}}" show-location="{{showMapLocation}}" show-scale="{{true}}" show-compass="{{rotate && !quotaTipsLocked}}" enable-satellite="{{enableSatellite}}" enable-3D="{{enable3D && !quotaTipsLocked}}" skew="{{quotaTipsLocked ? 0 : 20}}" enable-scroll="{{!quotaTipsLocked}}" enable-zoom="{{!quotaTipsLocked}}" bindpoitap="onPoiTap" bindtap="onMapTap" bindlabeltap="onLabelTap" bindcallouttap="onLabelTap" bindpolylinetap="onPolylineTap" bindregionchange="onRegionChange">
+  <map id="myMap" style="width: 100%; height: {{ mapHeight || 730}}px;" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{markers}}" polyline="{{polyline}}" polygons="{{polygons}}" scale="{{scale}}" enable-rotate="{{(enableRotate || headingFollowActive) && !quotaTipsLocked}}" rotate="{{rotate}}" show-location="{{showMapLocation}}" show-scale="{{true}}" show-compass="{{(rotate || headingFollowActive) && !quotaTipsLocked}}" enable-satellite="{{enableSatellite}}" enable-3D="{{enable3D && !headingFollowActive && !quotaTipsLocked}}" skew="{{quotaTipsLocked ? 0 : (headingFollowActive ? 0 : 20)}}" enable-scroll="{{!quotaTipsLocked}}" enable-zoom="{{!quotaTipsLocked}}" bindpoitap="onPoiTap" bindtap="onMapTap" bindlabeltap="onLabelTap" bindcallouttap="onLabelTap" bindpolylinetap="onPolylineTap" bindregionchange="onRegionChange">
     <image src="/images/marker0.png" class="cross {{markerBounce ? 'bounce' : ''}}" wx:if="{{showCenterMarker && markerTypeIndex === 0}}"></image>
     <image src="/images/marker1.png" class="cross {{markerBounce ? 'bounce' : ''}}" wx:if="{{showCenterMarker && (markerTypeIndex === 1 ) }}"></image>
     <image src="/images/marker2.png" class="cross {{markerBounce ? 'bounce' : ''}}" wx:if="{{showCenterMarker && (markerTypeIndex >=2 && markerTypeIndex <= 6)}}"></image>
     <image src="/images/marker3.png" class="cross {{markerBounce ? 'bounce' : ''}}" wx:if="{{showCenterMarker && markerTypeIndex === 7}}"></image>
     <image src="/images/marker4.png" class="cross {{markerBounce ? 'bounce' : ''}}" wx:if="{{showCenterMarker && markerTypeIndex === 8}}"></image>
+    <!-- 暂关机头向上：自定义定位覆盖层
+    <cover-image src="/images/controls/location-north-line-fill-64.png" class="heading-loc-icon" wx:if="{{locationFollowMode === 2 && !showCenterMarker}}"></cover-image>
+    -->
   </map>
   <top-tip noticeList="{{noticeList}}" id="topTip"></top-tip>
   <top-bar rect="{{rect}}" position="{{position}}" showRedDot="{{showRedDot}}" bind:onChooseLocation="onChooseLocation" bind:onSetting="onSetting"></top-bar>
   <!-- 底部添加和定位按钮 -->
   <bottom-add position="{{position}}" bind:onAdd="onAdd" wx:if="{{showAdd}}"></bottom-add>
   <location-guide visible="{{showLocationGuide}}" position="{{position}}" bottom="{{bottom}}" bind:close="onLocationGuideClose"></location-guide>
-  <bottom-location position="{{position}}" bottom="{{bottom}}" highlight="{{showLocationGuide}}" bind:onLocation="getLocation" wx:if="{{showLocation}}"></bottom-location>
-  <poi-detail id="poiDetail" showPOI="{{showPOI}}" xId="{{xId}}" poiDetail="{{poiDetail}}" windowInfo="{{windowInfo}}" bind:moveToCenter="moveToCenter" bind:getPolyline="getPolyline" bind:clearRoutePolyline="clearRoutePolyline" bind:requestRouteAd="onRequestRouteAd" bind:onDelete="onUserMarkerDelete" bind:onEdit="onUserMarkerEdit" bind:onFeedback="onFeedback" bind:onClose="onClosePoi"></poi-detail>
+  <bottom-location position="{{position}}" bottom="{{bottom}}" highlight="{{showLocationGuide}}" locationFollowMode="{{locationFollowMode}}" bind:onLocation="onLocationButtonTap" wx:if="{{showLocation}}"></bottom-location>
+  <poi-detail id="poiDetail" showPOI="{{showPOI}}" xId="{{xId}}" poiDetail="{{poiDetail}}" windowInfo="{{windowInfo}}" bind:moveToCenter="moveToCenter" bind:getPolyline="getPolyline" bind:clearRoutePolyline="clearRoutePolyline" bind:requestRouteAd="onRequestRouteAd" bind:onDelete="onUserMarkerDelete" bind:onEdit="onUserMarkerEdit" bind:onRevokeOverride="onRevokeOverride" bind:onFeedback="onFeedback" bind:onClose="onClosePoi"></poi-detail>
   <marker-add-grid show="{{showGrid}}" bind:getMarkerTypeIndex="getMarkerTypeIndex" bind:createMap="createMap"></marker-add-grid>
   <marker-add markerTypeIndex="{{markerTypeIndex}}" showForm="{{showForm}}" showChooseMarker="{{showChooseMarker}}" markerDetail="{{markerDetail}}" mapCtx="{{mapCtx}}" bind:addUserMarkerByUser="addUserMarkerByUser" bind:updateUserMarkerByUser="updateUserMarkerByUser" bind:showBottomBar="showBottomBar" bind:onFormClose="onFormClose" bind:onChooseMarker="onChooseMarker" bind:onBackChooseMarker="onBackChooseMarker" bind:onFinishChooseMarker="onFinishChooseMarker" bind:onCancelChooseMarker="onCancelChooseMarker"></marker-add>
   <marker-feedback markerDetail="{{markerDetail}}" showFeedback="{{showFeedback}}" bind:onCloseFeedback="onCloseFeedback"></marker-feedback>

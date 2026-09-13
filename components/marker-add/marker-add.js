@@ -9,6 +9,9 @@ import {
   addMarker,
   updateMarker
 } from '../../utils/apis'
+import {
+  submitPersonalMarkerOverride
+} from '../../apis/marker-v2-api'
 Component({
   /**
    * 组件的属性列表
@@ -729,12 +732,54 @@ Component({
       })
     },
     updateMarker(longitude, latitude) {
-      //如果为true，则delete = 0 表示直接通过，为-1表示需要审核
       let deleted = checkString(this.data.name) ? 0 : -1
       let direction = this.getDirection()
       this.data.name = this.data.name + direction
+      const that = this
+      const editMode = this.selectedMarker.editMode
+
+      if (editMode === 'override') {
+        submitPersonalMarkerOverride({
+          xId: this.selectedMarker.xId,
+          operation: 'update',
+          type: this.data.markerTypeIndex,
+          name: this.data.name,
+          remark: this.getRemark(),
+          lat: latitude,
+          lng: longitude
+        }).then(() => {
+          wx.showToast({
+            title: '已提交，待审核',
+          })
+          that.triggerEvent('onFormClose')
+          that.triggerEvent('updateUserMarkerByUser', {
+            xId: that.selectedMarker.xId,
+            name: that.data.name,
+            longitude,
+            latitude,
+            deleted: -1,
+            markerTypeIndex: that.data.markerTypeIndex,
+            imageCount: that.getImageObjectKeys().length,
+            reviewStatus: 'pending',
+            isPersonalOverride: true
+          })
+          that.resetForm()
+          wx.showTabBar()
+          that.setData({
+            showCenterMarker: false,
+            showForm: false,
+            xId: 0,
+            showPOI: false,
+            markerTypeIndex: 0,
+            name: '',
+            tagNameList: []
+          })
+        })
+        return
+      }
+
       let mapType = wx.getStorageSync('mapType')
-      let isPersonal = mapType === 2 //1为公共地图，2为个人地图
+      let isPersonal = mapType === 2
       let param = {
         xId: this.selectedMarker.xId,
         userId: this.selectedMarker.userId,
@@ -748,7 +793,6 @@ Component({
         updateUserId: wx.getStorageSync('userId'),
         isPersonal
       }
-      const that = this
       updateMarker(param).then(res => {
         wx.showToast({
           title: '修改成功',
@@ -764,8 +808,6 @@ Component({
           imageCount: that.getImageObjectKeys().length
         })
 
-        //改变子组件的属性，从而重新生成你想输入的词
-        let name = that.data.name
         that.resetForm()
         wx.showTabBar()
         that.setData({

@@ -1,8 +1,8 @@
 import {
-  changeIsPubMap as requestPubMapMerge
-} from '../../apis/user-api'
+  getPublicMapSetting,
+  setPublicMapSetting
+} from '../../apis/marker-v2-api'
 
-// components/map-layer/map-layer.js
 Component({
 
   /**
@@ -15,8 +15,6 @@ Component({
       observer(newVal, oldVal) {
         if (newVal) {
           this.initStorage()
-          // // 调用开始动画函数
-          // this.startAnimation();
         }
       }
     }
@@ -31,7 +29,9 @@ Component({
     count: 0,
     showCommunityDetail: true,
     showRedDot: false,
-    showLocIconHelp: false, // 显示定位图标帮助提示
+    showLocIconHelp: false,
+    mapType: 1,
+    includePublicMap: false,
     locIconList: [{
       url: '/images/loc-marker/0.png',
     }, {
@@ -50,17 +50,11 @@ Component({
    */
   methods: {
     initStorage() {
-      //控件位置
       const position = wx.getStorageSync('position')
-      //标记形状
       const markerShape = wx.getStorageSync('markerShape')
-      //开启旋转
       const enableRotate = wx.getStorageSync('enableRotate')
-      //开启卫星地图
       const enableSatellite = wx.getStorageSync('enableSatellite')
-      //开启3d楼块
       const enable3D = wx.getStorageSync('enable3D')
-      //显示小区边界和出入口
       const showCommunityDetail = wx.getStorageSync('showCommunityDetail')
       this.setData({
         position: position ? position : 'right',
@@ -94,10 +88,26 @@ Component({
       }
       const mapType = parseInt(wx.getStorageSync('mapType'), 10) || 1
       const userInfo = wx.getStorageSync('userInfo') || {}
+      const includePublicMap = typeof userInfo.includePublicMap === 'boolean'
+        ? userInfo.includePublicMap
+        : !!userInfo.isPubMap
       this.setData({
         mapType,
-        isPubMap: !!userInfo.isPubMap
+        includePublicMap
       })
+      if (userInfo) {
+        this.fetchPublicMapSetting()
+      }
+    },
+    fetchPublicMapSetting() {
+      if (!wx.getStorageSync('userInfo')) {
+        return
+      }
+      getPublicMapSetting().then(res => {
+        if (res && typeof res.includePublicMap === 'boolean') {
+          this.updateUserInfoIncludePublicMap(res.includePublicMap)
+        }
+      }).catch(() => {})
     },
     ensureLoggedInForMapMode() {
       const userInfo = wx.getStorageSync('userInfo')
@@ -135,37 +145,37 @@ Component({
       const prev = !next
       if (!this.ensureLoggedInForMapMode()) {
         this.setData({
-          isPubMap: prev
+          includePublicMap: prev
         })
         return
       }
-      this.applyPubMapMerge(next).then((ok) => {
+      if (this.data.mapType !== 2) {
+        wx.showToast({
+          title: '请先切换到个人地图',
+          icon: 'none'
+        })
+        this.setData({
+          includePublicMap: prev
+        })
+        return
+      }
+      this.applyIncludePublicMap(next).then((ok) => {
         if (!ok) {
           this.setData({
-            isPubMap: prev
+            includePublicMap: prev
           })
         }
       })
     },
-    applyPubMapMerge(isPubMap) {
-      const userInfo = wx.getStorageSync('userInfo')
-      if (!userInfo || !userInfo.userId) {
-        wx.showToast({
-          title: '请先登录',
-          icon: 'none'
-        })
+    applyIncludePublicMap(includePublicMap) {
+      if (!this.ensureLoggedInForMapMode()) {
         return Promise.resolve(false)
       }
-      const userId = userInfo.userId
-      return requestPubMapMerge({
-        userId,
-        isPubMap
+      return setPublicMapSetting({
+        includePublicMap
       }).then(res => {
-        if (res) {
-          wx.showToast({
-            title: isPubMap ? '已合并公共地图' : '已取消合并',
-          })
-          this.updateUserInfoIsPubMap(isPubMap)
+        if (res !== false && res !== null) {
+          this.updateUserInfoIncludePublicMap(includePublicMap)
           this.triggerEvent('onMapTypeChange', {
             mapType: wx.getStorageSync('mapType'),
             mapName: wx.getStorageSync('mapName')
@@ -179,19 +189,19 @@ Component({
         return false
       }).catch(() => false)
     },
-    updateUserInfoIsPubMap(isPubMap) {
+    updateUserInfoIncludePublicMap(includePublicMap) {
       const userInfo = wx.getStorageSync('userInfo')
       if (!userInfo) return
-      userInfo.isPubMap = isPubMap
+      userInfo.includePublicMap = includePublicMap
+      userInfo.isPubMap = includePublicMap
       wx.setStorageSync('userInfo', userInfo)
       this.setData({
-        isPubMap
+        includePublicMap
       })
     },
     onClose() {
       this.triggerEvent('onSettingClose')
     },
-    //标准地图和卫星地图的选择
     onChoose(event) {
       const index = parseInt(event.currentTarget.dataset.index)
       this.setData({
@@ -200,7 +210,6 @@ Component({
       wx.setStorageSync('enableSatellite', index === 1)
       this.triggerEvent('onSatellite', index === 1)
     },
-    //开启个人地图
     onPersonalmapChange(e) {
       this.setData({
         enableMap: e.detail.value
@@ -208,14 +217,11 @@ Component({
       wx.setStorageSync('enableMap', e.detail.value)
       this.triggerEvent('mapChange', e.detail.value)
     },
-    //个人地图帮助
     onMapHelp() {
       this.setData({
         showConfirm: true
       })
     },
-    //导入个人数据
-    //要先开启个人地图才能导入个人数据
     onImportPersonalDataChange(e) {
       const enableMap = wx.getStorageSync('enableMap')
       if (enableMap) {
@@ -235,7 +241,6 @@ Component({
         }, 500);
       }
     },
-    //定位图标选择
     onLocIcon(e) {
       const index = parseInt(e.currentTarget.dataset.index)
       let locIconIndex = wx.getStorageSync('locIconIndex')
@@ -257,7 +262,6 @@ Component({
       wx.setStorageSync('locIconIndex', locIconIndex)
       this.triggerEvent('onLocIcon', locIconIndex)
     },
-    //地图控件位置选择
     onPositionChange(e) {
       this.setData({
         position: e.detail.value
@@ -265,7 +269,6 @@ Component({
       wx.setStorageSync('position', e.detail.value)
       this.triggerEvent('onPosition', e.detail.value)
     },
-    //标记形状选择
     onMarkerShapeChange(e) {
       if (e.detail.value === 'callout') {
         wx.showModal({
@@ -293,7 +296,6 @@ Component({
         });
       }
     },
-    //显示小区边界和出入口
     onCommunityDetailChange(e) {
       const value = e.detail.value
       this.setData({
@@ -319,7 +321,6 @@ Component({
         [dialogKey]: false
       });
     },
-    //开启旋转
     onRotateChange(e) {
       this.setData({
         enableRotate: e.detail.value
@@ -327,7 +328,6 @@ Component({
       wx.setStorageSync('enableRotate', e.detail.value)
       this.triggerEvent('onRotate', e.detail.value)
     },
-    //开启3d楼块
     on3DChange(e) {
       this.setData({
         enable3D: e.detail.value
@@ -335,33 +335,27 @@ Component({
       wx.setStorageSync('enable3D', e.detail.value)
       this.triggerEvent('on3D', e.detail.value)
     },
-    //开启屏幕常亮
     onScreenOnChange(e) {
       wx.setKeepScreenOn({
         keepScreenOn: e.detail.value
       })
       wx.setStorageSync('enableScreenOn', e.detail.value)
     },
-    // 显示/隐藏定位图标帮助提示
-  onShowLocIconHelp() {
-    this.setData({
-      showLocIconHelp: !this.data.showLocIconHelp
-    })
-  },
-  startAnimation() {
-      // 定时器，控制边框显示隐藏
+    onShowLocIconHelp() {
+      this.setData({
+        showLocIconHelp: !this.data.showLocIconHelp
+      })
+    },
+    startAnimation() {
       const interval = setInterval(() => {
         if (this.data.count < 3) {
-          // 切换边框显示状态
           this.setData({
             isShowBorder: !this.data.isShowBorder
           });
-          // 计数器加 1
           this.setData({
             count: this.data.count + 0.5
           });
         } else {
-          // 达到三次后清除定时器
           clearInterval(interval);
         }
       }, 500);

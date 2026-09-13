@@ -13,12 +13,22 @@ Component({
         },
         mapName: {
             type: String,
-            value: '',
+            value: '公共地图',
             observer(newVal, oldVal) {
-                this.setData({
-                    firstChar: newVal.substring(0, 1)
-                })
+                if (newVal) {
+                    this.setData({
+                        firstChar: newVal.substring(0, 1)
+                    })
+                }
             }
+        },
+        mapType: {
+            type: Number,
+            value: 1
+        },
+        showSetting: {
+            type: Boolean,
+            value: false
         },
         showUp: {
             type: Boolean,

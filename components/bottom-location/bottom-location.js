@@ -1,15 +1,16 @@
-// components/bottom-location/bottom-location.js
+const LOCATION_ICONS = [
+  '/images/controls/location-64.png',
+  '/images/controls/location-fill-64.png',
+  // 暂关机头向上
+  // '/images/controls/location-north-line-fill-64.png'
+]
+
 Component({
-  /**
-   * 组件的属性列表
-   */
   properties: {
-    //距离底部的距离
     bottom: {
       type: Number,
       value: 0
     },
-    //位置，左或右
     position: {
       type: String,
       value: 'right'
@@ -18,22 +19,25 @@ Component({
       type: Boolean,
       value: false
     },
+    locationFollowMode: {
+      type: Number,
+      value: 0,
+      observer(mode) {
+        const index = typeof mode === 'number' ? mode : 0
+        this.setData({
+          locIcon: LOCATION_ICONS[index] || LOCATION_ICONS[0]
+        })
+      }
+    }
   },
 
-  /**
-   * 组件的初始数据
-   */
   data: {
-
+    locIcon: LOCATION_ICONS[0]
   },
 
-  /**
-   * 组件的方法列表
-   */
   methods: {
-    //定位
     onLocation() {
-      this.triggerEvent('onLocation');
+      this.triggerEvent('onLocation')
     }
   }
 })

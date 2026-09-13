@@ -4,9 +4,13 @@ import {
   checkLoginAndNavigate
 } from '../../utils/util'
 import {
-  getMarkerById,
   updateMarkerLikes
 } from '../../utils/apis'
+import {
+  getPublicMarkerById,
+  getPersonalMarkerById,
+  submitPersonalMarkerOverride
+} from '../../apis/marker-v2-api'
 import {
   getBicycleRoute
 } from '../../apis/amap-apis'
@@ -57,6 +61,7 @@ Component({
             remarkTagList: [],
             canEditUserMarker: false,
             canDeleteUserMarker: false,
+            canRevokeOverride: false,
             showFeedback: false,
             duration: 0,
             distance: 0,
@@ -66,7 +71,6 @@ Component({
           this.poiInfo.lat = newVal.latitude
           this.poiInfo.lng = newVal.longitude
           this.showLouhao(newVal)
-          // this.showPolyline(newVal)
         }
       }
     },
@@ -106,29 +110,92 @@ Component({
   data: {
     showPolylineButton: false,
     routeVisible: false,
-    walkingMsg: '', //当超出距离时的提示
-    distance: '', //距离
-    duration: '', //耗时
-    canEditUserMarker: false, //用户的标记点是否可以编辑
-    canDeleteUserMarker: false, //用户的标记点是否可以删除 
-    isYours: false, //是否自己的标记
+    walkingMsg: '',
+    distance: '',
+    duration: '',
+    canEditUserMarker: false,
+    canDeleteUserMarker: false,
+    canRevokeOverride: false,
+    isYours: false,
     poiCommunity: '',
     markerImages: [],
     isFavorite: false,
     showFavoriteButton: false,
     currentPlaceKey: '',
+    pendingReview: false,
   },
 
   /**
    * 组件的方法列表
    */
   methods: {
+    resolveEditMode(mapType, result) {
+      if (mapType === 2 && result.markerScope === 'public') {
+        return 'override'
+      }
+      if (result.markerScope === 'personal') {
+        return 'personal'
+      }
+      return 'public'
+    },
+    resolvePermissions(mapType, result) {
+      const userId = wx.getStorageSync('userId')
+      const isLoggedIn = !!userId
+      const isOwner = userId === result.userId
+      const markerImages = this.normalizeMarkerImages(result.images)
+      const hasMarkerImages = markerImages.length > 0
+      const pendingReview = result.reviewStatus === 'pending' && result.isPersonalOverride
+
+      let canEditUserMarker = false
+      let canDeleteUserMarker = false
+      let canRevokeOverride = false
+      let showFeedback = isLoggedIn && !isOwner
+
+      if (mapType === 2) {
+        if (result.markerScope === 'personal' && isOwner) {
+          canEditUserMarker = true
+          canDeleteUserMarker = true
+          showFeedback = false
+        } else if (result.markerScope === 'public' && isLoggedIn && result.type < 6) {
+          canEditUserMarker = true
+          canDeleteUserMarker = false
+          showFeedback = false
+          if (result.isPersonalOverride) {
+            canRevokeOverride = true
+          }
+        }
+      } else if (isOwner) {
+        canEditUserMarker = true
+        canDeleteUserMarker = true
+        showFeedback = false
+      }
+
+      if (hasMarkerImages && !isOwner && result.markerScope !== 'public') {
+        canEditUserMarker = false
+        canDeleteUserMarker = false
+        showFeedback = false
+      }
+
+      const editMode = this.resolveEditMode(mapType, result)
+      return {
+        canEditUserMarker,
+        canDeleteUserMarker,
+        canRevokeOverride,
+        showFeedback,
+        markerImages,
+        pendingReview,
+        editMode
+      }
+    },
     getLouhao(xId) {
       const that = this
-      let mapType = wx.getStorageSync('mapType') || 1
-      getMarkerById({
-        xId,
-        mapType
+      const mapType = wx.getStorageSync('mapType') || 1
+      if (mapType === 2 && !checkLoginAndNavigate()) {
+        return
+      }
+      const fetchDetail = mapType === 2 ? getPersonalMarkerById : getPublicMarkerById
+      fetchDetail({
+        xId
       }).then(res => {
         let result = res
         let remarkTagList = []
@@ -137,10 +204,6 @@ Component({
           remarkTagList = result.remark.split(',')
         }
 
-        // if (result.userId === '92918a62b30c') {
-        //     // remarkTagList.push('来源于系统')
-        //     nickName = '系统'
-        // } else {
         if (result.isAdmin) {
           remarkTagList.push('vip')
         }
@@ -148,43 +211,37 @@ Component({
           remarkTagList.push('管理员')
         }
         nickName = result.nickName ? result.nickName : '匿名'
-        // }
 
-        const markerImages = that.normalizeMarkerImages(result.images)
-        const hasMarkerImages = markerImages.length > 0
-        const isOwner = wx.getStorageSync('userId') === result.userId
+        const perms = that.resolvePermissions(mapType, result)
+        if (perms.pendingReview) {
+          remarkTagList.push('待审核')
+        }
 
-        this.poiInfo = result
-        //显示楼号信息
+        this.poiInfo = {
+          ...result,
+          editMode: perms.editMode
+        }
         that.showLouhao({
           latitude: result.lat,
           longitude: result.lng,
           name: result.name,
           isUserMarker: true,
-          deleted: result.deleted
+          deleted: result.deleted,
+          reviewStatus: result.reviewStatus,
+          isPersonalOverride: result.isPersonalOverride
         })
-        let userInfo = wx.getStorageSync('userInfo')
-        let showFeedback = wx.getStorageSync('userId') !== result.userId
-        let canEditUserMarker = wx.getStorageSync('userId') === result.userId
-        //小程序能删除但要看广告
-        let canDeleteUserMarker = wx.getStorageSync('userId') === result.userId
-        // 有现场图的标记点：仅创建者可修改/删除；他人不可编辑、删除、报错
-        if (hasMarkerImages && !isOwner) {
-          canEditUserMarker = false
-          canDeleteUserMarker = false
-          showFeedback = false
-        }
         that.setData({
           markerType: result.type,
-          canEditUserMarker: !!canEditUserMarker,
-          canDeleteUserMarker: canDeleteUserMarker,
-          showFeedback,
+          canEditUserMarker: !!perms.canEditUserMarker,
+          canDeleteUserMarker: perms.canDeleteUserMarker,
+          canRevokeOverride: perms.canRevokeOverride,
+          showFeedback: perms.showFeedback,
+          pendingReview: perms.pendingReview,
           userMarker: result,
           remarkTagList,
-          // nickName,
           nickName: result.userId === wx.getStorageSync('userId') ? '您' : nickName,
           createdDate: this.convertDate(result.createdDate),
-          markerImages,
+          markerImages: perms.markerImages,
           showFavoriteButton: !!wx.getStorageSync('userId'),
         })
         that.syncFavoriteState(result)
@@ -274,18 +331,20 @@ Component({
         latitude,
         longitude,
         name,
-        isUserMarker,
-        deleted
+        deleted,
+        reviewStatus,
+        isPersonalOverride
       } = e
       if (deleted === -1) {
         name = name.substring(0, 2) + '***（审核中）'
+      } else if (reviewStatus === 'pending' && isPersonalOverride) {
+        name = name + '（待审核）'
       }
       this.setData({
-        // showPOI: true,
         poiText: name,
         bottom: 220,
       })
-      this.latitude = latitude //保存点击的位置
+      this.latitude = latitude
       this.longitude = longitude
     },
 
@@ -368,13 +427,12 @@ Component({
         address
       } = e.currentTarget.dataset
       wx.openLocation({
-        latitude: self.latitude, //维度
-        longitude: self.longitude, //经度
-        name: name, //目的地定位名称
-        address: address, //导航详细地址
+        latitude: self.latitude,
+        longitude: self.longitude,
+        name: name,
+        address: address,
       })
     },
-    //点赞
     onLike(event) {
       if (this.data.hasLike) {
         wx.showToast({
@@ -408,7 +466,6 @@ Component({
               title: '感谢反馈',
             })
           }
-          //把已经点过赞的xId写入缓存
           let likeList = wx.getStorageSync('likeList') || []
           if (!likeList.includes(xId)) {
             likeList.push(xId)
@@ -420,18 +477,37 @@ Component({
         }
       })
     },
-    //编辑标记
     onEdit() {
       this.setData({
         showPOI: false
       })
       this.triggerEvent('onEdit', this.poiInfo)
     },
-    //删除标记
     onDelete() {
       this.triggerEvent('onDelete', this.poiInfo)
     },
-    onFeedback(){
+    onRevokeOverride() {
+      const that = this
+      wx.showModal({
+        title: '温馨提示',
+        content: '确认撤销对该公共标记的个人修改吗？',
+        success(res) {
+          if (!res.confirm) {
+            return
+          }
+          submitPersonalMarkerOverride({
+            xId: that.poiInfo.xId,
+            operation: 'hide'
+          }).then(() => {
+            wx.showToast({
+              title: '已撤销修改',
+            })
+            that.triggerEvent('onRevokeOverride', that.poiInfo)
+          })
+        }
+      })
+    },
+    onFeedback() {
       if (!checkLoginAndNavigate()) {
         return
       }

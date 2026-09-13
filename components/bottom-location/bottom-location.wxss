@@ -55,13 +55,14 @@
 
 .img-wrap {
   position: relative;
+  width: 44rpx;
   height: 44rpx;
 }
 
 .img {
   position: relative;
-  width: 44rpx;
-  height: 44rpx;
+  width: 42rpx;
+  height: 42rpx;
   z-index: 0;
 }
 

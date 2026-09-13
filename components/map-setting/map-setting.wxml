@@ -13,6 +13,22 @@
             <view class="{{enableSatellite   ? 'text text-checked' : 'text'}}">卫星地图</view>
         </view>
     </view>
+    <!-- 地图模式 -->
+    <view class="setting">
+        <view class="row flex f-x-sb">
+            <view class="row-title">个人地图模式</view>
+            <view class="row-title">
+                <t-switch value="{{mapType === 2}}" slot="note" size="small" bind:change="onPersonalMapSwitch" />
+            </view>
+        </view>
+        <view class="row flex f-x-sb" wx:if="{{mapType === 2}}">
+            <view class="row-title">导入公共地图</view>
+            <view class="row-title">
+                <t-switch value="{{includePublicMap}}" slot="note" size="small" bind:change="onMergePubMapSwitch" />
+            </view>
+        </view>
+    </view>
+
     <!-- 位置、形状、旋转设置 -->
     <view class="setting">
         <view class="row flex f-x-sb">

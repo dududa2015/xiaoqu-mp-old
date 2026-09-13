@@ -1,17 +1,9 @@
 .top-search {
-    position: absolute;
-    left: 8px;
     line-height: 72rpx;
-    font-size: 12px;
-    color: #999;
-    background: #fff;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
-    /* border: 1rpx solid #E7F0FF; */
-    border-radius: 48rpx;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    opacity: 0.98;
+    background: transparent;
 }
 
 .img {
@@ -32,19 +24,26 @@
 .round-wrap {
     display: flex;
     align-items: center;
-    height: 56rpx;
+    margin-right: 12rpx;
 }
 
 .round {
-    width: 72rpx;
-    height: 72rpx;
-    line-height: 72rpx;
+    width: 56rpx;
+    height: 56rpx;
+    line-height: 56rpx;
     text-align: center;
     border-radius: 50%;
-    background-color: #0074FE;
-    font-size: 30rpx;
+    font-size: 26rpx;
     font-weight: 500;
     color: #fff;
+}
+
+.round-public {
+    background-color: #0074FE;
+}
+
+.round-personal {
+    background-color: #E85827;
 }
 
 .icon-wrap {
@@ -64,10 +63,11 @@
 .name {
     height: 44rpx;
     line-height: 44rpx;
-    font-size: 16px;
-    font-weight: 500;
-    color: #333;
-    /* margin: 0 auto; */
+    font-size: 34rpx;
+    font-weight: 600;
+    color: #000;
+    letter-spacing: 0.5rpx;
+    -webkit-text-stroke: 1rpx #fff;
 }
 
 .top-wrap {
@@ -78,7 +78,7 @@
 
 .map-name-wrap {
     display: flex;
-    padding: 12rpx 24rpx;
+    padding: 0 8rpx;
 }
 .down-icon {
   transition: transform 0.5s ease; /* 平滑过渡效果 */

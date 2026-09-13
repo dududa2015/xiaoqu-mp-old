@@ -36,7 +36,9 @@
   },
   "requiredPrivateInfos": [
     "getLocation",
-    "chooseLocation"
+    "chooseLocation",
+    "startLocationUpdate",
+    "onLocationChange"
   ],
   "tabBar": {
     "color": "#000000",

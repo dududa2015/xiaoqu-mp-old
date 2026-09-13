@@ -48,7 +48,7 @@
     align-items: center;
     padding: 24rpx 36rpx;
     background-color: #fff;
-    border-radius: 32rpx;
+    border-radius: 48rpx;
 }
 
 .margin32 {
@@ -83,7 +83,7 @@
 .setting {
     background-color: #fff;
     margin: 32rpx 0;
-    border-radius: 32rpx;
+    border-radius: 48rpx;
     overflow: hidden;
 }
 
