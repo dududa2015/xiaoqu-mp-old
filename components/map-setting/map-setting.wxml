@@ -15,16 +15,14 @@
     </view>
     <!-- 地图模式 -->
     <view class="setting">
-        <view class="row flex f-x-sb">
-            <view class="row-title">个人地图模式</view>
-            <view class="row-title">
-                <t-switch value="{{mapType === 2}}" slot="note" size="small" bind:change="onPersonalMapSwitch" />
-            </view>
+        <view class="row flex f-x-sb" bind:tap="onOpenMapSwitcher">
+            <view class="row-title">当前地图</view>
+            <view class="row-title map-name">{{mapName}}</view>
         </view>
-        <view class="row flex f-x-sb" wx:if="{{mapType === 2}}">
+        <view class="row flex f-x-sb" wx:if="{{mapType === 2 || mapType === 3}}">
             <view class="row-title">导入公共地图</view>
             <view class="row-title">
-                <t-switch value="{{includePublicMap}}" slot="note" size="small" bind:change="onMergePubMapSwitch" />
+                <t-switch value="{{includePublicMap}}" disabled="{{!canChangeIsPub}}" slot="note" size="small" bind:change="onMergePubMapSwitch" />
             </view>
         </view>
     </view>

@@ -1,0 +1,101 @@
+<view wx:if="{{loading}}" class="page-status">
+  <t-loading theme="circular" size="40rpx" text="加载中..." />
+</view>
+<view wx:elif="{{loadError}}" class="page-status">
+  <view class="page-status-text">加载失败</view>
+  <view class="page-status-retry" bind:tap="onRetry">重试</view>
+</view>
+<view class="content" wx:elif="{{map}}">
+  <t-cell-group class="group">
+    <t-cell wx:if="{{!editingName}}">
+      <view slot="title" class="name-main">
+        <text class="name-label">名称</text>
+        <text class="name-value">{{map.name}}</text>
+      </view>
+      <view wx:if="{{isOwner}}" slot="right-icon" class="name-edit-btn" catch:tap="onEditName">修改</view>
+    </t-cell>
+    <view wx:else class="name-editor">
+      <view class="name-editor-head">
+        <view class="name-editor-label">名称</view>
+        <view class="name-editor-hint">最多 10 字</view>
+      </view>
+      <input
+        class="name-editor-input"
+        value="{{nameValue}}"
+        maxlength="10"
+        focus="{{editingName}}"
+        bindinput="onNameChange"
+      />
+      <view class="name-editor-actions">
+        <view class="name-editor-btn" bind:tap="onCancelName">取消</view>
+        <view class="name-editor-btn name-editor-btn-ok" bind:tap="onSaveName">保存</view>
+      </view>
+    </view>
+    <t-cell
+      wx:if="{{isShared}}"
+      title="导入公共地图"
+      description="打开后，本图会叠上创建前的公共点"
+      note="{{isOwner ? '' : (isPub ? '已开启' : '未开启')}}"
+    >
+      <t-switch wx:if="{{isOwner}}" slot="note" value="{{isPub}}" size="small" bind:change="onIsPubChange" />
+    </t-cell>
+  </t-cell-group>
+
+  <block wx:if="{{isShared}}">
+    <t-cell-group class="group" title="成员（{{members.length}}人）">
+      <t-cell wx:if="{{canInvite}}" title="邀请成员" arrow hover bind:tap="onInviteTap" />
+      <t-cell
+        wx:for="{{members}}"
+        wx:key="userId"
+        arrow="{{canInvite && !item.isOwner}}"
+        hover="{{canInvite && !item.isOwner}}"
+        bind:tap="onMemberTap"
+        data-id="{{item.userId}}"
+        data-role="{{item.role}}"
+      >
+        <view slot="title" class="member-main">
+          <text class="member-name">{{item.nickName}}</text>
+          <t-tag size="small" class="role-tag" variant="light" theme="{{item.roleTheme}}">{{item.roleText}}</t-tag>
+        </view>
+      </t-cell>
+      <view wx:if="{{!hasOtherMembers}}" class="member-empty">还没有其他成员</view>
+    </t-cell-group>
+  </block>
+
+  <view class="actions">
+    <t-button wx:if="{{canLeave}}" theme="default" size="large" block bind:tap="onLeave">退出地图</t-button>
+    <t-button wx:if="{{canDelete}}" theme="danger" size="large" block bind:tap="onDelete">删除地图</t-button>
+  </view>
+</view>
+
+<t-action-sheet
+  visible="{{showInvite}}"
+  cancel-text="取消"
+  description="编辑可增删改标记，只读仅能查看。链接 7 天内有效。"
+  items="{{inviteSheetItems}}"
+  bind:cancel="onCloseInvite"
+  bind:visible-change="onInviteVisibleChange"
+>
+  <button
+    class="invite-sheet-item"
+    open-type="share"
+    data-role="editor"
+    disabled="{{!editorToken}}"
+  >邀请编辑</button>
+  <button
+    class="invite-sheet-item"
+    open-type="share"
+    data-role="viewer"
+    disabled="{{!viewerToken}}"
+  >邀请只读</button>
+</t-action-sheet>
+
+<t-action-sheet
+  visible="{{showMemberSheet}}"
+  cancel-text="取消"
+  description="{{memberSheetDesc}}"
+  items="{{memberSheetItems}}"
+  bind:selected="onMemberSheetSelected"
+  bind:cancel="onCloseMemberSheet"
+  bind:visible-change="onMemberSheetVisibleChange"
+/>

@@ -1,0 +1,201 @@
+.content {
+  padding: 24rpx;
+}
+
+.page-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 160rpx 32rpx;
+}
+
+.page-status-text {
+  font-size: 28rpx;
+  color: #808080;
+}
+
+.page-status-retry {
+  margin-top: 24rpx;
+  padding: 12rpx 40rpx;
+  border-radius: 32rpx;
+  background: #F3F4F6;
+  color: #0074FE;
+  font-size: 26rpx;
+}
+
+.group {
+  margin-bottom: 8rpx;
+  border-radius: 48rpx;
+  overflow: hidden;
+}
+
+.t-cell-group__title {
+  line-height: 48rpx;
+  background-color: transparent;
+  padding-left: 16rpx;
+}
+
+.t-cell-group__title.group {
+  margin-bottom: 8rpx;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.name-main {
+  display: flex;
+  align-items: center;
+}
+
+.name-label {
+  flex-shrink: 0;
+  margin-right: 64rpx;
+  font-size: 32rpx;
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.name-value {
+  flex: 1;
+  text-align: left;
+  font-size: 28rpx;
+  color: #111827;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.name-edit-btn {
+  min-width: 88rpx;
+  height: 52rpx;
+  padding: 0 20rpx;
+  border-radius: 26rpx;
+  background: #F3F4F6;
+  color: #6B7280;
+  font-size: 24rpx;
+  font-weight: 500;
+  line-height: 52rpx;
+  text-align: center;
+}
+
+.name-editor {
+  padding: 24rpx 32rpx 28rpx;
+  background: #fff;
+}
+
+.name-editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.name-editor-label {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 40rpx;
+}
+
+.name-editor-hint {
+  font-size: 22rpx;
+  color: #9CA3AF;
+  line-height: 40rpx;
+}
+
+.name-editor-input {
+  height: 80rpx;
+  margin-top: 16rpx;
+  padding: 0 24rpx;
+  border-radius: 16rpx;
+  background: #F5F6F8;
+  font-size: 30rpx;
+  color: #111827;
+}
+
+.name-editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20rpx;
+}
+
+.name-editor-btn {
+  min-width: 120rpx;
+  height: 64rpx;
+  margin-left: 16rpx;
+  border-radius: 32rpx;
+  background: #F3F4F6;
+  color: #4B5563;
+  font-size: 26rpx;
+  font-weight: 500;
+  line-height: 64rpx;
+  text-align: center;
+}
+
+.name-editor-btn-ok {
+  color: #fff;
+  background: #3CB371;
+}
+
+.invite-sheet-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 112rpx;
+  margin: 0;
+  padding: 0 32rpx;
+  border: none;
+  border-radius: 0;
+  background: #fff;
+  font-size: 32rpx;
+  font-weight: 400;
+  line-height: 112rpx;
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.invite-sheet-item::after {
+  border: none;
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background-color: #e7e7e7;
+  transform: scaleY(0.5);
+}
+
+.invite-sheet-item[disabled] {
+  color: rgba(0, 0, 0, 0.26);
+}
+
+.member-main {
+  display: flex;
+  align-items: center;
+}
+
+.member-name {
+  margin-right: 12rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.role-tag {
+  flex-shrink: 0;
+}
+
+.member-empty {
+  padding: 8rpx 32rpx 28rpx;
+  background: #fff;
+  font-size: 24rpx;
+  color: #9CA3AF;
+}
+
+.actions {
+  margin-top: 48rpx;
+}
+
+.actions t-button {
+  margin-bottom: 24rpx;
+}

@@ -8,9 +8,17 @@ import {
 } from '../../utils/apis'
 import {
   getPublicMarkerById,
-  getPersonalMarkerById,
-  submitPersonalMarkerOverride
+  getMapMarkerById
 } from '../../apis/marker-v2-api'
+import {
+  deleteMarker
+} from '../../apis/marker-apis'
+const {
+  getSession,
+  isPrivateMap,
+  canEditMarkers,
+  isMapViewer
+} = require('../../utils/map-session')
 import {
   getBicycleRoute
 } from '../../apis/amap-apis'
@@ -129,40 +137,46 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    resolveEditMode(mapType, result) {
-      if (mapType === 2 && result.markerScope === 'public') {
-        return 'override'
+    resolveEditMode(session, result) {
+      if (isPrivateMap(session) && result.markerScope === 'public') {
+        return 'fork'
+      }
+      if (result.markerScope === 'shared') {
+        return 'shared'
       }
       if (result.markerScope === 'personal') {
         return 'personal'
       }
       return 'public'
     },
-    resolvePermissions(mapType, result) {
+    resolvePermissions(session, result) {
       const userId = wx.getStorageSync('userId')
       const isLoggedIn = !!userId
       const isOwner = userId === result.userId
       const markerImages = this.normalizeMarkerImages(result.images)
       const hasMarkerImages = markerImages.length > 0
       const pendingReview = result.reviewStatus === 'pending' && result.isPersonalOverride
+      const sourceXId = result.sourceXId || result.SourceXId
+      const canEdit = canEditMarkers(session)
 
       let canEditUserMarker = false
       let canDeleteUserMarker = false
       let canRevokeOverride = false
       let showFeedback = isLoggedIn && !isOwner
 
-      if (mapType === 2) {
-        if (result.markerScope === 'personal' && isOwner) {
-          canEditUserMarker = true
-          canDeleteUserMarker = true
-          showFeedback = false
-        } else if (result.markerScope === 'public' && isLoggedIn && result.type < 6) {
-          canEditUserMarker = true
-          canDeleteUserMarker = false
-          showFeedback = false
-          if (result.isPersonalOverride) {
-            canRevokeOverride = true
-          }
+      if (isMapViewer(session)) {
+        canEditUserMarker = false
+        canDeleteUserMarker = false
+        showFeedback = false
+      } else if (isPrivateMap(session)) {
+        showFeedback = false
+        if (result.markerScope === 'public') {
+          canEditUserMarker = canEdit && result.type < 6
+          canDeleteUserMarker = canEdit
+        } else if (canEdit) {
+          canEditUserMarker = session.mapType === 3 || isOwner
+          canDeleteUserMarker = session.mapType === 3 || isOwner
+          canRevokeOverride = !!sourceXId
         }
       } else if (isOwner) {
         canEditUserMarker = true
@@ -170,13 +184,13 @@ Component({
         showFeedback = false
       }
 
-      if (hasMarkerImages && !isOwner && result.markerScope !== 'public') {
+      if (hasMarkerImages && !isOwner && result.markerScope !== 'public' && session.mapType !== 3) {
         canEditUserMarker = false
         canDeleteUserMarker = false
         showFeedback = false
       }
 
-      const editMode = this.resolveEditMode(mapType, result)
+      const editMode = this.resolveEditMode(session, result)
       return {
         canEditUserMarker,
         canDeleteUserMarker,
@@ -184,19 +198,20 @@ Component({
         showFeedback,
         markerImages,
         pendingReview,
-        editMode
+        editMode,
+        sourceXId
       }
     },
     getLouhao(xId) {
       const that = this
-      const mapType = wx.getStorageSync('mapType') || 1
-      if (mapType === 2 && !checkLoginAndNavigate()) {
+      const session = getSession()
+      if (isPrivateMap(session) && !checkLoginAndNavigate()) {
         return
       }
-      const fetchDetail = mapType === 2 ? getPersonalMarkerById : getPublicMarkerById
-      fetchDetail({
-        xId
-      }).then(res => {
+      const fetchDetail = isPrivateMap(session)
+        ? () => getMapMarkerById({ xId, mapId: session.mapId })
+        : () => getPublicMarkerById({ xId })
+      fetchDetail().then(res => {
         let result = res
         let remarkTagList = []
         let nickName = ''
@@ -212,14 +227,15 @@ Component({
         }
         nickName = result.nickName ? result.nickName : '匿名'
 
-        const perms = that.resolvePermissions(mapType, result)
+        const perms = that.resolvePermissions(session, result)
         if (perms.pendingReview) {
           remarkTagList.push('待审核')
         }
 
         this.poiInfo = {
           ...result,
-          editMode: perms.editMode
+          editMode: perms.editMode,
+          sourceXId: perms.sourceXId
         }
         that.showLouhao({
           latitude: result.lat,
@@ -490,20 +506,22 @@ Component({
       const that = this
       wx.showModal({
         title: '温馨提示',
-        content: '确认撤销对该公共标记的个人修改吗？',
+        content: '确认撤销修改并恢复公共原样吗？',
         success(res) {
           if (!res.confirm) {
             return
           }
-          submitPersonalMarkerOverride({
+          const session = getSession()
+          deleteMarker({
             xId: that.poiInfo.xId,
-            operation: 'hide'
+            userId: wx.getStorageSync('userId'),
+            mapId: session.mapId
           }).then(() => {
             wx.showToast({
               title: '已撤销修改',
             })
             that.triggerEvent('onRevokeOverride', that.poiInfo)
-          })
+          }).catch(() => {})
         }
       })
     },

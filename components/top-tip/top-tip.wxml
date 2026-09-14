@@ -1,5 +1,5 @@
 <view class="top-tip" wx:if="{{show}}">
-  <view class="top-tip__content" bind:tap="onClick">
+  <view class="top-tip__content">
     <t-notice-bar
       class="t-notice-bar_wrap"
       visible="{{true}}"

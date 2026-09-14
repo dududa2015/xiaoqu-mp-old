@@ -4,6 +4,7 @@ const { isHarmonyDevice } = require('./device')
 const HARMONY_DOWNLOAD_PAGE = '/pages/my/app/harmony/harmony'
 
 function tryShowHarmonyDownloadPrompt() {
+  return
   if (!isHarmonyDevice(getDeviceContext())) {
     return
   }

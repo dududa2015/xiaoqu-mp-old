@@ -35,9 +35,21 @@ import {
 } from '../../utils/apis'
 import {
   getPublicAroundList,
-  getPersonalAroundList,
-  getPublicMapSetting
+  getMapAroundList
 } from '../../apis/marker-v2-api'
+import {
+  joinMap,
+  hidePublicMarker,
+  getMapList
+} from '../../apis/map-api'
+const {
+  getSession,
+  applyMap,
+  canEditMarkers,
+  isPrivateMap,
+  normalizeMapList,
+  hydrateSessionFromList
+} = require('../../utils/map-session')
 import {
   deleteMarker
 } from '../../apis/marker-apis'
@@ -59,6 +71,8 @@ Page({
     currentCommunityId: '',
     // isSetLocMarkerIcon: false, //是否设置了定位点图标
     rect: {},
+    mapName: '公共地图',
+    mapType: 1,
     tips: '', //顶部的提示语
     position: 'right', //地图控件的展示位置，左和右
     showRedDot: false,
@@ -85,6 +99,8 @@ Page({
     headingFollowActive: false,
     bottom: 0,
     showAdd: true,
+    canAddMarker: true,
+    showMap: false,
     markers: [],
     show: false,
     polyline: [],
@@ -103,7 +119,7 @@ Page({
     quotaTipsUnlocked: false,
     freeUntilText: ''
   },
-  onLoad() {
+  onLoad(options) {
     this.getWindowInfo()
     this.getLocation()
     this.getPadding()
@@ -112,7 +128,9 @@ Page({
     //初始化配置
     this.initStorage()
     this.syncMapModeView()
+    this.hydrateMapSession()
     this.bindEntitlement()
+    this.handleInviteToken(options && options.inviteToken)
     // 看视频解锁今天：临时关闭
     // setTimeout(() => {
     //   this.initAd()
@@ -124,18 +142,90 @@ Page({
       tryShowHarmonyDownloadPrompt()
     }, 800)
   },
+  //对onLoad里的getWindowInfo做个补充
+  onReady(){
+    this.getWindowInfo()
+  },
   onShow() {
     this.syncMapModeView()
+    this.hydrateMapSession()
     this.amapSearch()
     this.openPlaceFromStorage()
     this.updateLocationGuide()
     this.syncEntitlementView(getSnapshot())
   },
   syncMapModeView() {
-    const mapType = parseInt(wx.getStorageSync('mapType'), 10) || 1
-    const mapName = mapType === 2 ? '个人地图' : '公共地图'
-    wx.setStorageSync('mapName', mapName)
-    this.setTabBarName(mapName)
+    const session = getSession()
+    this.setTabBarName(session.mapName)
+    this.setData({
+      canAddMarker: canEditMarkers(session),
+      mapName: session.mapName,
+      mapType: session.mapType
+    })
+  },
+  hydrateMapSession() {
+    if (!wx.getStorageSync('userInfo')) {
+      return
+    }
+    const session = getSession()
+    if (session.mapType === 1) {
+      return
+    }
+    getMapList({
+      userId: wx.getStorageSync('userId')
+    }).then(res => {
+      hydrateSessionFromList(normalizeMapList(res))
+      this.syncMapModeView()
+    }).catch(() => {})
+  },
+  handleInviteToken(inviteToken) {
+    if (!inviteToken) {
+      return
+    }
+    if (!wx.getStorageSync('userInfo')) {
+      wx.showToast({
+        title: '请先登录后再加入地图',
+        icon: 'none'
+      })
+      return
+    }
+    wx.showModal({
+      title: '加入共建地图',
+      content: '是否接受邀请并加入这张地图？',
+      success: (res) => {
+        if (!res.confirm) {
+          return
+        }
+        joinMap({
+          inviteToken
+        }).then(map => {
+          if (!map || !map.mapId) {
+            wx.showToast({
+              title: '加入失败',
+              icon: 'none'
+            })
+            return
+          }
+          applyMap(map)
+          this.syncMapModeView()
+          this.refreshCurrentAround()
+          wx.showToast({
+            title: '已加入'
+          })
+        }).catch(() => {})
+      }
+    })
+  },
+  refreshCurrentAround() {
+    this.setData({
+      markers: [],
+      polyline: []
+    })
+    const latitude = wx.getStorageSync('latitude')
+    const longitude = wx.getStorageSync('longitude')
+    if (latitude && longitude) {
+      this.getAroundList(latitude, longitude)
+    }
   },
   setTabBarName(mapName) {
     const text = mapName || wx.getStorageSync('mapName') || '公共地图'
@@ -702,10 +792,14 @@ Page({
         })
         wx.setStorageSync('latitude', latitude)
         wx.setStorageSync('longitude', longitude)
+        wx.setStorageSync('lastLatitude', latitude)
+        wx.setStorageSync('lastLongitude', longitude)
         that.getMapContext().moveToLocation({
           latitude,
           longitude
         })
+        that.getAroundList(latitude, longitude)
+        that.getAroundCommunityList(latitude, longitude)
       },
       fail() {
         that.showSettingDialog()
@@ -796,7 +890,7 @@ Page({
         wx.setStorageSync('lastLongitude', longitude)
         that.waitForUserInfo().then((userInfo) => {
           if (userInfo) {
-            that.syncPublicMapSetting()
+            that.syncMapModeView()
             that.getNotice()
             that.setData({
               tips: userInfo.remark,
@@ -811,7 +905,7 @@ Page({
           console.error('等待 userInfo 超时或失败:', err)
           const userInfo = wx.getStorageSync('userInfo')
           if (userInfo) {
-            that.syncPublicMapSetting()
+            that.syncMapModeView()
             that.getNotice()
             that.setData({
               tips: userInfo.remark,
@@ -1007,8 +1101,8 @@ Page({
     if (markerId.toString().startsWith('999')) {
       return
     }
-    const mapType = wx.getStorageSync('mapType') || 1
-    if (mapType === 2 && !checkLoginAndNavigate()) {
+    const session = getSession()
+    if (isPrivateMap(session) && !checkLoginAndNavigate()) {
       return
     }
     if (!this.ensureCoreAccess()) {
@@ -1371,9 +1465,10 @@ Page({
     wx.setStorageSync('videoType', 1)
     this.selectedMarker = event.detail
     const that = this
+    const isHide = event.detail && event.detail.editMode === 'fork'
     wx.showModal({
       title: '温馨提示',
-      content: '确认要删除吗？',
+      content: isHide ? '仅在本图隐藏，不影响公共地图' : '确认要删除吗？',
       success(res) {
         if (res.confirm) {
           that.onDelete()
@@ -1388,15 +1483,14 @@ Page({
       mask: true
     })
     const that = this
-    deleteMarker({
-      xId: that.selectedMarker.xId,
-      userId: wx.getStorageSync('userId')
-    }).then(res => {
-      if (res) {
+    const marker = that.selectedMarker || {}
+    const session = getSession()
+    const finish = (ok) => {
+      if (ok) {
         wx.showToast({
           title: '删除成功',
         })
-        that.deleteOneMarker(that.selectedMarker)
+        that.deleteOneMarker(marker)
         that.showTabBar()
         that.resetMap()
       } else {
@@ -1405,7 +1499,30 @@ Page({
           icon: 'error'
         })
       }
-    })
+    }
+    if (marker.editMode === 'fork') {
+      hidePublicMarker({
+        mapId: session.mapId,
+        xId: marker.xId
+      }).then(finish).catch(() => finish(false))
+      return
+    }
+    const payload = {
+      xId: marker.xId,
+      userId: wx.getStorageSync('userId')
+    }
+    if (session.mapId) {
+      payload.mapId = session.mapId
+    }
+    deleteMarker(payload).then(res => {
+      if (res && marker.sourceXId && session.mapId) {
+        return hidePublicMarker({
+          mapId: session.mapId,
+          xId: marker.sourceXId
+        }).then(() => res)
+      }
+      return res
+    }).then(finish).catch(() => finish(false))
   },
   //在删除时或者报错时调用，从地图中删除当前的点或线
   deleteOneMarker(poi) {
@@ -1428,15 +1545,18 @@ Page({
       return
     }
     const that = this
-    const mapType = wx.getStorageSync('mapType') || 1
-    if (mapType === 2 && !wx.getStorageSync('userInfo')) {
+    const session = getSession()
+    if (isPrivateMap(session) && !wx.getStorageSync('userInfo')) {
       return
     }
-    const fetchList = mapType === 2 ? getPersonalAroundList : getPublicAroundList
-    fetchList({
-      lng,
-      lat
-    }).then(res => {
+    if (isPrivateMap(session) && !session.mapId) {
+      return
+    }
+    const fetchList = isPrivateMap(session) ? getMapAroundList : getPublicAroundList
+    const params = isPrivateMap(session)
+      ? { lng, lat, mapId: session.mapId }
+      : { lng, lat }
+    fetchList(params).then(res => {
       let list = res
       if (Array.isArray(list) && list.length > 0) {
         that.deleteNearMarkers(list)
@@ -1446,7 +1566,7 @@ Page({
   },
   //获取周围的小区
   getAroundCommunityList(lat, lng) {
-    if (!canUseCoreFeatures()) {
+    if (!this.data.showCommunityDetail || !canUseCoreFeatures()) {
       return
     }
     getAroundCommunityList({
@@ -2057,17 +2177,18 @@ Page({
   },
   //个人地图选择
   onMapChange(e) {
-    let mapType = e.detail.mapType
-    let mapName = e.detail.mapName
-    wx.setStorageSync('mapType', mapType)
-    wx.setStorageSync('mapName', mapName)
+    const session = e.detail || getSession()
     this.setData({
       showUp: false,
       markers: [],
       polyline: [],
-      showMap: false
+      showMap: false,
+      showSetting: false,
+      canAddMarker: canEditMarkers(session),
+      mapName: session.mapName,
+      mapType: session.mapType
     })
-    this.setTabBarName(mapName)
+    this.setTabBarName(session.mapName)
     this.showTabBar()
     this.resetMap()
     const latitude = wx.getStorageSync('latitude')
@@ -2077,6 +2198,24 @@ Page({
     } else {
       this.getLocation()
     }
+  },
+  onOpenMapSwitcher() {
+    if (this.data.showMap) {
+      this.onMapClose()
+      return
+    }
+    if (!wx.getStorageSync('userInfo')) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      })
+      return
+    }
+    this.setData({
+      showSetting: false,
+      showMap: true
+    })
+    this.hideTabBar()
   },
   onRevokeOverride(event) {
     const poi = event.detail
@@ -2097,33 +2236,20 @@ Page({
   },
   //个人地图开关
   onMapTypeChange(e) {
-    let mapType = e.detail.mapType
-    let mapName = e.detail.mapName
-    wx.setStorageSync('mapType', mapType)
-    wx.setStorageSync('mapName', mapName)
+    const session = e.detail || getSession()
     this.setData({
       markers: [],
-      polyline: []
+      polyline: [],
+      canAddMarker: canEditMarkers(session),
+      mapName: session.mapName,
+      mapType: session.mapType
     })
-    this.setTabBarName(mapName)
+    this.setTabBarName(session.mapName)
     const latitude = wx.getStorageSync('latitude')
     const longitude = wx.getStorageSync('longitude')
     if (latitude && longitude) {
       this.getAroundList(latitude, longitude)
     }
-  },
-  syncPublicMapSetting() {
-    const userInfo = wx.getStorageSync('userInfo')
-    if (!userInfo) {
-      return
-    }
-    getPublicMapSetting().then(res => {
-      if (res && typeof res.includePublicMap === 'boolean') {
-        userInfo.includePublicMap = res.includePublicMap
-        userInfo.isPubMap = res.includePublicMap
-        wx.setStorageSync('userInfo', userInfo)
-      }
-    }).catch(() => {})
   },
   //打开设置
   onSetting() {
@@ -2302,7 +2428,8 @@ Page({
       showGrid: false,
       showAdd: true,
       showLocation: true,
-      showSetting: true
+      showSetting: false,
+      showMap: true
     })
     this.hideTabBar()
   },
@@ -2353,7 +2480,7 @@ Page({
     return {
       title: "小区楼号分布图",
       path: `/pages/index/index?userId=${wx.getStorageSync('userId')}`
-    };
+    }
   },
   onShareTimeline() {
 

@@ -3,7 +3,6 @@ const APP_NAME = '小区楼号'
 Page({
   data: {
     appName: APP_NAME,
-    navTitle: '华为应用市场下载',
     searchSectionTitle: '在华为应用市场中搜索',
     searchName: APP_NAME,
     searchTip: '点击复制后，在华为应用市场搜索框长按粘贴上述名称即可。',
@@ -14,10 +13,6 @@ Page({
     ],
     downloadUrl: 'https://appgallery.huawei.com/app/detail?id=com.louhao.xiaoqu&channelId=SHARE&source=appshare',
     linkTip: '若搜索不到，可复制链接到浏览器打开，跳转华为应用市场搜索。'
-  },
-
-  onLoad() {
-    wx.setNavigationBarTitle({ title: this.data.navTitle })
   },
 
   onCopy() {

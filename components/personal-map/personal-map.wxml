@@ -1,38 +1,88 @@
-<t-popup visible="{{showMap}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#F5F5F5;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx);">
+<t-popup visible="{{showMap}}" show-overlay="{{false}}" placement="bottom" touchmove="false" style="background:#F5F5F5;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx);">
     <view class="popup-title-wrap">
-        <view class="popup-title">个人地图</view>
+        <view class="popup-title">切换地图</view>
         <image src="/images/controls/cross.png" mode="" style="width: 40rpx; height: 40rpx;" bind:tap="onClose" />
     </view>
-    <view class="cell-wrap">
-        <view class="img-wrap" slot="image" style="background-color: #0074FE;">
+
+    <view class="cell-wrap" bind:tap="onChoosePublic">
+        <view class="img-wrap" style="background-color: #0074FE;">
             <t-icon name="map-information-2" size="48rpx" color="#fff" />
         </view>
-        <view class="title-wrap" bind:tap="onMapChoose" data-type="1" data-name="公共地图">
+        <view class="title-wrap">
             <view class="title {{ mapType === 1 ? 'current' : '' }}">公共地图</view>
-            <view class="desc">用户共建地图</view>
-        </view>
-        <view class="cell-right">
-            <!-- <view class="btn-wrap">
-                进入
-            </view> -->
-            <!-- <t-icon name="chevron-right" size="40rpx" color="#333"></t-icon> -->
+            <view class="desc">用户共建的公共楼号图</view>
         </view>
     </view>
-    <view class="cell-wrap">
-        <view class="img-wrap" slot="image" style="background-color: #E85827;">
+
+    <view class="cell-wrap" wx:if="{{personalMap}}" bind:tap="onChooseMap" data-kind="personal" data-id="{{personalMap.mapId}}">
+        <view class="img-wrap" style="background-color: #E85827;">
             <t-icon name="map-bubble" size="48rpx" color="#fff" />
         </view>
-        <view class="title-wrap" bind:tap="onMapChoose" data-type="2" data-name="个人地图">
-            <view class="title {{ mapType === 2 ? 'current_p' : '' }}">个人地图 </view>
-            <view class="desc">
-                <text wx:if="{{isPubMap}}">个人专属地图，已导入公共地图数据</text>
-                <text wx:else>个人专属地图，未导入公共地图数据</text>
-            </view>
+        <view class="title-wrap">
+            <view class="title {{ mapType === 2 && mapId == personalMap.mapId ? 'current_p' : '' }}">{{personalMap.name}}</view>
+            <view class="desc">{{personalMap.isPub ? '个人地图，已导入公共点' : '个人专属地图'}}</view>
         </view>
-        <view class="cell-right">
+        <view class="ispub-wrap" catch:tap="onPersonalSwitchTap">
+            <text class="ispub-label">导入公共点</text>
+            <t-switch value="{{personalMap.isPub}}" size="small" bind:change="onPersonalIsPubChange" />
         </view>
-        <view class="ellipsis" catchtap="onMapTap">
-            <image src="/images/my/ellipsis.png" mode="" class="ellipsis-img" />
+    </view>
+    <view class="cell-wrap" wx:else bind:tap="onCreate" data-kind="personal">
+        <view class="img-wrap" style="background-color: #E85827;">
+            <t-icon name="add" size="48rpx" color="#fff" />
+        </view>
+        <view class="title-wrap">
+            <view class="title">创建个人地图</view>
+            <view class="desc">每人只能创建一张，他人无法查看</view>
+        </view>
+    </view>
+
+    <view class="cell-wrap" wx:for="{{sharedList}}" wx:key="mapId" bind:tap="onChooseMap" data-kind="shared" data-id="{{item.mapId}}">
+        <view class="img-wrap" style="background-color: #3CB371;">
+            <t-icon name="usergroup" size="48rpx" color="#fff" />
+        </view>
+        <view class="title-wrap">
+            <view class="title {{ mapType === 3 && mapId == item.mapId ? 'current_s' : '' }}">{{item.name}}</view>
+            <view class="desc">{{item.role === 'owner' ? '我创建的共建地图' : (item.ownerNickName || '共建地图')}} · {{item.role === 'owner' ? '创建者' : (item.role === 'editor' ? '编辑' : '只读')}}</view>
+        </view>
+        <view class="manage-btn manage-btn-shared" catch:tap="onManage" data-id="{{item.mapId}}">
+            <t-icon name="setting" size="28rpx" color="#3CB371" />
+            <text>管理</text>
+        </view>
+    </view>
+
+    <view class="cell-wrap" wx:if="{{canCreateShared}}" bind:tap="onCreate" data-kind="shared">
+        <view class="img-wrap" style="background-color: #3CB371;">
+            <t-icon name="add" size="48rpx" color="#fff" />
+        </view>
+        <view class="title-wrap">
+            <view class="title">创建共建地图</view>
+            <view class="desc">每人只能创建一张，可邀请他人编辑</view>
+        </view>
+    </view>
+</t-popup>
+
+<t-popup visible="{{showForm}}" placement="center" bind:visible-change="onFormVisibleChange" style="--td-popup-bg-color: transparent; --td-popup-border-radius: 0;">
+    <view class="create-dialog {{formKind === 'shared' ? 'create-dialog-shared' : 'create-dialog-personal'}}">
+        <view class="create-icon">
+            <t-icon wx:if="{{formKind === 'shared'}}" name="usergroup" size="44rpx" color="#3CB371" />
+            <t-icon wx:else name="map-bubble" size="44rpx" color="#E85827" />
+        </view>
+        <view class="create-title">{{formKind === 'shared' ? '创建共建地图' : '创建个人地图'}}</view>
+        <view class="create-desc">{{formKind === 'shared' ? '每人只能创建一张，可邀请他人一起编辑' : '每人只能创建一张，仅自己可见'}}</view>
+        <view class="create-field">
+            <input
+                class="create-input"
+                value="{{inputValue}}"
+                placeholder="请输入地图名称"
+                maxlength="10"
+                bindinput="handleInput"
+            />
+            <text class="create-count">{{inputValue.length}}/16</text>
+        </view>
+        <view class="create-actions">
+            <view class="create-btn create-btn-cancel" bind:tap="onFormClose">取消</view>
+            <view class="create-btn create-btn-ok" bind:tap="onFormConfirm">创建</view>
         </view>
     </view>
 </t-popup>

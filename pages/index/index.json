@@ -2,6 +2,7 @@
   "usingComponents": {
     "top-tip": "/components/top-tip/top-tip",
     "top-bar": "/components/top-bar/top-bar",
+    "map-type-bar": "/components/map-type-bar/map-type-bar",
     "bottom-add": "/components/bottom-add/bottom-add",
     "bottom-location": "/components/bottom-location/bottom-location",
     "location-guide": "/components/location-guide/location-guide",
@@ -18,6 +19,7 @@
     "marker-add": "/components/marker-add/marker-add",
     "marker-add-grid": "/components/marker-add-grid/marker-add-grid",
     "map-setting": "/components/map-setting/map-setting",
+    "personal-map": "/components/personal-map/personal-map",
     "quota-tips": "/components/quota-tips/quota-tips"
   },
   "navigationBarTitleText": "小区楼号",

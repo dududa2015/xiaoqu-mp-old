@@ -1,0 +1,9 @@
+.content {
+  padding: 24rpx;
+}
+
+.manage {
+  font-size: 24rpx;
+  color: #0074FE;
+  padding: 0 8rpx;
+}

@@ -12,6 +12,8 @@
     "pages/my/newUser/newUser",
     "pages/my/markers/markers",
     "pages/my/places/places",
+    "pages/map/list/list",
+    "pages/map/manage/manage",
     "pages/my/app/ios/ios",
     "pages/my/app/android/android",
     "pages/my/app/harmony/harmony",

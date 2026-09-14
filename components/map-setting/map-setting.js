@@ -1,7 +1,10 @@
 import {
-  getPublicMapSetting,
-  setPublicMapSetting
-} from '../../apis/marker-v2-api'
+  updateMap
+} from '../../apis/map-api'
+const {
+  getSession,
+  canChangeIsPub
+} = require('../../utils/map-session')
 
 Component({
 
@@ -31,7 +34,10 @@ Component({
     showRedDot: false,
     showLocIconHelp: false,
     mapType: 1,
+    mapName: '公共地图',
+    mapRole: '',
     includePublicMap: false,
+    canChangeIsPub: false,
     locIconList: [{
       url: '/images/loc-marker/0.png',
     }, {
@@ -86,28 +92,14 @@ Component({
         })
         wx.setStorageSync('showCommunityDetail', true)
       }
-      const mapType = parseInt(wx.getStorageSync('mapType'), 10) || 1
-      const userInfo = wx.getStorageSync('userInfo') || {}
-      const includePublicMap = typeof userInfo.includePublicMap === 'boolean'
-        ? userInfo.includePublicMap
-        : !!userInfo.isPubMap
+      const session = getSession()
       this.setData({
-        mapType,
-        includePublicMap
+        mapType: session.mapType,
+        mapName: session.mapName,
+        mapRole: session.mapRole,
+        includePublicMap: !!session.isPub,
+        canChangeIsPub: canChangeIsPub(session)
       })
-      if (userInfo) {
-        this.fetchPublicMapSetting()
-      }
-    },
-    fetchPublicMapSetting() {
-      if (!wx.getStorageSync('userInfo')) {
-        return
-      }
-      getPublicMapSetting().then(res => {
-        if (res && typeof res.includePublicMap === 'boolean') {
-          this.updateUserInfoIncludePublicMap(res.includePublicMap)
-        }
-      }).catch(() => {})
     },
     ensureLoggedInForMapMode() {
       const userInfo = wx.getStorageSync('userInfo')
@@ -120,40 +112,17 @@ Component({
       })
       return false
     },
-    onPersonalMapSwitch(e) {
-      const wantPersonal = e.detail.value
-      if (wantPersonal && !this.ensureLoggedInForMapMode()) {
-        this.setData({
-          mapType: 1
-        })
+    onOpenMapSwitcher() {
+      if (!this.ensureLoggedInForMapMode()) {
         return
       }
-      const mapType = wantPersonal ? 2 : 1
-      const mapName = wantPersonal ? '个人地图' : '公共地图'
-      wx.setStorageSync('mapType', mapType)
-      wx.setStorageSync('mapName', mapName)
-      this.setData({
-        mapType
-      })
-      this.triggerEvent('onMapTypeChange', {
-        mapType,
-        mapName
-      })
+      this.triggerEvent('onOpenMapSwitcher')
     },
     onMergePubMapSwitch(e) {
       const next = e.detail.value
       const prev = !next
-      if (!this.ensureLoggedInForMapMode()) {
-        this.setData({
-          includePublicMap: prev
-        })
-        return
-      }
-      if (this.data.mapType !== 2) {
-        wx.showToast({
-          title: '请先切换到个人地图',
-          icon: 'none'
-        })
+      const session = getSession()
+      if (!this.ensureLoggedInForMapMode() || !canChangeIsPub(session) || !session.mapId) {
         this.setData({
           includePublicMap: prev
         })
@@ -167,19 +136,18 @@ Component({
         }
       })
     },
-    applyIncludePublicMap(includePublicMap) {
-      if (!this.ensureLoggedInForMapMode()) {
-        return Promise.resolve(false)
-      }
-      return setPublicMapSetting({
-        includePublicMap
+    applyIncludePublicMap(isPub) {
+      const session = getSession()
+      return updateMap({
+        mapId: session.mapId,
+        isPub
       }).then(res => {
         if (res !== false && res !== null) {
-          this.updateUserInfoIncludePublicMap(includePublicMap)
-          this.triggerEvent('onMapTypeChange', {
-            mapType: wx.getStorageSync('mapType'),
-            mapName: wx.getStorageSync('mapName')
+          wx.setStorageSync('mapIsPub', isPub)
+          this.setData({
+            includePublicMap: isPub
           })
+          this.triggerEvent('onMapTypeChange', getSession())
           return true
         }
         wx.showToast({
@@ -188,16 +156,6 @@ Component({
         })
         return false
       }).catch(() => false)
-    },
-    updateUserInfoIncludePublicMap(includePublicMap) {
-      const userInfo = wx.getStorageSync('userInfo')
-      if (!userInfo) return
-      userInfo.includePublicMap = includePublicMap
-      userInfo.isPubMap = includePublicMap
-      wx.setStorageSync('userInfo', userInfo)
-      this.setData({
-        includePublicMap
-      })
     },
     onClose() {
       this.triggerEvent('onSettingClose')

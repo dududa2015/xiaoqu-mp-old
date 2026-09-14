@@ -11,17 +11,19 @@
     <cover-image src="/images/controls/location-north-line-fill-64.png" class="heading-loc-icon" wx:if="{{locationFollowMode === 2 && !showCenterMarker}}"></cover-image>
     -->
   </map>
+  <map-type-bar mapName="{{mapName}}" mapType="{{mapType}}" opened="{{showMap}}" bind:switch="onOpenMapSwitcher"></map-type-bar>
   <top-tip noticeList="{{noticeList}}" id="topTip"></top-tip>
   <top-bar rect="{{rect}}" position="{{position}}" showRedDot="{{showRedDot}}" bind:onChooseLocation="onChooseLocation" bind:onSetting="onSetting"></top-bar>
   <!-- 底部添加和定位按钮 -->
-  <bottom-add position="{{position}}" bind:onAdd="onAdd" wx:if="{{showAdd}}"></bottom-add>
+  <bottom-add position="{{position}}" bind:onAdd="onAdd" wx:if="{{showAdd && canAddMarker}}"></bottom-add>
   <location-guide visible="{{showLocationGuide}}" position="{{position}}" bottom="{{bottom}}" bind:close="onLocationGuideClose"></location-guide>
   <bottom-location position="{{position}}" bottom="{{bottom}}" highlight="{{showLocationGuide}}" locationFollowMode="{{locationFollowMode}}" bind:onLocation="onLocationButtonTap" wx:if="{{showLocation}}"></bottom-location>
   <poi-detail id="poiDetail" showPOI="{{showPOI}}" xId="{{xId}}" poiDetail="{{poiDetail}}" windowInfo="{{windowInfo}}" bind:moveToCenter="moveToCenter" bind:getPolyline="getPolyline" bind:clearRoutePolyline="clearRoutePolyline" bind:requestRouteAd="onRequestRouteAd" bind:onDelete="onUserMarkerDelete" bind:onEdit="onUserMarkerEdit" bind:onRevokeOverride="onRevokeOverride" bind:onFeedback="onFeedback" bind:onClose="onClosePoi"></poi-detail>
   <marker-add-grid show="{{showGrid}}" bind:getMarkerTypeIndex="getMarkerTypeIndex" bind:createMap="createMap"></marker-add-grid>
   <marker-add markerTypeIndex="{{markerTypeIndex}}" showForm="{{showForm}}" showChooseMarker="{{showChooseMarker}}" markerDetail="{{markerDetail}}" mapCtx="{{mapCtx}}" bind:addUserMarkerByUser="addUserMarkerByUser" bind:updateUserMarkerByUser="updateUserMarkerByUser" bind:showBottomBar="showBottomBar" bind:onFormClose="onFormClose" bind:onChooseMarker="onChooseMarker" bind:onBackChooseMarker="onBackChooseMarker" bind:onFinishChooseMarker="onFinishChooseMarker" bind:onCancelChooseMarker="onCancelChooseMarker"></marker-add>
   <marker-feedback markerDetail="{{markerDetail}}" showFeedback="{{showFeedback}}" bind:onCloseFeedback="onCloseFeedback"></marker-feedback>
-  <map-setting id="mapSetting" showSetting="{{showSetting}}" bind:onSettingClose="onSettingClose" bind:onLocIcon="onLocIcon" bind:onSatellite="onSatellite" bind:mapChange="mapChange" bind:onMapTypeChange="onMapTypeChange" bind:onPosition="onPosition" bind:onRotate="onRotate" bind:onCommunityDetailChange="onCommunityDetailChange" bind:on3D="on3D"></map-setting>
+  <map-setting id="mapSetting" showSetting="{{showSetting}}" bind:onSettingClose="onSettingClose" bind:onLocIcon="onLocIcon" bind:onSatellite="onSatellite" bind:mapChange="mapChange" bind:onMapTypeChange="onMapTypeChange" bind:onOpenMapSwitcher="onOpenMapSwitcher" bind:onPosition="onPosition" bind:onRotate="onRotate" bind:onCommunityDetailChange="onCommunityDetailChange" bind:on3D="on3D"></map-setting>
+  <personal-map showMap="{{showMap}}" bind:onMapChange="onMapChange" bind:onMapClose="onMapClose" bind:onIsPubChange="onMapTypeChange" bind:onMapRefresh="onMapTypeChange"></personal-map>
   <view wx:if="{{quotaTipsLocked}}" class="map-lock-mask" catchtouchmove="preventMapMove"></view>
   <quota-tips visible="{{showQuotaTips}}" expanded="{{quotaTipsExpanded}}" locked="{{quotaTipsLocked}}" unlocked="{{quotaTipsUnlocked}}" deadlineText="{{freeUntilText}}" bind:play="onQuotaTipsPlay" bind:collapse="onQuotaTipsCollapse" bind:openvip="onQuotaTipsVip"></quota-tips>
 </view>

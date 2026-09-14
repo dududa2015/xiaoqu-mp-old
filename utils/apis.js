@@ -13,7 +13,7 @@ export const getAroundList = (params) => {
 // 向db中写一条楼号数据
 export const addMarker = (params) => {
     return request({
-        url: '/marker/addMarker',
+        url: params && params.mapId ? '/MarkerMapV2/addMarker' : '/marker/addMarker',
         data: params,
         method: 'POST',
     })
@@ -37,7 +37,7 @@ export const getMarkerById = (params) => {
 //修改
 export const updateMarker = (params) => {
     return request({
-        url: '/marker/updateMarker',
+        url: params && params.mapId ? '/MarkerMapV2/updateMarker' : '/marker/updateMarker',
         data: params,
         method: 'POST',
     })
@@ -45,7 +45,7 @@ export const updateMarker = (params) => {
 // 删除
 export const deleteMarker = (params) => {
     return request({
-        url: '/marker/deleteMarker',
+        url: params && params.mapId ? '/MarkerMapV2/deleteMarker' : '/marker/deleteMarker',
         data: params,
         method: 'POST',
     })

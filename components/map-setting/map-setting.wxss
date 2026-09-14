@@ -16,6 +16,11 @@
     line-height: 96rpx;
 }
 
+.map-name {
+    color: #808080;
+    font-size: 26rpx;
+}
+
 .map-mode-setting {
     margin-top: 24rpx;
 }

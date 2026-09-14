@@ -61,6 +61,9 @@ Component({
     },
 
     onClick() {
+      if (this.navigating) {
+        return
+      }
       const deviceContext = getDeviceContext()
       const { platform, model, brand = '' } = deviceContext
       const brandLower = String(brand).toLowerCase()
@@ -72,7 +75,15 @@ Component({
       } else if (brandLower.includes('vivo') || brandLower.includes('iqoo')) {
         url = '/pages/my/app/android/android?store=vivo'
       }
-      wx.navigateTo({ url })
+      this.navigating = true
+      wx.navigateTo({
+        url,
+        complete: () => {
+          setTimeout(() => {
+            this.navigating = false
+          }, 400)
+        }
+      })
     },
 
     onClose() {

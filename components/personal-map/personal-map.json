@@ -3,8 +3,6 @@
     "usingComponents": {
         "t-popup": "tdesign-miniprogram/popup/popup",
         "t-icon": "tdesign-miniprogram/icon/icon",
-        "t-swipe-cell": "tdesign-miniprogram/swipe-cell/swipe-cell",
-        "t-cell": "tdesign-miniprogram/cell/cell",
-        "t-input": "tdesign-miniprogram/input/input"
+        "t-switch": "tdesign-miniprogram/switch/switch"
     }
 }

@@ -10,8 +10,12 @@ import {
   updateMarker
 } from '../../utils/apis'
 import {
-  submitPersonalMarkerOverride
+  forkPublicMarker
 } from '../../apis/marker-v2-api'
+const {
+  getSession,
+  isPrivateMap
+} = require('../../utils/map-session')
 Component({
   /**
    * 组件的属性列表
@@ -674,9 +678,9 @@ Component({
       let deleted = checkString(this.data.name) ? 0 : -1
       let direction = this.getDirection()
       this.data.name = this.data.name + direction
-      let enableMap = wx.getStorageSync('enableMap')
       let mapType = wx.getStorageSync('mapType')
-      let isPersonal = mapType === 2 //1为公共地图，2为个人地图
+      let isPersonal = mapType === 2
+      const session = getSession()
       let param = {
         xId: uid,
         userId: wx.getStorageSync('userId'),
@@ -688,6 +692,10 @@ Component({
         lat: latitude,
         lng: longitude,
         isPersonal
+      }
+      if (isPrivateMap(session) && session.mapId) {
+        param.mapId = session.mapId
+        param.isPersonal = session.mapType === 2
       }
       const that = this
       addMarker(param).then(res => {
@@ -738,30 +746,31 @@ Component({
       const that = this
       const editMode = this.selectedMarker.editMode
 
-      if (editMode === 'override') {
-        submitPersonalMarkerOverride({
-          xId: this.selectedMarker.xId,
-          operation: 'update',
+      if (editMode === 'fork' || editMode === 'override') {
+        const session = getSession()
+        forkPublicMarker({
+          mapId: session.mapId,
+          sourceXId: this.selectedMarker.xId,
           type: this.data.markerTypeIndex,
           name: this.data.name,
           remark: this.getRemark(),
           lat: latitude,
-          lng: longitude
-        }).then(() => {
+          lng: longitude,
+          imageObjectKeys: this.getImageObjectKeys()
+        }).then((res) => {
+          const nextXId = (res && (res.xId || res)) || that.selectedMarker.xId
           wx.showToast({
-            title: '已提交，待审核',
+            title: '已修改',
           })
           that.triggerEvent('onFormClose')
           that.triggerEvent('updateUserMarkerByUser', {
-            xId: that.selectedMarker.xId,
+            xId: nextXId,
             name: that.data.name,
             longitude,
             latitude,
-            deleted: -1,
+            deleted: 0,
             markerTypeIndex: that.data.markerTypeIndex,
-            imageCount: that.getImageObjectKeys().length,
-            reviewStatus: 'pending',
-            isPersonalOverride: true
+            imageCount: that.getImageObjectKeys().length
           })
           that.resetForm()
           wx.showTabBar()
@@ -780,6 +789,7 @@ Component({
 
       let mapType = wx.getStorageSync('mapType')
       let isPersonal = mapType === 2
+      const session = getSession()
       let param = {
         xId: this.selectedMarker.xId,
         userId: this.selectedMarker.userId,
@@ -792,6 +802,10 @@ Component({
         lat: latitude,
         updateUserId: wx.getStorageSync('userId'),
         isPersonal
+      }
+      if (isPrivateMap(session) && session.mapId) {
+        param.mapId = session.mapId
+        param.isPersonal = session.mapType === 2
       }
       updateMarker(param).then(res => {
         wx.showToast({

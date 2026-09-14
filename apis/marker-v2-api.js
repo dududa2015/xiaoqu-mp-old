@@ -56,3 +56,27 @@ export const submitPersonalMarkerOverride = (params) => {
     method: 'POST',
   })
 }
+
+export const getMapAroundList = (params) => {
+  return request({
+    url: '/MarkerV2/getMapAroundList',
+    data: params,
+    method: 'GET',
+  })
+}
+
+export const getMapMarkerById = (params) => {
+  return request({
+    url: '/MarkerV2/getMapMarkerById',
+    data: params,
+    method: 'GET',
+  })
+}
+
+export const forkPublicMarker = (params) => {
+  return request({
+    url: '/marker/forkPublicMarker',
+    data: params,
+    method: 'POST',
+  })
+}

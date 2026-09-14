@@ -1,0 +1,8 @@
+<view class="map-type-bar" style="top: {{top}}px; height: {{height}}px;">
+  <view class="map-type-chip map-type-{{mapType}}" catch:tap="onTap">
+    <text class="map-type-text">{{mapName}}</text>
+    <view class="map-type-arrow {{opened ? 'map-type-arrow-up' : ''}}">
+      <t-icon name="chevron-down" size="28rpx" color="{{iconColor}}" />
+    </view>
+  </view>
+</view>

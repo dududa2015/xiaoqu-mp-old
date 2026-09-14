@@ -1,0 +1,57 @@
+.map-type-bar {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.map-type-chip {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 0 16rpx 0 20rpx;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 999rpx;
+  box-shadow: 0 4rpx 16rpx rgba(100, 101, 102, 0.12);
+}
+
+.map-type-text {
+  max-width: 360rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 28rpx;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.map-type-1 .map-type-text {
+  color: #0074FE;
+}
+
+.map-type-2 .map-type-text {
+  color: #E85827;
+}
+
+.map-type-3 .map-type-text {
+  color: #2E8B57;
+}
+
+.map-type-arrow {
+  display: flex;
+  align-items: center;
+  margin-left: 4rpx;
+  transform-origin: center center;
+  transform: rotate(0deg);
+  transition: transform 0.22s ease;
+}
+
+.map-type-arrow-up {
+  transform: rotate(180deg);
+}

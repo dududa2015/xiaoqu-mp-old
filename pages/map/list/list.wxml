@@ -1,0 +1,37 @@
+<view class="content">
+  <t-cell-group>
+    <t-cell title="公共地图" note="用户共建的公共楼号图" hover bind:tap="onChoosePublic">
+      <t-icon wx:if="{{mapType === 1}}" slot="note" name="check" color="#0074FE" />
+    </t-cell>
+    <t-cell
+      wx:if="{{personalMap}}"
+      title="{{personalMap.name}}"
+      note="{{personalMap.isPub ? '个人地图，已导入公共点' : '个人专属地图'}}"
+      hover
+      arrow
+      bind:tap="onChooseMap"
+      data-kind="personal"
+      data-id="{{personalMap.mapId}}"
+    >
+      <view slot="right-icon" class="manage" catch:tap="onManage" data-id="{{personalMap.mapId}}">管理</view>
+    </t-cell>
+    <t-cell wx:else title="创建个人地图" note="每人只能创建一张" hover bind:tap="onCreate" data-kind="personal" />
+  </t-cell-group>
+
+  <t-cell-group title="共建地图">
+    <t-cell
+      wx:for="{{sharedList}}"
+      wx:key="mapId"
+      title="{{item.name}}"
+      note="{{item.roleText}}"
+      hover
+      bind:tap="onChooseMap"
+      data-kind="shared"
+      data-id="{{item.mapId}}"
+    >
+      <view slot="right-icon" class="manage" catch:tap="onManage" data-id="{{item.mapId}}">管理</view>
+    </t-cell>
+    <t-cell wx:if="{{canCreateShared}}" title="创建共建地图" note="每人只能创建一张" hover bind:tap="onCreate" data-kind="shared" />
+    <t-cell wx:elif="{{sharedList.length === 0}}" title="暂无共建地图" />
+  </t-cell-group>
+</view>

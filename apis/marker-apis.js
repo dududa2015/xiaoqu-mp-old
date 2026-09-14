@@ -1,12 +1,13 @@
 import {
     request
 } from "../utils/request"
+import { getMapList as fetchMapList } from './map-api'
 
 
 //删除标记
 export const deleteMarker = (params) => {
     return request({
-        url: '/marker/deleteMarker',
+        url: params && params.mapId ? '/MarkerMapV2/deleteMarker' : '/marker/deleteMarker',
         data: params,
         method: 'POST',
     })
@@ -20,14 +21,7 @@ export const getMarkerListUpdate = (params) => {
     })
 }
 
-//获取个人地图列表
-export const getMapList = (params) => {
-    return request({
-        url: '/map/getMapList',
-        data: params,
-        method: 'GET',
-    })
-}
+export const getMapList = fetchMapList
 
 //批量审核不通过,不扣分 
 export const auditNotPassedList = (params) => {
