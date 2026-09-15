@@ -1,4 +1,4 @@
-<t-popup visible="{{visible}}" placement="center" bind:visible-change="onVisibleChange">
+<t-popup visible="{{visible}}" placement="center" bind:visible-change="onVisibleChange" style="--td-popup-border-radius: 48rpx;">
   <view class="notice">
     <text class="notice-title">浏览不再弹广告</text>
     <text class="notice-body">封面、插屏、格子广告已取消。核心功能现已取消每日时长与会员门槛，可全天使用。</text>

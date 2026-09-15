@@ -105,7 +105,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 8rpx 0 16rpx;
+  padding: 12rpx 0 12rpx;
   height: 108rpx;
   box-sizing: border-box;
 }
@@ -231,7 +231,7 @@
 .input-wrap {
   margin: 0 0;
   background-color: #fff;
-  border-radius: 16rpx;
+  border-radius: 48rpx;
   overflow: hidden;
 }
 

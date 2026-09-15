@@ -2,6 +2,17 @@
 const { checkLoginAndNavigate } = require('../../utils/util.js')
 const { isMpVip, buildMineVipExpiry } = require('../../utils/entitlement')
 
+function resolveNickName(nickName) {
+  if (nickName == null) {
+    return '请设置昵称'
+  }
+  const name = String(nickName).trim()
+  if (!name || /^null$/i.test(name)) {
+    return '请设置昵称'
+  }
+  return name
+}
+
 Component({
 
   /**
@@ -39,6 +50,7 @@ Component({
    * 组件的初始数据
    */
   data: {
+    displayNickName: '请设置昵称',
     vipExpiry: {
       visible: false,
       primaryText: '',
@@ -57,6 +69,7 @@ Component({
         const userId = newVal.userId.slice(-8)
         this.setData({
           userId,
+          displayNickName: resolveNickName(newVal.nickName),
           isVip: isMpVip(newVal),
           vipExpiry: buildMineVipExpiry(newVal),
           isAdmin: newVal.isAdmin,
@@ -71,6 +84,7 @@ Component({
 
       this.setData({
         userId: '',
+        displayNickName: '请设置昵称',
         isVip: false,
         vipExpiry: buildMineVipExpiry(null),
         isAdmin: false,

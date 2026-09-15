@@ -38,13 +38,13 @@
 
 .img-wrap {
   position: relative;
-  height: 44rpx;
+  height: 48rpx;
 }
 
 .img {
   position: relative;
-  width: 44rpx;
-  height: 44rpx;
+  width: 48rpx;
+  height: 48rpx;
   z-index: 0;
 }
 

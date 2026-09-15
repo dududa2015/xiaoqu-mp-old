@@ -1,4 +1,4 @@
-<t-popup visible="{{visible}}" placement="bottom" close-on-overlay-click="{{false}}" style="--td-popup-bg-color: transparent; --td-popup-border-radius: 0;">
+<t-popup visible="{{visible}}" placement="bottom" close-on-overlay-click="{{false}}" style="--td-popup-bg-color: transparent; --td-popup-border-radius: 0; box-shadow: none;">
   <view class="paywall">
     <view class="handle"></view>
     <view class="head">

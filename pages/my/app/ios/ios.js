@@ -5,27 +5,6 @@ Page({
      * 页面的初始数据
      */
     data: {
-        rightsList: [{
-            name: '免广告',
-            desc: '​​提供无干扰的流畅体验',
-            imgUrl: '/images/my/rights-noad.png'
-        }, {
-            name: '个人地图',
-            desc: '建立私人楼号数据库',
-            imgUrl: '/images/my/rights-map.png'
-        }, {
-            name: '跟随导航',
-            desc: '确保行进指引始终精准可视',
-            imgUrl: '/images/my/rights-nav.png'
-        }, {
-            name: '3D地图',
-            desc: '更直观、精准的地图',
-            imgUrl: '/images/my/rights-3d.png'
-        }, {
-            name: '定位图标',
-            desc: '在复杂地图环境中保持醒目美观',
-            imgUrl: '/images/my/rights-loc.png'
-        }],
         current: 0,
         autoplay: true,
         duration: 500,

@@ -1,7 +1,7 @@
 /* 白色容器 */
 .light-container {
   background: #fff;
-  border-radius: 36rpx 36rpx 0 0;
+  border-radius: 48rpx 48rpx 0 0;
   /* min-height: 72vh; */
 }
 

@@ -1,6 +1,6 @@
-<t-popup visible="{{show}}" show-overlay="{{false}}" placement="bottom" style="background: linear-gradient(to bottom, transparent, #fff 75%);">
-    <view class="marker-add-grid-wrap">
-        <view class="grid-wrap">
+<t-popup visible="{{show}}" show-overlay="{{false}}" placement="bottom" style="box-shadow:0 -12rpx 36rpx rgba(0,0,0,0.08);--td-popup-border-radius: 48rpx;">
+    <!-- <view class="marker-add-grid-wrap"> -->
+        <view class="marker-add-grid-wrap">
             <view class="grid-item" wx:for="{{pointList}}" wx:key="index" bind:tap="onChoose" data-index="{{index}}">
                 <view class="grid-img">
                     <view class="img-wrap" style="background-color: {{item.bgcolor}};">
@@ -25,6 +25,6 @@
                 </view>
             </view>
         </view> -->
-    </view>
+    <!-- </view> -->
 
 </t-popup>

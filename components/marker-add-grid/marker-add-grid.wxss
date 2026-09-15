@@ -1,13 +1,13 @@
-.marker-add-grid-wrap {
+/* .marker-add-grid-wrap {
     margin: 15rpx;
-}
+} */
 
-.grid-wrap {
+.marker-add-grid-wrap {
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
     padding: 48rpx 0 0 0;
-    border-radius: 32rpx;
+    border-radius: 48rpx;
     background-color: #fff;
 }
 

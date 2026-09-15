@@ -1,4 +1,4 @@
-<t-popup visible="{{showPOI}}" show-overlay="{{false}}" placement="bottom" style=" padding-left: 32rpx; padding-right: 32rpx; width: calc(100% - 64rpx);">
+<t-popup visible="{{showPOI}}" show-overlay="{{false}}" placement="bottom" style="padding-left: 32rpx; padding-right: 32rpx; width: calc(100% - 64rpx); --td-popup-border-radius: 48rpx;">
   <view class="poi-wrap">
     <view class="poi-close" bindtap="onClose">
       <t-icon name="close" size="28rpx" color="#4a5568" />

@@ -26,20 +26,20 @@
   } */
 .img-wrap-first {
     position: relative;
-    height: 44rpx;
+    height: 48rpx;
     padding: 0 16rpx;
 }
 
 .img-wrap {
     position: relative;
-    height: 44rpx;
+    height: 48rpx;
     padding: 12rpx 16rpx 0 16rpx;
 }
 
 .img {
     position: relative;
-    width: 44rpx;
-    height: 44rpx;
+    width: 48rpx;
+    height: 48rpx;
     z-index: 0;
 }
 .red-dot {
@@ -54,7 +54,7 @@
 }
 
 .text {
-    font-size: 20rpx;
+    font-size: 22rpx;
     font-weight: 600;
     color: #333;
     line-height: 36rpx;

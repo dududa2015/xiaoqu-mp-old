@@ -1,11 +1,3 @@
-import {
-  updateMap
-} from '../../apis/map-api'
-const {
-  getSession,
-  canChangeIsPub
-} = require('../../utils/map-session')
-
 Component({
 
   /**
@@ -33,11 +25,6 @@ Component({
     showCommunityDetail: true,
     showRedDot: false,
     showLocIconHelp: false,
-    mapType: 1,
-    mapName: '公共地图',
-    mapRole: '',
-    includePublicMap: false,
-    canChangeIsPub: false,
     locIconList: [{
       url: '/images/loc-marker/0.png',
     }, {
@@ -92,70 +79,6 @@ Component({
         })
         wx.setStorageSync('showCommunityDetail', true)
       }
-      const session = getSession()
-      this.setData({
-        mapType: session.mapType,
-        mapName: session.mapName,
-        mapRole: session.mapRole,
-        includePublicMap: !!session.isPub,
-        canChangeIsPub: canChangeIsPub(session)
-      })
-    },
-    ensureLoggedInForMapMode() {
-      const userInfo = wx.getStorageSync('userInfo')
-      if (userInfo) {
-        return true
-      }
-      wx.showToast({
-        title: '请先登录',
-        icon: 'none'
-      })
-      return false
-    },
-    onOpenMapSwitcher() {
-      if (!this.ensureLoggedInForMapMode()) {
-        return
-      }
-      this.triggerEvent('onOpenMapSwitcher')
-    },
-    onMergePubMapSwitch(e) {
-      const next = e.detail.value
-      const prev = !next
-      const session = getSession()
-      if (!this.ensureLoggedInForMapMode() || !canChangeIsPub(session) || !session.mapId) {
-        this.setData({
-          includePublicMap: prev
-        })
-        return
-      }
-      this.applyIncludePublicMap(next).then((ok) => {
-        if (!ok) {
-          this.setData({
-            includePublicMap: prev
-          })
-        }
-      })
-    },
-    applyIncludePublicMap(isPub) {
-      const session = getSession()
-      return updateMap({
-        mapId: session.mapId,
-        isPub
-      }).then(res => {
-        if (res !== false && res !== null) {
-          wx.setStorageSync('mapIsPub', isPub)
-          this.setData({
-            includePublicMap: isPub
-          })
-          this.triggerEvent('onMapTypeChange', getSession())
-          return true
-        }
-        wx.showToast({
-          title: '操作失败，请重试',
-          icon: 'none'
-        })
-        return false
-      }).catch(() => false)
     },
     onClose() {
       this.triggerEvent('onSettingClose')

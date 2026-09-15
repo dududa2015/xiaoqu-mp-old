@@ -1,4 +1,4 @@
-<t-popup visible="{{showMap}}" show-overlay="{{false}}" placement="bottom" touchmove="false" style="background:#F5F5F5;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx);">
+<t-popup visible="{{showMap}}" show-overlay="{{false}}" placement="bottom" touchmove="false" style="background:#F5F5F5;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx); --td-popup-border-radius: 48rpx; box-shadow: 0 -8rpx 24rpx rgba(0, 0, 0, 0.06);">
     <view class="popup-title-wrap">
         <view class="popup-title">切换地图</view>
         <image src="/images/controls/cross.png" mode="" style="width: 40rpx; height: 40rpx;" bind:tap="onClose" />
@@ -62,7 +62,7 @@
     </view>
 </t-popup>
 
-<t-popup visible="{{showForm}}" placement="center" bind:visible-change="onFormVisibleChange" style="--td-popup-bg-color: transparent; --td-popup-border-radius: 0;">
+<t-popup visible="{{showForm}}" placement="center" bind:visible-change="onFormVisibleChange" style="--td-popup-bg-color: transparent; --td-popup-border-radius: 0; box-shadow: none;">
     <view class="create-dialog {{formKind === 'shared' ? 'create-dialog-shared' : 'create-dialog-personal'}}">
         <view class="create-icon">
             <t-icon wx:if="{{formKind === 'shared'}}" name="usergroup" size="44rpx" color="#3CB371" />

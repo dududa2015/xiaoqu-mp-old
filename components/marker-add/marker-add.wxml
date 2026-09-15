@@ -19,7 +19,7 @@
   </view>
 </view>
 
-<t-popup visible="{{showForm}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#f5f5f5;padding-left:24rpx;padding-right:24rpx;width:calc(100% - 48rpx);box-shadow:0 -12rpx 36rpx rgba(0,0,0,0.08);">
+<t-popup visible="{{showForm}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#f5f5f5;padding-left:24rpx;padding-right:24rpx;width:calc(100% - 48rpx);box-shadow:0 -12rpx 36rpx rgba(0,0,0,0.08);--td-popup-border-radius: 48rpx;">
   <view class="form-wrap">
     <view class="form-header">
       <view class="form-header-slot form-header-slot--start">

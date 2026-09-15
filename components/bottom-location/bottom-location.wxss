@@ -34,6 +34,9 @@
   background-color: #fff;
   padding: 16rpx;
   border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .location-wrap-highlight {
@@ -55,15 +58,16 @@
 
 .img-wrap {
   position: relative;
-  width: 44rpx;
-  height: 44rpx;
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .img {
-  position: relative;
   width: 42rpx;
   height: 42rpx;
-  z-index: 0;
 }
 
 .text {

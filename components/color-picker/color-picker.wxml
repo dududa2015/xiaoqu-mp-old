@@ -1,4 +1,4 @@
-<t-popup visible="{{visible}}" placement="bottom" touchmove='false' bind:visible-change="onVisibleChange" style="background:#fff;padding:16rpx 32rpx 32rpx 32rpx; width: calc(100% - 64rpx);">
+<t-popup visible="{{visible}}" placement="bottom" touchmove='false' bind:visible-change="onVisibleChange" style="background:#fff;padding:16rpx 32rpx 32rpx 32rpx; width: calc(100% - 64rpx); --td-popup-border-radius: 48rpx;">
   <t-icon t-class="close-btn" name="close-circle" size="32" color="#fff" bind:tap="onFormClose" />
   <view class="title">标记颜色<text class="title-sub">(颜色对所有人可见)</text> </view>
   <view class="color-wrap">

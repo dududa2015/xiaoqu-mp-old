@@ -120,6 +120,10 @@ Page({
     freeUntilText: ''
   },
   onLoad(options) {
+    wx.setTabBarItem({
+      index: 0,
+      text: '小区楼号'
+    })
     this.getWindowInfo()
     this.getLocation()
     this.getPadding()
@@ -156,7 +160,6 @@ Page({
   },
   syncMapModeView() {
     const session = getSession()
-    this.setTabBarName(session.mapName)
     this.setData({
       canAddMarker: canEditMarkers(session),
       mapName: session.mapName,
@@ -226,13 +229,6 @@ Page({
     if (latitude && longitude) {
       this.getAroundList(latitude, longitude)
     }
-  },
-  setTabBarName(mapName) {
-    const text = mapName || wx.getStorageSync('mapName') || '公共地图'
-    wx.setTabBarItem({
-      index: 0,
-      text
-    })
   },
   onUnload() {
     this.stopLocationFollow()
@@ -2188,7 +2184,6 @@ Page({
       mapName: session.mapName,
       mapType: session.mapType
     })
-    this.setTabBarName(session.mapName)
     this.showTabBar()
     this.resetMap()
     const latitude = wx.getStorageSync('latitude')
@@ -2244,7 +2239,6 @@ Page({
       mapName: session.mapName,
       mapType: session.mapType
     })
-    this.setTabBarName(session.mapName)
     const latitude = wx.getStorageSync('latitude')
     const longitude = wx.getStorageSync('longitude')
     if (latitude && longitude) {
@@ -2409,8 +2403,8 @@ Page({
     } else {
       let bottom = 0
       if (typeIndex === 0) bottom = 520
-      else if (typeIndex === 1 || typeIndex === 3 || typeIndex === 4) bottom = 400
-      else bottom = 305
+      else if (typeIndex === 1 || typeIndex === 3 || typeIndex === 4) bottom = 420
+      else bottom = 320
       this.setData({
         bottom: bottom,
         showGrid: false,

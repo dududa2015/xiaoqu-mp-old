@@ -5,30 +5,35 @@
   <view class="page-status-text">加载失败</view>
   <view class="page-status-retry" bind:tap="onRetry">重试</view>
 </view>
-<view class="content" wx:elif="{{map}}">
-  <t-cell-group class="group">
-    <t-cell wx:if="{{!editingName}}">
-      <view slot="title" class="name-main">
-        <text class="name-label">名称</text>
-        <text class="name-value">{{map.name}}</text>
+<view class="page" wx:elif="{{map}}">
+  <scroll-view class="page-body" scroll-y enhanced show-scrollbar="{{false}}">
+    <t-cell-group class="group">
+    <t-cell
+      wx:if="{{!editingName}}"
+      title="名称"
+      note="{{map.name}}"
+      arrow="{{isOwner}}"
+      hover="{{isOwner}}"
+      bind:tap="onEditName"
+    />
+    <view class="edit-mode" wx:else>
+      <view class="edit-header">
+        <text class="edit-label">名称</text>
       </view>
-      <view wx:if="{{isOwner}}" slot="right-icon" class="name-edit-btn" catch:tap="onEditName">修改</view>
-    </t-cell>
-    <view wx:else class="name-editor">
-      <view class="name-editor-head">
-        <view class="name-editor-label">名称</view>
-        <view class="name-editor-hint">最多 10 字</view>
-      </view>
-      <input
-        class="name-editor-input"
-        value="{{nameValue}}"
-        maxlength="10"
-        focus="{{editingName}}"
-        bindinput="onNameChange"
-      />
-      <view class="name-editor-actions">
-        <view class="name-editor-btn" bind:tap="onCancelName">取消</view>
-        <view class="name-editor-btn name-editor-btn-ok" bind:tap="onSaveName">保存</view>
+      <view class="edit-content">
+        <input
+          class="edit-input"
+          value="{{nameValue}}"
+          maxlength="10"
+          placeholder="请输入名称"
+          focus="{{focusInput}}"
+          bindinput="onNameChange"
+          bindconfirm="onSaveName"
+        />
+        <view class="edit-actions">
+          <view class="edit-btn cancel-btn" bind:tap="onCancelName">取消</view>
+          <view class="edit-btn save-btn" bind:tap="onSaveName">保存</view>
+        </view>
       </view>
     </view>
     <t-cell
@@ -61,8 +66,9 @@
       <view wx:if="{{!hasOtherMembers}}" class="member-empty">还没有其他成员</view>
     </t-cell-group>
   </block>
+  </scroll-view>
 
-  <view class="actions">
+  <view class="actions" wx:if="{{canLeave || canDelete}}">
     <t-button wx:if="{{canLeave}}" theme="default" size="large" block bind:tap="onLeave">退出地图</t-button>
     <t-button wx:if="{{canDelete}}" theme="danger" size="large" block bind:tap="onDelete">删除地图</t-button>
   </view>
@@ -81,13 +87,13 @@
     open-type="share"
     data-role="editor"
     disabled="{{!editorToken}}"
-  >邀请编辑</button>
+  >邀请编辑成员</button>
   <button
     class="invite-sheet-item"
     open-type="share"
     data-role="viewer"
     disabled="{{!viewerToken}}"
-  >邀请只读</button>
+  >邀请只读成员</button>
 </t-action-sheet>
 
 <t-action-sheet

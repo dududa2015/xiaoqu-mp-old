@@ -1,4 +1,4 @@
-<t-popup visible="{{showSetting}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#F5F5F5;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx);">
+<t-popup visible="{{showSetting}}" show-overlay="{{false}}" placement="bottom" touchmove='false' style="background:#F5F5F5;padding-left: 24rpx; padding-right: 24rpx; width: calc(100% - 48rpx); --td-popup-border-radius: 48rpx; box-shadow: 0 -8rpx 24rpx rgba(0, 0, 0, 0.06);">
     <view class="close-btn" bind:tap="onClose">
         <image src="/images/controls/cross.png" mode="" style="width: 40rpx; height: 40rpx;" />
     </view>
@@ -13,20 +13,6 @@
             <view class="{{enableSatellite   ? 'text text-checked' : 'text'}}">卫星地图</view>
         </view>
     </view>
-    <!-- 地图模式 -->
-    <view class="setting">
-        <view class="row flex f-x-sb" bind:tap="onOpenMapSwitcher">
-            <view class="row-title">当前地图</view>
-            <view class="row-title map-name">{{mapName}}</view>
-        </view>
-        <view class="row flex f-x-sb" wx:if="{{mapType === 2 || mapType === 3}}">
-            <view class="row-title">导入公共地图</view>
-            <view class="row-title">
-                <t-switch value="{{includePublicMap}}" disabled="{{!canChangeIsPub}}" slot="note" size="small" bind:change="onMergePubMapSwitch" />
-            </view>
-        </view>
-    </view>
-
     <!-- 位置、形状、旋转设置 -->
     <view class="setting">
         <view class="row flex f-x-sb">

@@ -1,4 +1,4 @@
-<t-popup visible="{{visible}}" show-overlay="{{false}}" placement="bottom" bind:visible-change="onVisibleChange" style="height:96vh;width:100%;">
+<t-popup visible="{{visible}}" show-overlay="{{false}}" placement="bottom" bind:visible-change="onVisibleChange" style="height:96vh;width:100%;--td-popup-border-radius: 48rpx;">
   <view class="sheet">
     <view class="form-header">
       <view class="form-header-slot form-header-slot--start">

@@ -11,6 +11,8 @@ page {
   --td-cell-title-font-size: 32rpx;
   --td-cell-vertical-padding: 24rpx 32rpx;
   --td-popup-border-radius: 48rpx;
+  --td-action-sheet-border-radius: 48rpx;
+  --td-dialog-border-radius: 48rpx;
   --td-radius-extra-large: 48rpx;
   /* --td-font-size-m: 28rpx; */
   --td-cell-title-font-size: 28rpx;
@@ -48,11 +50,30 @@ page {
 }
 
 .t-popup {
-  /* box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .1); */
+  --td-popup-border-radius: 48rpx;
+}
+
+.t-popup--top {
+  border-bottom-left-radius: 48rpx;
+  border-bottom-right-radius: 48rpx;
 }
 
 .t-popup--bottom {
   padding-bottom: 32rpx !important;
+  border-top-left-radius: 48rpx;
+  border-top-right-radius: 48rpx;
+  box-shadow: 0 -8rpx 24rpx rgba(0, 0, 0, 0.06);
+}
+
+.t-popup--center {
+  border-radius: 48rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
+}
+
+.t-action-sheet__content {
+  border-top-left-radius: 48rpx;
+  border-top-right-radius: 48rpx;
+  box-shadow: 0 -8rpx 24rpx rgba(0, 0, 0, 0.06);
 }
 
 .t-cell-group {

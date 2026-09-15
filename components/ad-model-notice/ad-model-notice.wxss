@@ -2,7 +2,7 @@
   width: 600rpx;
   padding: 48rpx 40rpx 40rpx;
   background: #fff;
-  border-radius: 32rpx;
+  border-radius: 48rpx;
 }
 
 .notice-title {

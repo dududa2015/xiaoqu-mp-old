@@ -1,4 +1,4 @@
-<t-popup visible="{{visible}}" prevent-scroll-through="{{false}}" bind:visible-change="onVisibleChange" placement="bottom">
+<t-popup visible="{{visible}}" prevent-scroll-through="{{false}}" bind:visible-change="onVisibleChange" placement="bottom" style="--td-popup-border-radius: 48rpx;">
   <view class="light-container">
     <!-- 头部 -->
     <view class="header-bar">

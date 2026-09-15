@@ -1,4 +1,4 @@
-<t-popup visible="{{visible}}" placement="center" bind:visible-change="onVisibleChange" style="--td-popup-bg-color: transparent; --td-popup-border-radius: 0;">
+<t-popup visible="{{visible}}" placement="center" bind:visible-change="onVisibleChange" style="--td-popup-bg-color: transparent; --td-popup-border-radius: 0; box-shadow: none;">
   <view class="sheet">
     <view class="hero">
       <view class="hero-icon">

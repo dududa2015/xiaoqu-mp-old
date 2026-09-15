@@ -35,6 +35,7 @@ Page({
     members: [],
     nameValue: '',
     editingName: false,
+    focusInput: false,
     isPub: false,
     isShared: false,
     isOwner: false,
@@ -141,6 +142,7 @@ Page({
       members,
       nameValue: keepNameEdit ? this.data.nameValue : map.name,
       editingName: keepNameEdit,
+      focusInput: keepNameEdit ? this.data.focusInput : false,
       isPub: !!map.isPub,
       isShared,
       isOwner,
@@ -205,12 +207,18 @@ Page({
       editingName: true,
       nameValue: this.savedName || this.data.map.name
     })
+    setTimeout(() => {
+      this.setData({
+        focusInput: true
+      })
+    }, 100)
   },
 
   onCancelName() {
     this.setData({
       editingName: false,
-      nameValue: this.savedName
+      nameValue: this.savedName,
+      focusInput: false
     })
   },
 
@@ -228,7 +236,8 @@ Page({
     }
     if (name === this.savedName) {
       this.setData({
-        editingName: false
+        editingName: false,
+        focusInput: false
       })
       return
     }
@@ -248,6 +257,7 @@ Page({
         map: next,
         nameValue: next.name,
         editingName: false,
+        focusInput: false,
         saving: false
       })
       this.syncIfCurrent(next)
@@ -500,13 +510,13 @@ Page({
       return {
         title: `邀请你加入《${name}》${role === 'viewer' ? '（只读）' : '（编辑）'}`,
         path: `/pages/index/index?inviteToken=${token}`,
-        imageUrl: '/images/share/invite-shared.png'
+        imageUrl: 'https://a-ho-img.dtstatic.com/uploads/blog_hw/202609/15/P5So8NqAfb20Pb1.png'
       }
     }
     return {
       title: name,
       path: '/pages/index/index',
-      imageUrl: '/images/share/invite-shared.png'
+      imageUrl: 'https://a-ho-img.dtstatic.com/uploads/blog_hw/202609/15/P5So8NqAfb20Pb1.png'
     }
   }
 })
