@@ -16,11 +16,11 @@
       <t-cell title="使用帮助" hover arrow url="/pages/help/help/help">
         <t-icon name="help-circle" size="44rpx" color="#E85827" class="left-icon" slot="left-icon" />
       </t-cell>
-      <t-cell title="客户服务" hover arrow url="/pages/my/customerService/customerService">
+      <!-- <t-cell title="客户服务" hover arrow url="/pages/my/customerService/customerService">
         <t-icon name="service" size="40rpx" color="#0074FE" class="left-icon" slot="left-icon" />
-      </t-cell>
+      </t-cell> -->
     </t-cell-group>
-      <t-cell-group style="margin-top: 24rpx;border-radius: 48rpx; overflow: hidden;">
+      <!-- <t-cell-group style="margin-top: 24rpx;border-radius: 48rpx; overflow: hidden;">
       <t-cell hover arrow url="/pages/my/app/ios/ios">
         <text slot="title" class="download-title-ios">苹果App下载</text>
         <t-icon name="logo-apple" size="40rpx" color="#007AFF" class="left-icon" slot="left-icon" />
@@ -33,6 +33,6 @@
         <text slot="title" class="download-title-harmony">鸿蒙App下载</text>
         <t-icon name="download" size="40rpx" color="#CF0A2C" class="left-icon" slot="left-icon" />
       </t-cell>
-    </t-cell-group>
+    </t-cell-group> -->
   </view>
 </view>
