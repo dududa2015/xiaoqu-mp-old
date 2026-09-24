@@ -41,6 +41,19 @@ const STORE_CONFIG = {
     downloadUrl: 'https://h5.appstore.vivo.com.cn/#/search?keyword=小区楼号',
     linkTip: '若搜索不到，可复制链接到浏览器打开。建议在 vivo / iQOO 手机上打开。'
   },
+  honor: {
+    navTitle: '荣耀应用市场下载',
+    searchSectionTitle: '在荣耀应用市场中搜索',
+    searchName: APP_NAME,
+    searchTip: '点击复制后，在荣耀应用市场搜索框长按粘贴上述名称即可。',
+    installSteps: [
+      '打开手机「应用市场」',
+      '点击搜索框，粘贴已复制的「小区楼号」',
+      '在搜索结果中点击「安装」，按提示完成下载'
+    ],
+    downloadUrl: `https://appgallery.hihonor.com/app/detail?id=${PACKAGE_NAME}`,
+    linkTip: '若搜索不到，可复制链接到浏览器打开。建议在荣耀手机上打开。'
+  },
   default: {
     navTitle: '应用宝下载',
     searchSectionTitle: '在应用宝中搜索',
@@ -69,6 +82,10 @@ function getAndroidStoreType(brand = '') {
 
   if (brandLower.includes('vivo') || brandLower.includes('iqoo')) {
     return 'vivo'
+  }
+
+  if (brandLower.includes('honor')) {
+    return 'honor'
   }
 
   return 'default'

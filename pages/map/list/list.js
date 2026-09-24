@@ -54,7 +54,8 @@ Page({
   },
 
   onChoosePublic() {
-    applyPublic()
+    const session = applyPublic()
+    this.showSwitchToast(session)
     wx.switchTab({
       url: '/pages/index/index'
     })
@@ -69,9 +70,18 @@ Page({
     if (!map) {
       return
     }
-    applyMap(map)
+    const session = applyMap(map)
+    this.showSwitchToast(session)
     wx.switchTab({
       url: '/pages/index/index'
+    })
+  },
+
+  showSwitchToast(session) {
+    const name = (session && session.mapName) || '该地图'
+    wx.showToast({
+      title: `已切换到${name}`,
+      icon: 'none'
     })
   },
 

@@ -57,8 +57,22 @@
 } */
 
 .edit-mode {
+  position: relative;
   background: #ffffff;
   padding: 32rpx;
+}
+
+.edit-mode::after {
+  position: absolute;
+  box-sizing: border-box;
+  content: ' ';
+  pointer-events: none;
+  bottom: 0;
+  left: var(--td-cell-border-left-space, var(--td-cell-horizontal-padding, 32rpx));
+  right: var(--td-cell-border-right-space, 0);
+  border-bottom: var(--td-cell-border-width, 1px) solid var(--td-cell-border-color, var(--td-component-stroke, var(--td-gray-color-3, #e7e7e7)));
+  transform: scaleY(0.5);
+  transform-origin: bottom;
 }
 
 .edit-header {

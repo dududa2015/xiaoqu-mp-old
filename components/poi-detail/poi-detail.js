@@ -71,6 +71,8 @@ Component({
             canDeleteUserMarker: false,
             canRevokeOverride: false,
             showFeedback: false,
+            showFavoriteButton: false,
+            isFavorite: false,
             duration: 0,
             distance: 0,
             markerImages: [],

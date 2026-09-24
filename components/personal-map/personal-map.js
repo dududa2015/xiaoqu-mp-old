@@ -77,6 +77,7 @@ Component({
         mapType: session.mapType,
         mapId: ''
       })
+      this.showSwitchToast(session)
       this.triggerEvent('onMapChange', session)
     },
     onChooseMap(e) {
@@ -96,7 +97,15 @@ Component({
         mapType: session.mapType,
         mapId: session.mapId
       })
+      this.showSwitchToast(session)
       this.triggerEvent('onMapChange', session)
+    },
+    showSwitchToast(session) {
+      const name = (session && session.mapName) || '该地图'
+      wx.showToast({
+        title: `已切换到${name}`,
+        icon: 'none'
+      })
     },
     onCreate(e) {
       if (!checkLoginAndNavigate()) {

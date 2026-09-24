@@ -19,14 +19,14 @@
       <view class="dot"></view>
       <text class="bullet-text">使用当前微信授权登录后，标记、收藏会同步到该账号。</text>
     </view>
-    <view class="bullet">
+    <!-- <view class="bullet">
       <view class="dot"></view>
       <text class="bullet-text">小程序会员仅在微信小程序内有效，不能用于 App。</text>
-    </view>
+    </view> 
     <view class="bullet">
       <view class="dot"></view>
       <text class="bullet-text">核心功能现已取消每日时长与会员门槛，可全天使用。</text>
-    </view>
+    </view>-->
   </view>
 
   <view class="card pad">
@@ -64,7 +64,7 @@
       </view>
       <view class="row-main">
         <text class="row-title">安卓 App</text>
-        <text class="row-summary">应用宝 / 小米 / OPPO / VIVO</text>
+        <text class="row-summary">小米、OPPO、vivo、荣耀应用商店搜索「小区楼号」</text>
       </view>
       <text class="row-arrow">›</text>
     </view>

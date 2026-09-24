@@ -37,7 +37,7 @@ Component({
       const modelLower = model.toLowerCase()
       const brandLower = brand.toLowerCase()
 
-      if (isHarmonyDevice(systemInfo)) {
+      if (isHarmonyDevice(systemInfo) && !brandLower.includes('honor')) {
         return { notice: '鸿蒙 App 已上线，欢迎下载 →' }
       }
 
@@ -57,6 +57,10 @@ Component({
         return { notice: 'vivo 应用商店已上架，欢迎下载 →' }
       }
 
+      if (brandLower.includes('honor')) {
+        return { notice: '荣耀应用市场已上架，欢迎下载 →' }
+      }
+
       return { notice: '安卓 App 已上线，欢迎下载 →' }
     },
 
@@ -68,12 +72,14 @@ Component({
       const { platform, model, brand = '' } = deviceContext
       const brandLower = String(brand).toLowerCase()
       let url = '/pages/my/app/android/android'
-      if (isHarmonyDevice(deviceContext)) {
+      if (isHarmonyDevice(deviceContext) && !brandLower.includes('honor')) {
         url = '/pages/my/app/harmony/harmony'
       } else if (platform === 'ios' || model.indexOf('iPhone') > -1) {
         url = '/pages/my/app/ios/ios'
       } else if (brandLower.includes('vivo') || brandLower.includes('iqoo')) {
         url = '/pages/my/app/android/android?store=vivo'
+      } else if (brandLower.includes('honor')) {
+        url = '/pages/my/app/android/android?store=honor'
       }
       this.navigating = true
       wx.navigateTo({

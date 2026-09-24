@@ -10,7 +10,9 @@ import {
   buildMarkers,
   buildPolyline,
   buildPolygon,
-  applyMarkerSelectedStyle
+  applyMarkerSelectedStyle,
+  toSafeMarkerId,
+  markerRawId
 } from '../../utils/map'
 import { tryShowHarmonyDownloadPrompt } from '../../utils/harmony-download-prompt'
 import {
@@ -1068,6 +1070,8 @@ Page({
   onLabelTap(e) {
     console.log(e)
     let markerId = e.detail.markerId
+    const tappedMarker = (this.data.markers || []).find(item => item.id === markerId)
+    const rawId = markerRawId(tappedMarker || markerId)
     if (this.data.showForm || this.disableTap || this.data.showChooseMarker || this.data.showFeedback || this.data.showVipExpired || this.data.quotaTipsLocked) {
       return
     }
@@ -1077,24 +1081,25 @@ Page({
       return
     }
     //如果为888开头，说明是小区的标记
-    if (markerId.toString().startsWith('888')) {
+    if (rawId.startsWith('888')) {
       if (!this.ensureCoreAccess()) {
         return
       }
-      const communityId = markerId.toString()
       this.setData({
-        currentCommunityId: communityId
+        currentCommunityId: rawId
       })
-      if (!this.data.showCommunityDetail) {
-        this.clearCommunityDetail()
-        return
+      this.openCommunityPoiPopup(tappedMarker, '小区')
+      if (this.data.showCommunityDetail) {
+        this.getCommunityFullDetail(rawId)
       }
-      this.clearCommunityDetail()
-      this.getCommunityFullDetail(communityId)
       return
     }
-    //如果为999开头，说明是小区门的标记，不查询详情
-    if (markerId.toString().startsWith('999')) {
+    //如果为999开头，说明是小区出入口
+    if (rawId.startsWith('999')) {
+      if (!this.ensureCoreAccess()) {
+        return
+      }
+      this.openCommunityPoiPopup(tappedMarker, '出入口')
       return
     }
     const session = getSession()
@@ -1107,8 +1112,9 @@ Page({
     this.hideTabBar()
     this.resetMarker()
     this.resetPolyline()
+    const detailXId = parseInt(rawId, 10)
     this.setData({
-      xId: e.detail.markerId,
+      xId: Number.isFinite(detailXId) && detailXId > 0 ? detailXId : markerId,
       showPOI: true,
       showAdd: false,
       showLocation: false,
@@ -1124,6 +1130,27 @@ Page({
       lng
     }).then(res => {
       console.log(res)
+    })
+  },
+  getCommunityMarkerName(marker, fallbackName) {
+    const content = (marker && marker.label && marker.label.content)
+      || (marker && marker.callout && marker.callout.content)
+      || ''
+    return String(content).replace(/^🏠︎/, '') || fallbackName || '小区'
+  },
+  openCommunityPoiPopup(marker, fallbackName) {
+    this.hideTabBar()
+    this.setData({
+      xId: 0,
+      poiDetail: {
+        latitude: marker ? marker.latitude : this.data.latitude,
+        longitude: marker ? marker.longitude : this.data.longitude,
+        name: this.getCommunityMarkerName(marker, fallbackName)
+      },
+      showPOI: true,
+      showAdd: false,
+      showLocation: false,
+      showGrid: false
     })
   },
   //根据id获取小区详情
@@ -1391,7 +1418,7 @@ Page({
   },
   // 清理小区边界和出入口
   clearCommunityDetail() {
-    const markers = (this.data.markers || []).filter(item => !String(item.id).startsWith('999'))
+    const markers = (this.data.markers || []).filter(item => !markerRawId(item).startsWith('999'))
     this.setData({
       polygons: [],
       markers
@@ -1416,7 +1443,7 @@ Page({
     })
     let markers = []
     this.data.markers.forEach(element => {
-      if (!element.id.toString().startsWith('999')) {
+      if (!markerRawId(element).startsWith('999')) {
         markers.push(element)
       }
     });
@@ -1586,7 +1613,10 @@ Page({
         //每次只显示一个小区的边界和出入口
         let markers = this.data.markers
         if (Array.isArray(markers) && markers.length > 0) {
-          markers = markers.filter(item => !String(item.id).startsWith('888') && !String(item.id).startsWith('999'))
+          markers = markers.filter(item => {
+            const key = markerRawId(item)
+            return !key.startsWith('888') && !key.startsWith('999')
+          })
         } else {
           markers = []
         }
@@ -1663,8 +1693,10 @@ Page({
     let polyline = this.data.polyline
     for (const item of list) {
       const selectedId = this.data.showPOI && this.data.xId > 0 ? parseInt(this.data.xId, 10) : 0
-      const isSelected = selectedId > 0 && parseInt(item.xId, 10) === selectedId
-      let marker = buildMarkers(item.lat, item.lng, parseInt(item.xId), item.name, item.type, item.userId, item.deleted, isSelected, item.imageCount, item.images, item.reviewStatus, item.isPersonalOverride)
+      const safeId = toSafeMarkerId(item.xId)
+      const isSelected = selectedId > 0 && safeId === selectedId
+      let marker = buildMarkers(item.lat, item.lng, safeId, item.name, item.type, item.userId, item.deleted, isSelected, item.imageCount, item.images, item.reviewStatus, item.isPersonalOverride)
+      marker.rawXId = String(item.xId)
       marker.markerScope = item.markerScope
       marker.reviewStatus = item.reviewStatus
       marker.isPersonalOverride = item.isPersonalOverride

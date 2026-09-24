@@ -16,6 +16,34 @@ function formatMarkerDisplayName(name, imageCount, images) {
   return name
 }
 
+function hashString(str) {
+  let hash = 5381
+  const text = String(str || '')
+  for (let i = 0; i < text.length; i++) {
+    hash = ((hash << 5) + hash) + text.charCodeAt(i)
+    hash |= 0
+  }
+  return Math.abs(hash)
+}
+
+function toSafeMarkerId(xId) {
+  const str = String(xId ?? '')
+  // 仅压缩小区名/出入口这类超长 id，普通标记保持原 xId，避免详情查错
+  if (str.startsWith('888') || str.startsWith('999')) {
+    const hashed = hashString(str) % 1000000
+    return (str.startsWith('888') ? 888000000 : 999000000) + hashed
+  }
+  const num = parseInt(str, 10)
+  return Number.isFinite(num) ? num : 1
+}
+
+function markerRawId(markerOrId) {
+  if (markerOrId && typeof markerOrId === 'object') {
+    return String(markerOrId.rawXId || markerOrId.id || '')
+  }
+  return String(markerOrId ?? '')
+}
+
 const MARKER_LABEL_FONT_SIZE = 11
 const MARKER_LABEL_FONT_SIZE_SELECTED = 14
 const MARKER_LABEL_PADDING = 3
@@ -198,5 +226,7 @@ module.exports = {
   buildPolygon,
   applyMarkerSelectedStyle,
   formatMarkerDisplayName,
-  resolveImageCount
+  resolveImageCount,
+  toSafeMarkerId,
+  markerRawId
 }

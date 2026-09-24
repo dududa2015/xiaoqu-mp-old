@@ -25,7 +25,7 @@
           class="edit-input"
           value="{{nameValue}}"
           maxlength="10"
-          placeholder="请输入名称"
+          placeholder="请输入名称(最多10字)"
           focus="{{focusInput}}"
           bindinput="onNameChange"
           bindconfirm="onSaveName"
