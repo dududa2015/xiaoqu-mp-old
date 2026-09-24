@@ -16,13 +16,6 @@ Page({
         url: ANDROID_DOWNLOAD_URL,
         tip: '复制后请在手机浏览器中打开',
         copyToast: '链接已复制，请在浏览器中打开'
-      },
-      {
-        key: 'harmony',
-        label: '鸿蒙（华为应用市场）',
-        url: HARMONY_DOWNLOAD_URL,
-        tip: '复制后可在浏览器中打开并跳转应用市场',
-        copyToast: '链接已复制，请在浏览器中打开'
       }
     ]
   },
