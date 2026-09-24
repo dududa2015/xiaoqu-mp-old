@@ -1,0 +1,102 @@
+.root {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0);
+  pointer-events: none;
+}
+
+.mask-show {
+  background: rgba(0, 0, 0, 0.28);
+  pointer-events: auto;
+}
+
+.panel {
+  position: absolute;
+  left: 24rpx;
+  right: 24rpx;
+  bottom: calc(24rpx + env(safe-area-inset-bottom));
+  padding: 16rpx 32rpx 32rpx;
+  border-radius: 40rpx;
+  background: #ffffff;
+  transform: translateY(120%);
+  pointer-events: auto;
+}
+
+.panel-worklet {
+  transform: translateY(0);
+}
+
+.panel-open {
+  transform: translateY(0);
+  transition: transform 260ms ease;
+}
+
+.handle-wrap {
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.handle {
+  width: 72rpx;
+  height: 8rpx;
+  border-radius: 8rpx;
+  background: #d8d8d8;
+}
+
+.title {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.4;
+}
+
+.subtitle {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: rgba(0, 0, 0, 0.45);
+  line-height: 1.4;
+}
+
+.actions {
+  margin-top: 28rpx;
+  display: flex;
+  flex-direction: row;
+}
+
+.btn {
+  flex: 1;
+  height: 80rpx;
+  border-radius: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+}
+
+.btn-ghost {
+  margin-right: 16rpx;
+  background: #f3f4f6;
+  color: #333;
+}
+
+.btn-primary {
+  background: #0074fe;
+  color: #ffffff;
+}

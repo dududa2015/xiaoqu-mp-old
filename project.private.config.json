@@ -1,0 +1,10 @@
+{
+  "description": "Skyline 演示私有配置",
+  "projectname": "xiaoqu-skyline",
+  "setting": {
+    "compileHotReLoad": true,
+    "skylineRenderEnable": true,
+    "compileWorklet": true
+  },
+  "libVersion": "3.13.2"
+}

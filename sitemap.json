@@ -1,0 +1,9 @@
+{
+  "desc": "Skyline demo",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}

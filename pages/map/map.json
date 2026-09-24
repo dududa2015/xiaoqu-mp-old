@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "Skyline 地图演示",
+  "disableScroll": true,
+  "renderer": "skyline",
+  "componentFramework": "glass-easel",
+  "usingComponents": {
+    "skyline-poi-sheet": "/components/skyline-poi-sheet/skyline-poi-sheet"
+  }
+}

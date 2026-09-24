@@ -1,0 +1,35 @@
+<view class="page">
+  <map
+    id="skylineMap"
+    class="map"
+    latitude="{{latitude}}"
+    longitude="{{longitude}}"
+    scale="{{scale}}"
+    markers="{{markers}}"
+    show-location="{{true}}"
+    enable-scroll="{{true}}"
+    enable-zoom="{{true}}"
+    bindmarkertap="onMarkerTap"
+    bindlabeltap="onMarkerTap"
+    bindcallouttap="onMarkerTap"
+  />
+
+  <view class="hud">
+    <view class="hud-tag">Skyline</view>
+    <text class="hud-text">空分支演示 · 点标记看详情，下拉关闭</text>
+  </view>
+
+  <view class="locate-btn" bind:tap="onLocate">
+    <text class="locate-icon">◎</text>
+    <text class="locate-text">定位</text>
+  </view>
+
+  <skyline-poi-sheet
+    visible="{{showSheet}}"
+    title="{{sheetTitle}}"
+    subtitle="{{sheetSubtitle}}"
+    latitude="{{sheetLat}}"
+    longitude="{{sheetLng}}"
+    bind:close="onSheetClose"
+  />
+</view>

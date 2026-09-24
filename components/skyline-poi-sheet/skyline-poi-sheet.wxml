@@ -1,0 +1,16 @@
+<view class="root">
+  <view class="mask {{visible ? 'mask-show' : ''}}" bind:tap="onClose"></view>
+  <vertical-drag-gesture-handler worklet:ongesture="handlePan">
+    <view class="panel {{useWorklet ? 'panel-worklet' : ''}} {{visible && !useWorklet ? 'panel-open' : ''}}">
+      <view class="handle-wrap">
+        <view class="handle"></view>
+      </view>
+      <text class="title">{{title || '详情'}}</text>
+      <text class="subtitle">{{subtitle}}</text>
+      <view class="actions">
+        <view class="btn btn-ghost" bind:tap="onClose">关闭</view>
+        <view class="btn btn-primary" bind:tap="onOpenLocation">导航</view>
+      </view>
+    </view>
+  </vertical-drag-gesture-handler>
+</view>
