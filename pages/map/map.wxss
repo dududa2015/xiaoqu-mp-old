@@ -1,8 +1,54 @@
 .page {
+  position: fixed;
+  left: 0;
+  top: 0;
   width: 100%;
   height: 100vh;
-  position: relative;
-  background: #f5f5f5;
+}
+
+.map-chip {
+  position: absolute;
+  left: 50%;
+  z-index: 6;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-width: 560rpx;
+  min-height: 64rpx;
+  padding: 12rpx 24rpx;
+  box-sizing: border-box;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 999rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
+}
+
+.map-chip.is-disabled {
+  opacity: 0.45;
+}
+
+.map-chip-name {
+  font-size: 26rpx;
+  font-weight: 600;
+  line-height: 36rpx;
+  color: #111;
+}
+
+.map-chip-role {
+  flex-shrink: 0;
+  margin-left: 8rpx;
+  font-size: 20rpx;
+  color: #888;
+}
+
+.map-chip-chevron {
+  flex-shrink: 0;
+  width: 32rpx;
+  height: 32rpx;
+  margin-left: 4rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .map {
@@ -10,56 +56,163 @@
   height: 100%;
 }
 
-.hud {
+.form-pin {
   position: absolute;
-  top: calc(16rpx + env(safe-area-inset-top));
-  left: 24rpx;
-  right: 24rpx;
-  padding: 16rpx 24rpx;
-  border-radius: 24rpx;
-  background: rgba(255, 255, 255, 0.92);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.hud-tag {
-  padding: 4rpx 12rpx;
-  margin-right: 12rpx;
-  border-radius: 8rpx;
-  background: #0074fe;
-  color: #fff;
-  font-size: 22rpx;
-  font-weight: 600;
-}
-
-.hud-text {
-  flex: 1;
-  font-size: 24rpx;
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.locate-btn {
-  position: absolute;
-  right: 24rpx;
-  bottom: calc(280rpx + env(safe-area-inset-bottom));
+  left: 50%;
+  top: 50%;
   width: 96rpx;
   height: 96rpx;
-  border-radius: 48rpx;
-  background: #ffffff;
+  margin-left: -48rpx;
+  margin-top: -96rpx;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.draw-bar {
+  position: absolute;
+  left: 50%;
+  bottom: calc(24rpx + env(safe-area-inset-bottom));
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 520rpx;
+  margin-left: -260rpx;
+  padding: 12rpx 8rpx;
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 32rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.12);
+}
+
+.draw-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 112rpx;
 }
 
-.locate-icon {
-  font-size: 28rpx;
-  color: #0074fe;
+.draw-text {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  color: #333;
+}
+
+.draw-text.is-road {
+  color: #3CB371;
+  font-weight: 600;
+}
+
+.draw-text.is-wall {
+  color: #dc143c;
+  font-weight: 600;
+}
+
+.popup-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.popup-sheet.is-front {
+  z-index: 5;
+}
+
+.poi-sheet.is-open .sheet-scroll {
+  pointer-events: auto;
+}
+
+.sheet-scroll {
+  height: 100%;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(32px) saturate(180%);
+  border-top-left-radius: 44rpx;
+  border-top-right-radius: 44rpx;
+  box-shadow: 0 -10rpx 40rpx rgba(0, 0, 0, 0.08);
+}
+
+.sheet-inner {
+  padding: 12rpx 36rpx calc(200rpx + env(safe-area-inset-bottom));
+}
+
+.sheet-handle {
+  width: 72rpx;
+  height: 8rpx;
+  margin: 10rpx auto 28rpx;
+  border-radius: 8rpx;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.sheet-title {
+  display: block;
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #111111;
   line-height: 1.2;
 }
 
-.locate-text {
-  font-size: 20rpx;
-  color: #333;
+.sheet-subtitle {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  color: rgba(0, 0, 0, 0.4);
+  line-height: 1.4;
+}
+
+.sheet-actions {
+  margin-top: 36rpx;
+  display: flex;
+  flex-direction: row;
+}
+
+.sheet-btn {
+  flex: 1;
+  margin: 0;
+  height: 84rpx;
+  line-height: 84rpx;
+  border-radius: 42rpx;
+  font-size: 28rpx;
+  font-weight: 560;
+  background: rgba(120, 120, 128, 0.12);
+  color: #111111;
+}
+
+.sheet-btn::after {
+  border: none;
+}
+
+.sheet-btn + .sheet-btn {
+  margin-left: 16rpx;
+}
+
+.sheet-btn-primary {
+  background: #111111;
+  color: #ffffff;
+}
+
+.sheet-block {
+  margin-top: 24rpx;
+  padding: 28rpx;
+  border-radius: 28rpx;
+  background: rgba(120, 120, 128, 0.08);
+}
+
+.sheet-block-title {
+  display: block;
+  font-size: 22rpx;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.38);
+}
+
+.sheet-block-text {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 28rpx;
+  color: #111111;
+  line-height: 1.55;
 }

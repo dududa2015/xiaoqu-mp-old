@@ -1,0 +1,56 @@
+.t-segmented {
+  display: inline-block;
+  padding: 4rpx;
+  background-color: #eeeeee;
+  border-radius: 8rpx;
+}
+
+.t-segmented--block {
+  display: flex;
+  width: 100%;
+}
+
+.t-segmented__group {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100%;
+}
+
+.t-segmented__thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #ffffff;
+  border-radius: 999rpx;
+}
+
+.t-segmented__item {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  padding: 6rpx 24rpx;
+  text-align: center;
+  font-size: 28rpx;
+  line-height: 44rpx;
+  color: rgba(0, 0, 0, 0.9);
+}
+
+.t-segmented--block .t-segmented__item {
+  flex: 1;
+  min-width: 0;
+}
+
+.t-segmented__item-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.t-segmented__item--active {
+  font-weight: 600;
+  color: #0074fe;
+}

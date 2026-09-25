@@ -1,12 +1,46 @@
 {
   "pages": [
-    "pages/map/map"
+    "pages/map/map",
+    "pages/open-location/open-location",
+    "pages/profile/profile",
+    "pages/profile-edit/edit",
+    "pages/account-cancel/cancel",
+    "pages/my-markers/markers",
+    "pages/help/help",
+    "pages/help-detail/help-detail",
+    "pages/customer-service/customer-service",
+    "pages/app-download/download",
+    "pages/map-manage/manage",
+    "pages/test/test"
   ],
   "window": {
+    "navigationStyle": "custom",
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "Skyline 演示",
     "navigationBarBackgroundColor": "#ffffff",
     "backgroundColor": "#f5f5f5"
+  },
+  "usingComponents": {},
+  "tabBar": {
+    "custom": true,
+    "color": "#8E8E93",
+    "selectedColor": "#111111",
+    "backgroundColor": "#00000000",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/map/map",
+        "text": "地图",
+        "iconPath": "images/tabs/home.png",
+        "selectedIconPath": "images/tabs/home_select.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/tabs/my.png",
+        "selectedIconPath": "images/tabs/my_select.png"
+      }
+    ]
   },
   "lazyCodeLoading": "requiredComponents",
   "renderer": "skyline",
@@ -27,7 +61,8 @@
     }
   },
   "requiredPrivateInfos": [
-    "getLocation"
+    "getLocation",
+    "chooseLocation"
   ],
   "sitemapLocation": "sitemap.json"
 }

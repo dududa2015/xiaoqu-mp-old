@@ -1,0 +1,46 @@
+<view class="page">
+  <view class="nav" style="padding-top: {{statusBarHeight}}px; height: {{navBarHeight}}px;">
+    <view class="nav-back" bindtap="onBack">
+      <t-icon name="chevron-left" size="48rpx" color="#111" />
+    </view>
+    <text class="nav-title">帮助详情</text>
+  </view>
+  <scroll-view class="body" scroll-y="{{true}}" show-scrollbar="{{false}}">
+    <view class="content" wx:if="{{section}}">
+      <view class="group article">
+        <text class="title">{{section.title}}</text>
+        <text class="summary" wx:if="{{section.summary}}">{{section.summary}}</text>
+        <block wx:for="{{section.blocks}}" wx:key="key">
+          <text wx:if="{{item.type === 'h3'}}" class="h3">{{item.title}}</text>
+          <text wx:elif="{{item.type === 'p'}}" class="p">{{item.text}}</text>
+          <text wx:elif="{{item.type === 'note'}}" class="note">{{item.text}}</text>
+          <block wx:elif="{{item.type === 'bullets'}}">
+            <text class="li" wx:for="{{item.items}}" wx:for-item="li" wx:key="*this">• {{li}}</text>
+          </block>
+          <block wx:elif="{{item.type === 'numbered'}}">
+            <text class="li" wx:for="{{item.items}}" wx:for-item="li" wx:for-index="nIndex" wx:key="*this">{{nIndex + 1}}. {{li}}</text>
+          </block>
+        </block>
+      </view>
+      <view wx:if="{{related.length}}">
+        <text class="group-label">相关主题</text>
+        <view class="group">
+          <view
+            wx:for="{{related}}"
+            wx:key="id"
+            class="row {{index < related.length - 1 ? '' : 'row-last'}}"
+            data-id="{{item.id}}"
+            bindtap="onRelated"
+          >
+            <view class="main">
+              <text class="row-title">{{item.title}}</text>
+              <text class="row-sub">{{item.summary}}</text>
+            </view>
+            <t-icon name="chevron-right" size="36rpx" color="#c7c7cc" />
+          </view>
+        </view>
+      </view>
+    </view>
+    <text class="empty" wx:else>没有找到这篇帮助</text>
+  </scroll-view>
+</view>

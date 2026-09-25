@@ -1,0 +1,109 @@
+<view class="host">
+<view class="mask {{show ? 'is-on' : ''}}" bindtap="onClose"></view>
+  <draggable-sheet
+  class="sheet-host"
+  initial-child-size="{{0}}"
+  min-child-size="{{0}}"
+  max-child-size="{{sheetSize}}"
+  snap="{{true}}"
+  snap-sizes="{{[sheetSize]}}"
+  worklet:onsizeupdate="onSheetSizeUpdate"
+>
+  <scroll-view
+    class="sheet-scroll {{sheetOpened ? 'is-open' : ''}}"
+    scroll-y="{{true}}"
+    type="list"
+    associative-container="draggable-sheet"
+    bounces="{{false}}"
+    show-scrollbar="{{false}}"
+    bindtap="onSheetBlankTap"
+  >
+    <view class="sheet-card" catchtap="onSheetCardTap">
+      <view class="form-header">
+        <view class="form-header-slot form-header-slot--start">
+          <view class="ios-toolbar-btn" bindtap="onClose" hover-class="ios-toolbar-btn--pressed" hover-stay-time="80">
+            <text class="ios-toolbar-btn__label">关闭</text>
+          </view>
+        </view>
+        <view class="form-header-slot form-header-slot--center">
+          <text class="form-header-title">{{displayTitle}}</text>
+        </view>
+        <view class="form-header-slot form-header-slot--end">
+          <view wx:if="{{showDeleteAction}}" class="ios-toolbar-btn" bindtap="onDeleteTap" hover-class="ios-toolbar-btn--pressed" hover-stay-time="80">
+            <text class="ios-toolbar-btn__label" style="color: #e34d59;">删除</text>
+          </view>
+          <view wx:elif="{{showUnfavoriteAction}}" class="ios-toolbar-btn" bindtap="onUnfavoriteTap" hover-class="ios-toolbar-btn--pressed" hover-stay-time="80">
+            <text class="ios-toolbar-btn__label" style="color: #0074FE;">取消收藏</text>
+          </view>
+        </view>
+      </view>
+      <view class="content">
+        <text class="hint" wx:if="{{loading}}">加载标记详情</text>
+        <block wx:else>
+          <view class="group map-card">
+            <map
+              wx:if="{{hasRenderableMap}}"
+              class="map-preview"
+              latitude="{{latitude}}"
+              longitude="{{longitude}}"
+              markers="{{markers}}"
+              polyline="{{polyline}}"
+              scale="16"
+              enable-scroll="{{false}}"
+              enable-zoom="{{false}}"
+            />
+            <view class="empty-map" wx:else>
+              <text class="empty-title">暂无位置信息</text>
+              <text class="empty-desc">该记录缺少坐标或折线数据</text>
+            </view>
+          </view>
+
+          <view class="group photo-card" wx:if="{{markerImages.length}}">
+            <text class="photo-label">照片 · {{markerImages.length}}张</text>
+            <scroll-view class="photo-scroll" scroll-x="{{true}}" show-scrollbar="{{false}}">
+              <view class="photo-row">
+                <image
+                  wx:for="{{markerImages}}"
+                  wx:key="full"
+                  class="photo"
+                  mode="aspectFill"
+                  src="{{item.thumb}}"
+                  data-index="{{index}}"
+                  bindtap="onPreviewImage"
+                />
+              </view>
+            </scroll-view>
+          </view>
+
+          <view class="group">
+            <view class="row">
+              <text class="label">类型</text>
+              <text class="tag" style="color: {{typeColor}}; background-color: {{typeBg}};">{{typeName}}</text>
+            </view>
+            <view class="row">
+              <text class="label">经度</text>
+              <text class="value">{{lngText}}</text>
+            </view>
+            <view class="row">
+              <text class="label">纬度</text>
+              <text class="value">{{latText}}</text>
+            </view>
+            <view class="row {{deletedDateText ? '' : 'row-last'}}">
+              <text class="label">创建时间</text>
+              <text class="value">{{createdDateText}}</text>
+            </view>
+            <view class="row row-last" wx:if="{{deletedDateText}}">
+              <text class="label">删除时间</text>
+              <text class="value">{{deletedDateText}}</text>
+            </view>
+          </view>
+
+          <view class="action" wx:if="{{showMapActionBar}}">
+            <view class="map-btn {{canOpenOnMap ? '' : 'is-off'}}" bindtap="onOpenOnMap">在地图上查看</view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </scroll-view>
+</draggable-sheet>
+</view>

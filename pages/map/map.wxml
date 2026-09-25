@@ -6,30 +6,90 @@
     longitude="{{longitude}}"
     scale="{{scale}}"
     markers="{{markers}}"
+    polygons="{{polygons}}"
+    polyline="{{polyline}}"
     show-location="{{true}}"
+    enable-satellite="{{enableSatellite}}"
+    enable-rotate="{{enableRotate}}"
     enable-scroll="{{true}}"
     enable-zoom="{{true}}"
+    bindtap="onMapTap"
     bindmarkertap="onMarkerTap"
     bindlabeltap="onMarkerTap"
     bindcallouttap="onMarkerTap"
+    bindpoitap="onPoiTap"
+    bindregionchange="onRegionChange"
   />
 
-  <view class="hud">
-    <view class="hud-tag">Skyline</view>
-    <text class="hud-text">空分支演示 · 点标记看详情，下拉关闭</text>
+  <view class="map-chip {{showAddForm || drawing ? 'is-disabled' : ''}}" style="top: {{capsuleTop}}px;" bindtap="onMapChip">
+    <text class="map-chip-name">{{mapName}}</text>
+    <text class="map-chip-role" wx:if="{{!canAdd}}">只读</text>
+    <view id="mapChipChevron" class="map-chip-chevron">
+      <t-icon name="chevron-down" size="32rpx" color="#111" />
+    </view>
   </view>
 
-  <view class="locate-btn" bind:tap="onLocate">
-    <text class="locate-icon">◎</text>
-    <text class="locate-text">定位</text>
+  <map-tools position="{{controlPosition}}" setting-disabled="{{showAddForm || drawing}}" search-disabled="{{showAddForm || drawing}}" bind:search="onSearchTap" bind:setting="onSettingTap" />
+
+  <image class="form-pin" wx:if="{{drawing && drawType === 7}}" src="/images/marker/marker3.png" mode="aspectFit" />
+  <image class="form-pin" wx:if="{{drawing && drawType === 8}}" src="/images/marker/marker4.png" mode="aspectFit" />
+  <image class="form-pin" wx:if="{{showAddForm && addTypeIndex === 0}}" src="/images/marker/marker0.png" mode="aspectFit" />
+  <image class="form-pin" wx:if="{{showAddForm && addTypeIndex === 1}}" src="/images/marker/marker1.png" mode="aspectFit" />
+  <image class="form-pin" wx:elif="{{showAddForm && addTypeIndex > 1}}" src="/images/marker/marker2.png" mode="aspectFit" />
+
+  <view class="draw-bar" wx:if="{{drawing}}">
+    <view class="draw-btn" bindtap="onDrawUndo">
+      <t-icon name="rollback" size="40rpx" color="#333" />
+      <text class="draw-text">撤销</text>
+    </view>
+    <view class="draw-btn" bindtap="onDrawPoint">
+      <t-icon name="location" size="48rpx" color="{{drawType === 7 ? '#3CB371' : '#dc143c'}}" />
+      <text class="draw-text {{drawType === 7 ? 'is-road' : 'is-wall'}}">定点</text>
+    </view>
+    <view class="draw-btn" bindtap="onDrawFinish">
+      <t-icon name="check" size="48rpx" color="{{drawType === 7 ? '#3CB371' : '#dc143c'}}" />
+      <text class="draw-text {{drawType === 7 ? 'is-road' : 'is-wall'}}">完成</text>
+    </view>
+    <view class="draw-btn" bindtap="onDrawExit">
+      <t-icon name="close" size="48rpx" color="#333" />
+      <text class="draw-text">退出</text>
+    </view>
   </view>
 
-  <skyline-poi-sheet
-    visible="{{showSheet}}"
-    title="{{sheetTitle}}"
-    subtitle="{{sheetSubtitle}}"
-    latitude="{{sheetLat}}"
-    longitude="{{sheetLng}}"
-    bind:close="onSheetClose"
+  <map-actions position="{{controlPosition}}" bottom="{{locateBottom}}" located="{{located}}" show-add="{{canAdd && !showAddGrid && !showAddForm && !showSetting && !showDetail && !drawing && !showMapSwitch && !showMapManage}}" show-locate="{{!showAddGrid && !showSetting && !showDetail && !drawing && !showMapSwitch && !showMapManage}}" bind:add="onAddTap" bind:locate="onLocate" />
+
+  <map-add-grid class="popup-sheet" show="{{showAddGrid}}" bind:close="onAddClose" bind:choose="onAddChoose" bind:sizechange="onPopupSize" />
+  <map-add-form
+    class="popup-sheet"
+    show="{{showAddForm}}"
+    type-index="{{addTypeIndex}}"
+    type-name="{{addTypeName}}"
+    color="{{addTypeColor}}"
+    label="{{addTypeLabel}}"
+    need-name="{{addTypeNeedName}}"
+    edit-marker="{{editMarker}}"
+    bind:close="onAddFormBack"
+    bind:back="onAddFormBack"
+    bind:save="onAddSave"
+    bind:sizechange="onPopupSize"
   />
+  <map-detail-sheet
+    class="popup-sheet"
+    show="{{showDetail}}"
+    marker-id="{{detailId}}"
+    map-editable="{{canAdd}}"
+    poi-name="{{poiName}}"
+    poi-latitude="{{poiLat}}"
+    poi-longitude="{{poiLng}}"
+    bind:close="onDetailClose"
+    bind:route="onDetailRoute"
+    bind:edit="onDetailEdit"
+    bind:delete="onDetailDelete"
+    bind:feedback="onDetailFeedback"
+    bind:sizechange="onPopupSize"
+  />
+  <map-setting-sheet class="popup-sheet" show="{{showSetting}}" bind:close="onSettingClose" bind:change="onSettingChange" bind:sizechange="onPopupSize" />
+  <map-feedback-sheet class="popup-sheet" show="{{showFeedback}}" marker="{{feedbackMarker}}" bind:close="onFeedbackClose" bind:done="onFeedbackDone" bind:sizechange="onPopupSize" />
+  <map-switch-sheet id="mapSwitch" class="popup-sheet" show="{{showMapSwitch}}" bind:close="onMapSwitchClose" bind:change="onMapSwitch" bind:reload="onMapReload" bind:manage="onMapManage" bind:sizechange="onPopupSize" />
+  <map-manage-sheet wx:if="{{showMapManage}}" id="mapManage" class="popup-sheet is-front" show="{{true}}" map-id="{{manageMapId}}" bind:close="onMapManageClose" bind:reload="onMapReload" bind:updated="onMapManageUpdated" bind:sizechange="onPopupSize" />
 </view>

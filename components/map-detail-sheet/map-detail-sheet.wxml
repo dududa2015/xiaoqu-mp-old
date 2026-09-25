@@ -1,0 +1,73 @@
+<draggable-sheet
+  class="sheet-host"
+  initial-child-size="{{0}}"
+  min-child-size="{{0}}"
+  max-child-size="{{sheetSize}}"
+  snap="{{true}}"
+  snap-sizes="{{snapSizes}}"
+  worklet:onsizeupdate="onSheetSizeUpdate"
+>
+  <scroll-view
+    class="sheet-scroll {{sheetOpened ? 'is-open' : ''}}"
+    scroll-y="{{true}}"
+    type="list"
+    associative-container="draggable-sheet"
+    bounces="{{false}}"
+    show-scrollbar="{{false}}"
+    bindtap="onSheetBlankTap"
+  >
+    <view class="sheet-card" catchtap="onSheetCardTap">
+      <view class="sheet-inner">
+      <view class="handle"></view>
+      <view class="poi-wrap">
+        <text class="poi-title">{{poiText}}</text>
+        <view class="poi-tags" wx:if="{{remarkTagList.length}}">
+          <t-tag wx:for="{{remarkTagList}}" wx:key="*this" class="poi-tag" size="small" variant="light" theme="primary">{{item}}</t-tag>
+        </view>
+        <text class="poi-desc" wx:if="{{walkingMsg}}">{{walkingMsg}}</text>
+        <text class="poi-desc" wx:elif="{{duration}}">距你 {{distance}}，骑行约 {{duration}}</text>
+        <text class="poi-desc" wx:if="{{poiAddress}}">{{poiAddress}}</text>
+        <text class="poi-desc" wx:if="{{showNickName}}">{{nickName}}创建于{{createdDate}}</text>
+        <scroll-view wx:if="{{markerImages.length}}" class="poi-images" scroll-x="{{true}}" show-scrollbar="{{false}}">
+          <view class="poi-images-row">
+            <image
+              wx:for="{{markerImages}}"
+              wx:key="full"
+              class="poi-image"
+              mode="aspectFill"
+              src="{{item.thumb}}"
+              data-index="{{index}}"
+              bindtap="onPreview"
+            />
+          </view>
+        </scroll-view>
+      </view>
+      <view class="button-wrap">
+        <view class="left">
+          <view class="thumb" wx:if="{{showFavoriteButton}}" bindtap="onToggleFavorite">
+            <t-icon wx:if="{{isFavorite}}" name="star-filled" size="38rpx" color="#0074FE" />
+            <t-icon wx:else name="star" size="38rpx" />
+            <text class="b-text">{{isFavorite ? '已收藏' : '收藏'}}</text>
+          </view>
+          <view class="thumb" wx:if="{{canEdit}}" bindtap="onEdit">
+            <t-icon name="edit" size="38rpx" />
+            <text class="b-text">修改</text>
+          </view>
+          <view class="thumb" wx:if="{{canDelete}}" bindtap="onDelete">
+            <t-icon name="delete" size="38rpx" />
+            <text class="b-text">删除</text>
+          </view>
+          <view class="thumb" wx:if="{{showFeedback}}" bindtap="onFeedback">
+            <t-icon name="error-circle" size="38rpx" />
+            <text class="b-text">报错</text>
+          </view>
+        </view>
+        <view class="right">
+          <t-button size="small" shape="round" variant="outline" t-class="nav-btn" bind:tap="onNavigate">导航</t-button>
+          <t-button theme="primary" size="small" shape="round" t-class="route-btn" bind:tap="onRoute">路线</t-button>
+        </view>
+      </view>
+      </view>
+    </view>
+  </scroll-view>
+</draggable-sheet>

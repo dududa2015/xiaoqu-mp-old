@@ -1,0 +1,7 @@
+<view class="page">
+  <view class="liquid-glass-circle">
+    <view class="circle-content">
+      Glass
+    </view>
+  </view>
+</view>

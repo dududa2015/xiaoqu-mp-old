@@ -1,9 +1,19 @@
 {
+  "navigationStyle": "custom",
   "navigationBarTitleText": "Skyline 地图演示",
   "disableScroll": true,
   "renderer": "skyline",
   "componentFramework": "glass-easel",
   "usingComponents": {
-    "skyline-poi-sheet": "/components/skyline-poi-sheet/skyline-poi-sheet"
+    "map-tools": "/components/map-tools/map-tools",
+    "map-actions": "/components/map-actions/map-actions",
+    "map-add-grid": "/components/map-add-grid/map-add-grid",
+    "map-add-form": "/components/map-add-form/map-add-form",
+    "map-detail-sheet": "/components/map-detail-sheet/map-detail-sheet",
+    "map-setting-sheet": "/components/map-setting-sheet/map-setting-sheet",
+    "map-feedback-sheet": "/components/map-feedback-sheet/map-feedback-sheet",
+    "map-switch-sheet": "/components/map-switch-sheet/map-switch-sheet",
+    "map-manage-sheet": "/components/map-manage-sheet/map-manage-sheet",
+    "t-icon": "tdesign-miniprogram/icon/icon"
   }
 }

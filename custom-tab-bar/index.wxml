@@ -1,0 +1,20 @@
+<view class="tab-bar {{hidden ? 'is-hidden' : ''}}" style="padding-bottom: {{safeBottom}}px;">
+  <view class="pill">
+    <view class="indicator {{animate ? 'animate' : ''}} at-{{indicatorPos}}"></view>
+    <view class="row">
+      <view
+        class="item {{selected === index ? 'on' : ''}} {{pressed === index ? 'pressed' : ''}}"
+        wx:for="{{list}}"
+        wx:key="pagePath"
+        data-index="{{index}}"
+        bindtap="onChange"
+        bindtouchstart="onPress"
+        bindtouchend="onRelease"
+        bindtouchcancel="onRelease"
+      >
+        <image class="icon" src="{{selected === index ? item.selectedIcon : item.icon}}" mode="aspectFit" />
+        <text class="label">{{item.text}}</text>
+      </view>
+    </view>
+  </view>
+</view>

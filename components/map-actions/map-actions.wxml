@@ -1,0 +1,9 @@
+<view class="locate-stack {{position === 'left' ? 'is-left' : ''}}" style="bottom: {{bottom}}px;">
+  <view class="add-card" wx:if="{{showAdd}}" bindtap="onAdd">
+    <image class="add-icon" src="/images/controls/add.png" mode="aspectFit" />
+    <text class="add-label">添加</text>
+  </view>
+  <view class="locate-btn" wx:if="{{showLocate}}" bindtap="onLocate">
+    <image class="locate-icon" src="{{located ? '/images/controls/location-fill-64.png' : '/images/controls/location-64.png'}}" mode="aspectFit" />
+  </view>
+</view>

@@ -1,0 +1,12 @@
+{
+  "navigationStyle": "custom",
+  "navigationBarTitleText": "我的标记",
+  "disableScroll": true,
+  "renderer": "skyline",
+  "componentFramework": "glass-easel",
+  "usingComponents": {
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-segmented": "tdesign-miniprogram/segmented/segmented",
+    "my-marker-detail": "/components/my-marker-detail/my-marker-detail"
+  }
+}

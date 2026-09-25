@@ -1,0 +1,52 @@
+<view class="page">
+  <view class="nav" style="padding-top: {{statusBarHeight}}px; height: {{navBarHeight}}px;">
+    <view class="nav-back" bindtap="onBack">
+      <t-icon name="chevron-left" size="48rpx" color="#111" />
+    </view>
+    <text class="nav-title">{{navTitle}}</text>
+  </view>
+  <scroll-view class="body" scroll-y="{{true}}" show-scrollbar="{{false}}">
+    <view class="content">
+      <view class="card {{theme}}">
+        <view class="app-row">
+          <image class="logo" src="/images/icon-83.5@2x.png" mode="aspectFit" />
+          <view class="app-info">
+            <text class="app-name">{{appName}}</text>
+            <text class="app-meta" wx:if="{{meta}}">{{meta}}</text>
+            <text class="app-meta app-meta-highlight">推荐使用微信登录</text>
+          </view>
+        </view>
+        <text class="section-title">{{searchSectionTitle}}</text>
+        <view class="search-row">
+          <view class="search-chip">
+            <t-icon name="search" size="32rpx" color="{{iconColor}}" />
+            <text class="search-text">{{searchName}}</text>
+          </view>
+          <view class="copy-row" bindtap="onCopyName">
+            <t-icon name="copy" size="32rpx" color="{{iconColor}}" />
+            <text class="copy-text">复制名称</text>
+          </view>
+        </view>
+        <text class="tip">{{searchTip}}</text>
+        <text class="section-title">下载步骤</text>
+        <view class="steps">
+          <view class="step-item" wx:for="{{installSteps}}" wx:key="*this">
+            <text class="step-index">{{index + 1}}</text>
+            <text class="step-text">{{item}}</text>
+          </view>
+        </view>
+        <block wx:if="{{downloadUrl}}">
+          <text class="section-title section-title-secondary">备用：复制下载链接</text>
+          <view class="search-row link-row">
+            <text class="link-text">{{downloadUrl}}</text>
+            <view class="copy-row" bindtap="onCopyLink">
+              <t-icon name="copy" size="32rpx" color="{{iconColor}}" />
+              <text class="copy-text">复制链接</text>
+            </view>
+          </view>
+          <text class="tip">{{linkTip}}</text>
+        </block>
+      </view>
+    </view>
+  </scroll-view>
+</view>

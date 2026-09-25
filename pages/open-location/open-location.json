@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "navigationBarTitleText": "导航",
+  "disableScroll": true,
+  "renderer": "skyline",
+  "componentFramework": "glass-easel"
+}

@@ -1,0 +1,11 @@
+{
+  "component": true,
+  "renderer": "skyline",
+  "componentFramework": "glass-easel",
+  "styleIsolation": "isolated",
+  "usingComponents": {
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-tag": "tdesign-miniprogram/tag/tag",
+    "t-button": "tdesign-miniprogram/button/button"
+  }
+}

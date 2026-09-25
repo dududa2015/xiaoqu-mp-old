@@ -1,0 +1,76 @@
+<view class="page" style="padding-top: {{statusBarHeight}}px;">
+  <view class="user-card">
+    <view class="user-row" bindtap="onEdit">
+      <view class="avatar-wrap">
+        <image class="avatar" src="/images/icon-83.5@2x.png" mode="aspectFill" />
+      </view>
+      <view class="user-details">
+        <text class="user-name">{{userName}}</text>
+        <text class="user-id">{{userIdText}}</text>
+      </view>
+      <view class="edit-btn">
+        <t-icon name="edit" size="38rpx" />
+      </view>
+    </view>
+    <view class="stats">
+      <view class="stat" data-tab="valid" bindtap="onMarkers">
+        <view class="stat-row">
+          <view class="stat-icon stat-icon-marker">
+            <t-icon name="location" size="28rpx" color="#3b82f6" />
+          </view>
+          <text class="stat-value stat-value-marker">{{validCount}}</text>
+        </view>
+        <text class="stat-title">有效标记</text>
+      </view>
+      <view class="stat" data-tab="pending" bindtap="onMarkers">
+        <view class="stat-row">
+          <view class="stat-icon stat-icon-pending">
+            <t-icon name="time" size="28rpx" color="#f59e0b" />
+          </view>
+          <text class="stat-value stat-value-pending">{{pendingCount}}</text>
+        </view>
+        <text class="stat-title">待审核</text>
+      </view>
+      <view class="stat" data-tab="favorites" bindtap="onMarkers">
+        <view class="stat-row">
+          <view class="stat-icon stat-icon-fav">
+            <t-icon name="star-filled" size="28rpx" color="#f97316" />
+          </view>
+          <text class="stat-value stat-value-fav">{{favoriteCount}}</text>
+        </view>
+        <text class="stat-title">收藏</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="group">
+    <view class="cell" bindtap="onHelp">
+      <t-icon class="cell-glyph" name="help-circle" size="40rpx" color="#E85827" />
+      <text class="cell-title">使用帮助</text>
+      <text class="cell-arrow">›</text>
+    </view>
+    <view class="cell cell-last" bindtap="onService">
+      <t-icon class="cell-glyph" name="service" size="40rpx" color="#0074FE" />
+      <text class="cell-title">客户服务</text>
+      <text class="cell-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="group">
+    <view class="cell" data-platform="ios" bindtap="onDownload">
+      <t-icon class="cell-glyph" name="logo-apple" size="40rpx" color="#007AFF" />
+      <text class="cell-title cell-title-ios">苹果App下载</text>
+      <text class="cell-arrow">›</text>
+    </view>
+    <view class="cell" data-platform="android" bindtap="onDownload">
+      <t-icon class="cell-glyph" name="logo-android" size="40rpx" color="#E85827" />
+      <text class="cell-title cell-title-android">安卓App下载</text>
+      <text class="cell-arrow">›</text>
+    </view>
+    <view class="cell cell-last" data-platform="harmony" bindtap="onDownload">
+      <t-icon class="cell-glyph" name="download" size="40rpx" color="#CF0A2C" />
+      <text class="cell-title cell-title-harmony">鸿蒙App下载</text>
+      <text class="cell-arrow">›</text>
+    </view>
+  </view>
+</view>

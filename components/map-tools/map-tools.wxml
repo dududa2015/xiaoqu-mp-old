@@ -1,0 +1,17 @@
+<view class="tool-stack {{position === 'left' ? 'is-left' : ''}}">
+  <view class="tool-card">
+    <view class="tool-share">
+      <image class="tool-icon" src="/images/controls/share2.png" mode="aspectFit" />
+      <button class="share-btn" open-type="share"></button>
+    </view>
+    <text class="tool-label">分享</text>
+    <view class="tool-block {{searchDisabled ? 'is-disabled' : ''}}" bindtap="onSearch">
+      <image class="tool-icon" src="/images/controls/search.png" mode="aspectFit" />
+    </view>
+    <text class="tool-label {{searchDisabled ? 'is-disabled' : ''}}" bindtap="onSearch">搜索</text>
+    <view class="tool-block {{settingDisabled ? 'is-disabled' : ''}}" bindtap="onSetting">
+      <image class="tool-icon" src="/images/controls/setting.png" mode="aspectFit" />
+    </view>
+    <text class="tool-label {{settingDisabled ? 'is-disabled' : ''}}" bindtap="onSetting">设置</text>
+  </view>
+</view>

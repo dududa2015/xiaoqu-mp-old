@@ -1,0 +1,9 @@
+{
+  "component": true,
+  "renderer": "skyline",
+  "componentFramework": "glass-easel",
+  "styleIsolation": "isolated",
+  "usingComponents": {
+    "t-icon": "tdesign-miniprogram/icon/icon"
+  }
+}

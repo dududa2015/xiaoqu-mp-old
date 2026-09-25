@@ -1,0 +1,14 @@
+<view class="t-segmented {{block ? 't-segmented--block' : ''}}">
+  <view class="t-segmented__group">
+    <view wx:if="{{activeIndex > -1}}" class="t-segmented__thumb" style="{{thumbStyle}}"></view>
+    <view
+      wx:for="{{segmentItems}}"
+      wx:key="value"
+      class="t-segmented__item t-segmented-item-{{index}} {{index === activeIndex ? 't-segmented__item--active' : ''}}"
+      data-value="{{item.value}}"
+      bindtap="handleSelect"
+    >
+      <view class="t-segmented__item-inner">{{item.label}}</view>
+    </view>
+  </view>
+</view>

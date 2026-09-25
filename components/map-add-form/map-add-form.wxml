@@ -1,0 +1,102 @@
+<draggable-sheet
+  class="sheet-host"
+  initial-child-size="{{0}}"
+  min-child-size="{{0}}"
+  max-child-size="{{formSize}}"
+  snap="{{true}}"
+  snap-sizes="{{[formSize]}}"
+  worklet:onsizeupdate="onSheetSizeUpdate"
+>
+  <scroll-view
+    class="sheet-scroll {{sheetOpened ? 'is-open' : ''}}"
+    scroll-y="{{true}}"
+    type="list"
+    associative-container="draggable-sheet"
+    bounces="{{false}}"
+    show-scrollbar="{{false}}"
+    bindtap="onSheetBlankTap"
+  >
+    <view class="sheet-card" catchtap="onSheetCardTap">
+      <view class="form-header">
+        <view class="form-header-slot form-header-slot--start">
+          <view class="ios-toolbar-btn" bindtap="onBack" hover-class="ios-toolbar-btn--pressed" hover-stay-time="80">
+            <text class="ios-toolbar-btn__label">关闭</text>
+          </view>
+        </view>
+        <view class="form-header-slot form-header-slot--center">
+          <text class="form-header-title">{{editing ? '修改' : '添加'}}{{typeName}}</text>
+        </view>
+        <view class="form-header-slot form-header-slot--end">
+          <view class="ios-toolbar-btn" bindtap="onSave" hover-class="ios-toolbar-btn--pressed" hover-stay-time="80">
+            <text class="ios-toolbar-btn__label" style="color: {{color}};">保存</text>
+          </view>
+        </view>
+      </view>
+      <view class="input-wrap">
+        <view class="form-row">
+          <text class="row-label">{{label}}<text wx:if="{{needName}}" class="required"> *</text></text>
+          <input class="row-input" maxlength="10" value="{{name}}" bindinput="onNameInput" placeholder="{{needName ? '必填，最多10个字' : '最多10个字'}}" placeholder-class="row-placeholder" cursor-spacing="36" always-embed="{{true}}" adjust-position="{{true}}" />
+        </view>
+        <view class="form-row" wx:if="{{showQuick && suggestions.length}}">
+          <text class="row-label">快速输入</text>
+          <scroll-view class="chip-scroll" scroll-x="{{true}}" show-scrollbar="{{false}}" enhanced="{{true}}">
+            <view class="chip-row">
+              <view
+                class="text-tag {{item.checked ? 'text-tag-on' : ''}}"
+                style="{{item.checked ? 'background:' + color + ';' : ''}}"
+                wx:for="{{suggestions}}"
+                wx:key="name"
+                data-name="{{item.name}}"
+                bindtap="onSuggestion"
+              >{{item.name}}</view>
+            </view>
+          </scroll-view>
+        </view>
+        <view class="form-row" wx:if="{{typeIndex === 0}}">
+          <text class="row-label">大门朝向</text>
+          <scroll-view class="chip-scroll" scroll-x="{{true}}" show-scrollbar="{{false}}" enhanced="{{true}}">
+            <view class="chip-row">
+              <view
+                class="direction-tag {{direction === item.label ? 'direction-tag-on' : ''}}"
+                wx:for="{{directions}}"
+                wx:key="label"
+                data-label="{{item.label}}"
+                bindtap="onDirection"
+              >
+                <text class="direction-icon">{{item.icon}}</text>
+                <text class="direction-label">{{item.label}}</text>
+              </view>
+            </view>
+          </scroll-view>
+        </view>
+        <view class="form-row" wx:if="{{tags.length}}">
+          <text class="row-label">标签</text>
+          <scroll-view class="chip-scroll" scroll-x="{{true}}" show-scrollbar="{{false}}" enhanced="{{true}}">
+            <view class="chip-row">
+              <view
+                class="text-tag {{item.checked ? 'text-tag-on' : ''}}"
+                style="{{item.checked ? 'background:' + color + ';' : ''}}"
+                wx:for="{{tags}}"
+                wx:key="name"
+                data-name="{{item.name}}"
+                bindtap="onTag"
+              >{{item.name}}</view>
+            </view>
+          </scroll-view>
+        </view>
+        <view class="form-row form-row-photo">
+          <text class="row-label">照片</text>
+          <view class="photo-row">
+            <view class="photo" wx:for="{{photos}}" wx:for-index="index" wx:key="*this">
+              <image class="photo-img" src="{{item}}" mode="aspectFill" />
+              <view class="photo-remove" data-index="{{index}}" catchtap="onRemovePhoto">×</view>
+            </view>
+            <view class="photo-add" wx:if="{{photos.length < 4}}" bindtap="onAddPhoto">
+              <image class="photo-add-icon" src="/images/camera.png" mode="aspectFit" />
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</draggable-sheet>

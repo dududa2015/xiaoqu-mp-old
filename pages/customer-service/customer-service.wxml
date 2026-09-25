@@ -1,0 +1,75 @@
+<view class="page">
+  <view class="nav" style="padding-top: {{statusBarHeight}}px; height: {{navBarHeight}}px;">
+    <view class="nav-back" bindtap="onBack">
+      <t-icon name="chevron-left" size="48rpx" color="#111" />
+    </view>
+    <text class="nav-title">客户服务</text>
+  </view>
+  <scroll-view class="body" scroll-y="{{true}}" show-scrollbar="{{false}}">
+    <view class="content">
+      <button class="contact" open-type="contact" hover-class="none">
+        <view class="row row-last">
+          <t-icon name="chat" size="40rpx" color="#0074FE" />
+          <view class="main">
+            <text class="title">在线客服</text>
+            <text class="sub">工作日 9:00-18:00 · 小程序与 App 均可咨询</text>
+          </view>
+          <text class="arrow">›</text>
+        </view>
+      </button>
+
+      <text class="group-label">使用说明</text>
+      <view class="group article">
+        <text class="h3">小程序</text>
+        <text class="p">使用当前微信授权登录后，标记、收藏会同步到该账号。</text>
+        <text class="p">小程序会员仅在微信小程序内有效，不能用于 App。</text>
+        <text class="p">核心功能现已取消每日时长与会员门槛，可全天使用。</text>
+      </view>
+      <view class="group article">
+        <text class="h3">App</text>
+        <text class="p">出现闪退、无法登录、地图空白或功能异常时，请先到应用商店更新到最新版本。</text>
+        <text class="p">更新后仍无法使用，可卸载后重新安装；安装时建议使用微信登录。</text>
+        <text class="p">仍有问题请通过上方「在线客服」联系，并说明手机型号、系统版本与 App 版本。</text>
+        <text class="note">若重新登录后会员权益不见了，可以换其他微信账号登录试试。App 会员与小程序会员相互独立。</text>
+      </view>
+
+      <text class="group-label">App 下载</text>
+      <view class="group">
+        <view class="row" data-platform="ios" bindtap="onDownload">
+          <t-icon name="logo-apple" size="40rpx" color="#007AFF" />
+          <view class="main">
+            <text class="title">苹果 App</text>
+            <text class="sub">App Store 搜索「小区楼号地图-快递外卖极速导航」</text>
+          </view>
+          <text class="arrow">›</text>
+        </view>
+        <view class="row" data-platform="android" bindtap="onDownload">
+          <t-icon name="logo-android" size="40rpx" color="#E85827" />
+          <view class="main">
+            <text class="title">安卓 App</text>
+            <text class="sub">应用宝 / 小米 / OPPO / VIVO</text>
+          </view>
+          <text class="arrow">›</text>
+        </view>
+        <view class="row row-last" data-platform="harmony" bindtap="onDownload">
+          <t-icon name="download" size="40rpx" color="#CF0A2C" />
+          <view class="main">
+            <text class="title">鸿蒙 App</text>
+            <text class="sub">华为应用市场搜索「小区楼号」</text>
+          </view>
+          <text class="arrow">›</text>
+        </view>
+      </view>
+
+      <view class="group">
+        <view class="link {{index < links.length - 1 ? '' : 'row-last'}}" wx:for="{{links}}" wx:key="key">
+          <view class="main">
+            <text class="title">{{item.label}}</text>
+            <text class="sub">{{item.url}}</text>
+          </view>
+          <text class="copy" data-url="{{item.url}}" catchtap="onCopy">复制</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

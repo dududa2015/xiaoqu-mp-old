@@ -1,0 +1,96 @@
+<draggable-sheet
+  class="sheet-host"
+  initial-child-size="{{0}}"
+  min-child-size="{{0}}"
+  max-child-size="{{sheetSize}}"
+  snap="{{true}}"
+  snap-sizes="{{[sheetSize]}}"
+  worklet:onsizeupdate="onSheetSizeUpdate"
+>
+  <scroll-view
+    class="sheet-scroll {{sheetOpened ? 'is-open' : ''}}"
+    scroll-y="{{true}}"
+    type="list"
+    associative-container="draggable-sheet"
+    bounces="{{false}}"
+    show-scrollbar="{{false}}"
+    bindtap="onSheetBlankTap"
+  >
+    <view class="sheet-card" catchtap="onSheetCardTap">
+      <view class="handle" bindtap="onSheetClose"></view>
+      <view class="header">
+        <text class="title">共建地图</text>
+      </view>
+      <view wx:if="{{loading}}" class="status">加载中</view>
+      <view wx:elif="{{loadError}}" class="status" bindtap="loadDetail">{{errorText || '加载失败'}}，点此重试</view>
+      <block wx:else>
+        <view class="group">
+          <block wx:if="{{!editingName}}">
+            <view class="row" bindtap="onEditName">
+              <text class="label">名称</text>
+              <view class="tail">
+                <text class="value">{{map.name}}</text>
+                <t-icon wx:if="{{isOwner}}" name="chevron-right" size="36rpx" color="#c7c7cc" />
+              </view>
+            </view>
+          </block>
+          <view wx:else class="edit-mode">
+            <view class="edit-header">
+              <text class="edit-label">名称</text>
+              <text class="edit-required">*</text>
+            </view>
+            <input
+              class="edit-input"
+              value="{{nameValue}}"
+              maxlength="10"
+              placeholder="请输入名称"
+              placeholder-class="edit-placeholder"
+              focus="{{focusInput}}"
+              bindinput="onNameInput"
+              bindconfirm="onSaveName"
+            />
+            <view class="edit-actions">
+              <view class="edit-btn cancel-btn" catchtap="onCancelName">取消</view>
+              <view class="edit-btn save-btn" catchtap="onSaveName">保存</view>
+            </view>
+          </view>
+          <view class="row row-last">
+            <view class="label-wrap">
+              <text class="label">同时显示公共标记</text>
+              <text class="hint">打开后，地图上同时看到公共标记</text>
+            </view>
+            <switch wx:if="{{isOwner}}" checked="{{isPub}}" color="#3CB371" bindchange="onIsPubChange" />
+            <text wx:else class="value">{{isPub ? '已开启' : '未开启'}}</text>
+          </view>
+        </view>
+        <view class="group">
+          <view class="group-title">成员（{{memberCount}}人）</view>
+          <view class="invite" wx:if="{{isOwner}}">
+            <view class="invite-actions">
+              <button class="share share-gap" open-type="share" data-role="editor" disabled="{{!editorToken}}">邀请编辑</button>
+              <button class="share" open-type="share" data-role="viewer" disabled="{{!viewerToken}}">邀请只读</button>
+            </view>
+            <text class="hint">编辑可增删改标记，只读只能查看</text>
+          </view>
+          <view
+            class="row"
+            wx:for="{{members}}"
+            wx:key="userId"
+            data-id="{{item.userId}}"
+            data-role="{{item.role}}"
+            bindtap="onMember"
+          >
+            <text class="label">{{item.nickName}}</text>
+            <view class="tail">
+              <text class="tag {{item.roleClass}}">{{item.roleText}}</text>
+              <t-icon wx:if="{{isOwner && !item.isOwner}}" name="chevron-right" size="36rpx" color="#c7c7cc" />
+            </view>
+          </view>
+          <view wx:if="{{!hasOtherMembers}}" class="empty">还没有其他成员</view>
+        </view>
+        <view wx:if="{{canLeave}}" class="danger" bindtap="onLeave">退出地图</view>
+        <view wx:if="{{canDelete}}" class="danger" bindtap="onDelete">删除地图</view>
+      </block>
+    </view>
+  </scroll-view>
+</draggable-sheet>

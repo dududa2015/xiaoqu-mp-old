@@ -1,0 +1,41 @@
+<view class="page">
+  <view class="nav" style="padding-top: {{statusBarHeight}}px; height: {{navBarHeight}}px;">
+    <view class="nav-back" bindtap="onBack">
+      <t-icon name="chevron-left" size="48rpx" color="#111" />
+    </view>
+    <text class="nav-title">我的标记</text>
+  </view>
+  <view class="segment">
+    <t-segmented block value="{{activeTab}}" options="{{segments}}" style="border-radius: 999rpx; overflow: hidden;" bind:change="onTab" />
+  </view>
+  <scroll-view class="body" scroll-y="{{true}}" show-scrollbar="{{false}}" bindscrolltolower="onMore">
+    <view class="content">
+      <view class="group" wx:if="{{list.length}}">
+        <view
+          wx:for="{{list}}"
+          wx:key="rowKey"
+          class="row {{index < list.length - 1 ? '' : 'row-last'}}"
+          data-index="{{index}}"
+          bindtap="onOpen"
+        >
+          <view class="badge">
+            <text class="badge-text">{{item.indexNumber}}</text>
+          </view>
+          <view class="main">
+            <view class="title-row">
+              <text class="title {{item.deletedStyle ? 'is-deleted' : ''}}">{{item.displayTitle}}</text>
+              <text class="tag" wx:if="{{item.typeName}}" style="color: {{item.typeColor}}; background-color: {{item.typeBg}};">{{item.typeName}}</text>
+            </view>
+            <text class="sub" wx:if="{{item.showSubtitle}}">{{item.subtitle}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="empty" wx:elif="{{initialized && !loading}}">
+        <text class="empty-title">{{emptyTitle}}</text>
+        <text class="empty-desc">{{emptyDesc}}</text>
+      </view>
+      <text class="hint" wx:if="{{loading}}">加载中</text>
+    </view>
+    </scroll-view>
+  <my-marker-detail id="myMarkerDetail" class="popup-sheet" show="{{showDetail}}" bind:close="onDetailClose" bind:changed="onDetailChanged" />
+</view>

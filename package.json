@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "tdesign-miniprogram": "^1.17.0",
+    "tslib": "^2.8.1"
+  }
+}

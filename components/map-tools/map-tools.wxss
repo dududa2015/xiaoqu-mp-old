@@ -1,0 +1,61 @@
+.tool-stack {
+  position: absolute;
+  top: 176rpx;
+  right: 24rpx;
+  z-index: 5;
+}
+
+.is-left {
+  right: auto;
+  left: 24rpx;
+}
+
+.tool-card {
+  text-align: center;
+  background-color: #ffffff;
+  padding: 16rpx 0;
+  border-radius: 48rpx;
+  opacity: 0.95;
+  box-shadow: 0rpx 4rpx 24rpx 0rpx rgba(100, 101, 102, 0.12);
+}
+
+.tool-share {
+  position: relative;
+  height: 44rpx;
+  padding: 0 16rpx;
+}
+
+.tool-block {
+  position: relative;
+  height: 44rpx;
+  padding: 12rpx 16rpx 0;
+}
+
+.tool-icon {
+  width: 44rpx;
+  height: 44rpx;
+}
+
+.tool-label {
+  font-size: 20rpx;
+  font-weight: 600;
+  color: #333333;
+  line-height: 32rpx;
+  height: 32rpx;
+}
+
+.is-disabled {
+  opacity: 0.35;
+}
+
+.share-btn {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 96rpx;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  padding: 0;
+}

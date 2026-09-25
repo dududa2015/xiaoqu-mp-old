@@ -1,0 +1,49 @@
+<draggable-sheet
+  class="sheet-host"
+  initial-child-size="{{0}}"
+  min-child-size="{{0}}"
+  max-child-size="{{sheetSize}}"
+  snap="{{true}}"
+  snap-sizes="{{[sheetSize]}}"
+  worklet:onsizeupdate="onSheetSizeUpdate"
+>
+  <scroll-view
+    class="sheet-scroll {{sheetOpened ? 'is-open' : ''}}"
+    scroll-y="{{true}}"
+    type="list"
+    associative-container="draggable-sheet"
+    bounces="{{false}}"
+    show-scrollbar="{{false}}"
+    bindtap="onSheetBlankTap"
+  >
+    <view class="sheet-card" catchtap="onSheetCardTap">
+      <view class="form-header">
+        <view class="form-header-slot form-header-slot--start">
+          <view class="ios-toolbar-btn" bindtap="onClose" hover-class="ios-toolbar-btn--pressed" hover-stay-time="80">
+            <text class="ios-toolbar-btn__label">关闭</text>
+          </view>
+        </view>
+        <view class="form-header-slot form-header-slot--center">
+          <text class="form-header-title">报错</text>
+        </view>
+        <view class="form-header-slot form-header-slot--end">
+          <view class="ios-toolbar-btn" bindtap="onSave" hover-class="ios-toolbar-btn--pressed" hover-stay-time="80">
+            <text class="ios-toolbar-btn__label save-label">保存</text>
+          </view>
+        </view>
+      </view>
+      <view class="group">
+        <view
+          class="row {{index === reasons.length - 1 ? 'row-last' : ''}}"
+          wx:for="{{reasons}}"
+          wx:key="value"
+          data-value="{{item.value}}"
+          bindtap="onPick"
+        >
+          <text class="row-title">{{item.label}}</text>
+          <t-icon wx:if="{{selected === item.value}}" name="check" size="36rpx" color="#0074FE" />
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</draggable-sheet>

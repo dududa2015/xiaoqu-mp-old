@@ -1,0 +1,86 @@
+<draggable-sheet
+  class="sheet-host"
+  initial-child-size="{{0}}"
+  min-child-size="{{0}}"
+  max-child-size="{{sheetSize}}"
+  snap="{{true}}"
+  snap-sizes="{{[sheetSize]}}"
+  worklet:onsizeupdate="onSheetSizeUpdate"
+>
+  <scroll-view
+    class="sheet-scroll {{sheetOpened ? 'is-open' : ''}}"
+    scroll-y="{{true}}"
+    type="list"
+    associative-container="draggable-sheet"
+    bounces="{{false}}"
+    show-scrollbar="{{false}}"
+    bindtap="onSheetBlankTap"
+  >
+    <view class="sheet-card" catchtap="onSheetCardTap">
+      <view class="handle" bindtap="onSheetClose"></view>
+      <view class="header">
+        <text class="title">切换地图</text>
+      </view>
+
+      <view class="cell" bindtap="onPublic">
+        <view class="badge is-public">
+          <t-icon name="map-information-2" size="40rpx" color="#fff" />
+        </view>
+        <view class="meta">
+          <text class="name {{mapType === 1 ? 'is-on-public' : ''}}">公共地图</text>
+          <text class="desc">所有人一起维护的楼号图</text>
+        </view>
+        <t-icon wx:if="{{mapType === 1}}" name="check" size="36rpx" color="#0074FE" />
+      </view>
+
+      <view class="cell is-stack" wx:if="{{personalMap}}" bindtap="onPersonal">
+        <view class="cell-main">
+          <view class="badge is-personal">
+            <t-icon name="map-bubble" size="40rpx" color="#fff" />
+          </view>
+          <view class="meta">
+            <text class="name {{mapType === 2 ? 'is-on-personal' : ''}}">{{personalMap.name}}</text>
+            <text class="desc">仅自己可见</text>
+          </view>
+          <t-icon wx:if="{{mapType === 2}}" name="check" size="36rpx" color="#E85827" />
+        </view>
+        <view class="pub-row" wx:if="{{mapType === 2}}" catchtap="onPubTap">
+          <text class="pub-label">同时显示公共标记</text>
+          <switch checked="{{personalMap.isPub}}" color="#E85827" bindchange="onPubChange" />
+        </view>
+      </view>
+      <view class="cell" wx:else bindtap="onCreatePersonal">
+        <view class="badge is-personal">
+          <t-icon name="add" size="40rpx" color="#fff" />
+        </view>
+        <view class="meta">
+          <text class="name">创建个人地图</text>
+          <text class="desc">每人一张，仅自己可见</text>
+        </view>
+      </view>
+
+      <view class="cell" wx:for="{{sharedList}}" wx:key="mapId" data-id="{{item.mapId}}" bindtap="onShared">
+        <view class="badge is-shared">
+          <t-icon name="usergroup" size="40rpx" color="#fff" />
+        </view>
+        <view class="meta">
+          <text class="name {{mapType === 3 && mapId == item.mapId ? 'is-on-shared' : ''}}">{{item.name}}</text>
+          <text class="desc">{{item.roleText}}</text>
+        </view>
+        <view wx:if="{{mapType === 3 && mapId == item.mapId}}" class="check">
+          <t-icon name="check" size="36rpx" color="#3CB371" />
+        </view>
+        <view class="manage" catchtap="onManage" data-id="{{item.mapId}}">管理</view>
+      </view>
+      <view class="cell" wx:if="{{canCreateShared}}" bindtap="onCreateShared">
+        <view class="badge is-shared">
+          <t-icon name="add" size="40rpx" color="#fff" />
+        </view>
+        <view class="meta">
+          <text class="name">创建共建地图</text>
+          <text class="desc">每人创建一张，可邀请他人编辑</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</draggable-sheet>

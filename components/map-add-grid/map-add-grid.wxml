@@ -1,0 +1,40 @@
+<draggable-sheet
+  class="sheet-host"
+  initial-child-size="{{0}}"
+  min-child-size="{{0}}"
+  max-child-size="{{gridSize}}"
+  snap="{{true}}"
+  snap-sizes="{{[]}}"
+  worklet:onsizeupdate="onSheetSizeUpdate"
+>
+  <scroll-view
+    class="sheet-scroll {{sheetOpened ? 'is-open' : ''}}"
+    scroll-y="{{true}}"
+    type="list"
+    associative-container="draggable-sheet"
+    bounces="{{false}}"
+    show-scrollbar="{{false}}"
+    bindtap="onSheetBlankTap"
+  >
+    <view class="sheet-card" catchtap="onSheetCardTap">
+      <view class="sheet-body">
+        <view class="handle"></view>
+        <view class="grid">
+          <view
+            class="grid-item"
+            style="width: {{itemWidth}}px; margin-left: {{gap}}px; margin-right: {{(index + 1) % 5 === 0 ? gap : 0}}px;"
+            wx:for="{{types}}"
+            wx:key="name"
+            data-name="{{item.name}}"
+            bindtap="onChoose"
+          >
+            <view class="grid-icon" style="background-color: {{item.color}};">
+              <image class="grid-glyph" src="{{item.icon}}" mode="aspectFit" />
+            </view>
+            <text class="grid-text">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</draggable-sheet>
