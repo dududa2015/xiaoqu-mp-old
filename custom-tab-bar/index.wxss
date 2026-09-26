@@ -27,12 +27,12 @@
 .pill {
   pointer-events: auto;
   position: relative;
-  width: 360rpx;
-  height: 112rpx;
-  border-radius: 56rpx;
+  width: 400rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
   background: #ffffff;
-  opacity: 0.95;
-  box-shadow: 0 8rpx 28rpx rgba(0, 0, 0, 0.12);
+  border: 1rpx solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
 }
 
 .indicator {
@@ -40,9 +40,9 @@
   top: 8rpx;
   bottom: 8rpx;
   left: 8rpx;
-  width: 168rpx;
-  border-radius: 48rpx;
-  background: #e5e5ea;
+  width: 188rpx;
+  border-radius: 52rpx;
+  background: rgba(0, 116, 254, 0.1);
   z-index: 1;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .indicator.at-1 {
-  transform: translateX(176rpx);
+  transform: translateX(196rpx);
 }
 
 .indicator.animate {
@@ -61,15 +61,15 @@
 .row {
   position: relative;
   z-index: 2;
-  width: 360rpx;
-  height: 112rpx;
+  width: 400rpx;
+  height: 120rpx;
   display: flex;
   flex-direction: row;
 }
 
 .item {
-  width: 180rpx;
-  height: 112rpx;
+  width: 200rpx;
+  height: 120rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -86,9 +86,9 @@
 }
 
 .label {
-  margin-top: 2rpx;
-  font-size: 16rpx;
-  line-height: 1.1;
+  margin-top: 4rpx;
+  font-size: 20rpx;
+  line-height: 28rpx;
   font-weight: 500;
   color: #8e8e93;
 }

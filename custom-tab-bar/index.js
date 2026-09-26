@@ -36,7 +36,7 @@ Component({
       const screenHeight = windowInfo.screenHeight || windowInfo.windowHeight || 0
       const inset = safeArea ? Math.max(0, screenHeight - safeArea.bottom) : 0
       this.setData({
-        safeBottom: inset > 0 ? 18 : 12
+        safeBottom: inset > 0 ? 24 : 16
       })
     }
   },
