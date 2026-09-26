@@ -1,0 +1,198 @@
+{
+	"desc": "关于本文件的更多信息，请参考文档 代码加固开发者文档: https://developers.weixin.qq.com/miniprogram/dev/devtools/code_obfuscation.html",
+	"switch": true,
+	"configs": [
+		{
+			"path": "app.js",
+			"sub_switch": true
+		},
+		{
+			"path": "custom-tab-bar/index.js",
+			"sub_switch": true
+		},
+		{
+			"path": "behaviors/sheet-drag.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/community.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/device.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/map.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/marker.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/place.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/route.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/security.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/upload.js",
+			"sub_switch": true
+		},
+		{
+			"path": "apis/user.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/map-actions/map-actions.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/map-add-form/map-add-form.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/map-add-grid/map-add-grid.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/map-detail-sheet/map-detail-sheet.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/map-feedback-sheet/map-feedback-sheet.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/map-manage-sheet/map-manage-sheet.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/map-setting-sheet/map-setting-sheet.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/map-switch-sheet/map-switch-sheet.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/map-tools/map-tools.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/my-marker-detail/my-marker-detail.js",
+			"sub_switch": true
+		},
+		{
+			"path": "components/td-segmented/td-segmented.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/account-cancel/cancel.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/app-download/download.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/customer-service/customer-service.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/help-detail/help-detail.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/help/help.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/map-manage/manage.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/map/map.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/my-markers/markers.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/open-location/open-location.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/profile-edit/edit.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/profile/profile.js",
+			"sub_switch": true
+		},
+		{
+			"path": "pages/test/test.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/auth.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/building-suggestions.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/device.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/help-catalog.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/image-compress.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/map-marker.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/map-session.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/marker-submit.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/my-marker-format.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/request.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/security.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/system-info.js",
+			"sub_switch": true
+		},
+		{
+			"path": "utils/tab-bar.js",
+			"sub_switch": true
+		}
+	]
+}
