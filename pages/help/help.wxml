@@ -41,6 +41,7 @@
                 <text class="sub">{{section.summary}}</text>
               </view>
               <t-icon name="chevron-right" size="36rpx" color="#c7c7cc" />
+              <view class="line"></view>
             </view>
           </view>
         </view>
@@ -58,6 +59,7 @@
             <text class="sub">{{item.summary}}</text>
           </view>
           <t-icon name="chevron-right" size="36rpx" color="#c7c7cc" />
+          <view class="line"></view>
         </view>
       </view>
     </view>

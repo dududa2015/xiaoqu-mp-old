@@ -42,6 +42,7 @@
         >
           <text class="row-title">{{item.label}}</text>
           <t-icon wx:if="{{selected === item.value}}" name="check" size="36rpx" color="#0074FE" />
+          <view class="line"></view>
         </view>
       </view>
     </view>

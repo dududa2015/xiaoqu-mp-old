@@ -48,6 +48,7 @@
       <t-icon class="cell-glyph" name="help-circle" size="40rpx" color="#E85827" />
       <text class="cell-title">使用帮助</text>
       <text class="cell-arrow">›</text>
+      <view class="cell-line"></view>
     </view>
     <view class="cell cell-last" bindtap="onService">
       <t-icon class="cell-glyph" name="service" size="40rpx" color="#0074FE" />
@@ -61,11 +62,13 @@
       <t-icon class="cell-glyph" name="logo-apple" size="40rpx" color="#007AFF" />
       <text class="cell-title cell-title-ios">苹果App下载</text>
       <text class="cell-arrow">›</text>
+      <view class="cell-line"></view>
     </view>
     <view class="cell" data-platform="android" bindtap="onDownload">
       <t-icon class="cell-glyph" name="logo-android" size="40rpx" color="#E85827" />
       <text class="cell-title cell-title-android">安卓App下载</text>
       <text class="cell-arrow">›</text>
+      <view class="cell-line"></view>
     </view>
     <view class="cell cell-last" data-platform="harmony" bindtap="onDownload">
       <t-icon class="cell-glyph" name="download" size="40rpx" color="#CF0A2C" />

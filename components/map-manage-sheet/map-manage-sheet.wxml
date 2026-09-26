@@ -32,6 +32,7 @@
                 <text class="value">{{map.name}}</text>
                 <t-icon wx:if="{{isOwner}}" name="chevron-right" size="36rpx" color="#c7c7cc" />
               </view>
+              <view class="line"></view>
             </view>
           </block>
           <view wx:else class="edit-mode">
@@ -53,6 +54,7 @@
               <view class="edit-btn cancel-btn" catchtap="onCancelName">取消</view>
               <view class="edit-btn save-btn" catchtap="onSaveName">保存</view>
             </view>
+            <view class="line"></view>
           </view>
           <view class="row row-last">
             <view class="label-wrap">
@@ -85,6 +87,7 @@
               <text class="tag {{item.roleClass}}">{{item.roleText}}</text>
               <t-icon wx:if="{{isOwner && !item.isOwner}}" name="chevron-right" size="36rpx" color="#c7c7cc" />
             </view>
+            <view class="line"></view>
           </view>
           <view wx:if="{{!hasOtherMembers}}" class="empty">还没有其他成员</view>
         </view>

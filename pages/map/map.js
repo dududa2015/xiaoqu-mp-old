@@ -63,8 +63,10 @@ Page({
     detailLng: 0,
     enableSatellite: false,
     enableRotate: false,
+    rotate: 0,
+    enable3D: false,
+    skew: 0,
     controlPosition: 'right',
-    markerShape: 'label',
     mapName: '公共地图',
     mapType: 1,
     canAdd: true,
@@ -93,20 +95,23 @@ Page({
     })
   },
 
-  /** 从本地恢复卫星图、控件位置、标记形状和小区范围。 */
+  /** 从本地恢复卫星图、控件位置、小区范围、3D 楼栋和屏幕常亮。 */
   initMapSetting() {
     const position = wx.getStorageSync('position')
-    const markerShape = wx.getStorageSync('markerShape')
     const enableRotate = wx.getStorageSync('enableRotate')
     const enableSatellite = wx.getStorageSync('enableSatellite')
     const showCommunityDetail = wx.getStorageSync('showCommunityDetail')
+    const enable3D = wx.getStorageSync('enable3D') === true
+    const enableScreenOn = wx.getStorageSync('enableScreenOn') === true
     this.setData({
       controlPosition: position === 'left' ? 'left' : 'right',
-      markerShape: markerShape === 'callout' ? 'callout' : 'label',
       enableRotate: enableRotate === true,
       enableSatellite: enableSatellite === true,
-      showCommunityDetail: typeof showCommunityDetail === 'boolean' ? showCommunityDetail : true
+      showCommunityDetail: typeof showCommunityDetail === 'boolean' ? showCommunityDetail : true,
+      enable3D,
+      skew: enable3D ? 20 : 0
     })
+    wx.setKeepScreenOn({ keepScreenOn: enableScreenOn })
   },
 
   /** 打开一个弹层前先关掉其他弹层，并藏起底栏。 */
@@ -465,17 +470,17 @@ Page({
     this.closePopups()
   },
 
-  /** 应用卫星图、控件位置、标记形状、小区和旋转。 */
+  /** 应用卫星图、控件位置、小区、旋转和 3D 楼栋。 */
   onSettingChange(e) {
     const detail = e.detail || {}
-    const markerShape = detail.markerShape === 'callout' ? 'callout' : 'label'
+    const enable3D = !!detail.enable3D
     this.setData({
       enableSatellite: !!detail.enableSatellite,
       enableRotate: !!detail.enableRotate,
       controlPosition: detail.position === 'left' ? 'left' : 'right',
-      markerShape
+      enable3D,
+      skew: enable3D ? 20 : 0
     })
-    this.rebuildMarkers()
     if (detail.showCommunityDetail) {
       this.setData({ showCommunityDetail: true })
       const lat = this._lastLat || this.data.latitude
@@ -767,19 +772,27 @@ Page({
     this.getLocation()
   },
 
-  /** 定位成功后移动相机并加载周围标记。 */
+  /** 定位成功后移到当前位置，并把旋转过的地图转回正北。 */
   getLocation() {
     wx.getLocation({
       type: 'gcj02',
       isHighAccuracy: true,
       success: (res) => {
         const { latitude, longitude } = res
-        this.setData({
+        const current = typeof this._mapRotate === 'number' ? this._mapRotate : this.data.rotate
+        const place = {
           latitude,
           longitude,
           scale: 17,
-          located: true
-        })
+          located: true,
+          rotate: 0
+        }
+        this._mapRotate = 0
+        if (Math.abs(current) >= 0.5 && this.data.rotate !== current) {
+          this.setData({ rotate: current }, () => this.setData(place))
+        } else {
+          this.setData(place)
+        }
         wx.setStorageSync('latitude', latitude)
         wx.setStorageSync('longitude', longitude)
         this.loadAround(latitude, longitude)
@@ -822,6 +835,9 @@ Page({
 
   /** 拖动结束时，添加或画线会让中心图钉跳一下，并刷新周围标记。 */
   onRegionChange(e) {
+    if (e.detail && typeof e.detail.rotate === 'number') {
+      this._mapRotate = e.detail.rotate
+    }
     if (e.causedBy === 'drag' && this.data.located) {
       this.setData({ located: false })
     }

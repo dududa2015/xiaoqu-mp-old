@@ -1,4 +1,4 @@
-/** 把接口里的标记画成地图 label 或 callout。未选中 12px，选中 15px。 */
+/** 把接口里的标记画成地图标签。未选中 12px，选中 15px。 */
 
 /** 未选中标记文字大小，单位是地图 label 的 px。 */
 const MARKER_LABEL_FONT_SIZE = 12
@@ -122,34 +122,18 @@ function buildMarkers(latitude, longitude, uid, name, type, userId, deleted, sel
     longitude,
     userId
   }
-  const markerShape = wx.getStorageSync('markerShape')
-  const bgColor = getBgColorByType(type)
-  if (markerShape === 'label' || !markerShape) {
-    marker.callout = null
-    marker.label = {
-      content: displayName,
-      borderWidth: MARKER_LABEL_BORDER_WIDTH,
-      borderColor: MARKER_LABEL_BORDER_COLOR,
-      borderRadius: 8,
-      bgColor,
-      color: '#fff',
-      padding: 3,
-      fontSize: MARKER_LABEL_FONT_SIZE,
-      textAlign: 'center',
-      anchorY: -16,
-      anchorX: getAnchorX(displayName)
-    }
-  } else {
-    marker.callout = {
-      content: displayName,
-      color: '#fff',
-      bgColor,
-      padding: getApp().globalData.padding,
-      fontSize: MARKER_LABEL_FONT_SIZE,
-      borderRadius: 7,
-      display: 'ALWAYS'
-    }
-    marker.label = null
+  marker.label = {
+    content: displayName,
+    borderWidth: MARKER_LABEL_BORDER_WIDTH,
+    borderColor: MARKER_LABEL_BORDER_COLOR,
+    borderRadius: 8,
+    bgColor: getBgColorByType(type),
+    color: '#fff',
+    padding: 3,
+    fontSize: MARKER_LABEL_FONT_SIZE,
+    textAlign: 'center',
+    anchorY: -16,
+    anchorX: getAnchorX(displayName)
   }
   return applyMarkerSelectedStyle(marker, selected)
 }

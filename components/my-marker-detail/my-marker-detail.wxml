@@ -79,18 +79,22 @@
             <view class="row">
               <text class="label">类型</text>
               <text class="tag" style="color: {{typeColor}}; background-color: {{typeBg}};">{{typeName}}</text>
+              <view class="line"></view>
             </view>
             <view class="row">
               <text class="label">经度</text>
               <text class="value">{{lngText}}</text>
+              <view class="line"></view>
             </view>
             <view class="row">
               <text class="label">纬度</text>
               <text class="value">{{latText}}</text>
+              <view class="line"></view>
             </view>
             <view class="row {{deletedDateText ? '' : 'row-last'}}">
               <text class="label">创建时间</text>
               <text class="value">{{createdDateText}}</text>
+              <view class="line"></view>
             </view>
             <view class="row row-last" wx:if="{{deletedDateText}}">
               <text class="label">删除时间</text>

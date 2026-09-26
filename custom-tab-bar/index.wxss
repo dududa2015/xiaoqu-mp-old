@@ -27,9 +27,9 @@
 .pill {
   pointer-events: auto;
   position: relative;
-  width: 400rpx;
-  height: 120rpx;
-  border-radius: 60rpx;
+  width: 350rpx;
+  height: 108rpx;
+  border-radius: 54rpx;
   background: #ffffff;
   border: 1rpx solid rgba(0, 0, 0, 0.06);
   box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
@@ -37,11 +37,11 @@
 
 .indicator {
   position: absolute;
-  top: 8rpx;
-  bottom: 8rpx;
-  left: 8rpx;
-  width: 188rpx;
-  border-radius: 52rpx;
+  top: 6rpx;
+  bottom: 6rpx;
+  left: 6rpx;
+  width: 166rpx;
+  border-radius: 48rpx;
   background: rgba(0, 116, 254, 0.1);
   z-index: 1;
 }
@@ -51,7 +51,7 @@
 }
 
 .indicator.at-1 {
-  transform: translateX(196rpx);
+  transform: translateX(172rpx);
 }
 
 .indicator.animate {
@@ -61,15 +61,15 @@
 .row {
   position: relative;
   z-index: 2;
-  width: 400rpx;
-  height: 120rpx;
+  width: 350rpx;
+  height: 108rpx;
   display: flex;
   flex-direction: row;
 }
 
 .item {
-  width: 200rpx;
-  height: 120rpx;
+  width: 175rpx;
+  height: 108rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -81,8 +81,8 @@
 }
 
 .icon {
-  width: 44rpx;
-  height: 44rpx;
+  width: 40rpx;
+  height: 40rpx;
 }
 
 .label {

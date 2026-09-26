@@ -70,16 +70,25 @@
 }
 
 .row {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   padding: 24rpx;
-  border-bottom: 1rpx solid rgba(34, 34, 34, 0.08);
 }
 
-.row-last {
-  border-bottom: none;
+.line {
+  position: absolute;
+  left: 24rpx;
+  right: 0;
+  bottom: 0;
+  height: 1rpx;
+  background: rgba(34, 34, 34, 0.08);
+}
+
+.row-last .line {
+  display: none;
 }
 
 .label-wrap {
@@ -103,8 +112,8 @@
 }
 
 .name-edit {
+  position: relative;
   padding: 20rpx 24rpx 16rpx;
-  border-bottom: 1rpx solid rgba(34, 34, 34, 0.08);
 }
 
 .name-edit-row {

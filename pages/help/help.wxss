@@ -112,15 +112,24 @@
 }
 
 .row {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 24rpx 32rpx;
-  border-bottom: 1rpx solid #f0f0f0;
 }
 
-.row-last {
-  border-bottom-width: 0;
+.line {
+  position: absolute;
+  left: 32rpx;
+  right: 0;
+  bottom: 0;
+  height: 1rpx;
+  background: #f0f0f0;
+}
+
+.row-last .line {
+  display: none;
 }
 
 .main {

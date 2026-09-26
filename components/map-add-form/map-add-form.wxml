@@ -36,6 +36,7 @@
         <view class="form-row">
           <text class="row-label">{{label}}<text wx:if="{{needName}}" class="required"> *</text></text>
           <input class="row-input" maxlength="10" value="{{name}}" bindinput="onNameInput" placeholder="{{needName ? '必填，最多10个字' : '最多10个字'}}" placeholder-class="row-placeholder" cursor-spacing="36" always-embed="{{true}}" adjust-position="{{true}}" />
+          <view class="form-line"></view>
         </view>
         <view class="form-row" wx:if="{{showQuick && suggestions.length}}">
           <text class="row-label">快速输入</text>
@@ -51,6 +52,7 @@
               >{{item.name}}</view>
             </view>
           </scroll-view>
+          <view class="form-line"></view>
         </view>
         <view class="form-row" wx:if="{{typeIndex === 0}}">
           <text class="row-label">大门朝向</text>
@@ -68,6 +70,7 @@
               </view>
             </view>
           </scroll-view>
+          <view class="form-line"></view>
         </view>
         <view class="form-row" wx:if="{{tags.length}}">
           <text class="row-label">标签</text>
@@ -83,6 +86,7 @@
               >{{item.name}}</view>
             </view>
           </scroll-view>
+          <view class="form-line"></view>
         </view>
         <view class="form-row form-row-photo">
           <text class="row-label">照片</text>
@@ -95,6 +99,7 @@
               <image class="photo-add-icon" src="/images/camera.png" mode="aspectFit" />
             </view>
           </view>
+          <view class="form-line"></view>
         </view>
       </view>
     </view>

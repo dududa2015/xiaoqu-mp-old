@@ -1,4 +1,4 @@
-/** 地图显示设置。卫星图、控件位置、标记形状、小区范围和旋转。 */
+/** 地图显示设置。卫星图、控件位置、小区范围、旋转、3D 楼栋和屏幕常亮。 */
 
 const sheetDrag = require('../../behaviors/sheet-drag')
 
@@ -15,18 +15,16 @@ Component({
   data: {
     enableSatellite: false,
     position: 'right',
-    markerShape: 'label',
     showCommunityDetail: true,
     enableRotate: false,
+    enable3D: false,
+    enableScreenOn: false,
     sheetSize: 0.5,
     positionOptions: [
       { label: '居左', value: 'left' },
       { label: '居右', value: 'right' }
     ],
-    shapeOptions: [
-      { label: '气泡', value: 'callout' },
-      { label: '标签', value: 'label' }
-    ]
+    segmentStyle: 'border-radius: 999rpx; overflow: hidden; --td-spacer: 8rpx; --td-spacer-1: 28rpx; --td-segmented-item-label-font: 26rpx / 40rpx PingFang SC, Microsoft YaHei, Arial Regular; --td-segmented-item-color: #222222; --td-segmented-item-active-color: #0074FE;'
   },
 
   lifetimes: {
@@ -70,7 +68,7 @@ Component({
       const width = this._windowWidth || 375
       const height = this._windowHeight || 667
       const rpx = width / 750
-      const content = 16 + 8 + 8 + 44 + 12 + 196 + 16 + 96 * 4 + 16
+      const content = 16 + 8 + 8 + 44 + 12 + 196 + 16 + 96 * 5 + 16
       return Math.min(0.92, content * rpx / height)
     },
 
@@ -140,19 +138,21 @@ Component({
       wx.worklet.runOnJS(this.onSheetSizeChange.bind(this))(size)
     },
 
-    /** 读出卫星图、控件左右、标签或气泡、小区范围、是否旋转。 */
+    /** 读出卫星图、控件左右、小区范围、旋转、3D 楼栋和屏幕常亮。 */
     readStorage() {
       const position = wx.getStorageSync('position')
-      const markerShape = wx.getStorageSync('markerShape')
       const enableRotate = wx.getStorageSync('enableRotate')
       const enableSatellite = wx.getStorageSync('enableSatellite')
       const showCommunityDetail = wx.getStorageSync('showCommunityDetail')
+      const enable3D = wx.getStorageSync('enable3D')
+      const enableScreenOn = wx.getStorageSync('enableScreenOn')
       this.setData({
         position: position || 'right',
-        markerShape: markerShape || 'label',
         enableRotate: typeof enableRotate === 'boolean' ? enableRotate : false,
         enableSatellite: typeof enableSatellite === 'boolean' ? enableSatellite : false,
-        showCommunityDetail: typeof showCommunityDetail === 'boolean' ? showCommunityDetail : true
+        showCommunityDetail: typeof showCommunityDetail === 'boolean' ? showCommunityDetail : true,
+        enable3D: enable3D === true,
+        enableScreenOn: enableScreenOn === true
       })
     },
 
@@ -161,9 +161,10 @@ Component({
       this.triggerEvent('change', {
         enableSatellite: this.data.enableSatellite,
         position: this.data.position,
-        markerShape: this.data.markerShape,
         showCommunityDetail: this.data.showCommunityDetail,
-        enableRotate: this.data.enableRotate
+        enableRotate: this.data.enableRotate,
+        enable3D: this.data.enable3D,
+        enableScreenOn: this.data.enableScreenOn
       })
     },
 
@@ -187,18 +188,6 @@ Component({
       this.emitChange()
     },
 
-    /** 标记用标签还是气泡。 */
-    onShape(e) {
-      const value = e.detail.value
-      const markerShape = Array.isArray(value) ? value[0] : value
-      if (markerShape !== 'callout' && markerShape !== 'label') {
-        return
-      }
-      this.setData({ markerShape })
-      wx.setStorageSync('markerShape', markerShape)
-      this.emitChange()
-    },
-
     /** 是否画出小区边界和出入口。 */
     onCommunity(e) {
       const showCommunityDetail = e.detail.value
@@ -212,6 +201,23 @@ Component({
       const enableRotate = e.detail.value
       this.setData({ enableRotate })
       wx.setStorageSync('enableRotate', enableRotate)
+      this.emitChange()
+    },
+
+    /** 打开后地图倾斜，并显示立体楼栋。 */
+    on3D(e) {
+      const enable3D = e.detail.value
+      this.setData({ enable3D })
+      wx.setStorageSync('enable3D', enable3D)
+      this.emitChange()
+    },
+
+    /** 保持屏幕不自动锁屏。 */
+    onScreenOn(e) {
+      const enableScreenOn = e.detail.value
+      this.setData({ enableScreenOn })
+      wx.setStorageSync('enableScreenOn', enableScreenOn)
+      wx.setKeepScreenOn({ keepScreenOn: enableScreenOn })
       this.emitChange()
     }
   }

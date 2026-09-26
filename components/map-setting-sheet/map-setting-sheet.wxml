@@ -32,25 +32,31 @@
           </view>
         </view>
         <view class="group">
-          <view class="row">
+          <view class="row row-segment">
             <text class="row-title">地图控件位置</text>
             <view class="segment">
-              <t-segmented value="{{position}}" options="{{positionOptions}}" style="border-radius: 999rpx; overflow: hidden;" bind:change="onPosition" />
+              <t-segmented value="{{position}}" options="{{positionOptions}}" style="{{segmentStyle}}" bind:change="onPosition" />
             </view>
           </view>
-          <view class="row">
-            <text class="row-title">标记形状</text>
-            <view class="segment">
-              <t-segmented value="{{markerShape}}" options="{{shapeOptions}}" style="border-radius: 999rpx; overflow: hidden;" bind:change="onShape" />
-            </view>
-          </view>
+          <view class="line"></view>
           <view class="row">
             <text class="row-title">显示小区边界和出入口</text>
             <switch checked="{{showCommunityDetail}}" color="#0074FE" bindchange="onCommunity" />
           </view>
-          <view class="row row-last">
+          <view class="line"></view>
+          <view class="row">
             <text class="row-title">开启旋转</text>
             <switch checked="{{enableRotate}}" color="#0074FE" bindchange="onRotate" />
+          </view>
+          <view class="line"></view>
+          <view class="row">
+            <text class="row-title">3D楼栋</text>
+            <switch checked="{{enable3D}}" color="#0074FE" bindchange="on3D" />
+          </view>
+          <view class="line"></view>
+          <view class="row row-last">
+            <text class="row-title">屏幕常亮</text>
+            <switch checked="{{enableScreenOn}}" color="#0074FE" bindchange="onScreenOn" />
           </view>
         </view>
     </view>

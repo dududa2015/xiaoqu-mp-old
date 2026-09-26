@@ -37,6 +37,7 @@
               <text class="row-sub">{{item.summary}}</text>
             </view>
             <t-icon name="chevron-right" size="36rpx" color="#c7c7cc" />
+            <view class="line"></view>
           </view>
         </view>
       </view>

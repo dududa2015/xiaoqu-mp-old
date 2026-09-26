@@ -28,6 +28,7 @@
             </view>
             <text class="sub" wx:if="{{item.showSubtitle}}">{{item.subtitle}}</text>
           </view>
+          <view class="line"></view>
         </view>
       </view>
       <view class="empty" wx:elif="{{initialized && !loading}}">
