@@ -31,11 +31,11 @@
 
   <map-tools position="{{controlPosition}}" setting-disabled="{{showAddForm || drawing}}" search-disabled="{{showAddForm || drawing}}" bind:search="onSearchTap" bind:setting="onSettingTap" />
 
-  <image class="form-pin" wx:if="{{drawing && drawType === 7}}" src="/images/marker/marker3.png" mode="aspectFit" />
-  <image class="form-pin" wx:if="{{drawing && drawType === 8}}" src="/images/marker/marker4.png" mode="aspectFit" />
-  <image class="form-pin" wx:if="{{showAddForm && addTypeIndex === 0}}" src="/images/marker/marker0.png" mode="aspectFit" />
-  <image class="form-pin" wx:if="{{showAddForm && addTypeIndex === 1}}" src="/images/marker/marker1.png" mode="aspectFit" />
-  <image class="form-pin" wx:elif="{{showAddForm && addTypeIndex > 1}}" src="/images/marker/marker2.png" mode="aspectFit" />
+  <image class="form-pin {{pinBounce ? 'is-bounce' : ''}}" wx:if="{{drawing && drawType === 7}}" src="/images/marker/marker3.png" mode="aspectFit" />
+  <image class="form-pin {{pinBounce ? 'is-bounce' : ''}}" wx:if="{{drawing && drawType === 8}}" src="/images/marker/marker4.png" mode="aspectFit" />
+  <image class="form-pin {{pinBounce ? 'is-bounce' : ''}}" wx:if="{{showAddForm && addTypeIndex === 0}}" src="/images/marker/marker0.png" mode="aspectFit" />
+  <image class="form-pin {{pinBounce ? 'is-bounce' : ''}}" wx:if="{{showAddForm && addTypeIndex === 1}}" src="/images/marker/marker1.png" mode="aspectFit" />
+  <image class="form-pin {{pinBounce ? 'is-bounce' : ''}}" wx:elif="{{showAddForm && addTypeIndex > 1}}" src="/images/marker/marker2.png" mode="aspectFit" />
 
   <view class="draw-bar" wx:if="{{drawing}}">
     <view class="draw-btn" bindtap="onDrawUndo">

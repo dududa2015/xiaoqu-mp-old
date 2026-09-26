@@ -338,6 +338,16 @@ Component({
       })
     },
 
+    onPreviewPhoto(e) {
+      const index = Number(e.currentTarget.dataset.index) || 0
+      const urls = this.data.photos || []
+      const current = urls[index]
+      if (!current) {
+        return
+      }
+      wx.previewImage({ current, urls })
+    },
+
     onRemovePhoto(e) {
       const index = Number(e.currentTarget.dataset.index)
       this.setData({

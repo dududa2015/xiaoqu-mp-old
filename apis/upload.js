@@ -1,21 +1,8 @@
 const { apiUrl } = require('../utils/request')
 const { generateSecurityHeaders } = require('../utils/security')
+const { compressImageToPath } = require('../utils/image-compress')
 
 const UPLOAD_PATH = '/ImageUpload/CheckThenUploadToCos'
-
-function compress(filePath) {
-  if (!wx.compressImage) {
-    return Promise.resolve(filePath)
-  }
-  return new Promise((resolve) => {
-    wx.compressImage({
-      src: filePath,
-      quality: 75,
-      success: (res) => resolve(res.tempFilePath || filePath),
-      fail: () => resolve(filePath)
-    })
-  })
-}
 
 function uploadMarkerPhoto(filePath) {
   const header = generateSecurityHeaders({
@@ -24,7 +11,7 @@ function uploadMarkerPhoto(filePath) {
     data: {}
   })
   delete header['Content-Type']
-  return compress(filePath).then((path) => new Promise((resolve, reject) => {
+  return compressImageToPath(filePath, { quality: 0.72 }).then((path) => new Promise((resolve, reject) => {
     wx.uploadFile({
       url: apiUrl + UPLOAD_PATH,
       filePath: path,

@@ -43,6 +43,7 @@ Page({
     addTypeLabel: '名称',
     addTypeNeedName: false,
     editMarker: null,
+    pinBounce: false,
     drawing: false,
     drawType: 7,
     showDetail: false,
@@ -776,6 +777,9 @@ Page({
     if (e.causedBy === 'drag' && this.data.located) {
       this.setData({ located: false })
     }
+    if (e.type === 'end' && e.causedBy === 'drag' && (this.data.showAddForm || this.data.drawing)) {
+      this.bouncePin()
+    }
     if (!e.detail || !e.detail.centerLocation || e.type !== 'end' || e.causedBy !== 'drag') {
       return
     }
@@ -788,6 +792,27 @@ Page({
     }
     this.loadAround(latitude, longitude)
     this.loadCommunity(latitude, longitude)
+  },
+
+  bouncePin() {
+    if (this._pinBounceTimer) {
+      clearTimeout(this._pinBounceTimer)
+      this._pinBounceTimer = null
+    }
+    if (this.data.pinBounce) {
+      this.setData({ pinBounce: false })
+      setTimeout(() => this.startPinBounce(), 20)
+      return
+    }
+    this.startPinBounce()
+  },
+
+  startPinBounce() {
+    this.setData({ pinBounce: true })
+    this._pinBounceTimer = setTimeout(() => {
+      this.setData({ pinBounce: false })
+      this._pinBounceTimer = null
+    }, 600)
   },
 
   loadAround(lat, lng) {

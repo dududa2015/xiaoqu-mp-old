@@ -87,7 +87,7 @@
         <view class="form-row form-row-photo">
           <text class="row-label">照片</text>
           <view class="photo-row">
-            <view class="photo" wx:for="{{photos}}" wx:for-index="index" wx:key="*this">
+            <view class="photo" wx:for="{{photos}}" wx:for-index="index" wx:key="index" data-index="{{index}}" catchtap="onPreviewPhoto">
               <image class="photo-img" src="{{item}}" mode="aspectFill" />
               <view class="photo-remove" data-index="{{index}}" catchtap="onRemovePhoto">×</view>
             </view>
