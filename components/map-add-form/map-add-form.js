@@ -1,3 +1,5 @@
+/** 添加和修改点标记的表单。楼号、出入口、公厕、设施、其他共用这一张。 */
+
 const TAGS = {
   0: ['有门禁', '大门常开', '有电梯', '无电梯', '需业主开门', '有保安登记', '临时停车难', '夜间关闭'],
   1: ['需要登记', '禁止骑行', '可以骑行', '需要刷卡', '24h开放'],
@@ -79,6 +81,7 @@ Component({
   },
 
   lifetimes: {
+    /** 记下窗口尺寸，用来把卡片高度换算成弹层比例。 */
     attached() {
       const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
       this._windowWidth = info.windowWidth || 375
@@ -87,6 +90,7 @@ Component({
   },
 
   observers: {
+    /** 打开时用正在编辑的标记填表，并按内容收缩高度。 */
     show(visible) {
       if (visible) {
         const filled = this.fillFromMarker(this.properties.editMarker)
@@ -122,6 +126,7 @@ Component({
   },
 
   methods: {
+    /** 从标记还原名称、朝向、标签和已上传照片。 */
     fillFromMarker(marker) {
       const typeIndex = this.data.typeIndex
       if (!marker || !marker.xId) {
@@ -160,14 +165,17 @@ Component({
       return { name, direction, tags, photos, photoKeys }
     },
 
+    /** 楼号、出入口、设施、其他有快速输入。 */
     hasQuick(typeIndex) {
       return typeIndex === 0 || typeIndex === 1 || typeIndex === 3 || typeIndex === 4
     },
 
+    /** 按类型生成可选标签，默认都不选。 */
     buildTags(typeIndex) {
       return (TAGS[typeIndex] || []).map((name) => ({ name, checked: false }))
     },
 
+    /** 楼号按已输入内容推荐邻居楼；其他类型用固定词。 */
     buildSuggestions(typeIndex, name, initial) {
       if (typeIndex === 0) {
         const text = (name || '').trim()
@@ -184,6 +192,7 @@ Component({
         .map((item) => ({ name: item, checked: item === text }))
     },
 
+    /** 没有量到卡片时的默认高度比例。 */
     measureForm() {
       const width = this._windowWidth || 375
       const height = this._windowHeight || 667
@@ -202,11 +211,13 @@ Component({
       return Math.min(0.92, content * rpx / height)
     },
 
+    /** 卡片像素高度换成不超过 0.92 的弹层比例。 */
     sizeFromHeight(cardHeight) {
       const height = this._windowHeight || 667
       return Math.min(0.92, (cardHeight + 1) / height)
     },
 
+    /** 量 .sheet-card。节点还没出来时短延迟再量一次。 */
     readCard(done, retry) {
       const left = retry == null ? 6 : retry
       this.createSelectorQuery()
@@ -226,6 +237,7 @@ Component({
         })
     },
 
+    /** 写入高度并滚到该位置。打开用 beginOpen，避免被当成关闭。 */
     applyFormSize(formSize, open) {
       const next = formSize || this.measureForm()
       const finish = () => {
@@ -245,6 +257,7 @@ Component({
       this.setData({ formSize: next }, finish)
     },
 
+    /** 标签或照片变化后重新量高。 */
     refit() {
       if (!this.data.show) {
         return
@@ -257,6 +270,7 @@ Component({
       })
     },
 
+    /** 添加表单点空白不关闭，避免拖地图时误关。 */
     onSheetBlankTap() {
       if (this.data.typeIndex === 0) {
         return
@@ -267,12 +281,14 @@ Component({
       this.triggerEvent('close')
     },
 
+    /** worklet 里把高度交回逻辑层。 */
     onSheetSizeUpdate(e) {
       'worklet'
       const size = e.size || 0
       wx.worklet.runOnJS(this.onSheetSizeChange.bind(this))(size)
     },
 
+    /** 输入名称时刷新楼号推荐。出入口等类型只按关键字过滤。 */
     onNameInput(e) {
       const name = e.detail.value
       this.setData({
@@ -281,6 +297,7 @@ Component({
       }, () => this.refit())
     },
 
+    /** 点快速输入。非楼号只切换选中，不改列表本身。 */
     onSuggestion(e) {
       const name = e.currentTarget.dataset.name
       const typeIndex = this.data.typeIndex
@@ -311,6 +328,7 @@ Component({
       }, () => this.refit())
     },
 
+    /** 标签可多选。 */
     onTag(e) {
       const name = e.currentTarget.dataset.name
       const tags = this.data.tags.map((item) => ({
@@ -320,6 +338,7 @@ Component({
       this.setData({ tags })
     },
 
+    /** 从相册或相机添加，最多 4 张。 */
     onAddPhoto() {
       const remain = 4 - this.data.photos.length
       if (remain <= 0) {
@@ -338,6 +357,7 @@ Component({
       })
     },
 
+    /** 点照片预览原图，删除按钮单独处理。 */
     onPreviewPhoto(e) {
       const index = Number(e.currentTarget.dataset.index) || 0
       const urls = this.data.photos || []
@@ -348,6 +368,7 @@ Component({
       wx.previewImage({ current, urls })
     },
 
+    /** 删掉对应的预览和已有对象键。 */
     onRemovePhoto(e) {
       const index = Number(e.currentTarget.dataset.index)
       this.setData({
@@ -356,6 +377,7 @@ Component({
       }, () => this.refit())
     },
 
+    /** 楼号大门朝向，再点一次取消。 */
     onDirection(e) {
       const direction = e.currentTarget.dataset.label
       this.setData({
@@ -363,6 +385,7 @@ Component({
       })
     },
 
+    /** 编辑时直接关闭；新增时退回类型网格。 */
     onBack() {
       if (this.properties.editMarker && this.properties.editMarker.xId) {
         this.triggerEvent('close')
@@ -371,6 +394,7 @@ Component({
       this.triggerEvent('back')
     },
 
+    /** 校验必填名称后把表单内容交给地图页提交。 */
     onSave() {
       const name = (this.data.name || '').trim()
       if (this.data.typeIndex === 0 && name) {

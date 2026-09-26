@@ -1,3 +1,5 @@
+/** 本地分段器。设置页和我的标记若改用组件库的 t-segmented，这份可以不参与上传。 */
+
 function getRect(ctx, selector) {
   return new Promise((resolve) => {
     ctx.createSelectorQuery().select(selector).boundingClientRect().exec((res) => {
@@ -33,12 +35,14 @@ Component({
   },
 
   lifetimes: {
+    /** 首次算出滑块位置。 */
     ready() {
       this.updateThumb()
     }
   },
 
   observers: {
+    /** 选项变化时重建并移动滑块。 */
     options(options) {
       this.updateOptions(options)
     },
@@ -48,6 +52,7 @@ Component({
   },
 
   methods: {
+    /** 给每项补上选中态。 */
     updateOptions(options) {
       const list = options || []
       const segmentItems = list.map((option) => {
@@ -62,6 +67,7 @@ Component({
       this.setData({ segmentItems })
     },
 
+    /** 按 value 找到当前下标。 */
     updateActiveIndex() {
       const segmentItems = this.data.segmentItems || []
       const value = this.data.value
@@ -78,6 +84,7 @@ Component({
       })
     },
 
+    /** 量每一段宽度，移动白色滑块。 */
     updateThumb() {
       const activeIndex = this.data.activeIndex
       if (activeIndex < 0) {
@@ -97,6 +104,7 @@ Component({
       })
     },
 
+    /** 点选后通知外面。 */
     handleSelect(e) {
       if (this.data.disabled) {
         return

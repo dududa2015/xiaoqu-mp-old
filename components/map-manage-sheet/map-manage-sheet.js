@@ -1,3 +1,5 @@
+/** 共建地图管理弹层。改名称、成员角色、邀请、退出和删除。 */
+
 const sheetDrag = require('../../behaviors/sheet-drag')
 const {
   getMapDetail,
@@ -19,6 +21,7 @@ const {
   roleText
 } = require('../../utils/map-session')
 
+/** 详情接口的 data 可能包了一层，这里取出地图对象。 */
 function detailBody(res) {
   if (typeof res === 'string') {
     try {
@@ -33,6 +36,7 @@ function detailBody(res) {
   return res
 }
 
+/** 从详情里取出成员数组。 */
 function pickMembers(body) {
   const list = body && (body.members || body.Members)
   return Array.isArray(list) ? list : []
@@ -68,6 +72,7 @@ Component({
   },
 
   lifetimes: {
+    /** 记录窗口高度。 */
     attached() {
       const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
       this._windowHeight = info.windowHeight || 667
@@ -99,11 +104,13 @@ Component({
   },
 
   methods: {
+    /** 拖动时同步高度。 */
     onSheetSizeUpdate(e) {
       'worklet'
       wx.worklet.runOnJS(this.onSheetSizeChange.bind(this))(e.size || 0)
     },
 
+    /** 按卡片真实高度设置弹层，避免底部空一截。 */
     fitCard(open, retry) {
       const left = retry == null ? 6 : retry
       this.createSelectorQuery().select('.sheet-card').boundingClientRect().exec((res) => {
@@ -137,6 +144,7 @@ Component({
       })
     },
 
+    /** 拉当前共建地图详情。 */
     loadDetail() {
       getMapDetail({ mapId: this.mapId }).then((res) => {
         const body = detailBody(res)
@@ -155,6 +163,7 @@ Component({
       })
     },
 
+    /** 详情失败时用列表里的地图顶上。 */
     loadFromList(message) {
       const userId = wx.getStorageSync('userId')
       getMapList({ userId }).then((res) => {
@@ -170,6 +179,7 @@ Component({
       })
     },
 
+    /** 把地图、成员和邀请写进界面。只读成员不能改名称。 */
     showMap(map, rawMembers, memberCount) {
       const user = wx.getStorageSync('userInfo') || {}
       const myId = user.userId || wx.getStorageSync('userId')
@@ -208,6 +218,7 @@ Component({
       }
     },
 
+    /** 没有邀请口令时补创建编辑和只读两种。 */
     ensureInvites() {
       if (!this.data.editorToken) {
         createInvite({ mapId: this.mapId, role: 'editor' }).then((invite) => {
@@ -225,6 +236,7 @@ Component({
       }
     },
 
+    /** 进入和资料页相同的名称编辑。 */
     onEditName() {
       if (!this.data.isOwner || !this.data.map || this.data.editingName) {
         return
@@ -245,6 +257,7 @@ Component({
       })
     },
 
+    /** 记录正在输入的名称。 */
     onNameInput(e) {
       const nameValue = String((e.detail && e.detail.value) || '').slice(0, 10)
       this.setData({
@@ -253,10 +266,12 @@ Component({
       })
     },
 
+    /** 放弃修改并重新量高。 */
     onCancelName() {
       this.setData({ editingName: false, focusInput: false }, () => this.fitCard(false))
     },
 
+    /** 名称为空时提示，没变化则只退出编辑。 */
     onSaveName() {
       if (!this.data.isOwner || !this.data.map || this.data.savingName) {
         return
@@ -285,6 +300,7 @@ Component({
       })
     },
 
+    /** 创建者切换是否同时显示公共标记。 */
     onIsPubChange(e) {
       const isPub = !!(e.detail && e.detail.value)
       updateMap({ mapId: this.mapId, isPub }).then((res) => {
@@ -303,6 +319,7 @@ Component({
       })
     },
 
+    /** 修改角色或移出成员。不能改自己的创建者角色。 */
     onMember(e) {
       if (!this.data.isOwner) {
         return
@@ -356,6 +373,7 @@ Component({
       })
     },
 
+    /** 退出或删除成功后回到公共地图。 */
     finishLeave() {
       const mapId = this.mapId
       if (String(getSession().mapId) === String(mapId)) {
@@ -366,6 +384,7 @@ Component({
       this.triggerEvent('updated', { mapId, removed: true })
     },
 
+    /** 成员退出共建地图。 */
     onLeave() {
       wx.showModal({
         title: '确认退出',
@@ -383,6 +402,7 @@ Component({
       })
     },
 
+    /** 创建者删除整张地图。 */
     onDelete() {
       wx.showModal({
         title: '确认删除',

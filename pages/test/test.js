@@ -1,3 +1,5 @@
+/** 开发者工具生成的空白页，没有接入业务。 */
+
 const { setTabBarSelected } = require('../../utils/tab-bar')
 
 Page({

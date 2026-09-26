@@ -1,5 +1,8 @@
+/** 共建地图和个人地图接口。列表、创建、成员和邀请都从这里发。 */
+
 const { request } = require('../utils/request')
 
+/** 当前用户能看到的个人地图和共建地图。 */
 function getMapList(params) {
   return request({
     url: '/MapV2/getMapList',
@@ -10,6 +13,7 @@ function getMapList(params) {
   })
 }
 
+/** 创建个人地图或共建地图。 */
 function createMap(data) {
   return request({
     url: '/MapV2/createMap',
@@ -19,6 +23,7 @@ function createMap(data) {
   })
 }
 
+/** 修改地图名称或是否同时显示公共标记。 */
 function updateMap(data) {
   return request({
     url: '/MapV2/updateMap',
@@ -29,6 +34,7 @@ function updateMap(data) {
   })
 }
 
+/** 地图详情，含成员和邀请口令。 */
 function getMapDetail(params) {
   return request({
     url: '/MapV2/getMapDetail',
@@ -38,6 +44,7 @@ function getMapDetail(params) {
   })
 }
 
+/** 创建者删除整张地图。 */
 function deleteMap(data) {
   return request({
     url: '/MapV2/deleteMap',
@@ -48,6 +55,7 @@ function deleteMap(data) {
   })
 }
 
+/** 成员退出共建地图。 */
 function leaveMap(data) {
   return request({
     url: '/MapV2/leaveMap',
@@ -58,6 +66,7 @@ function leaveMap(data) {
   })
 }
 
+/** 生成编辑或只读邀请。 */
 function createInvite(data) {
   return request({
     url: '/MapV2/createInvite',
@@ -68,6 +77,7 @@ function createInvite(data) {
   })
 }
 
+/** 用邀请口令加入地图。 */
 function joinMap(data) {
   return request({
     url: '/MapV2/joinMap',
@@ -78,6 +88,7 @@ function joinMap(data) {
   })
 }
 
+/** 修改成员是编辑还是只读。 */
 function updateMemberRole(data) {
   return request({
     url: '/MapV2/updateMemberRole',
@@ -88,6 +99,7 @@ function updateMemberRole(data) {
   })
 }
 
+/** 把成员移出地图。 */
 function removeMember(data) {
   return request({
     url: '/MapV2/removeMember',

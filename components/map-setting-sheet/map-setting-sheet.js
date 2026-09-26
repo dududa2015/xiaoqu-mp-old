@@ -1,3 +1,5 @@
+/** 地图显示设置。卫星图、控件位置、标记形状、小区范围和旋转。 */
+
 const sheetDrag = require('../../behaviors/sheet-drag')
 
 Component({
@@ -28,6 +30,7 @@ Component({
   },
 
   lifetimes: {
+    /** 记录窗口高度。 */
     attached() {
       const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
       this._windowWidth = info.windowWidth || 375
@@ -36,6 +39,7 @@ Component({
   },
 
   observers: {
+    /** 打开时读本地设置并量高。 */
     show(visible) {
       if (visible) {
         this.readStorage()
@@ -61,6 +65,7 @@ Component({
   },
 
   methods: {
+    /** 默认弹层比例。 */
     measureSheet() {
       const width = this._windowWidth || 375
       const height = this._windowHeight || 667
@@ -69,11 +74,13 @@ Component({
       return Math.min(0.92, content * rpx / height)
     },
 
+    /** 按卡片高度计算比例。 */
     sizeFromHeight(cardHeight) {
       const height = this._windowHeight || 667
       return Math.min(0.92, (cardHeight + 1) / height)
     },
 
+    /** 量卡片，节点未出现时重试。 */
     readCard(done, retry) {
       const left = retry == null ? 6 : retry
       this.createSelectorQuery()
@@ -93,6 +100,7 @@ Component({
         })
     },
 
+    /** 展开到量出的高度。 */
     applySheetSize(sheetSize, open) {
       const next = sheetSize || this.measureSheet()
       const finish = () => {
@@ -112,6 +120,7 @@ Component({
       this.setData({ sheetSize: next }, finish)
     },
 
+    /** 分段器出现后重新量高。 */
     refit() {
       if (!this.data.show) {
         return
@@ -124,12 +133,14 @@ Component({
       })
     },
 
+    /** 拖动高度交回逻辑层。 */
     onSheetSizeUpdate(e) {
       'worklet'
       const size = e.size || 0
       wx.worklet.runOnJS(this.onSheetSizeChange.bind(this))(size)
     },
 
+    /** 读出卫星图、控件左右、标签或气泡、小区范围、是否旋转。 */
     readStorage() {
       const position = wx.getStorageSync('position')
       const markerShape = wx.getStorageSync('markerShape')
@@ -145,6 +156,7 @@ Component({
       })
     },
 
+    /** 把设置交回地图页并写入本地。 */
     emitChange() {
       this.triggerEvent('change', {
         enableSatellite: this.data.enableSatellite,
@@ -155,6 +167,7 @@ Component({
       })
     },
 
+    /** 标准地图或卫星图。 */
     onMapType(e) {
       const enableSatellite = e.currentTarget.dataset.mode === 'satellite'
       this.setData({ enableSatellite })
@@ -162,6 +175,7 @@ Component({
       this.emitChange()
     },
 
+    /** 添加和定位按钮靠左还是靠右。 */
     onPosition(e) {
       const value = e.detail.value
       const position = Array.isArray(value) ? value[0] : value
@@ -173,6 +187,7 @@ Component({
       this.emitChange()
     },
 
+    /** 标记用标签还是气泡。 */
     onShape(e) {
       const value = e.detail.value
       const markerShape = Array.isArray(value) ? value[0] : value
@@ -184,6 +199,7 @@ Component({
       this.emitChange()
     },
 
+    /** 是否画出小区边界和出入口。 */
     onCommunity(e) {
       const showCommunityDetail = e.detail.value
       this.setData({ showCommunityDetail })
@@ -191,6 +207,7 @@ Component({
       this.emitChange()
     },
 
+    /** 是否允许地图随手机方向旋转。 */
     onRotate(e) {
       const enableRotate = e.detail.value
       this.setData({ enableRotate })

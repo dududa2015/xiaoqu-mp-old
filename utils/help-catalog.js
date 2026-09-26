@@ -1,3 +1,5 @@
+/** 使用帮助目录和正文。HIDE_VIP 为真时隐藏会员分类和两篇会员文章。 */
+
 const CATEGORIES = [
   { id: 'all', label: '全部' },
   { id: 'intro', label: '入门' },
@@ -13,6 +15,7 @@ const BROWSABLE = CATEGORIES.filter((item) => item.id !== 'all')
 // 会员帮助暂时不展示
 const HIDE_VIP = true
 
+/** 按开关过滤会员文章。 */
 function visibleSections() {
   if (!HIDE_VIP) {
     return SECTIONS
@@ -20,30 +23,37 @@ function visibleSections() {
   return SECTIONS.filter((item) => item.category !== 'vip')
 }
 
+/** 三级标题块。 */
 function h3(title) {
   return { type: 'h3', title }
 }
 
+/** 段落块。 */
 function p(text) {
   return { type: 'p', text }
 }
 
+/** 无序列表块。 */
 function bullets(items) {
   return { type: 'bullets', items }
 }
 
+/** 有序列表块。 */
 function numbered(items) {
   return { type: 'numbered', items }
 }
 
+/** 提示块。 */
 function note(text) {
   return { type: 'note', text }
 }
 
+/** 表格块。 */
 function table(headers, rows) {
   return { type: 'table', headers, rows }
 }
 
+/** 把一个内容块变成可搜索的纯文本。 */
 function blockText(block) {
   if (!block) {
     return ''
@@ -66,6 +76,7 @@ function blockText(block) {
   return ''
 }
 
+/** 标题或正文是否包含关键字。 */
 function matchesQuery(section, query) {
   const trimmed = String(query || '').trim().toLowerCase()
   if (!trimmed) {
@@ -80,6 +91,7 @@ function matchesQuery(section, query) {
   return (section.blocks || []).some((block) => blockText(block).toLowerCase().indexOf(trimmed) >= 0)
 }
 
+/** 列表页只用标题和摘要。 */
 function toListItem(section) {
   const category = CATEGORIES.find((item) => item.id === section.category)
   return {
@@ -434,19 +446,23 @@ const SECTIONS = [
   }
 ]
 
+/** 顶部分类。会员隐藏时不出现会员。 */
 function getCategories() {
   return CATEGORIES.filter((item) => !HIDE_VIP || item.id !== 'vip')
 }
 
+/** 当前可见的全部文章。 */
 function getSections() {
   return visibleSections()
 }
 
+/** 按 id 取一篇。 */
 function sectionById(id) {
   const num = Number(id)
   return visibleSections().find((item) => item.id === num) || null
 }
 
+/** 按分类和关键字筛选。 */
 function filter(category, query) {
   const sections = visibleSections()
   const byCategory = category && category !== 'all'
@@ -455,6 +471,7 @@ function filter(category, query) {
   return byCategory.filter((item) => matchesQuery(item, query)).map(toListItem)
 }
 
+/** 筛选结果再按分类分组，供列表展示。 */
 function group(category, query) {
   if (String(query || '').trim() || (category && category !== 'all')) {
     return []
@@ -466,6 +483,7 @@ function group(category, query) {
   }).filter(Boolean)
 }
 
+/** 同一分类下的其他文章。 */
 function relatedSections(sectionId) {
   const current = sectionById(sectionId)
   if (!current) {

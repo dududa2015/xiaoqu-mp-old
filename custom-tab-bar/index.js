@@ -1,3 +1,5 @@
+/** 自定义底栏。地图和我的两项，弹层打开时可以整个藏起来。 */
+
 Component({
   data: {
     selected: 0,
@@ -23,9 +25,11 @@ Component({
   },
 
   lifetimes: {
+    /** 记下当前选中项，避免重复 setData。 */
     created() {
       this._selected = null
     },
+    /** 读底部安全区。 */
     attached() {
       const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
       const safeArea = windowInfo.safeArea
@@ -38,6 +42,7 @@ Component({
   },
 
   methods: {
+    /** 弹层打开时隐藏底栏。 */
     setHidden(hidden) {
       const next = !!hidden
       if (this.data.hidden === next) {
@@ -46,6 +51,7 @@ Component({
       this.setData({ hidden: next })
     },
 
+    /** 切换选中项并移动指示条。 */
     setSelected(index) {
       const next = Number(index)
       if (this._selected === next) {
@@ -60,16 +66,19 @@ Component({
       })
     },
 
+    /** 按下时的反馈。 */
     onPress(e) {
       this.setData({ pressed: Number(e.currentTarget.dataset.index) })
     },
 
+    /** 松手后取消按下态。 */
     onRelease() {
       if (this.data.pressed !== -1) {
         this.setData({ pressed: -1 })
       }
     },
 
+    /** 切到对应 tab 页。 */
     onChange(e) {
       const index = Number(e.currentTarget.dataset.index)
       const item = this.data.list[index]

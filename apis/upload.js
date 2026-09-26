@@ -1,9 +1,12 @@
+/** 标记照片上传。先压缩并加水印，再送到先审后发接口。 */
+
 const { apiUrl } = require('../utils/request')
 const { generateSecurityHeaders } = require('../utils/security')
 const { compressImageToPath } = require('../utils/image-compress')
 
 const UPLOAD_PATH = '/ImageUpload/CheckThenUploadToCos'
 
+/** 返回 COS 对象键。已有对象键的旧图不要走这里。 */
 function uploadMarkerPhoto(filePath) {
   const header = generateSecurityHeaders({
     method: 'POST',

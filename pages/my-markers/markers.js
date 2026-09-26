@@ -1,3 +1,5 @@
+/** 我的标记。分段切换有效、待审核、被删除和收藏。 */
+
 const { getMarkerByUserId } = require('../../apis/marker')
 const { listFavorites } = require('../../apis/place')
 const { mapMarkerRow, mapFavoriteRow } = require('../../utils/my-marker-format')
@@ -17,6 +19,7 @@ const EMPTY = {
   favorites: { title: '暂无收藏', desc: '在地图标记详情中点击收藏即可添加。' }
 }
 
+/** 自定义导航尺寸。 */
 function navMetrics() {
   const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
   const menu = wx.getMenuButtonBoundingClientRect()
@@ -28,6 +31,7 @@ function navMetrics() {
   }
 }
 
+/** 每个分段的空状态文案。 */
 function emptyOf(tab) {
   const state = EMPTY[tab] || EMPTY.valid
   return { emptyTitle: state.title, emptyDesc: state.desc }
@@ -48,6 +52,7 @@ Page({
     emptyDesc: ''
   }, navMetrics()),
 
+  /** 可从参数指定初始分段。 */
   onLoad(options) {
     const tab = options && options.tab
     const activeTab = EMPTY[tab] ? tab : 'valid'
@@ -55,10 +60,12 @@ Page({
     this.load(true)
   },
 
+  /** 返回我的页面。 */
   onBack() {
     wx.navigateBack()
   },
 
+  /** 切换分段并重新加载。 */
   onTab(e) {
     const tab = e.detail && e.detail.value
     if (!tab || tab === this.data.activeTab) {
@@ -75,12 +82,14 @@ Page({
     this.load(true)
   },
 
+  /** 滚动到底继续翻页。收藏不分页。 */
   onMore() {
     if (this.data.activeTab !== 'favorites') {
       this.load(false)
     }
   },
 
+  /** 按当前分段选择收藏接口或标记接口。 */
   load(reset) {
     if (!checkLogin()) {
       this.setData({ initialized: true, loading: false })
@@ -93,6 +102,7 @@ Page({
     this.loadMarkers(reset)
   },
 
+  /** 一次性拉完收藏。 */
   loadFavorites() {
     const userId = wx.getStorageSync('userId')
     this.setData({ loading: true })
@@ -104,6 +114,7 @@ Page({
     })
   },
 
+  /** 按审核状态分页拉自己的标记。 */
   loadMarkers(reset) {
     if (this.data.loading || (!reset && !this.data.hasMore)) {
       return
@@ -138,6 +149,7 @@ Page({
     })
   },
 
+  /** 打开这条标记的详情弹层。 */
   onOpen(e) {
     const item = this.data.list[e.currentTarget.dataset.index]
     if (!item) {
@@ -150,10 +162,12 @@ Page({
     }
   },
 
+  /** 关闭详情。 */
   onDetailClose() {
     this.setData({ showDetail: false })
   },
 
+  /** 删除或取消收藏后从第一页重载。 */
   onDetailChanged() {
     this.setData({
       list: [],

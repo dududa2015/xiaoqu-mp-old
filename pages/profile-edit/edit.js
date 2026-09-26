@@ -1,6 +1,9 @@
+/** 编辑资料。昵称点进去才出现输入框，注销账号进入单独页面。 */
+
 const { updateNickName } = require('../../apis/user')
 const { checkNickname } = require('../../apis/security')
 
+/** 自定义导航尺寸。 */
 function navMetrics() {
   const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
   const menu = wx.getMenuButtonBoundingClientRect()
@@ -20,6 +23,7 @@ Page({
     focusInput: false
   }, navMetrics()),
 
+  /** 显示当前昵称。未登录则返回。 */
   onShow() {
     const user = wx.getStorageSync('userInfo')
     const nickName = user && user.nickName && !/^null$/i.test(String(user.nickName).trim())
@@ -33,10 +37,12 @@ Page({
     })
   },
 
+  /** 返回我的页面。 */
   onBack() {
     wx.navigateBack()
   },
 
+  /** 进入昵称编辑，并延迟聚焦。 */
   onEdit() {
     const name = this.data.nickName || ''
     this.setData({
@@ -49,16 +55,19 @@ Page({
     }, 100)
   },
 
+  /** 记录输入，最长 10 字。 */
   onInput(e) {
     this.setData({
       editingName: e.detail.value || ''
     })
   },
 
+  /** 放弃本次输入。 */
   onCancel() {
     this.setData({ editing: false, focusInput: false })
   },
 
+  /** 先做敏感词检查，没变化则只关闭编辑。 */
   onSave() {
     const name = (this.data.editingName || '').trim()
     if (!name) {
@@ -103,6 +112,7 @@ Page({
     })
   },
 
+  /** 进入注销页面。 */
   onCancelAccount() {
     wx.navigateTo({ url: '/pages/account-cancel/cancel' })
   }

@@ -1,5 +1,8 @@
+/** 注销账号。需勾选已知后果，再二次确认。成功后清空本地并回到地图。 */
+
 const { cancelAccount } = require('../../apis/user')
 
+/** 自定义导航的状态栏和胶囊位置。 */
 function navMetrics() {
   const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
   const menu = wx.getMenuButtonBoundingClientRect()
@@ -17,6 +20,7 @@ Page({
     submitting: false
   }, navMetrics()),
 
+  /** 未登录直接返回。 */
   onLoad() {
     if (!wx.getStorageSync('userId')) {
       wx.showToast({ title: '请先登录', icon: 'none' })
@@ -28,12 +32,14 @@ Page({
     }
   },
 
+  /** 返回编辑资料。 */
   onBack() {
     wx.navigateBack({
       fail: () => wx.switchTab({ url: '/pages/profile/profile' })
     })
   },
 
+  /** 勾选或取消「已知注销后果」。 */
   onToggle() {
     if (this.data.submitting) {
       return
@@ -41,6 +47,7 @@ Page({
     this.setData({ agreed: !this.data.agreed })
   },
 
+  /** 弹出最后确认。 */
   onConfirm() {
     if (!this.data.agreed || this.data.submitting) {
       return
@@ -58,6 +65,7 @@ Page({
     })
   },
 
+  /** 接口必须返回 success，否则视为失败。 */
   submitCancel() {
     this.setData({ submitting: true })
     cancelAccount().then((res) => {

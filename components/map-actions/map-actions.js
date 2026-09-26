@@ -1,3 +1,5 @@
+/** 地图右下角的添加和定位按钮。 */
+
 Component({
   properties: {
     bottom: {
@@ -23,9 +25,11 @@ Component({
   },
 
   methods: {
+    /** 打开添加类型网格。 */
     onAdd() {
       this.triggerEvent('add')
     },
+    /** 回到当前位置。 */
     onLocate() {
       this.triggerEvent('locate')
     }

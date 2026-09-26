@@ -1,3 +1,5 @@
+/** 地图标记详情。展示名称、照片和收藏，并提供修改、删除、报错、导航、路线。 */
+
 const sheetDrag = require('../../behaviors/sheet-drag')
 const { getMarkerById } = require('../../apis/marker')
 const { isFavorite, toggleFavorite } = require('../../apis/place')
@@ -5,6 +7,7 @@ const { getBicycleRoute } = require('../../apis/route')
 const { checkLogin } = require('../../utils/auth')
 const { joinCommunityName } = require('../../utils/map-marker')
 
+/** 创建时间只显示到日期。 */
 function formatDate(value) {
   const date = new Date(value)
   if (isNaN(date.getTime())) {
@@ -14,6 +17,7 @@ function formatDate(value) {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
 }
 
+/** 米或公里。 */
 function formatDistance(meters) {
   const value = Number(meters) || 0
   if (value > 1000) {
@@ -22,6 +26,7 @@ function formatDistance(meters) {
   return value + '米'
 }
 
+/** 骑行时长拆成小时、分钟、秒。 */
 function formatDuration(seconds) {
   let text = ''
   const total = Number(seconds) || 0
@@ -34,6 +39,7 @@ function formatDuration(seconds) {
   return text
 }
 
+/** 列表缩略图。预览仍用原图地址。 */
 function thumbUrl(url) {
   if (!url || !/^https?:\/\//i.test(url) || url.includes('imageView2/')) {
     return url
@@ -75,6 +81,7 @@ Component({
   },
 
   lifetimes: {
+    /** 记录窗口尺寸。 */
     attached() {
       const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
       this._windowWidth = info.windowWidth || 375
@@ -108,6 +115,7 @@ Component({
   },
 
   methods: {
+    /** 滚到目标高度。节点未就绪时重试。 */
     scrollSheet(size, retry) {
       const token = this._scrollToken || 0
       const left = retry == null ? 8 : retry
@@ -139,6 +147,7 @@ Component({
       })
     },
 
+    /** 打开详情。有标记 id 则请求详情，否则只显示兴趣点名称。 */
     presentDetail(markerId, poiName) {
       if (markerId > 0) {
         this.loadDetail(markerId)
@@ -149,6 +158,7 @@ Component({
       }
     },
 
+    /** 详情已开着时换一条标记，先记下高度再换内容，避免弹层塌下去。 */
     reopenDetail(key, markerId, poiName) {
       const full = this.data.sheetSize || 0.32
       const token = (this._scrollToken || 0) + 1
@@ -183,6 +193,7 @@ Component({
       }, 280)
     },
 
+    /** 地图自带兴趣点，没有标记数据。 */
     showMapPoi() {
       const latitude = Number(this.properties.poiLatitude)
       const longitude = Number(this.properties.poiLongitude)
@@ -211,6 +222,7 @@ Component({
       }, () => this.refit(true))
     },
 
+    /** 按 xId 拉标记，决定收藏、修改、删除、报错是否出现。 */
     loadDetail(xId) {
       this.poiInfo = null
       this.setData({
@@ -263,6 +275,7 @@ Component({
       }).catch(() => {})
     },
 
+    /** 按卡片内容调整弹层高度。从高变矮时先滚再收 max-child-size。 */
     refit(open) {
       const token = (this._fitToken || 0) + 1
       this._fitToken = token
@@ -325,11 +338,13 @@ Component({
       })
     },
 
+    /** worklet 回调，转给拖动行为。 */
     onSheetSizeUpdate(e) {
       'worklet'
       wx.worklet.runOnJS(this.onSheetSizeChange.bind(this))(e.size || 0)
     },
 
+    /** 预览标记照片原图。 */
     onPreview(e) {
       const index = Number(e.currentTarget.dataset.index) || 0
       const urls = this.data.markerImages.map((item) => item.full)
@@ -337,6 +352,7 @@ Component({
       wx.previewImage({ current: urls[index], urls })
     },
 
+    /** 收藏或取消收藏当前标记。 */
     onToggleFavorite() {
       if (!checkLogin() || !this.poiInfo) return
       const userId = wx.getStorageSync('userId')
@@ -357,18 +373,22 @@ Component({
       }).catch(() => {})
     },
 
+    /** 把完整标记交给地图页打开修改表单。 */
     onEdit() {
       this.triggerEvent('edit', this.poiInfo || {})
     },
 
+    /** 请求地图页删除。 */
     onDelete() {
       this.triggerEvent('delete', this.poiInfo || {})
     },
 
+    /** 打开报错弹层。 */
     onFeedback() {
       this.triggerEvent('feedback', this.poiInfo || {})
     },
 
+    /** 跳到无地图页面再调 wx.openLocation，避免和当前地图抢初始化。 */
     onNavigate() {
       const info = this.poiInfo || {}
       const latitude = Number(info.lat)
@@ -381,6 +401,7 @@ Component({
       })
     },
 
+    /** 请求骑行路线并画到地图上。 */
     onRoute() {
       if (!checkLogin()) return
       if (this.data.routeVisible) {

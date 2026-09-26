@@ -1,5 +1,8 @@
+/** 用户接口。登录、昵称、标记统计和注销。 */
+
 const { request } = require('../utils/request')
 
+/** 用 wx.login 的 code 换用户和 token。 */
 function getUserInfo(params) {
   return request({
     url: '/users/getUserInfo',
@@ -10,6 +13,7 @@ function getUserInfo(params) {
   })
 }
 
+/** 按用户 id 读资料。 */
 function getUserById(params) {
   return request({
     url: '/users/getUserById',
@@ -20,6 +24,7 @@ function getUserById(params) {
   })
 }
 
+/** 保存昵称。 */
 function updateNickName(data) {
   return request({
     url: '/users/updateNickName',
@@ -29,6 +34,7 @@ function updateNickName(data) {
   })
 }
 
+/** 按月汇总标记数。userId 放在查询串上。 */
 function updateUserMarkersAndDeleted(params) {
   const userId = params && params.userId ? params.userId : ''
   return request({
@@ -40,6 +46,7 @@ function updateUserMarkersAndDeleted(params) {
   })
 }
 
+/** 注销账号。调用方要自己判断 success。 */
 function cancelAccount() {
   return request({
     url: '/users/cancelAccount',

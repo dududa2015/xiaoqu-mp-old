@@ -1,3 +1,5 @@
+/** 地图页。加载附近标记，切换地图，以及添加、编辑、画道路和围墙。 */
+
 const { setTabBarSelected, setTabBarHidden } = require('../../utils/tab-bar')
 const { buildMarkers, applyMarkerSelectedStyle, buildPolygon, joinCommunityName } = require('../../utils/map-marker')
 const { getAroundList, addMarker, updateMarker, deleteMarker } = require('../../apis/marker')
@@ -14,6 +16,7 @@ const LOCATE_BOTTOM_CLOSED = 88
 const TYPE_BY_INDEX = [0, 1, 2, 3, 4, 7, 8]
 const MOVE_THRESHOLD = 0.0005
 
+/** 坐标保留 6 位小数，和提交精度一致。 */
 function trimCoord(num) {
   const text = String(num)
   const dot = text.indexOf('.')
@@ -71,6 +74,7 @@ Page({
     capsuleTop: 48
   },
 
+  /** 处理邀请参数，并准备导航和地图设置。 */
   onLoad(options) {
     this.initNavMetrics()
     this.initMapSetting()
@@ -78,6 +82,7 @@ Page({
     this.consumeInvite(options && options.inviteToken)
   },
 
+  /** 用 worklet 驱动顶部地图名旁边的箭头旋转。 */
   onReady() {
     this._chevron = shared(0)
     this.applyAnimatedStyle('.map-chip-chevron', () => {
@@ -88,6 +93,7 @@ Page({
     })
   },
 
+  /** 从本地恢复卫星图、控件位置、标记形状和小区范围。 */
   initMapSetting() {
     const position = wx.getStorageSync('position')
     const markerShape = wx.getStorageSync('markerShape')
@@ -103,6 +109,7 @@ Page({
     })
   },
 
+  /** 打开一个弹层前先关掉其他弹层，并藏起底栏。 */
   openPopup(key) {
     this.setData({
       showAddGrid: key === 'add',
@@ -117,6 +124,7 @@ Page({
     setTabBarHidden(this, true)
   },
 
+  /** 关掉全部弹层，恢复底栏和箭头。 */
   closePopups() {
     const hadPin = !!this._poiPin
     const hadSelection = !!this._selectedId
@@ -146,6 +154,7 @@ Page({
     }
   },
 
+  /** 弹层变高时把定位按钮往上推。 */
   onPopupSize(e) {
     const size = (e.detail && e.detail.size) || 0
     if (this.data.showAddGrid && !this.data.showAddForm) {
@@ -158,6 +167,7 @@ Page({
     this.syncLocateBottom(size)
   },
 
+  /** 同步地图会话。从导航页回来时不重复套用焦点。 */
   onShow() {
     setTabBarSelected(this, 0)
     const session = getSession()
@@ -174,6 +184,7 @@ Page({
     this.consumeInvite(enter && enter.query && enter.query.inviteToken)
   },
 
+  /** 我的标记「在地图上查看」：移到该点、选中并加载周围标记。 */
   applyMapFocus() {
     const focus = wx.getStorageSync('mapFocus')
     if (!focus || !focus.latitude || !focus.longitude) {
@@ -216,10 +227,12 @@ Page({
     this.loadCommunity(latitude, longitude)
   },
 
+  /** 用来判断地图有没有换成另一张。 */
   mapKey(session) {
     return session.mapType + ':' + (session.mapId || '') + ':' + (session.isPub ? 1 : 0)
   },
 
+  /** 按胶囊按钮定位顶部地图名。 */
   initNavMetrics() {
     const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
     this.setData({
@@ -228,6 +241,7 @@ Page({
     })
   },
 
+  /** 把相机移到 data 里的中心点。 */
   syncMapView() {
     const session = getSession()
     this.setData({
@@ -237,6 +251,7 @@ Page({
     })
   },
 
+  /** 读当前地图会话，必要时用列表纠正，再拉附近标记。 */
   hydrateMap() {
     const userId = wx.getStorageSync('userId')
     const session = getSession()
@@ -253,6 +268,7 @@ Page({
     }).catch(() => {})
   },
 
+  /** 切换地图后清空附近缓存并重新加载。 */
   applyMapSession(session, options) {
     this._mapKey = this.mapKey(session)
     this.syncMapView()
@@ -273,6 +289,7 @@ Page({
     }
   },
 
+  /** 分享卡片带入口令时加入对应地图。 */
   consumeInvite(token) {
     const next = token || this._pendingInvite
     if (!next || next === this._inviteDone) {
@@ -310,6 +327,7 @@ Page({
     })
   },
 
+  /** 箭头在切换弹层打开时转到朝上。 */
   syncChevron(open) {
     if (!this._chevron || !!this._chevronOpen === !!open) {
       return
@@ -321,6 +339,7 @@ Page({
     })
   },
 
+  /** 打开地图切换弹层。添加或画线时不可点。 */
   onMapChip() {
     if (this.data.showAddForm || this.data.drawing) {
       return
@@ -330,6 +349,7 @@ Page({
     setTabBarHidden(this, true)
   },
 
+  /** 在切换弹层上打开管理，不改变当前地图。 */
   onMapManage(e) {
     const mapId = e.detail && e.detail.mapId
     if (!mapId) {
@@ -339,10 +359,12 @@ Page({
     setTabBarHidden(this, true)
   },
 
+  /** 只关管理弹层，切换弹层还在。 */
   onMapManageClose() {
     this.setData({ showMapManage: false })
   },
 
+  /** 名称或开关改完后刷新会话。 */
   onMapManageUpdated() {
     const sheet = this.selectComponent('#mapSwitch')
     if (sheet && typeof sheet.load === 'function') {
@@ -351,6 +373,7 @@ Page({
     this.syncMapView()
   },
 
+  /** 关闭切换弹层。 */
   onMapSwitchClose() {
     this.setData({ showMapSwitch: false })
     this.syncChevron(false)
@@ -359,6 +382,7 @@ Page({
     }
   },
 
+  /** 换成选中的地图。 */
   onMapSwitch(e) {
     const session = e.detail || getSession()
     this._around = []
@@ -368,6 +392,7 @@ Page({
     this.applyMapSession(session)
   },
 
+  /** 列表变化后重新套用当前会话。 */
   onMapReload() {
     this.syncMapView()
     this._around = []
@@ -378,6 +403,7 @@ Page({
     }
   },
 
+  /** 按弹层高度摆放定位按钮。 */
   syncLocateBottom(size) {
     const height = this.data.windowHeight || 667
     const bottom = size > 0.05 ? Math.round(height * size + 12) : LOCATE_BOTTOM_CLOSED
@@ -388,6 +414,7 @@ Page({
     }
   },
 
+  /** 选点后把相机移过去并加载周围标记。 */
   onSearchTap() {
     if (this.data.showAddForm || this.data.drawing) {
       return
@@ -425,6 +452,7 @@ Page({
     })
   },
 
+  /** 打开显示设置。 */
   onSettingTap() {
     if (this.data.showAddForm || this.data.drawing) {
       return
@@ -432,10 +460,12 @@ Page({
     this.openPopup('setting')
   },
 
+  /** 关闭设置。 */
   onSettingClose() {
     this.closePopups()
   },
 
+  /** 应用卫星图、控件位置、标记形状、小区和旋转。 */
   onSettingChange(e) {
     const detail = e.detail || {}
     const markerShape = detail.markerShape === 'callout' ? 'callout' : 'label'
@@ -461,6 +491,7 @@ Page({
     }
   },
 
+  /** 未登录不能添加。打开类型网格。 */
   onAddTap() {
     if (!this.data.canAdd) {
       return
@@ -471,10 +502,12 @@ Page({
     this.openPopup('add')
   },
 
+  /** 关闭类型网格。 */
   onAddClose() {
     this.closePopups()
   },
 
+  /** 道路和围墙进入画线，其他类型打开表单。 */
   onAddChoose(e) {
     const detail = e.detail || {}
     const typeIndex = detail.typeIndex || 0
@@ -505,6 +538,7 @@ Page({
     })
   },
 
+  /** 从表单退回类型网格。 */
   onAddFormBack() {
     if (this.data.editMarker && this.data.editMarker.xId) {
       this.setData({
@@ -521,6 +555,7 @@ Page({
     this.syncLocateBottom(this._gridSheetSize || 0)
   },
 
+  /** 取地图中心作为标记坐标并提交。 */
   onAddSave(e) {
     const detail = e.detail || {}
     if (!checkLogin()) {
@@ -533,6 +568,7 @@ Page({
     })
   },
 
+  /** 组装名称、朝向、标签和照片后调用新增或修改。 */
   submitPoint(detail, latitude, longitude) {
     const lat = roundCoord(latitude)
     const lng = roundCoord(longitude)
@@ -586,6 +622,7 @@ Page({
     })
   },
 
+  /** 已有对象键的照片直接沿用，新照片才上传。 */
   uploadPhotos(photos, keys) {
     const tasks = (photos || []).map((src, index) => {
       const key = keys[index]
@@ -600,6 +637,7 @@ Page({
     return Promise.all(tasks).then((list) => list.filter(Boolean))
   },
 
+  /** 撤销最后一个道路或围墙顶点。 */
   onDrawUndo() {
     if (!this._draftPoints.length) {
       wx.showToast({ title: '无法再撤销了', icon: 'none' })
@@ -609,6 +647,7 @@ Page({
     this.refreshDraft()
   },
 
+  /** 把当前中心记为一个顶点，重复点会被拒绝。 */
   onDrawPoint() {
     const map = wx.createMapContext('skylineMap', this)
     map.getCenterLocation({
@@ -630,6 +669,7 @@ Page({
     })
   },
 
+  /** 至少两个点才能保存道路或围墙。 */
   onDrawFinish() {
     if (this._draftPoints.length < 2) {
       wx.showToast({ title: '请至少选择2个点', icon: 'none' })
@@ -672,6 +712,7 @@ Page({
     })
   },
 
+  /** 放弃当前折线。 */
   onDrawExit() {
     if (!this._draftPoints.length) {
       this.stopDrawing()
@@ -688,6 +729,7 @@ Page({
     })
   },
 
+  /** 清空草稿并恢复添加按钮。 */
   stopDrawing() {
     this._draftPoints = []
     this._draftLine = null
@@ -700,6 +742,7 @@ Page({
     this.rebuildMarkers()
   },
 
+  /** 把草稿点画成折线。 */
   refreshDraft() {
     const points = this._draftPoints
     this._draftLine = points.length >= 2 ? buildPolyline(points, this.data.drawType, 'draft') : null
@@ -707,6 +750,7 @@ Page({
     this.rebuildMarkers()
   },
 
+  /** 合并附近线路、草稿和骑行路线。 */
   syncLines() {
     const list = (this._lines || []).slice()
     if (this._draftLine) {
@@ -718,10 +762,12 @@ Page({
     this.setData({ polyline: list })
   },
 
+  /** 请求当前位置。 */
   onLocate() {
     this.getLocation()
   },
 
+  /** 定位成功后移动相机并加载周围标记。 */
   getLocation() {
     wx.getLocation({
       type: 'gcj02',
@@ -748,6 +794,7 @@ Page({
     })
   },
 
+  /** 点空白关闭弹层。添加表单打开时不关。 */
   onMapTap() {
     clearTimeout(this._mapTapTimer)
     this._mapTapTimer = setTimeout(() => {
@@ -773,6 +820,7 @@ Page({
     }, 50)
   },
 
+  /** 拖动结束时，添加或画线会让中心图钉跳一下，并刷新周围标记。 */
   onRegionChange(e) {
     if (e.causedBy === 'drag' && this.data.located) {
       this.setData({ located: false })
@@ -794,6 +842,7 @@ Page({
     this.loadCommunity(latitude, longitude)
   },
 
+  /** 若正在跳，先去掉 class 再重播，否则动画不会重新开始。 */
   bouncePin() {
     if (this._pinBounceTimer) {
       clearTimeout(this._pinBounceTimer)
@@ -807,6 +856,7 @@ Page({
     this.startPinBounce()
   },
 
+  /** 跳 0.6 秒后去掉 class。 */
   startPinBounce() {
     this.setData({ pinBounce: true })
     this._pinBounceTimer = setTimeout(() => {
@@ -815,6 +865,7 @@ Page({
     }, 600)
   },
 
+  /** 按中心点合并附近标记，保留当前选中。 */
   loadAround(lat, lng) {
     this._lastLat = lat
     this._lastLng = lng
@@ -837,6 +888,7 @@ Page({
     }).catch(() => {})
   },
 
+  /** 小区范围打开时，加载中心附近的小区。 */
   loadCommunity(lat, lng) {
     if (!this.data.showCommunityDetail) {
       return
@@ -857,6 +909,7 @@ Page({
     }).catch(() => {})
   },
 
+  /** 画出小区边界，并标出出入口。 */
   loadCommunityDetail(id) {
     if (!this.data.showCommunityDetail || !id) {
       return
@@ -887,6 +940,7 @@ Page({
     }).catch(() => {})
   },
 
+  /** 把附近标记、小区门和搜索钉画到地图上。 */
   rebuildMarkers() {
     const selectedId = this.data.showDetail ? Number(this._selectedId) : 0
     const markers = []
@@ -945,6 +999,7 @@ Page({
     this.setData({ markers })
   },
 
+  /** 点标记打开详情。添加或画线时不打开。 */
   onMarkerTap(e) {
     this._skipMapClose = true
     clearTimeout(this._mapTapTimer)
@@ -999,6 +1054,7 @@ Page({
     this.rebuildMarkers()
   },
 
+  /** 没有标记 id 的地点，只显示名称和路线。 */
   openPlaceDetail(name, latitude, longitude) {
     this._poiPin = null
     this.setData({
@@ -1011,6 +1067,7 @@ Page({
     this.rebuildMarkers()
   },
 
+  /** 点地图自带兴趣点。 */
   onPoiTap(e) {
     this._skipMapClose = true
     clearTimeout(this._mapTapTimer)
@@ -1038,6 +1095,7 @@ Page({
     this.rebuildMarkers()
   },
 
+  /** 详情打开时放大选中标记的文字。 */
   highlightSelected() {
     const selectedId = this.data.showDetail ? Number(this._selectedId) : 0
     const markers = (this.data.markers || []).map((marker) => {
@@ -1053,6 +1111,7 @@ Page({
     this.setData({ markers })
   },
 
+  /** 把附近的道路和围墙解析成折线。 */
   rebuildLines() {
     const lines = []
     ;(this._around || []).forEach((item) => {
@@ -1073,6 +1132,7 @@ Page({
     this.syncLines()
   },
 
+  /** 关闭详情并去掉路线。 */
   onDetailClose() {
     this._poiPin = null
     this._routeLine = null
@@ -1080,11 +1140,13 @@ Page({
     this.rebuildMarkers()
   },
 
+  /** 把骑行路线叠到地图上。 */
   onDetailRoute(e) {
     this._routeLine = (e.detail && e.detail.polyline) || []
     this.syncLines()
   },
 
+  /** 打开修改表单，并把相机移到该标记。 */
   onDetailEdit(e) {
     const marker = e.detail || {}
     if (!marker.xId || !checkLogin()) {
@@ -1113,6 +1175,7 @@ Page({
     })
   },
 
+  /** 确认后删除标记并刷新周围。 */
   onDetailDelete(e) {
     const marker = e.detail || {}
     if (!marker.xId || !checkLogin()) {
@@ -1149,6 +1212,7 @@ Page({
     })
   },
 
+  /** 打开报错弹层，详情留在下面。 */
   onDetailFeedback(e) {
     const marker = e.detail || {}
     if (!marker.xId || !checkLogin()) {
@@ -1167,10 +1231,12 @@ Page({
     })
   },
 
+  /** 只关报错。 */
   onFeedbackClose() {
     this.setData({ showFeedback: false, feedbackMarker: null })
   },
 
+  /** 报错提交成功后关掉两层弹层。 */
   onFeedbackDone(e) {
     const marker = (e.detail) || this.data.feedbackMarker || {}
     this._around = (this._around || []).filter((item) => String(item.xId) !== String(marker.xId))
@@ -1180,10 +1246,12 @@ Page({
     this.rebuildLines()
   },
 
+  /** 待审核标记不能修改。 */
   onDetailPending() {
     wx.showToast({ title: '暂未开放', icon: 'none' })
   },
 
+  /** 分享当前地图或邀请。 */
   onShareAppMessage(e) {
     const role = e && e.target && e.target.dataset && e.target.dataset.role
     const sheet = this.selectComponent('#mapManage')

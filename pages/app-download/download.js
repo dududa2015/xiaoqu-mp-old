@@ -1,5 +1,8 @@
+/** App 下载说明。iOS、Android、鸿蒙用同一页，颜色按平台区分。 */
+
 const PACKAGE_NAME = 'com.louhao.xiaoqu'
 
+/** 自定义导航尺寸。 */
 function navMetrics() {
   const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
   const menu = wx.getMenuButtonBoundingClientRect()
@@ -11,6 +14,7 @@ function navMetrics() {
   }
 }
 
+/** 按手机品牌选应用商店，其余用应用宝。 */
 function androidStore() {
   let brand = ''
   try {
@@ -57,6 +61,7 @@ function androidStore() {
   }
 }
 
+/** 拼出图标、强调色、搜索词和步骤。 */
 function pageData(platform) {
   if (platform === 'ios') {
     return {
@@ -107,14 +112,17 @@ function pageData(platform) {
 Page({
   data: Object.assign(pageData('android'), navMetrics()),
 
+  /** 读取 ios、android 或 harmony。 */
   onLoad(options) {
     this.setData(pageData((options && options.platform) || 'android'))
   },
 
+  /** 返回上一页。 */
   onBack() {
     wx.navigateBack()
   },
 
+  /** 复制要在商店搜索的名称。 */
   onCopyName() {
     wx.setClipboardData({
       data: this.data.searchName,
@@ -124,6 +132,7 @@ Page({
     })
   },
 
+  /** 复制下载链接。 */
   onCopyLink() {
     if (!this.data.downloadUrl) {
       return

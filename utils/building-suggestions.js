@@ -1,3 +1,6 @@
+/** 楼号快速输入。根据已输入的楼栋号生成相邻推荐。 */
+
+/** 按数字、字母或中文楼名给出后缀建议。 */
 function generateSuggestions(input) {
   if (!input || input.trim() === '') {
     return []
@@ -61,6 +64,7 @@ function generateSuggestions(input) {
   return suggestions
 }
 
+/** 去掉号楼、栋等后缀，留下可继续推荐的部分。 */
 function extractCorePart(input) {
   const suffixes = ['号楼', '栋', '幢', '座', '单元', '号', '区', '期', '层']
   let core = input
@@ -74,6 +78,7 @@ function extractCorePart(input) {
   return core !== input ? core : null
 }
 
+/** 中文数字转成阿拉伯数字，便于算邻居楼。 */
 function chineseToArabic(chinese) {
   const map = {
     一: '1', 二: '2', 三: '3', 四: '4', 五: '5',
@@ -96,6 +101,7 @@ function chineseToArabic(chinese) {
   return null
 }
 
+/** 以当前楼为中心，推荐前后几栋。 */
 function generateNeighborBuildings(input) {
   if (!input || typeof input !== 'string' || !input.trim()) {
     return ['1号楼', '2号楼', 'A座', 'B座']
@@ -150,6 +156,7 @@ function generateNeighborBuildings(input) {
   return neighbors
 }
 
+/** 把字符串列表变成可点选的芯片。 */
 function toChips(list, checkedName) {
   return (list || []).map((name) => ({
     name: name,

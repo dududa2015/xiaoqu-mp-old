@@ -1,12 +1,16 @@
+/** 底部弹层拖动。向下拖过阈值就关闭，切到后台再回来时保持打开。 */
+
 module.exports = Behavior({
   data: {
     sheetOpened: false
   },
 
   pageLifetimes: {
+    /** 页面进后台。这时的尺寸变化不当成用户关闭。 */
     hide() {
       this._pageHidden = true
     },
+    /** 回到前台后按上次高度重新展开。 */
     show() {
       this._pageHidden = false
       if (this.data.show && this._openSize) {
@@ -16,6 +20,7 @@ module.exports = Behavior({
   },
 
   methods: {
+    /** 记录展开高度。见过打开后又收到接近 0 的高度，就通知关闭。 */
     onSheetSizeChange(size) {
       if (!this.data.show || this._pageHidden) {
         return
@@ -36,6 +41,7 @@ module.exports = Behavior({
       }
     },
 
+    /** 把弹层滚到指定高度比例。 */
     scrollSheet(size, retry) {
       const left = retry == null ? 8 : retry
       wx.nextTick(() => {
@@ -60,6 +66,7 @@ module.exports = Behavior({
       })
     },
 
+    /** 打开动画期间忽略误触发的关闭。 */
     beginOpen(size) {
       this._opening = true
       this.setData({ sheetOpened: true })
@@ -70,11 +77,13 @@ module.exports = Behavior({
       }, 450)
     },
 
+    /** 向外抛出 close。 */
     onSheetClose() {
       this._opening = false
       this.scrollSheet(0)
     },
 
+    /** 点弹层空白处关闭。添加楼号表单不使用这个行为。 */
     onSheetBlankTap() {
       if (!this.data.show) {
         return
@@ -82,6 +91,7 @@ module.exports = Behavior({
       this.triggerEvent('close')
     },
 
+    /** 点卡片内容时不把事件冒泡到空白关闭。 */
     onSheetCardTap() {}
   }
 })

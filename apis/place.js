@@ -1,5 +1,8 @@
+/** 收藏接口。收藏的是地点，不限于当前地图上的标记。 */
+
 const { request } = require('../utils/request')
 
+/** 当前用户是否已收藏该地点。 */
 function isFavorite(params) {
   return request({
     url: '/userPlace/isFavorite',
@@ -10,6 +13,7 @@ function isFavorite(params) {
   })
 }
 
+/** 收藏或取消收藏。 */
 function toggleFavorite(data) {
   return request({
     url: '/userPlace/toggleFavorite',
@@ -20,6 +24,7 @@ function toggleFavorite(data) {
   })
 }
 
+/** 收藏列表。 */
 function listFavorites(params) {
   return request({
     url: '/userPlace/listFavorites',
@@ -30,6 +35,7 @@ function listFavorites(params) {
   })
 }
 
+/** 按地点键取消收藏。 */
 function removeFavorite(data) {
   return request({
     url: '/userPlace/removeFavorite',

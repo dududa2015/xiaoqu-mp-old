@@ -1,3 +1,5 @@
+/** 添加类型网格。选道路或围墙后进入画线，其他类型打开表单。 */
+
 const TYPES = [
   { name: '楼号', icon: '/images/grid/building-white.png', color: '#0074FE', needName: true, label: '楼号' },
   { name: '出入口', icon: '/images/grid/entrance-white.png', color: '#E85827', needName: false, label: '名称' },
@@ -28,6 +30,7 @@ Component({
   },
 
   lifetimes: {
+    /** 按屏幕宽度算格子大小。 */
     attached() {
       const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
       const windowWidth = info.windowWidth || 375
@@ -42,6 +45,7 @@ Component({
   },
 
   observers: {
+    /** 打开时量卡片高度。 */
     show(visible) {
       if (visible) {
         this.beginOpen(this.data.gridSize)
@@ -54,12 +58,14 @@ Component({
   },
 
   methods: {
+    /** 把弹层高度同步给地图页，用来让定位按钮上移。 */
     onSheetSizeUpdate(e) {
       'worklet'
       const size = e.size || 0
       wx.worklet.runOnJS(this.onSheetSizeChange.bind(this))(size)
     },
 
+    /** 把选中的类型下标抛给地图页。 */
     onChoose(e) {
       const name = e.currentTarget.dataset.name
       const index = TYPES.findIndex((item) => item.name === name)

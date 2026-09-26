@@ -1,4 +1,8 @@
+/** 把接口里的标记画成地图 label 或 callout。未选中 12px，选中 15px。 */
+
+/** 未选中标记文字大小，单位是地图 label 的 px。 */
 const MARKER_LABEL_FONT_SIZE = 12
+/** 详情选中后的文字大小。 */
 const MARKER_LABEL_FONT_SIZE_SELECTED = 15
 const MARKER_LABEL_PADDING = 3
 const MARKER_LABEL_BORDER_WIDTH = 0.4
@@ -6,6 +10,7 @@ const MARKER_LABEL_BORDER_COLOR = '#f5f5f5'
 const MARKER_LABEL_ANCHOR_Y = -16
 const MARKER_LABEL_ANCHOR_Y_SELECTED = -17
 
+/** 有照片时名称后面加「图×数量」。优先用数量字段。 */
 function resolveImageCount(imageCount, images) {
   if (typeof imageCount === 'number' && imageCount > 0) {
     return imageCount
@@ -16,6 +21,7 @@ function resolveImageCount(imageCount, images) {
   return 0
 }
 
+/** 详情标题拼小区名。地图标签不要用这个，避免名字过长。 */
 function joinCommunityName(name, community) {
   const building = String(name == null ? '' : name).trim()
   const place = String(community == null ? '' : community).trim()
@@ -28,6 +34,7 @@ function joinCommunityName(name, community) {
   return place + '-' + building
 }
 
+/** 有照片时在名称后附加图的数量。 */
 function formatMarkerDisplayName(name, imageCount, images) {
   const count = resolveImageCount(imageCount, images)
   if (count > 0) {
@@ -36,6 +43,7 @@ function formatMarkerDisplayName(name, imageCount, images) {
   return name
 }
 
+/** 中文按 2 个宽度算，用来在安卓上对齐标签。 */
 function getTextByteLen(text) {
   let length = 0
   String(text || '').split('').forEach((char) => {
@@ -44,6 +52,7 @@ function getTextByteLen(text) {
   return length
 }
 
+/** 安卓标签按文字宽度左移，让文字中心接近坐标点。 */
 function getAnchorX(name, fontSize = MARKER_LABEL_FONT_SIZE) {
   const app = getApp()
   if (app.globalData.isAndroid) {
@@ -52,6 +61,7 @@ function getAnchorX(name, fontSize = MARKER_LABEL_FONT_SIZE) {
   return 0
 }
 
+/** 楼号、出入口、设施、道路、围墙各自的底色。 */
 function getBgColorByType(type) {
   if (type === 0) {
     return '#0074FE'
@@ -71,6 +81,7 @@ function getBgColorByType(type) {
   return '#B23AEE'
 }
 
+/** 选中时放大字号并加粗。 */
 function applyMarkerSelectedStyle(marker, selected) {
   if (!marker || marker.id <= 0) {
     return marker
@@ -93,6 +104,7 @@ function applyMarkerSelectedStyle(marker, selected) {
   return marker
 }
 
+/** 生成一个地图 marker。审核中的名称会打码。 */
 function buildMarkers(latitude, longitude, uid, name, type, userId, deleted, selected = false, imageCount = 0, images = null, reviewStatus = null, isPersonalOverride = false) {
   let display = name || ''
   if (deleted === -1) {
@@ -142,6 +154,7 @@ function buildMarkers(latitude, longitude, uid, name, type, userId, deleted, sel
   return applyMarkerSelectedStyle(marker, selected)
 }
 
+/** 小区边界多边形。 */
 function buildPolygon(polyline) {
   const points = String(polyline || '').split('_').map((pair) => {
     const [longitude, latitude] = pair.split(',')

@@ -1,3 +1,5 @@
+/** 小程序入口。冷启动时登录、上报设备，并按机型决定地图标签内边距。 */
+
 const { getUserInfo } = require('./apis/user')
 const { saveDeviceInfo } = require('./apis/device')
 const { ensureDeviceId, getDeviceInfo } = require('./utils/device')
@@ -12,6 +14,7 @@ App({
     padding: 3
   },
 
+  /** 准备登录态、拉登录、检查小程序更新。 */
   onLaunch() {
     this.initMarkerStyle()
     this.initUserInfoReady()
@@ -19,6 +22,7 @@ App({
     this.autoUpdate()
   },
 
+  /** iOS 标签内边距 3，其他平台 6。 */
   initMarkerStyle() {
     const device = wx.getDeviceInfo ? wx.getDeviceInfo() : {}
     const ios = device.brand === 'iPhone' || device.brand === 'devtools' || device.platform === 'ios'
@@ -26,6 +30,7 @@ App({
     this.globalData.isAndroid = !ios
   },
 
+  /** 有缓存用户就直接就绪，否则等本次登录结束。 */
   initUserInfoReady() {
     const cached = wx.getStorageSync('userInfo')
     if (cached && cached.userId) {
@@ -38,6 +43,7 @@ App({
     })
   },
 
+  /** 同一时间只跑一次登录。 */
   login() {
     if (this._loginTask) {
       return this._loginTask
@@ -48,6 +54,7 @@ App({
     return this._loginTask
   },
 
+  /** wx.login 换 token，失败最多重试 3 次，仍失败则沿用缓存。 */
   async runLogin() {
     ensureDeviceId()
     let lastError = null
@@ -78,6 +85,7 @@ App({
     return null
   },
 
+  /** 取出 wx.login 的 code。 */
   wxLogin() {
     return new Promise((resolve, reject) => {
       wx.login({
@@ -87,6 +95,7 @@ App({
     })
   },
 
+  /** 把 userId、token、用户信息写入本地和 globalData。 */
   cacheUserData(data) {
     wx.setStorageSync('userId', data.userId)
     wx.setStorageSync('token', data.token)
@@ -95,6 +104,7 @@ App({
     this.settleUserInfo(data)
   },
 
+  /** 结束 userInfoReady，让等待登录的页面继续。 */
   settleUserInfo(user) {
     if (!this._resolveUserInfo) {
       return
@@ -103,6 +113,7 @@ App({
     this._resolveUserInfo = null
   },
 
+  /** 每台设备只上报一次。 */
   async reportDevice(userId) {
     if (!userId || wx.getStorageSync('deviceInfoSaved')) {
       return
@@ -119,6 +130,7 @@ App({
     }
   },
 
+  /** 新版本下载完成后询问是否重启。 */
   autoUpdate() {
     if (!wx.getUpdateManager) {
       return
@@ -137,6 +149,7 @@ App({
     })
   },
 
+  /** 登录重试间隔。 */
   sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms))
   }

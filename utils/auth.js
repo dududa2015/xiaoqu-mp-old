@@ -1,3 +1,6 @@
+/** 登录态展示和检查。页面在改数据前调用 checkLogin。 */
+
+/** 没登录显示请登录，没昵称显示请设置昵称。 */
 function displayName(user) {
   if (!user || !user.userId) {
     return '请登录'
@@ -9,6 +12,7 @@ function displayName(user) {
   return name
 }
 
+/** 界面上只显示用户 id 的后 8 位。 */
 function displayId(user) {
   if (!user || !user.userId) {
     return '--'
@@ -16,6 +20,7 @@ function displayId(user) {
   return String(user.userId).slice(-8)
 }
 
+/** 没有 userId 时 toast 并返回 false。 */
 function checkLogin() {
   const user = wx.getStorageSync('userInfo')
   if (!user || !user.userId) {
@@ -25,6 +30,7 @@ function checkLogin() {
   return true
 }
 
+/** 等冷启动登录结束，超时则返回空。 */
 function waitForUserInfo(timeout = 5000) {
   const cached = wx.getStorageSync('userInfo')
   if (cached && cached.userId) {

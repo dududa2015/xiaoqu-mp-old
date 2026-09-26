@@ -1,5 +1,8 @@
+/** 使用帮助列表。分类和搜索都来自本地目录，会员内容暂时隐藏。 */
+
 const catalog = require('../../utils/help-catalog')
 
+/** 自定义导航尺寸。 */
 function navMetrics() {
   const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
   const menu = wx.getMenuButtonBoundingClientRect()
@@ -11,6 +14,7 @@ function navMetrics() {
   }
 }
 
+/** 按分类和关键字筛文章，再按分类分组。 */
 function buildView(category, query) {
   const trimmed = String(query || '').trim()
   const filtered = catalog.filter(category, trimmed)
@@ -35,19 +39,23 @@ Page({
     emptyText: ''
   }, navMetrics()),
 
+  /** 默认显示全部分类。 */
   onLoad() {
     this.setData(buildView('all', ''))
   },
 
+  /** 返回我的页面。 */
   onBack() {
     wx.navigateBack()
   },
 
+  /** 关键字变化后立即筛选。 */
   onSearch(e) {
     const query = e.detail.value || ''
     this.setData(Object.assign({ query }, buildView(this.data.category, query)))
   },
 
+  /** 切换顶部分类。 */
   onCategory(e) {
     const category = e.currentTarget.dataset.id
     if (!category || category === this.data.category) {
@@ -56,6 +64,7 @@ Page({
     this.setData(Object.assign({ category }, buildView(category, this.data.query)))
   },
 
+  /** 进入文章详情。 */
   onOpen(e) {
     const id = e.currentTarget.dataset.id
     if (!id) {

@@ -1,5 +1,8 @@
+/** 单篇使用帮助。可再打开相关文章。 */
+
 const catalog = require('../../utils/help-catalog')
 
+/** 自定义导航尺寸。 */
 function navMetrics() {
   const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
   const menu = wx.getMenuButtonBoundingClientRect()
@@ -17,14 +20,17 @@ Page({
     related: []
   }, navMetrics()),
 
+  /** 按文章 id 取出正文。 */
   onLoad(options) {
     this.loadSection(options && options.id)
   },
 
+  /** 返回帮助列表。 */
   onBack() {
     wx.navigateBack()
   },
 
+  /** 找不到文章时提示并返回。 */
   loadSection(id) {
     const raw = catalog.sectionById(id)
     const section = raw
@@ -38,6 +44,7 @@ Page({
     })
   },
 
+  /** 换成另一篇，不新开页面。 */
   onRelated(e) {
     const id = e.currentTarget.dataset.id
     if (!id) {

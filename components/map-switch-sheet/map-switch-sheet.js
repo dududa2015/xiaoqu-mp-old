@@ -1,3 +1,5 @@
+/** 切换地图。公共地图、个人地图和共建地图列在同一张弹层里。 */
+
 const sheetDrag = require('../../behaviors/sheet-drag')
 const { getMapList, createMap, updateMap } = require('../../apis/map')
 const { checkLogin } = require('../../utils/auth')
@@ -32,6 +34,7 @@ Component({
   },
 
   lifetimes: {
+    /** 记录窗口高度。 */
     attached() {
       const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
       this._windowHeight = info.windowHeight || 667
@@ -39,6 +42,7 @@ Component({
   },
 
   observers: {
+    /** 打开时刷新地图列表。 */
     show(visible) {
       if (visible) {
         this.load()
@@ -53,11 +57,13 @@ Component({
   },
 
   methods: {
+    /** 拖动高度交回逻辑层。 */
     onSheetSizeUpdate(e) {
       'worklet'
       wx.worklet.runOnJS(this.onSheetSizeChange.bind(this))(e.size || 0)
     },
 
+    /** 拉地图列表，并标出当前选中项。 */
     load() {
       const session = getSession()
       this.setData({
@@ -82,6 +88,7 @@ Component({
       }).catch(() => {})
     },
 
+    /** 按列表高度收缩弹层。 */
     fitCard(open, retry) {
       const left = retry == null ? 6 : retry
       this.createSelectorQuery().select('.sheet-card').boundingClientRect().exec((res) => {
@@ -115,6 +122,7 @@ Component({
       })
     },
 
+    /** 选中后通知地图页切换并关闭。 */
     finish(session) {
       this.setData({
         mapType: session.mapType,
@@ -123,6 +131,7 @@ Component({
       this.triggerEvent('change', session)
     },
 
+    /** 切回公共地图。 */
     onPublic() {
       if (this.data.mapType === 1) {
         this.triggerEvent('close')
@@ -131,6 +140,7 @@ Component({
       this.finish(applyPublic())
     },
 
+    /** 切到自己的个人地图。 */
     onPersonal() {
       if (!checkLogin() || !this.data.personalMap) {
         return
@@ -142,6 +152,7 @@ Component({
       this.finish(applyMap(this.data.personalMap))
     },
 
+    /** 点管理胶囊，不切换地图。 */
     onManage(e) {
       const mapId = e.currentTarget.dataset.id
       if (!mapId) {
@@ -150,6 +161,7 @@ Component({
       this.triggerEvent('manage', { mapId })
     },
 
+    /** 切到一张共建地图。 */
     onShared(e) {
       if (!checkLogin()) {
         return
@@ -166,6 +178,7 @@ Component({
       this.finish(applyMap(map))
     },
 
+    /** 没有个人地图时创建一个，默认名称为个人地图。 */
     onCreatePersonal() {
       if (!checkLogin()) {
         return
@@ -190,6 +203,7 @@ Component({
       })
     },
 
+    /** 确认后创建共建地图。每个用户只能有一张自己创建的。 */
     onCreateShared() {
       if (!checkLogin()) {
         return
@@ -226,8 +240,10 @@ Component({
       })
     },
 
+    /** 点开关区域时不触发行点击。 */
     onPubTap() {},
 
+    /** 个人地图是否同时显示公共标记。只在选中该地图时可用。 */
     onPubChange(e) {
       const personalMap = this.data.personalMap
       if (!personalMap) {

@@ -1,3 +1,5 @@
+/** 共建地图管理页。实际入口已改成地图上的管理弹层，这页保留同样的名称和成员操作。 */
+
 const {
   getMapDetail,
   getMapList,
@@ -11,6 +13,7 @@ const {
 const { checkLogin } = require('../../utils/auth')
 const { normalizeMap, normalizeMapList, normalizeRole, applyMap, applyPublic, getSession, roleText } = require('../../utils/map-session')
 
+/** 解开详情接口可能多包的一层 data。 */
 function detailBody(res) {
   if (typeof res === 'string') {
     try {
@@ -25,6 +28,7 @@ function detailBody(res) {
   return res
 }
 
+/** 取出成员列表。 */
 function pickMembers(body) {
   const list = body && (body.members || body.Members)
   return Array.isArray(list) ? list : []
@@ -52,6 +56,7 @@ Page({
     navBarHeight: 44
   },
 
+  /** 没有 mapId 时返回。 */
   onLoad(options) {
     const windowInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
     const statusBarHeight = windowInfo.statusBarHeight || 20
@@ -73,16 +78,19 @@ Page({
     }
   },
 
+  /** 返回上一页。 */
   onBack() {
     wx.navigateBack()
   },
 
+  /** 每次显示都刷新详情。 */
   onShow() {
     if (this.mapId) {
       this.loadDetail()
     }
   },
 
+  /** 拉地图详情并生成缺失的邀请。 */
   loadDetail() {
     getMapDetail({ mapId: this.mapId }).then((res) => {
       const body = detailBody(res)
@@ -116,6 +124,7 @@ Page({
     })
   },
 
+  /** 详情失败时从地图列表里找同一张。 */
   loadFromList(message) {
     const userId = wx.getStorageSync('userId')
     getMapList({ userId }).then((res) => {
@@ -131,6 +140,7 @@ Page({
     })
   },
 
+  /** 渲染名称、开关、成员和邀请。 */
   showMap(map, rawMembers, memberCount) {
     const user = wx.getStorageSync('userInfo') || {}
     const myId = user.userId || wx.getStorageSync('userId')
@@ -169,6 +179,7 @@ Page({
     }
   },
 
+  /** 补齐编辑和只读邀请。 */
   ensureInvites() {
     if (!this.data.editorToken) {
       createInvite({ mapId: this.mapId, role: 'editor' }).then((invite) => {
@@ -186,6 +197,7 @@ Page({
     }
   },
 
+  /** 展开名称输入。 */
   onEditName() {
     if (!this.data.isOwner || !this.data.map || this.data.editingName) {
       return
@@ -198,6 +210,7 @@ Page({
     })
   },
 
+  /** 记录输入。 */
   onNameInput(e) {
     const nameValue = String((e.detail && e.detail.value) || '').slice(0, 10)
     this.setData({
@@ -206,10 +219,12 @@ Page({
     })
   },
 
+  /** 取消编辑。 */
   onCancelName() {
     this.setData({ editingName: false })
   },
 
+  /** 保存名称。空名称不允许提交。 */
   onSaveName() {
     if (!this.data.isOwner || !this.data.map || this.data.savingName) {
       return
@@ -237,6 +252,7 @@ Page({
     })
   },
 
+  /** 创建者切换公共标记显示。 */
   onIsPubChange(e) {
     const isPub = !!(e.detail && e.detail.value)
     updateMap({ mapId: this.mapId, isPub }).then((res) => {
@@ -254,6 +270,7 @@ Page({
     })
   },
 
+  /** 改角色或移出。 */
   onMember(e) {
     if (!this.data.isOwner) {
       return
@@ -307,6 +324,7 @@ Page({
     })
   },
 
+  /** 退出地图。 */
   onLeave() {
     wx.showModal({
       title: '确认退出',
@@ -327,6 +345,7 @@ Page({
     })
   },
 
+  /** 删除地图。 */
   onDelete() {
     wx.showModal({
       title: '确认删除',
@@ -347,6 +366,7 @@ Page({
     })
   },
 
+  /** 分享对应角色的邀请口令。 */
   onShareAppMessage(e) {
     const name = (this.data.map && this.data.map.name) || '共建地图'
     const role = (e && e.target && e.target.dataset && e.target.dataset.role) || 'editor'

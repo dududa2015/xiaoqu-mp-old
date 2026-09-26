@@ -1,5 +1,8 @@
+/** 内容安全。昵称等文本先过服务端敏感词检查。 */
+
 const { request } = require('../utils/request')
 
+/** 检查一段文本是否可发布。 */
 function msgSecurityCheck(params) {
   return request({
     url: '/securityCheck/msgSecurityCheck',
@@ -9,6 +12,7 @@ function msgSecurityCheck(params) {
   })
 }
 
+/** 校验昵称。不安全时 toast 并返回 false。 */
 function checkNickname(content) {
   wx.showLoading({ title: '正在校验', mask: true })
   return msgSecurityCheck({ content }).then((res) => {

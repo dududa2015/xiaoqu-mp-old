@@ -1,3 +1,5 @@
+/** 标记报错。选择原因后提交，盖在详情上面。 */
+
 const sheetDrag = require('../../behaviors/sheet-drag')
 const { updateMarkerFeedbackStatus } = require('../../apis/marker')
 const { checkLogin } = require('../../utils/auth')
@@ -30,6 +32,7 @@ Component({
   },
 
   lifetimes: {
+    /** 记录窗口高度。 */
     attached() {
       const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
       this._windowWidth = info.windowWidth || 375
@@ -38,6 +41,7 @@ Component({
   },
 
   observers: {
+    /** 每次打开清空上次选择，并按内容定高。 */
     show(visible) {
       if (visible) {
         this.setData({ selected: '0', sheetSize: this.measureSheet() }, () => {
@@ -61,6 +65,7 @@ Component({
   },
 
   methods: {
+    /** 量不到卡片时的默认比例。 */
     measureSheet() {
       const width = this._windowWidth || 375
       const height = this._windowHeight || 667
@@ -69,11 +74,13 @@ Component({
       return Math.min(0.72, content * rpx / height)
     },
 
+    /** 卡片高度换成弹层比例，上限 0.92。 */
     sizeFromHeight(cardHeight) {
       const height = this._windowHeight || 667
       return Math.min(0.72, (cardHeight + 1) / height)
     },
 
+    /** 量 .sheet-card，失败时重试一次。 */
     readCard(done, retry) {
       const left = retry == null ? 6 : retry
       this.createSelectorQuery()
@@ -93,6 +100,7 @@ Component({
         })
     },
 
+    /** 设置高度并展开。 */
     applySheetSize(sheetSize, open) {
       const next = sheetSize || this.measureSheet()
       const finish = () => {
@@ -111,20 +119,24 @@ Component({
       }
       this.setData({ sheetSize: next }, finish)
     },
+    /** 拖动高度交回逻辑层。 */
     onSheetSizeUpdate(e) {
       'worklet'
       const size = e.size || 0
       wx.worklet.runOnJS(this.onSheetSizeChange.bind(this))(size)
     },
 
+    /** 关闭报错，详情保持打开。 */
     onClose() {
       this.triggerEvent('close')
     },
 
+    /** 选中一条报错原因。 */
     onPick(e) {
       this.setData({ selected: e.currentTarget.dataset.value })
     },
 
+    /** 没选原因时提示，选了就提交。 */
     onSave() {
       const marker = this.properties.marker || {}
       if (!marker.xId || !checkLogin()) {

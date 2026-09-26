@@ -1,7 +1,13 @@
+/** 当前地图会话。公共地图、个人地图、共建地图的类型和角色都在这里统一。 */
+
+/** 公共地图。不带 mapId。 */
 const MAP_TYPE_PUBLIC = 1
+/** 个人地图。每个用户一张。 */
 const MAP_TYPE_PERSONAL = 2
+/** 共建地图。创建者、编辑、只读看到的是同一张。 */
 const MAP_TYPE_SHARED = 3
 
+/** 把接口里的 1/2 或 personal/shared 收成两种字符串。 */
 function normalizeKind(kind) {
   const text = kind == null ? '' : String(kind).toLowerCase()
   if (text === '1' || text === 'personal') {
@@ -13,6 +19,7 @@ function normalizeKind(kind) {
   return ''
 }
 
+/** 创建者、编辑、只读。 */
 function normalizeRole(role) {
   const text = role == null ? '' : String(role).toLowerCase()
   if (text === '1' || text === 'owner') {
@@ -26,6 +33,7 @@ function normalizeRole(role) {
   }
   return ''
 }
+/** 内部类型数字：1 公共，2 个人，3 共建。 */
 function mapTypeFromKind(kind) {
   if (kind === 'personal') {
     return MAP_TYPE_PERSONAL
@@ -36,6 +44,7 @@ function mapTypeFromKind(kind) {
   return MAP_TYPE_PUBLIC
 }
 
+/** 把列表项收成页面用的地图对象。 */
 function normalizeMap(item) {
   if (!item) {
     return null
@@ -57,11 +66,13 @@ function normalizeMap(item) {
   }
 }
 
+/** 列表接口可能直接给数组，也可能包在 maps 里。 */
 function normalizeMapList(res) {
   const raw = Array.isArray(res) ? res : ((res && res.maps) || [])
   return raw.map(normalizeMap).filter((item) => item && item.mapId)
 }
 
+/** 新建时个人地图、共建地图的默认名称。 */
 function defaultName(mapType) {
   if (mapType === MAP_TYPE_PERSONAL) {
     return '个人地图'
@@ -72,6 +83,7 @@ function defaultName(mapType) {
   return '公共地图'
 }
 
+/** 读本地当前地图。缺省是公共地图。 */
 function getSession() {
   const mapType = parseInt(wx.getStorageSync('mapType'), 10) || MAP_TYPE_PUBLIC
   return {
@@ -84,6 +96,7 @@ function getSession() {
   }
 }
 
+/** 切回公共地图并清掉私人地图字段。 */
 function applyPublic() {
   wx.setStorageSync('mapType', MAP_TYPE_PUBLIC)
   wx.setStorageSync('mapId', '')
@@ -94,6 +107,7 @@ function applyPublic() {
   return getSession()
 }
 
+/** 把选中的地图写成当前会话。 */
 function applyMap(map) {
   const normalized = normalizeMap(map)
   if (!normalized) {
@@ -110,11 +124,13 @@ function applyMap(map) {
   return getSession()
 }
 
+/** 个人或共建地图。 */
 function isPrivateMap(session) {
   const current = session || getSession()
   return current.mapType === MAP_TYPE_PERSONAL || current.mapType === MAP_TYPE_SHARED
 }
 
+/** 只读成员不能添加和修改标记。 */
 function canEditMarkers(session) {
   const current = session || getSession()
   if (current.mapType === MAP_TYPE_SHARED) {
@@ -123,18 +139,22 @@ function canEditMarkers(session) {
   return true
 }
 
+/** 每人只有一张个人地图。 */
 function findPersonalMap(maps) {
   return (maps || []).find((item) => item.kind === 'personal') || null
 }
 
+/** 自己创建的那张共建地图。 */
 function findOwnedSharedMap(maps) {
   return (maps || []).find((item) => item.kind === 'shared' && item.role === 'owner') || null
 }
 
+/** 所有共建地图，含别人邀请来的。 */
 function sharedMaps(maps) {
   return (maps || []).filter((item) => item.kind === 'shared')
 }
 
+/** 用最新列表纠正本地会话，地图被删时回到公共地图。 */
 function hydrateSessionFromList(maps) {
   const session = getSession()
   if (!isPrivateMap(session)) {
@@ -144,6 +164,7 @@ function hydrateSessionFromList(maps) {
   return current ? applyMap(current) : applyPublic()
 }
 
+/** 界面上的创建者、编辑、只读。 */
 function roleText(role) {
   if (role === 'owner') {
     return '创建者'

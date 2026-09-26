@@ -1,3 +1,6 @@
+/** 我的标记列表和详情的文案、颜色。颜色与添加网格一致。 */
+
+/** 下标与标记 type 对齐。5 和 6 在数据里仍是设施。 */
 const MARKER_TYPE_LIST = ['楼号', '出入口', '公厕', '设施', '设施', '设施', '其他', '道路', '围墙']
 
 const TYPE_COLOR = {
@@ -10,6 +13,7 @@ const TYPE_COLOR = {
   '围墙': '#dc143c'
 }
 
+/** 类型字色，以及约 10% 透明度的底色。 */
 function typeTint(name) {
   const color = TYPE_COLOR[name] || '#C67171'
   const hex = color.replace('#', '')
@@ -23,10 +27,12 @@ function typeTint(name) {
   }
 }
 
+/** 空值当空串。 */
 function trimText(value) {
   return String(value == null ? '' : value).trim()
 }
 
+/** 列表和详情里的时间文本。 */
 function formatDateTime(raw) {
   const text = trimText(raw)
   if (!text) {
@@ -45,6 +51,7 @@ function formatDateTime(raw) {
   return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds
 }
 
+/** 列表标题带小区名。已删除的加删除线由页面处理。 */
 function listDisplayTitle(name, community) {
   const displayBuilding = trimText(name) || '未命名'
   const displayCommunity = trimText(community)
@@ -54,10 +61,12 @@ function listDisplayTitle(name, community) {
   return displayCommunity + '-' + displayBuilding
 }
 
+/** 类型下标转成楼号、出入口等文字。 */
 function typeDisplayName(typeIndex) {
   return MARKER_TYPE_LIST[typeIndex] || '标记'
 }
 
+/** 经纬度显示用，保留 6 位。 */
 function formatCoord(value) {
   if (value == null || value === '') {
     return '--'
@@ -69,6 +78,7 @@ function formatCoord(value) {
   return num.toFixed(6)
 }
 
+/** 列表第二行：审核状态、删除原因或坐标。 */
 function buildMarkerSubtitle(item, kind) {
   const created = trimText(item.createdDate)
   const feedback = trimText(item.feedbackDate)
@@ -92,6 +102,7 @@ function buildMarkerSubtitle(item, kind) {
   return ''
 }
 
+/** 接口记录转成列表行。 */
 function mapMarkerRow(item, index, kind) {
   const typeName = typeDisplayName(item.type)
   const name = trimText(item.name) || '未命名'
@@ -107,6 +118,7 @@ function mapMarkerRow(item, index, kind) {
   })
 }
 
+/** 收藏记录转成同一套列表行。 */
 function mapFavoriteRow(item, index) {
   const typeLabel = item.markerType != null && item.markerType >= 0 ?
     MARKER_TYPE_LIST[item.markerType] :
@@ -125,6 +137,7 @@ function mapFavoriteRow(item, index) {
   })
 }
 
+/** 被删除分段里显示的删除时间。 */
 function deletionDateText(item) {
   const deleteDate = trimText(item.deleteDate)
   if (deleteDate) {

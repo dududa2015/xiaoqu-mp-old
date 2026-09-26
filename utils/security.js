@@ -1,20 +1,19 @@
 /**
- * 安全校验工具模块 - HMAC-SHA256 版
- * 提供请求签名、时间戳、nonce等安全机制
- *
- * 安全说明：使用 HMAC-SHA256 加密签名，防止请求被伪造和篡改
+ * 请求签名。每个接口带上时间戳、nonce 和 HMAC-SHA256。
+ * 服务端用同一把密钥、同一条签名串重算，对不上就拒绝。
+ * 密钥写在客户端，只能和服务端约定算法，不能当成机密。
  */
 
-// 导入 crypto-js 用于 HMAC-SHA256 加密
 const CryptoJS = require('crypto-js')
 
-// HMAC 签名密钥（生产环境应该从服务器获取或配置）
+// 与服务端约定的 HMAC 密钥。改动必须两边一起换，否则全部请求签名失败。
 const HMAC_SECRET_KEY = 'JFha7JgQa(NoW@wW9k#jPQghZg!V%wexpGOdeloz5Ldshnghi!0%91%_-&6FIK4c'
 
 /**
- * 生成随机字符串（用于nonce）
- * @param {number} length 字符串长度
- * @returns {string} 随机字符串
+ * 生成 nonce，同时放进 X-Nonce 和 X-Request-ID。
+ * 服务端在时间窗内拒绝重复 nonce，用来挡重放。
+ * @param {number} length 字符数，默认 16
+ * @returns {string}
  */
 function generateNonce(length = 16) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -26,17 +25,19 @@ function generateNonce(length = 16) {
 }
 
 /**
- * 获取当前时间戳（秒）
- * @returns {number} 时间戳
+ * 当前 Unix 时间戳，单位秒。签名和 X-Timestamp 都用这个值。
+ * @returns {number}
  */
 function getTimestamp() {
   return Math.floor(Date.now() / 1000);
 }
 
 /**
- * 对对象进行排序并序列化
- * @param {object} obj 要排序的对象
- * @returns {string} 排序后的查询字符串
+ * 把对象按 key 排序后拼成查询串。
+ * null / undefined 的字段跳过，避免和“没传该字段”签出不同结果。
+ * 对象和数组先 JSON 再编码。
+ * @param {object} obj
+ * @returns {string} 例如 a=1&b=2，没有前导 ?
  */
 function sortAndSerialize(obj) {
   if (!obj || typeof obj !== 'object') {
@@ -60,9 +61,10 @@ function sortAndSerialize(obj) {
 }
 
 /**
- * 解析URL中的查询参数并排序
- * @param {string} url URL字符串
- * @returns {object} 包含path和sortedQueryString的对象
+ * 拆开路径和查询串，查询参数按 key 重排。
+ * GET 会先把 data 拼到 url 上再签名，这里保证参数顺序不影响签名。
+ * @param {string} url 路径，可带查询串，不含域名
+ * @returns {{path: string, queryString: string}} queryString 带前导 ?，没有查询时为空串
  */
 function parseAndSortQueryParams(url) {
   // 分离路径和查询参数
@@ -98,38 +100,32 @@ function parseAndSortQueryParams(url) {
 }
 
 /**
- * 生成请求签名（HMAC-SHA256）
- * 签名算法：HMAC-SHA256(|timestamp|nonce|METHOD|path|queryParams|requestId)
- * @param {object} params 签名参数
- * @param {string} params.token 用户token（不参与签名）
- * @param {number} params.timestamp 时间戳
- * @param {string} params.nonce 随机字符串
- * @param {string} params.requestId 请求唯一标识（与 X-Request-ID 一致）
- * @param {string} params.method HTTP方法
- * @param {string} params.url 请求URL
- * @param {object} params.data 请求数据
- * @returns {object} 签名信息对象
+ * 计算 HMAC-SHA256，输出 hex。
+ * 签名串：|timestamp|nonce|METHOD|path|queryParams|requestId
+ * token 和请求体不参与签名。改 body 不会让签名失败，服务端不能靠签名发现 body 被改。
+ * @param {object} params
+ * @param {string} params.token 登录态，只随 Authorization 发送
+ * @param {number} params.timestamp 秒级时间戳
+ * @param {string} params.nonce
+ * @param {string} params.requestId 与 X-Request-ID 相同
+ * @param {string} params.method HTTP 方法
+ * @param {string} params.url 已带查询串的路径
+ * @param {object} params.data 请求体，当前不写入签名串
+ * @returns {{timestamp: number, nonce: string, signature: string}}
  */
 function generateSignature(params) {
-  const { token, timestamp, nonce, requestId, method, url, data } = params;
+  const { timestamp, nonce, requestId, method, url } = params;
 
-  // 对URL中的查询参数进行排序（重要修复）
+  // 查询参数先排序，再去掉前导 ? 放进签名串
   const { path: sortedPath, queryString: sortedQueryString } = parseAndSortQueryParams(url);
-
-  // 解析查询参数（去掉开头的 ?）
   let sortedQueryParams = '';
   if (sortedQueryString && sortedQueryString.startsWith('?')) {
     sortedQueryParams = sortedQueryString.substring(1);
   }
 
-  // 对请求体参数进行排序
-  const sortedParams = sortAndSerialize(data || {});
-
-  // 构建签名字符串（不包含token）
-  // 格式：|timestamp|nonce|METHOD|path|queryParams|requestId
   const signString = `|${timestamp}|${nonce}|${method.toUpperCase()}|${sortedPath}|${sortedQueryParams}|${requestId}`;
 
-  // 使用 HMAC-SHA256 加密
+  // hex，请求头 X-Sign-String 原样上传
   const signature = CryptoJS.HmacSHA256(signString, HMAC_SECRET_KEY)
     .toString(CryptoJS.enc.Hex)
 
@@ -143,10 +139,10 @@ function generateSignature(params) {
 }
 
 /**
- * 验证时间戳是否在有效范围内（防止重放攻击）
- * @param {number} timestamp 时间戳
- * @param {number} maxAge 最大有效期（秒），默认5分钟
- * @returns {boolean} 是否有效
+ * 判断时间戳是否还在窗口内。真正挡重放要在服务端做同样判断，并记下已用过的 nonce。
+ * @param {number} timestamp 秒
+ * @param {number} maxAge 允许的偏差，默认 300 秒
+ * @returns {boolean}
  */
 function validateTimestamp(timestamp, maxAge = 300) {
   const now = getTimestamp();
@@ -155,25 +151,26 @@ function validateTimestamp(timestamp, maxAge = 300) {
 }
 
 /**
- * 生成安全请求头
- * @param {object} options 请求选项
- * @param {string} options.method HTTP方法
- * @param {string} options.url 请求URL
- * @param {object} options.data 请求数据
- * @returns {object} 安全请求头对象
+ * 组装一次请求要用的安全头。upload 和 request 都走这里。
+ * X-Timestamp / X-Nonce / X-Request-ID 参与签名；
+ * Authorization、X-Device-Id 只标识用户和设备，不参与签名。
+ * @param {object} options
+ * @param {string} options.method
+ * @param {string} options.url 签名用的路径。GET 必须已经拼好查询串
+ * @param {object} options.data 请求体，当前不参与签名
+ * @returns {object}
  */
 function generateSecurityHeaders(options) {
   const { method, url, data } = options;
 
-  // 获取token
+  // 登录接口返回后写入 storage，未登录时为空
   const token = wx.getStorageSync('token') || '';
 
-  // 生成时间戳和nonce
   const timestamp = getTimestamp();
   const nonce = generateNonce();
+  // 同一次请求里唯一。时间戳加 nonce，避免并发时撞车
   const requestId = `${timestamp}-${nonce}`;
 
-  // 生成签名信息（包含 HMAC-SHA256 加密的签名）
   const signatureInfo = generateSignature({
     token,
     timestamp,
@@ -184,10 +181,9 @@ function generateSecurityHeaders(options) {
     data
   });
 
-  // 获取设备ID（从小程序存储中读取）
+  // 启动时写入，没有就不带头
   const deviceId = wx.getStorageSync('deviceId') || '';
 
-  // 构建安全请求头
   const headers = {
     'Content-Type': 'application/json',
     'X-Timestamp': timestamp.toString(),
@@ -195,17 +191,14 @@ function generateSecurityHeaders(options) {
     'X-Request-ID': requestId,
   };
 
-  // 如果有token，添加到Authorization头
   if (token) {
     headers.Authorization = `Bearer ${token}`;
   }
 
-  // 如果有设备ID，添加到X-Device-Id头
   if (deviceId) {
     headers['X-Device-Id'] = deviceId;
   }
 
-  // 将 HMAC-SHA256 加密后的签名添加到请求头
   headers['X-Sign-String'] = signatureInfo.signature;
 
   return headers;

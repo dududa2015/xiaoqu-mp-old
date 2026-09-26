@@ -1,3 +1,5 @@
+/** 我的标记详情。有效标记可删除，收藏可取消，并能在地图上查看。 */
+
 const sheetDrag = require('../../behaviors/sheet-drag')
 const { getOwnedMarkerById, deleteOwnedMarker } = require('../../apis/marker')
 const { removeFavorite } = require('../../apis/place')
@@ -12,6 +14,7 @@ const {
   deletionDateText
 } = require('../../utils/my-marker-format')
 
+/** 照片缩略图地址。 */
 function thumbUrl(url) {
   if (!url || !/^https?:\/\//i.test(url) || url.indexOf('imageView2/') >= 0) {
     return url
@@ -19,6 +22,7 @@ function thumbUrl(url) {
   return url + (url.indexOf('?') >= 0 ? '&' : '?') + 'imageView2/2/w/200/h/200'
 }
 
+/** 从详情里取出经纬度。 */
 function pointOf(detail) {
   const lat = Number(detail.lat != null ? detail.lat : detail.latitude)
   const lng = Number(detail.lng != null ? detail.lng : detail.longitude)
@@ -59,6 +63,7 @@ Component({
   },
 
   observers: {
+    /** 关闭时收起弹层并清掉遮罩用的打开状态。 */
     show(visible) {
       if (visible) {
         this.fitCard(true)
@@ -72,6 +77,7 @@ Component({
   },
 
   methods: {
+    /** 按列表项和当前分段加载详情。 */
     open(options) {
       const item = (options && options.item) || {}
       const activeTab = (options && options.activeTab) || 'valid'
@@ -93,6 +99,7 @@ Component({
       this.loadDetail(item, activeTab)
     },
 
+    /** 待审核和已删除用列表数据；有效和收藏再请求完整详情。 */
     loadDetail(item, activeTab) {
       const xId = String(item.xId || item.id || '').trim()
       if (!xId) {
@@ -125,6 +132,7 @@ Component({
       tryNext(0)
     },
 
+    /** 把类型、照片、坐标和时间写进卡片。 */
     applyDetail(raw, activeTab) {
       const detail = Object.assign({}, this._fallbackItem || {}, raw || {})
       const point = pointOf(detail)
@@ -154,6 +162,7 @@ Component({
       }, () => this.fitCard(false))
     },
 
+    /** 按内容高度打开，短内容不留大块空白。 */
     fitCard(open, retry) {
       const left = retry == null ? 6 : retry
       const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
@@ -189,6 +198,7 @@ Component({
       })
     },
 
+    /** 照片按排序字段排列，并拆出原图和缩略图。 */
     normalizeImages(images) {
       if (!images || !images.length) {
         return []
@@ -202,6 +212,7 @@ Component({
       }).filter(Boolean)
     },
 
+    /** 有坐标时给预览地图一个中心点。 */
     buildMapState(detail) {
       const point = pointOf(detail)
       const type = Number(detail.type)
@@ -249,6 +260,7 @@ Component({
       }
     },
 
+    /** 被删除和待审核不能跳到地图。 */
     checkCanOpenOnMap(detail, activeTab) {
       if (activeTab !== 'valid' && activeTab !== 'favorites') {
         return false
@@ -260,18 +272,22 @@ Component({
       return point.ok
     },
 
+    /** 阻止点击穿透到遮罩关闭。 */
     onCardTap() {},
 
+    /** 拖动关闭时通知页面。 */
     onSheetSizeUpdate(e) {
       'worklet'
       const size = e.size || 0
       wx.worklet.runOnJS(this.onSheetSizeChange.bind(this))(size)
     },
 
+    /** 关闭详情。 */
     onClose() {
       this.triggerEvent('close')
     },
 
+    /** 预览照片。 */
     onPreviewImage(e) {
       const index = Number(e.currentTarget.dataset.index) || 0
       const images = this.data.markerImages
@@ -284,6 +300,7 @@ Component({
       })
     },
 
+    /** 把焦点写进本地后切到地图页。 */
     onOpenOnMap() {
       const detail = this._detail
       if (!detail || !this.data.canOpenOnMap) {
@@ -300,6 +317,7 @@ Component({
       wx.switchTab({ url: '/pages/map/map' })
     },
 
+    /** 确认后删除自己的标记。 */
     onDeleteTap() {
       wx.showModal({
         title: '确定删除标记？',
@@ -314,6 +332,7 @@ Component({
       })
     },
 
+    /** 删除成功后让列表刷新。 */
     deleteCurrentMarker() {
       const detail = this._detail || {}
       const userId = wx.getStorageSync('userId')
@@ -338,6 +357,7 @@ Component({
       })
     },
 
+    /** 确认后取消收藏。 */
     onUnfavoriteTap() {
       wx.showModal({
         title: '确定取消收藏？',
@@ -352,6 +372,7 @@ Component({
       })
     },
 
+    /** 取消成功后让收藏列表刷新。 */
     unfavoriteCurrent() {
       const record = this._fallbackItem
       const userId = wx.getStorageSync('userId')

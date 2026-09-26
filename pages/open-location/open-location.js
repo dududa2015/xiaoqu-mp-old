@@ -1,4 +1,7 @@
+/** 中转页，本身没有地图。用来调用 wx.openLocation，避免和地图页上的 map 同时初始化。 */
+
 Page({
+  /** 接收名称、地址和坐标。 */
   onLoad(options) {
     this._latitude = Number(options.latitude)
     this._longitude = Number(options.longitude)
@@ -6,6 +9,7 @@ Page({
     this._address = decodeURIComponent(options.address || '')
   },
 
+  /** 第一次打开系统位置页，返回后再回到地图。 */
   onShow() {
     if (this._opened) {
       wx.navigateBack()
